@@ -8,6 +8,7 @@
 - `npm run index` и `npm run docs:build` — пересобрать индекс компонентов и AI-документацию после правок в Jinx UI.
 - `npm run rules:compile` — пересобрать файлы правил после правок в `rules/`.
 - `npm run run -- --task <id> --mode <mode> --driver claude-code` — записать прогон агента; `npm run matrix` собирает матрицу.
+- `npm run prompts` и `npm run record` — выгрузить задания по ячейкам и собрать записи из ответов в `data/outputs`, когда прогон делается без CLI.
 - `npm run lab:dev` и `npm run lab:local` — лаборатория на `http://localhost:3000`, второй вариант с локальным драйвером Claude Code.
 
 ## Правила

@@ -170,7 +170,7 @@ describe('матрица', () => {
     const matrix = buildMatrix(runs);
     expect(matrix.modes).toEqual(['none', 'docs']);
     const none = matrix.cells.find((cell) => cell.mode === 'none');
-    expect(none).toMatchObject({ passRate: 0.5, medianTokens: 220, medianCostUsd: 0.015, runs: ['a', 'b'] });
+    expect(none).toMatchObject({ passRate: 0.5, medianTokens: 220, medianContextTokens: 0, medianCostUsd: 0.015, runs: ['a', 'b'] });
     expect(median([3, 1, 2])).toBe(2);
     expect(median([])).toBe(0);
   });

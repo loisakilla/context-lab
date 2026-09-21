@@ -12,3 +12,5 @@ next-env.d.ts
 .DS_Store
 Thumbs.db
 apps/lab/src/generated/
+data/prompts/
+data/outputs/

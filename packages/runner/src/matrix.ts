@@ -6,6 +6,7 @@ export interface MatrixCell {
   runs: string[];
   passRate: number;
   medianTokens: number;
+  medianContextTokens: number;
   medianCostUsd: number | null;
   medianTscErrors: number;
   medianLintErrors: number;
@@ -52,6 +53,7 @@ export function buildMatrix(runs: RunRecord[]): Matrix {
       runs: bucket.map((run) => run.id),
       passRate: Number((bucket.filter((run) => run.verdict.passed).length / bucket.length).toFixed(2)),
       medianTokens: median(bucket.map((run) => run.usage.input + run.usage.output + run.usage.cacheRead + run.usage.cacheCreation)),
+      medianContextTokens: median(bucket.map((run) => run.context.tokens)),
       medianCostUsd: costs.length > 0 ? median(costs) : null,
       medianTscErrors: median(bucket.map((run) => run.checks?.tsc.errors.length ?? 0)),
       medianLintErrors: median(bucket.map((run) => run.checks?.lint.filter((finding) => finding.severity === 'error').length ?? 0)),

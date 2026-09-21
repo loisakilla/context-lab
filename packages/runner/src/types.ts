@@ -4,7 +4,7 @@ import type { JsonSchemaTool, ToolResult } from '@context-lab/index-tools';
 export const CONTEXT_MODES = ['none', 'readme', 'docs', 'docs+rules', 'mcp'] as const;
 export type ContextMode = (typeof CONTEXT_MODES)[number];
 
-export const DRIVER_NAMES = ['claude-code', 'api'] as const;
+export const DRIVER_NAMES = ['claude-code', 'api', 'subagent'] as const;
 export type DriverName = (typeof DRIVER_NAMES)[number];
 
 export interface Task {

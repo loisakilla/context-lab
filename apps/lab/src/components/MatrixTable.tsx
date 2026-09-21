@@ -42,7 +42,9 @@ export function MatrixTable({ matrix }: { matrix: Matrix }) {
                           {Math.round(cell.passRate * 100)}% без ошибок
                         </span>
                         <span className="opacity-70">
-                          {Math.round(cell.medianTokens).toLocaleString('ru-RU')} ток. · {formatCost(cell.medianCostUsd)}
+                          {cell.medianTokens > 0
+                            ? `${Math.round(cell.medianTokens).toLocaleString('ru-RU')} ток. · ${formatCost(cell.medianCostUsd)}`
+                            : `контекст ~${Math.round(cell.medianContextTokens).toLocaleString('ru-RU')} ток.`}
                         </span>
                         {first && (
                           <Link href={`/run/${first}`} className="underline">
