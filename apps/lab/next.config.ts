@@ -13,7 +13,16 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: '/preview/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: "default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' blob: data: https: http:; style-src 'unsafe-inline' https: http:; font-src https: data:; img-src data: blob: https: http:; connect-src 'none'; frame-ancestors 'self'",
+          },
+        ],
+      },
+      {
+        source: '/((?!preview/).*)',
         headers: [
           {
             key: 'Content-Security-Policy',

@@ -9,6 +9,12 @@ interface ReportProps {
   render?: RenderStatus | null;
 }
 
+const DRIVER_LABELS: Record<string, string> = {
+  'claude-code': 'Claude Code',
+  api: 'Anthropic API',
+  subagent: 'агент-исполнитель',
+};
+
 function tokensOf(record: RunRecord): number {
   return record.usage.input + record.usage.output + record.usage.cacheRead + record.usage.cacheCreation;
 }
@@ -32,10 +38,12 @@ export function Report({ record, render }: ReportProps) {
         </JxBadge>
         <JxBadge tone="default">{record.mode}</JxBadge>
         <JxBadge tone="default">{record.model}</JxBadge>
-        <JxBadge tone="default">{record.driver === 'claude-code' ? 'Claude Code' : 'API'}</JxBadge>
-        <JxBadge tone="info">{tokensOf(record).toLocaleString('ru-RU')} токенов</JxBadge>
-        <JxBadge tone="info">{formatCost(record.costUsd)}</JxBadge>
-        <JxBadge tone="default">{Math.round(record.durationMs / 1000)} с</JxBadge>
+        <JxBadge tone="default">{DRIVER_LABELS[record.driver] ?? record.driver}</JxBadge>
+        <JxBadge tone="info">
+          {tokensOf(record) > 0 ? `${tokensOf(record).toLocaleString('ru-RU')} токенов` : `контекст ~${record.context.tokens.toLocaleString('ru-RU')} токенов`}
+        </JxBadge>
+        {record.costUsd !== null && <JxBadge tone="info">{formatCost(record.costUsd)}</JxBadge>}
+        {record.durationMs > 0 && <JxBadge tone="default">{Math.round(record.durationMs / 1000)} с</JxBadge>}
         {record.stopReason !== 'end_turn' && <JxBadge tone="warning">stop: {record.stopReason}</JxBadge>}
       </div>
 
@@ -118,9 +126,13 @@ export function Report({ record, render }: ReportProps) {
           ~{record.context.tokens.toLocaleString('ru-RU')} токенов контекста
           {record.context.sources.length > 0 && <>: {record.context.sources.map((source) => `${source.kind} (${source.id}, ~${source.tokens})`).join(', ')}</>}
         </p>
-        <p className="text-sm">
-          Вход {record.usage.input.toLocaleString('ru-RU')} · выход {record.usage.output.toLocaleString('ru-RU')} · из кэша {record.usage.cacheRead.toLocaleString('ru-RU')} · в кэш {record.usage.cacheCreation.toLocaleString('ru-RU')}
-        </p>
+        {tokensOf(record) > 0 ? (
+          <p className="text-sm">
+            Вход {record.usage.input.toLocaleString('ru-RU')} · выход {record.usage.output.toLocaleString('ru-RU')} · из кэша {record.usage.cacheRead.toLocaleString('ru-RU')} · в кэш {record.usage.cacheCreation.toLocaleString('ru-RU')}
+          </p>
+        ) : (
+          <p className="text-sm">Расход токенов для этого прогона не записан: драйвер {record.driver} его не сообщает.</p>
+        )}
       </section>
     </div>
   );

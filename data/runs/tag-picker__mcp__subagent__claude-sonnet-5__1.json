@@ -1,0 +1,73 @@
+{
+  "id": "tag-picker__mcp__subagent__claude-sonnet-5__1",
+  "createdAt": "2026-09-21T08:12:09.686Z",
+  "repeat": 1,
+  "durationMs": 0,
+  "driver": "subagent",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "mcp",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 1000,
+    "sources": [
+      {
+        "kind": "tools",
+        "id": "search_components,get_component_api,get_component_examples,list_design_tokens",
+        "version": "0.1.0",
+        "tokens": 688
+      }
+    ]
+  },
+  "turns": [],
+  "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheCreation": 0
+  },
+  "costUsd": null,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxChip, JxTagInput } from '@jinx-ui/react';\n\ninterface TagPickerProps {\n  defaultValue?: string[];\n  placeholder?: string;\n  ariaLabel?: string;\n  className?: string;\n  onChange?: (tags: string[]) => void;\n}\n\nconst TagPicker = ({\n  defaultValue = [],\n  placeholder = 'Введите тег и нажмите Enter',\n  ariaLabel = 'Теги статьи',\n  className,\n  onChange,\n}: TagPickerProps) => {\n  const [tags, setTags] = useState<string[]>(defaultValue);\n\n  const updateTags = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  const removeTagAt = (index: number) => {\n    updateTags(tags.filter((_, i) => i !== index));\n  };\n\n  return (\n    <div className={className}>\n      <JxTagInput\n        ariaLabel={ariaLabel}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={updateTags}\n      />\n      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' }}>\n        {tags.map((tag, index) => (\n          <JxChip key={`${tag}-${index}`} removable onRemove={() => removeTagAt(index)}>\n            {tag}\n          </JxChip>\n        ))}\n      </div>\n    </div>\n  );\n};\n\nexport default TagPicker;",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxChip, JxTagInput } from '@jinx-ui/react';\n\ninterface TagPickerProps {\n  defaultValue?: string[];\n  placeholder?: string;\n  ariaLabel?: string;\n  className?: string;\n  onChange?: (tags: string[]) => void;\n}\n\nconst TagPicker = ({\n  defaultValue = [],\n  placeholder = 'Введите тег и нажмите Enter',\n  ariaLabel = 'Теги статьи',\n  className,\n  onChange,\n}: TagPickerProps) => {\n  const [tags, setTags] = useState<string[]>(defaultValue);\n\n  const updateTags = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  const removeTagAt = (index: number) => {\n    updateTags(tags.filter((_, i) => i !== index));\n  };\n\n  return (\n    <div className={className}>\n      <JxTagInput\n        ariaLabel={ariaLabel}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={updateTags}\n      />\n      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' }}>\n        {tags.map((tag, index) => (\n          <JxChip key={`${tag}-${index}`} removable onRemove={() => removeTagAt(index)}>\n            {tag}\n          </JxChip>\n        ))}\n      </div>\n    </div>\n  );\n};\n\nexport default TagPicker;\n```\n"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 38,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxChip",
+      "JxTagInput"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

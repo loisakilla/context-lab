@@ -1,0 +1,78 @@
+{
+  "id": "date-range__readme__subagent__claude-sonnet-5__1",
+  "createdAt": "2026-09-21T08:12:08.934Z",
+  "repeat": 1,
+  "durationMs": 0,
+  "driver": "subagent",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "date-range",
+    "title": "Выбор периода",
+    "prompt": "Сделай выбор даты отчёта: календарь на месяц и над ним ряд быстрых вариантов «Сегодня», «Вчера», «Неделя назад», при нажатии на которые дата подставляется в календарь. Выбранная дата отдаётся наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxCalendar",
+      "JxChip"
+    ]
+  },
+  "context": {
+    "tokens": 753,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [],
+  "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheCreation": 0
+  },
+  "costUsd": null,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useCallback, useMemo, useState } from 'react';\nimport { Button, Calendar } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date;\n  defaultValue?: Date;\n  onChange?: (date: Date) => void;\n};\n\ntype QuickOption = {\n  key: string;\n  label: string;\n  resolve: () => Date;\n};\n\nconst toStartOfDay = (date: Date): Date => {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n};\n\nconst addDays = (date: Date, days: number): Date => {\n  const result = new Date(date);\n  result.setDate(result.getDate() + days);\n  return result;\n};\n\nconst isSameDay = (a: Date, b: Date): boolean =>\n  toStartOfDay(a).getTime() === toStartOfDay(b).getTime();\n\nconst buildQuickOptions = (): QuickOption[] => {\n  const today = toStartOfDay(new Date());\n  return [\n    { key: 'today', label: 'Сегодня', resolve: () => today },\n    { key: 'yesterday', label: 'Вчера', resolve: () => addDays(today, -1) },\n    { key: 'week-ago', label: 'Неделя назад', resolve: () => addDays(today, -7) },\n  ];\n};\n\nconst ReportDatePicker = ({ value, defaultValue, onChange }: ReportDatePickerProps) => {\n  const [internalDate, setInternalDate] = useState<Date>(() =>\n    toStartOfDay(defaultValue ?? new Date())\n  );\n\n  const selectedDate = value ? toStartOfDay(value) : internalDate;\n  const quickOptions = useMemo(buildQuickOptions, [selectedDate]);\n\n  const selectDate = useCallback(\n    (date: Date) => {\n      const normalized = toStartOfDay(date);\n      setInternalDate(normalized);\n      onChange?.(normalized);\n    },\n    [onChange]\n  );\n\n  return (\n    <div className=\"jx-stack jx-gap-md\">\n      <div className=\"jx-row jx-gap-sm\" role=\"group\" aria-label=\"Быстрый выбор даты\">\n        {quickOptions.map((option) => {\n          const optionDate = option.resolve();\n          const isActive = isSameDay(optionDate, selectedDate);\n          return (\n            <Button\n              key={option.key}\n              type=\"button\"\n              variant={isActive ? 'solid' : 'ghost'}\n              size=\"sm\"\n              aria-pressed={isActive}\n              onClick={() => selectDate(optionDate)}\n            >\n              {option.label}\n            </Button>\n          );\n        })}\n      </div>\n      <Calendar\n        value={selectedDate}\n        onChange={selectDate}\n        mode=\"single\"\n        aria-label=\"Дата отчёта\"\n      />\n    </div>\n  );\n};\n\nexport default ReportDatePicker;",
+    "text": "```tsx\nimport { useCallback, useMemo, useState } from 'react';\nimport { Button, Calendar } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date;\n  defaultValue?: Date;\n  onChange?: (date: Date) => void;\n};\n\ntype QuickOption = {\n  key: string;\n  label: string;\n  resolve: () => Date;\n};\n\nconst toStartOfDay = (date: Date): Date => {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n};\n\nconst addDays = (date: Date, days: number): Date => {\n  const result = new Date(date);\n  result.setDate(result.getDate() + days);\n  return result;\n};\n\nconst isSameDay = (a: Date, b: Date): boolean =>\n  toStartOfDay(a).getTime() === toStartOfDay(b).getTime();\n\nconst buildQuickOptions = (): QuickOption[] => {\n  const today = toStartOfDay(new Date());\n  return [\n    { key: 'today', label: 'Сегодня', resolve: () => today },\n    { key: 'yesterday', label: 'Вчера', resolve: () => addDays(today, -1) },\n    { key: 'week-ago', label: 'Неделя назад', resolve: () => addDays(today, -7) },\n  ];\n};\n\nconst ReportDatePicker = ({ value, defaultValue, onChange }: ReportDatePickerProps) => {\n  const [internalDate, setInternalDate] = useState<Date>(() =>\n    toStartOfDay(defaultValue ?? new Date())\n  );\n\n  const selectedDate = value ? toStartOfDay(value) : internalDate;\n  const quickOptions = useMemo(buildQuickOptions, [selectedDate]);\n\n  const selectDate = useCallback(\n    (date: Date) => {\n      const normalized = toStartOfDay(date);\n      setInternalDate(normalized);\n      onChange?.(normalized);\n    },\n    [onChange]\n  );\n\n  return (\n    <div className=\"jx-stack jx-gap-md\">\n      <div className=\"jx-row jx-gap-sm\" role=\"group\" aria-label=\"Быстрый выбор даты\">\n        {quickOptions.map((option) => {\n          const optionDate = option.resolve();\n          const isActive = isSameDay(optionDate, selectedDate);\n          return (\n            <Button\n              key={option.key}\n              type=\"button\"\n              variant={isActive ? 'solid' : 'ghost'}\n              size=\"sm\"\n              aria-pressed={isActive}\n              onClick={() => selectDate(optionDate)}\n            >\n              {option.label}\n            </Button>\n          );\n        })}\n      </div>\n      <Calendar\n        value={selectedDate}\n        onChange={selectDate}\n        mode=\"single\"\n        aria-label=\"Дата отчёта\"\n      />\n    </div>\n  );\n};\n\nexport default ReportDatePicker;\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Calendar'. Did you mean 'JxCalendar'?"
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Calendar"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.42
+  }
+}

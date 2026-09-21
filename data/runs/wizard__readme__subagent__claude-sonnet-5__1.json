@@ -1,0 +1,85 @@
+{
+  "id": "wizard__readme__subagent__claude-sonnet-5__1",
+  "createdAt": "2026-09-21T08:12:10.392Z",
+  "repeat": 1,
+  "durationMs": 0,
+  "driver": "subagent",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 753,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [],
+  "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheCreation": 0
+  },
+  "costUsd": null,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, type ChangeEvent } from 'react';\nimport { Button, Card, TextField } from '@jinx-ui/react';\n\ninterface RegistrationData {\n  fullName: string;\n  email: string;\n  phone: string;\n  street: string;\n  city: string;\n  postalCode: string;\n}\n\ninterface RegistrationWizardProps {\n  onSubmit: (data: RegistrationData) => void;\n}\n\ntype StepId = 'contacts' | 'address' | 'review';\n\ninterface StepConfig {\n  id: StepId;\n  label: string;\n}\n\nconst STEPS: StepConfig[] = [\n  { id: 'contacts', label: 'Контакты' },\n  { id: 'address', label: 'Адрес' },\n  { id: 'review', label: 'Проверка' },\n];\n\nconst INITIAL_DATA: RegistrationData = {\n  fullName: '',\n  email: '',\n  phone: '',\n  street: '',\n  city: '',\n  postalCode: '',\n};\n\nexport default function RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [stepIndex, setStepIndex] = useState(0);\n  const [formData, setFormData] = useState<RegistrationData>(INITIAL_DATA);\n\n  const activeStep = STEPS[stepIndex];\n  const isFirstStep = stepIndex === 0;\n  const isLastStep = stepIndex === STEPS.length - 1;\n\n  const handleFieldChange = (field: keyof RegistrationData) => (event: ChangeEvent<HTMLInputElement>) => {\n    const { value } = event.target;\n    setFormData((previous) => ({ ...previous, [field]: value }));\n  };\n\n  const handleBack = () => {\n    setStepIndex((index) => Math.max(0, index - 1));\n  };\n\n  const handleNext = () => {\n    setStepIndex((index) => Math.min(STEPS.length - 1, index + 1));\n  };\n\n  const handleSubmit = () => {\n    onSubmit(formData);\n  };\n\n  return (\n    <Card className=\"jx-wizard\">\n      <ol className=\"jx-wizard__steps\" aria-label=\"Шаги регистрации\">\n        {STEPS.map((step, index) => {\n          const status = index === stepIndex ? 'active' : index < stepIndex ? 'done' : 'upcoming';\n          return (\n            <li\n              key={step.id}\n              className={`jx-wizard__step jx-wizard__step--${status}`}\n              aria-current={index === stepIndex ? 'step' : undefined}\n            >\n              <span className=\"jx-wizard__step-index\">{index + 1}</span>\n              <span className=\"jx-wizard__step-label\">{step.label}</span>\n            </li>\n          );\n        })}\n      </ol>\n\n      <div className=\"jx-wizard__content\">\n        {activeStep.id === 'contacts' && (\n          <div className=\"jx-wizard__fields\">\n            <TextField\n              label=\"Имя и фамилия\"\n              name=\"fullName\"\n              value={formData.fullName}\n              onChange={handleFieldChange('fullName')}\n              required\n            />\n            <TextField\n              label=\"Email\"\n              name=\"email\"\n              type=\"email\"\n              value={formData.email}\n              onChange={handleFieldChange('email')}\n              required\n            />\n            <TextField\n              label=\"Телефон\"\n              name=\"phone\"\n              type=\"tel\"\n              value={formData.phone}\n              onChange={handleFieldChange('phone')}\n              required\n            />\n          </div>\n        )}\n\n        {activeStep.id === 'address' && (\n          <div className=\"jx-wizard__fields\">\n            <TextField\n              label=\"Улица и дом\"\n              name=\"street\"\n              value={formData.street}\n              onChange={handleFieldChange('street')}\n              required\n            />\n            <TextField\n              label=\"Город\"\n              name=\"city\"\n              value={formData.city}\n              onChange={handleFieldChange('city')}\n              required\n            />\n            <TextField\n              label=\"Индекс\"\n              name=\"postalCode\"\n              value={formData.postalCode}\n              onChange={handleFieldChange('postalCode')}\n              required\n            />\n          </div>\n        )}\n\n        {activeStep.id === 'review' && (\n          <dl className=\"jx-wizard__summary\">\n            <div className=\"jx-wizard__summary-row\">\n              <dt>Имя и фамилия</dt>\n              <dd>{formData.fullName}</dd>\n            </div>\n            <div className=\"jx-wizard__summary-row\">\n              <dt>Email</dt>\n              <dd>{formData.email}</dd>\n            </div>\n            <div className=\"jx-wizard__summary-row\">\n              <dt>Телефон</dt>\n              <dd>{formData.phone}</dd>\n            </div>\n            <div className=\"jx-wizard__summary-row\">\n              <dt>Адрес</dt>\n              <dd>{`${formData.street}, ${formData.city}, ${formData.postalCode}`}</dd>\n            </div>\n          </dl>\n        )}\n      </div>\n\n      <div className=\"jx-wizard__footer\">\n        <Button type=\"button\" variant=\"secondary\" onClick={handleBack} disabled={isFirstStep}>\n          Назад\n        </Button>\n        {isLastStep ? (\n          <Button type=\"button\" variant=\"primary\" onClick={handleSubmit}>\n            Отправить\n          </Button>\n        ) : (\n          <Button type=\"button\" variant=\"primary\" onClick={handleNext}>\n            Дальше\n          </Button>\n        )}\n      </div>\n    </Card>\n  );\n}",
+    "text": "```tsx\nimport { useState, type ChangeEvent } from 'react';\nimport { Button, Card, TextField } from '@jinx-ui/react';\n\ninterface RegistrationData {\n  fullName: string;\n  email: string;\n  phone: string;\n  street: string;\n  city: string;\n  postalCode: string;\n}\n\ninterface RegistrationWizardProps {\n  onSubmit: (data: RegistrationData) => void;\n}\n\ntype StepId = 'contacts' | 'address' | 'review';\n\ninterface StepConfig {\n  id: StepId;\n  label: string;\n}\n\nconst STEPS: StepConfig[] = [\n  { id: 'contacts', label: 'Контакты' },\n  { id: 'address', label: 'Адрес' },\n  { id: 'review', label: 'Проверка' },\n];\n\nconst INITIAL_DATA: RegistrationData = {\n  fullName: '',\n  email: '',\n  phone: '',\n  street: '',\n  city: '',\n  postalCode: '',\n};\n\nexport default function RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [stepIndex, setStepIndex] = useState(0);\n  const [formData, setFormData] = useState<RegistrationData>(INITIAL_DATA);\n\n  const activeStep = STEPS[stepIndex];\n  const isFirstStep = stepIndex === 0;\n  const isLastStep = stepIndex === STEPS.length - 1;\n\n  const handleFieldChange = (field: keyof RegistrationData) => (event: ChangeEvent<HTMLInputElement>) => {\n    const { value } = event.target;\n    setFormData((previous) => ({ ...previous, [field]: value }));\n  };\n\n  const handleBack = () => {\n    setStepIndex((index) => Math.max(0, index - 1));\n  };\n\n  const handleNext = () => {\n    setStepIndex((index) => Math.min(STEPS.length - 1, index + 1));\n  };\n\n  const handleSubmit = () => {\n    onSubmit(formData);\n  };\n\n  return (\n    <Card className=\"jx-wizard\">\n      <ol className=\"jx-wizard__steps\" aria-label=\"Шаги регистрации\">\n        {STEPS.map((step, index) => {\n          const status = index === stepIndex ? 'active' : index < stepIndex ? 'done' : 'upcoming';\n          return (\n            <li\n              key={step.id}\n              className={`jx-wizard__step jx-wizard__step--${status}`}\n              aria-current={index === stepIndex ? 'step' : undefined}\n            >\n              <span className=\"jx-wizard__step-index\">{index + 1}</span>\n              <span className=\"jx-wizard__step-label\">{step.label}</span>\n            </li>\n          );\n        })}\n      </ol>\n\n      <div className=\"jx-wizard__content\">\n        {activeStep.id === 'contacts' && (\n          <div className=\"jx-wizard__fields\">\n            <TextField\n              label=\"Имя и фамилия\"\n              name=\"fullName\"\n              value={formData.fullName}\n              onChange={handleFieldChange('fullName')}\n              required\n            />\n            <TextField\n              label=\"Email\"\n              name=\"email\"\n              type=\"email\"\n              value={formData.email}\n              onChange={handleFieldChange('email')}\n              required\n            />\n            <TextField\n              label=\"Телефон\"\n              name=\"phone\"\n              type=\"tel\"\n              value={formData.phone}\n              onChange={handleFieldChange('phone')}\n              required\n            />\n          </div>\n        )}\n\n        {activeStep.id === 'address' && (\n          <div className=\"jx-wizard__fields\">\n            <TextField\n              label=\"Улица и дом\"\n              name=\"street\"\n              value={formData.street}\n              onChange={handleFieldChange('street')}\n              required\n            />\n            <TextField\n              label=\"Город\"\n              name=\"city\"\n              value={formData.city}\n              onChange={handleFieldChange('city')}\n              required\n            />\n            <TextField\n              label=\"Индекс\"\n              name=\"postalCode\"\n              value={formData.postalCode}\n              onChange={handleFieldChange('postalCode')}\n              required\n            />\n          </div>\n        )}\n\n        {activeStep.id === 'review' && (\n          <dl className=\"jx-wizard__summary\">\n            <div className=\"jx-wizard__summary-row\">\n              <dt>Имя и фамилия</dt>\n              <dd>{formData.fullName}</dd>\n            </div>\n            <div className=\"jx-wizard__summary-row\">\n              <dt>Email</dt>\n              <dd>{formData.email}</dd>\n            </div>\n            <div className=\"jx-wizard__summary-row\">\n              <dt>Телефон</dt>\n              <dd>{formData.phone}</dd>\n            </div>\n            <div className=\"jx-wizard__summary-row\">\n              <dt>Адрес</dt>\n              <dd>{`${formData.street}, ${formData.city}, ${formData.postalCode}`}</dd>\n            </div>\n          </dl>\n        )}\n      </div>\n\n      <div className=\"jx-wizard__footer\">\n        <Button type=\"button\" variant=\"secondary\" onClick={handleBack} disabled={isFirstStep}>\n          Назад\n        </Button>\n        {isLastStep ? (\n          <Button type=\"button\" variant=\"primary\" onClick={handleSubmit}>\n            Отправить\n          </Button>\n        ) : (\n          <Button type=\"button\" variant=\"primary\" onClick={handleNext}>\n            Дальше\n          </Button>\n        )}\n      </div>\n    </Card>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Card'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TextField'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Card",
+        "TextField"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.28
+  }
+}

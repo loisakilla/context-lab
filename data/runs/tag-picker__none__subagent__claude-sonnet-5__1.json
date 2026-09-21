@@ -1,0 +1,76 @@
+{
+  "id": "tag-picker__none__subagent__claude-sonnet-5__1",
+  "createdAt": "2026-09-21T08:12:09.708Z",
+  "repeat": 1,
+  "durationMs": 0,
+  "driver": "subagent",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "none",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 111,
+    "sources": []
+  },
+  "turns": [],
+  "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheCreation": 0
+  },
+  "costUsd": null,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useCallback, useState, ChangeEvent, KeyboardEvent } from 'react';\nimport { TextField, Tag, Stack } from '@jinx-ui/react';\n\ninterface TagPickerProps {\n  label?: string;\n  placeholder?: string;\n  defaultTags?: string[];\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function TagPicker({\n  label = 'Теги',\n  placeholder = 'Введите тег и нажмите Enter',\n  defaultTags = [],\n  onChange,\n}: TagPickerProps) {\n  const [tags, setTags] = useState<string[]>(defaultTags);\n  const [inputValue, setInputValue] = useState('');\n\n  const commitTags = useCallback(\n    (nextTags: string[]) => {\n      setTags(nextTags);\n      onChange?.(nextTags);\n    },\n    [onChange],\n  );\n\n  const addTag = useCallback(\n    (rawValue: string) => {\n      const value = rawValue.trim();\n      if (!value || tags.includes(value)) {\n        setInputValue('');\n        return;\n      }\n      commitTags([...tags, value]);\n      setInputValue('');\n    },\n    [tags, commitTags],\n  );\n\n  const removeTag = useCallback(\n    (tagToRemove: string) => {\n      commitTags(tags.filter((tag) => tag !== tagToRemove));\n    },\n    [tags, commitTags],\n  );\n\n  const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {\n    setInputValue(event.target.value);\n  }, []);\n\n  const handleKeyDown = useCallback(\n    (event: KeyboardEvent<HTMLInputElement>) => {\n      if (event.key === 'Enter' || event.key === ',') {\n        event.preventDefault();\n        addTag(inputValue);\n        return;\n      }\n      if (event.key === 'Backspace' && inputValue === '' && tags.length > 0) {\n        removeTag(tags[tags.length - 1]);\n      }\n    },\n    [inputValue, addTag, removeTag, tags],\n  );\n\n  return (\n    <Stack direction=\"column\" gap=\"sm\" className=\"jx-tag-picker\">\n      <TextField\n        label={label}\n        placeholder={placeholder}\n        value={inputValue}\n        onChange={handleInputChange}\n        onKeyDown={handleKeyDown}\n      />\n      {tags.length > 0 && (\n        <Stack direction=\"row\" wrap gap=\"xs\" className=\"jx-tag-picker__list\">\n          {tags.map((tag) => (\n            <Tag key={tag} onRemove={() => removeTag(tag)}>\n              {tag}\n            </Tag>\n          ))}\n        </Stack>\n      )}\n    </Stack>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useState, ChangeEvent, KeyboardEvent } from 'react';\nimport { TextField, Tag, Stack } from '@jinx-ui/react';\n\ninterface TagPickerProps {\n  label?: string;\n  placeholder?: string;\n  defaultTags?: string[];\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function TagPicker({\n  label = 'Теги',\n  placeholder = 'Введите тег и нажмите Enter',\n  defaultTags = [],\n  onChange,\n}: TagPickerProps) {\n  const [tags, setTags] = useState<string[]>(defaultTags);\n  const [inputValue, setInputValue] = useState('');\n\n  const commitTags = useCallback(\n    (nextTags: string[]) => {\n      setTags(nextTags);\n      onChange?.(nextTags);\n    },\n    [onChange],\n  );\n\n  const addTag = useCallback(\n    (rawValue: string) => {\n      const value = rawValue.trim();\n      if (!value || tags.includes(value)) {\n        setInputValue('');\n        return;\n      }\n      commitTags([...tags, value]);\n      setInputValue('');\n    },\n    [tags, commitTags],\n  );\n\n  const removeTag = useCallback(\n    (tagToRemove: string) => {\n      commitTags(tags.filter((tag) => tag !== tagToRemove));\n    },\n    [tags, commitTags],\n  );\n\n  const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {\n    setInputValue(event.target.value);\n  }, []);\n\n  const handleKeyDown = useCallback(\n    (event: KeyboardEvent<HTMLInputElement>) => {\n      if (event.key === 'Enter' || event.key === ',') {\n        event.preventDefault();\n        addTag(inputValue);\n        return;\n      }\n      if (event.key === 'Backspace' && inputValue === '' && tags.length > 0) {\n        removeTag(tags[tags.length - 1]);\n      }\n    },\n    [inputValue, addTag, removeTag, tags],\n  );\n\n  return (\n    <Stack direction=\"column\" gap=\"sm\" className=\"jx-tag-picker\">\n      <TextField\n        label={label}\n        placeholder={placeholder}\n        value={inputValue}\n        onChange={handleInputChange}\n        onKeyDown={handleKeyDown}\n      />\n      {tags.length > 0 && (\n        <Stack direction=\"row\" wrap gap=\"xs\" className=\"jx-tag-picker__list\">\n          {tags.map((tag) => (\n            <Tag key={tag} onRemove={() => removeTag(tag)}>\n              {tag}\n            </Tag>\n          ))}\n        </Stack>\n      )}\n    </Stack>\n  );\n}\n```\n"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TextField'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Tag'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        }
+      ],
+      "unknownComponents": [
+        "Stack",
+        "Tag",
+        "TextField"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.28
+  }
+}

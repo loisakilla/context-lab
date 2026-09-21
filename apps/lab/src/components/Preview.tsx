@@ -21,11 +21,37 @@ interface PreviewMessage {
   height?: number;
 }
 
+let shellPromise: Promise<string> | undefined;
+
+function loadShell(): Promise<string> {
+  shellPromise ??= fetch('/preview/index.html').then((response) => {
+    if (!response.ok) throw new Error(`Страница превью не загрузилась: ${response.status}`);
+    return response.text();
+  });
+  return shellPromise;
+}
+
 export function Preview({ code, theme = 'light', style = 'brutal', onRendered }: PreviewProps) {
   const frame = useRef<HTMLIFrameElement>(null);
+  const [shell, setShell] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
   const [height, setHeight] = useState(240);
   const [status, setStatus] = useState<RenderStatus | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    loadShell()
+      .then((html) => {
+        if (active) setShell(html);
+      })
+      .catch((error: unknown) => {
+        if (active) setLoadError(error instanceof Error ? error.message : String(error));
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     const onMessage = (event: MessageEvent<PreviewMessage>) => {
@@ -47,13 +73,16 @@ export function Preview({ code, theme = 'light', style = 'brutal', onRendered }:
     frame.current?.contentWindow?.postMessage({ type: 'render', code, theme, style }, '*');
   }, [ready, code, theme, style]);
 
+  if (loadError) return <pre className="code-block text-[var(--jx-danger)]">{loadError}</pre>;
+
   return (
     <div className="flex flex-col gap-2">
       <iframe
         ref={frame}
         title="Превью сгенерированного компонента"
         sandbox="allow-scripts"
-        src={`/preview/index.html?theme=${theme}&style=${style}`}
+        onLoad={() => setReady(true)}
+        {...(shell ? { srcDoc: shell } : {})}
         style={{ height, width: '100%', border: '2px solid var(--jx-border)', borderRadius: 'var(--jx-r, 4px)', background: 'var(--jx-bg)' }}
       />
       {status && !status.ok && <pre className="code-block text-[var(--jx-danger)]">{status.error}</pre>}

@@ -1,0 +1,108 @@
+{
+  "id": "wizard__none__subagent__claude-sonnet-5__1",
+  "createdAt": "2026-09-21T08:12:10.318Z",
+  "repeat": 1,
+  "durationMs": 0,
+  "driver": "subagent",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "none",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 111,
+    "sources": []
+  },
+  "turns": [],
+  "usage": {
+    "input": 0,
+    "output": 0,
+    "cacheRead": 0,
+    "cacheCreation": 0
+  },
+  "costUsd": null,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, type ChangeEvent } from 'react';\nimport {\n  Box,\n  Stack,\n  Text,\n  Button,\n  Input,\n  Field,\n  Steps,\n  Step,\n} from '@jinx-ui/react';\n\ntype ContactsData = {\n  fullName: string;\n  email: string;\n  phone: string;\n};\n\ntype AddressData = {\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype RegistrationData = {\n  contacts: ContactsData;\n  address: AddressData;\n};\n\ntype RegistrationWizardProps = {\n  onSubmit: (data: RegistrationData) => void;\n};\n\nconst STEP_TITLES = ['Контакты', 'Адрес', 'Проверка'];\n\nfunction RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [stepIndex, setStepIndex] = useState(0);\n  const [contacts, setContacts] = useState<ContactsData>({\n    fullName: '',\n    email: '',\n    phone: '',\n  });\n  const [address, setAddress] = useState<AddressData>({\n    country: '',\n    city: '',\n    street: '',\n    zip: '',\n  });\n\n  const isFirstStep = stepIndex === 0;\n  const isLastStep = stepIndex === STEP_TITLES.length - 1;\n\n  const updateContacts = (field: keyof ContactsData) =>\n    (event: ChangeEvent<HTMLInputElement>) =>\n      setContacts((previous) => ({ ...previous, [field]: event.target.value }));\n\n  const updateAddress = (field: keyof AddressData) =>\n    (event: ChangeEvent<HTMLInputElement>) =>\n      setAddress((previous) => ({ ...previous, [field]: event.target.value }));\n\n  const goBack = () => setStepIndex((current) => Math.max(0, current - 1));\n  const goNext = () => setStepIndex((current) => Math.min(STEP_TITLES.length - 1, current + 1));\n  const handleSubmit = () => onSubmit({ contacts, address });\n\n  return (\n    <Box className=\"jx-registration-wizard\">\n      <Steps current={stepIndex} className=\"jx-registration-wizard__steps\">\n        {STEP_TITLES.map((title) => (\n          <Step key={title} title={title} />\n        ))}\n      </Steps>\n\n      <Box className=\"jx-registration-wizard__content\">\n        {stepIndex === 0 && (\n          <Stack direction=\"column\" gap=\"md\">\n            <Field label=\"Имя и фамилия\">\n              <Input value={contacts.fullName} onChange={updateContacts('fullName')} placeholder=\"Иван Иванов\" />\n            </Field>\n            <Field label=\"Email\">\n              <Input type=\"email\" value={contacts.email} onChange={updateContacts('email')} placeholder=\"ivan@example.com\" />\n            </Field>\n            <Field label=\"Телефон\">\n              <Input type=\"tel\" value={contacts.phone} onChange={updateContacts('phone')} placeholder=\"+7 900 000-00-00\" />\n            </Field>\n          </Stack>\n        )}\n\n        {stepIndex === 1 && (\n          <Stack direction=\"column\" gap=\"md\">\n            <Field label=\"Страна\">\n              <Input value={address.country} onChange={updateAddress('country')} />\n            </Field>\n            <Field label=\"Город\">\n              <Input value={address.city} onChange={updateAddress('city')} />\n            </Field>\n            <Field label=\"Улица и дом\">\n              <Input value={address.street} onChange={updateAddress('street')} />\n            </Field>\n            <Field label=\"Индекс\">\n              <Input value={address.zip} onChange={updateAddress('zip')} />\n            </Field>\n          </Stack>\n        )}\n\n        {stepIndex === 2 && (\n          <Stack direction=\"column\" gap=\"md\">\n            <Text weight=\"bold\">Контакты</Text>\n            <Text>{contacts.fullName}</Text>\n            <Text>{contacts.email}</Text>\n            <Text>{contacts.phone}</Text>\n            <Text weight=\"bold\">Адрес</Text>\n            <Text>{address.country}, {address.city}, {address.street}</Text>\n            <Text>{address.zip}</Text>\n          </Stack>\n        )}\n      </Box>\n\n      <Stack direction=\"row\" justify=\"space-between\" className=\"jx-registration-wizard__actions\">\n        <Button variant=\"secondary\" onClick={goBack} disabled={isFirstStep}>\n          Назад\n        </Button>\n        {isLastStep ? (\n          <Button variant=\"primary\" onClick={handleSubmit}>\n            Отправить\n          </Button>\n        ) : (\n          <Button variant=\"primary\" onClick={goNext}>\n            Дальше\n          </Button>\n        )}\n      </Stack>\n    </Box>\n  );\n}\n\nexport default RegistrationWizard;",
+    "text": "```tsx\nimport { useState, type ChangeEvent } from 'react';\nimport {\n  Box,\n  Stack,\n  Text,\n  Button,\n  Input,\n  Field,\n  Steps,\n  Step,\n} from '@jinx-ui/react';\n\ntype ContactsData = {\n  fullName: string;\n  email: string;\n  phone: string;\n};\n\ntype AddressData = {\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype RegistrationData = {\n  contacts: ContactsData;\n  address: AddressData;\n};\n\ntype RegistrationWizardProps = {\n  onSubmit: (data: RegistrationData) => void;\n};\n\nconst STEP_TITLES = ['Контакты', 'Адрес', 'Проверка'];\n\nfunction RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [stepIndex, setStepIndex] = useState(0);\n  const [contacts, setContacts] = useState<ContactsData>({\n    fullName: '',\n    email: '',\n    phone: '',\n  });\n  const [address, setAddress] = useState<AddressData>({\n    country: '',\n    city: '',\n    street: '',\n    zip: '',\n  });\n\n  const isFirstStep = stepIndex === 0;\n  const isLastStep = stepIndex === STEP_TITLES.length - 1;\n\n  const updateContacts = (field: keyof ContactsData) =>\n    (event: ChangeEvent<HTMLInputElement>) =>\n      setContacts((previous) => ({ ...previous, [field]: event.target.value }));\n\n  const updateAddress = (field: keyof AddressData) =>\n    (event: ChangeEvent<HTMLInputElement>) =>\n      setAddress((previous) => ({ ...previous, [field]: event.target.value }));\n\n  const goBack = () => setStepIndex((current) => Math.max(0, current - 1));\n  const goNext = () => setStepIndex((current) => Math.min(STEP_TITLES.length - 1, current + 1));\n  const handleSubmit = () => onSubmit({ contacts, address });\n\n  return (\n    <Box className=\"jx-registration-wizard\">\n      <Steps current={stepIndex} className=\"jx-registration-wizard__steps\">\n        {STEP_TITLES.map((title) => (\n          <Step key={title} title={title} />\n        ))}\n      </Steps>\n\n      <Box className=\"jx-registration-wizard__content\">\n        {stepIndex === 0 && (\n          <Stack direction=\"column\" gap=\"md\">\n            <Field label=\"Имя и фамилия\">\n              <Input value={contacts.fullName} onChange={updateContacts('fullName')} placeholder=\"Иван Иванов\" />\n            </Field>\n            <Field label=\"Email\">\n              <Input type=\"email\" value={contacts.email} onChange={updateContacts('email')} placeholder=\"ivan@example.com\" />\n            </Field>\n            <Field label=\"Телефон\">\n              <Input type=\"tel\" value={contacts.phone} onChange={updateContacts('phone')} placeholder=\"+7 900 000-00-00\" />\n            </Field>\n          </Stack>\n        )}\n\n        {stepIndex === 1 && (\n          <Stack direction=\"column\" gap=\"md\">\n            <Field label=\"Страна\">\n              <Input value={address.country} onChange={updateAddress('country')} />\n            </Field>\n            <Field label=\"Город\">\n              <Input value={address.city} onChange={updateAddress('city')} />\n            </Field>\n            <Field label=\"Улица и дом\">\n              <Input value={address.street} onChange={updateAddress('street')} />\n            </Field>\n            <Field label=\"Индекс\">\n              <Input value={address.zip} onChange={updateAddress('zip')} />\n            </Field>\n          </Stack>\n        )}\n\n        {stepIndex === 2 && (\n          <Stack direction=\"column\" gap=\"md\">\n            <Text weight=\"bold\">Контакты</Text>\n            <Text>{contacts.fullName}</Text>\n            <Text>{contacts.email}</Text>\n            <Text>{contacts.phone}</Text>\n            <Text weight=\"bold\">Адрес</Text>\n            <Text>{address.country}, {address.city}, {address.street}</Text>\n            <Text>{address.zip}</Text>\n          </Stack>\n        )}\n      </Box>\n\n      <Stack direction=\"row\" justify=\"space-between\" className=\"jx-registration-wizard__actions\">\n        <Button variant=\"secondary\" onClick={goBack} disabled={isFirstStep}>\n          Назад\n        </Button>\n        {isLastStep ? (\n          <Button variant=\"primary\" onClick={handleSubmit}>\n            Отправить\n          </Button>\n        ) : (\n          <Button variant=\"primary\" onClick={goNext}>\n            Дальше\n          </Button>\n        )}\n      </Stack>\n    </Box>\n  );\n}\n\nexport default RegistrationWizard;\n```\n"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Box'."
+        },
+        {
+          "code": 2305,
+          "line": 4,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 5,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        },
+        {
+          "code": 2724,
+          "line": 6,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 7,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
+        },
+        {
+          "code": 2305,
+          "line": 8,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Field'."
+        },
+        {
+          "code": 2305,
+          "line": 9,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Steps'."
+        },
+        {
+          "code": 2305,
+          "line": 10,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Step'."
+        }
+      ],
+      "unknownComponents": [
+        "Box",
+        "Button",
+        "Field",
+        "Input",
+        "Stack",
+        "Step",
+        "Steps",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}
