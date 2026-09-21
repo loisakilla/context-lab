@@ -5,8 +5,10 @@
     "libraryRoot": "vendor/jinx-ui",
     "packageRoot": "vendor/jinx-ui/packages/react",
     "entry": "src/runtime.ts",
-    "docsDir": "vendor/jinx-ui/docs/components",
-    "tokensCss": ["vendor/jinx-ui/packages/tokens/src/index.css"],
+    "docsDir": "docs/library/jinx-ui/components",
+    "tokensCss": [
+      "vendor/jinx-ui/packages/tokens/src/index.css"
+    ],
     "readme": "vendor/jinx-ui/README.md"
   },
   "index": "data/index/jinx-ui.json",
