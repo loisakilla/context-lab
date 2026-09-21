@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "context-lab": {
+      "command": "node",
+      "args": ["node_modules/tsx/dist/cli.mjs", "packages/mcp/src/cli.ts", "serve", "--config", "context-lab.config.json"]
+    }
+  }
+}

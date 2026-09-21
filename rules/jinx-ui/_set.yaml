@@ -1,0 +1,4 @@
+name: jinx-ui
+version: 1.0.0
+description: Правила работы с библиотекой компонентов Jinx UI
+extends: [org]

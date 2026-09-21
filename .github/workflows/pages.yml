@@ -1,0 +1,45 @@
+name: docs-pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/docs/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          mkdir -p site
+          cp -r data/docs/* site/
+          printf '<!doctype html><meta charset="utf-8"><title>Context Lab docs</title><h1>AI-документация библиотек</h1><ul>' > site/index.html
+          for lib in data/docs/*; do
+            name=$(basename "$lib")
+            for version in "$lib"/*; do
+              v=$(basename "$version")
+              printf '<li><a href="%s/%s/llms.txt">%s@%s</a> · <a href="%s/%s/llms-full.txt">полная версия</a></li>' "$name" "$v" "$name" "$v" "$name" "$v" >> site/index.html
+            done
+          done
+          printf '</ul>' >> site/index.html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4

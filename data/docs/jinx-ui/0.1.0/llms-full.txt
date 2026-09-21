@@ -1,0 +1,1635 @@
+# jinx-ui (@jinx-ui/react@0.1.0)
+
+> Библиотека React-компонентов: 38 компонентов, 3 хуков, 35 CSS-токенов. Версия 0.1.0, коммит 63b81b6.
+
+## Как пользоваться
+
+- Импорт: `import { JxButton } from '@jinx-ui/react'`; стили подключаются пакетами `@jinx-ui/tokens` и `@jinx-ui/core`.
+- Используйте только перечисленные ниже компоненты и их собственные пропсы. Стандартные DOM-пропсы доступны у компонентов с пометкой extends.
+- Цвета, радиусы, тени и шрифты берите из токенов через `var(--jx-*)`, не хардкодом.
+- Компоненты с пометкой DEPRECATED в новом коде не используйте.
+
+## Компоненты
+
+- **JxAccordion** — Список раскрывающихся секций.
+  `<JxAccordion items: JxAccordionItem[]; className?: string; defaultValue?: string[]; onValueChange?: (value: string[]) => void; single?: boolean = true; value?: string[] />`
+- **JxAlert** — Встроенное в разметку сообщение с иконкой, заголовком и текстом.
+  `<JxAlert title: ReactNode; children?: ReactNode; icon?: ReactNode; intent?: JxAlertIntent = 'info' />` extends HTMLAttributes<HTMLDivElement>
+- **JxAvatar**
+  `<JxAvatar children?: ReactNode; size?: JxAvatarSize = 'md'; status?: boolean = false; tone?: JxAvatarTone = 'default' />` extends HTMLAttributes<HTMLSpanElement>
+- **JxAvatarStack**
+  `<JxAvatarStack children?: ReactNode />` extends HTMLAttributes<HTMLDivElement>
+- **JxBadge** — Небольшая метка статуса или счётчика.
+  `<JxBadge children?: ReactNode; dot?: boolean = false; tone?: JxBadgeTone = 'default' />` extends HTMLAttributes<HTMLSpanElement>
+- **JxBreadcrumbs**
+  `<JxBreadcrumbs items: JxBreadcrumbItem[]; separator?: ReactNode = '/' />` extends HTMLAttributes<HTMLElement>
+- **JxButton** — Кнопка действия.
+  `<JxButton iconOnly?: boolean = false; size?: JxButtonSize = 'md'; variant?: JxButtonVariant = 'primary' />` extends ButtonHTMLAttributes<HTMLButtonElement>
+- **JxCalendar** — Календарь на один месяц с выбором одной даты.
+  `<JxCalendar defaultValue?: Date | null; locale?: string = 'en-US'; monthFormatter?: (date: Date) => { month: string; year: string }; onValueChange?: (value: Date | null) => void; rangeHover?: { from: Date; to: Date } | null; value?: Date | null />` extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange">
+- **JxCheckbox** — Флажок с подписью.
+  `<JxCheckbox label?: ReactNode; wrapClassName?: string />` extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size">
+- **JxChip** — Компактная метка-кнопка для фильтров и быстрого выбора.
+  `<JxChip active?: boolean = false; children?: ReactNode; onRemove?: () => void; removable?: boolean = false />` extends HTMLAttributes<HTMLSpanElement>
+- **JxCombobox** — Поле с автодополнением: пользователь печатает, список фильтруется, выбор одного значения.
+  `<JxCombobox options: JxComboboxOption[]; ariaLabel?: string; className?: string; defaultValue?: string; emptyText?: string = 'No matches. Try fewer letters.'; onValueChange?: (value: string) => void; placeholder?: string = 'Search...'; value?: string />`
+- **JxDivider**
+  `<JxDivider label?: ReactNode />` extends HTMLAttributes<HTMLDivElement>
+- **JxDrawer** — Боковая панель, выезжающая слева или справа поверх страницы, с ловушкой фокуса и закрытием по Escape.
+  `<JxDrawer title: ReactNode; children?: ReactNode; className?: string; defaultOpen?: boolean = false; onOpenChange?: (open: boolean) => void; open?: boolean; side?: JxDrawerSide = 'right' />`
+- **JxEmptyState**
+  `<JxEmptyState title: ReactNode; action?: ReactNode; icon?: ReactNode; message?: ReactNode />` extends HTMLAttributes<HTMLDivElement>
+- **JxInputField** — Текстовое поле с подписью, подсказкой и текстом ошибки.
+  `<JxInputField className?: string; errorText?: string; helperText?: string; label?: string; prefix?: string; required?: boolean />` extends InputHTMLAttributes<HTMLInputElement>
+- **JxKbd**
+  `<JxKbd children?: ReactNode />` extends HTMLAttributes<HTMLSpanElement>
+- **JxMenu** — Вертикальное меню действий.
+  `<JxMenu items: JxMenuItem[] />` extends HTMLAttributes<HTMLDivElement>
+- **JxModal** — Модальное окно с ловушкой фокуса и закрытием по Escape.
+  `<JxModal title: ReactNode; children?: ReactNode; className?: string; defaultOpen?: boolean = false; icon?: ReactNode; intent?: JxModalIntent = 'default'; message?: ReactNode; onOpenChange?: (open: boolean) => void; open?: boolean />`
+- **JxPagination** — Постраничная навигация с кнопками «назад» и «вперёд» и многоточиями для длинных списков.
+  `<JxPagination total: number; defaultPage?: number; onPageChange?: (page: number) => void; page?: number; siblingCount?: number = 1 />` extends Omit<HTMLAttributes<HTMLElement>, "onChange">
+- **JxProgress** — Горизонтальная полоса прогресса.
+  `<JxProgress value: number; label?: string; max?: number = 100 />` extends HTMLAttributes<HTMLDivElement>
+- **JxProgressCircle**
+  `<JxProgressCircle value: number; max?: number = 100; showValue?: boolean = true />` extends HTMLAttributes<HTMLDivElement>
+- **JxRadio** — Радиокнопка с подписью.
+  `<JxRadio label?: ReactNode; wrapClassName?: string />` extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size">
+- **JxSelect** — Выпадающий список с одним выбранным значением, клавиатурной навигацией и группами.
+  `<JxSelect options: JxSelectOption[]; className?: string; defaultValue?: string; label?: string; onValueChange?: (value: string) => void; placeholder?: string = 'Select'; value?: string />`
+- **JxSkeleton**
+  `<JxSkeleton circle?: boolean = false; height?: CSSProperties['height']; width?: CSSProperties['width'] />` extends HTMLAttributes<HTMLDivElement>
+- **JxSlider**
+  `<JxSlider defaultValue?: number; label?: ReactNode; onValueChange?: (value: number) => void; showOutput?: boolean = true; unit?: string = ''; value?: number />` extends Omit<InputHTMLAttributes<HTMLInputElement>, "defaultValue" | "value" | "onChange" | "type">
+- **JxSnip**
+  `<JxSnip children?: ReactNode />` extends HTMLAttributes<HTMLSpanElement>
+- **JxSnippet**
+  `<JxSnippet block?: boolean = false; children?: ReactNode; copyText?: string; prompt?: ReactNode; tone?: JxSnippetTone = 'default' />` extends HTMLAttributes<HTMLSpanElement>
+- **JxSpinner**
+  `<JxSpinner size?: number; variant?: 'ring' | 'dots' = 'ring' />` extends HTMLAttributes<HTMLSpanElement>
+- **JxStepper** — Индикатор шагов для пошаговых форм.
+  `<JxStepper current: number; steps: JxStep[] />` extends HTMLAttributes<HTMLDivElement>
+- **JxSwitch** — Переключатель «включено/выключено» с подписью.
+  `<JxSwitch label?: ReactNode; wrapClassName?: string />` extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size">
+- **JxTable** — Стилизованная таблица.
+  `<JxTable />` extends TableHTMLAttributes<HTMLTableElement>
+- **JxTabs** — Вкладки с клавиатурной навигацией стрелками.
+  `<JxTabs items: JxTabItem[]; ariaLabel?: string; className?: string; defaultValue?: string; onValueChange?: (value: string) => void; value?: string; variant?: 'segmented' | 'underline' = 'segmented' />`
+- **JxTagInput** — Поле для набора тегов: пользователь вводит текст, Enter добавляет тег, Backspace удаляет последний.
+  `<JxTagInput ariaLabel?: string; className?: string; defaultValue?: string[]; onValueChange?: (value: string[]) => void; placeholder?: string = 'Add tag…'; value?: string[] />`
+- **JxTextareaField** — Многострочное поле с подписью, подсказкой и текстом ошибки.
+  `<JxTextareaField className?: string; errorText?: string; helperText?: string; label?: string; required?: boolean />` extends TextareaHTMLAttributes<HTMLTextAreaElement>
+- **JxToast** — Одно всплывающее уведомление с заголовком, текстом и кнопкой закрытия.
+  `<JxToast title: ReactNode; message?: ReactNode; onClose?: () => void; showIcon?: boolean = true; variant?: JxToastVariant = 'default' />`
+- **JxToastViewport** — Область, в которой показывается очередь уведомлений.
+  `<JxToastViewport items: JxToastItem[]; onDismiss: (id: string) => void; position?: 'bottom-left' | 'bottom-right' | 'top-right' | 'top-left' = 'bottom-left' />`
+- **JxToggle**
+  `<JxToggle items: JxToggleItem[]; defaultValue?: string; onValueChange?: (value: string) => void; value?: string />` extends Omit<HTMLAttributes<HTMLDivElement>, "onChange">
+- **JxTooltip**
+  `<JxTooltip children: ReactNode; tip: ReactNode />` extends HTMLAttributes<HTMLDivElement>
+
+## Хуки
+
+- `useControllableState<T>(controlledValue: T | undefined, defaultValue: T, onChange?: (value: T) => void): readonly [T, (nextValue: T) => void]`
+  Источник: `packages/react/src/hooks/useControllableState.ts:3`
+- `useDialogA11y({ isOpen, onClose, containerRef, initialFocusRef }: { isOpen: boolean; onClose: () => void; containerRef: RefObject<HTMLElement | null>; initialFocusRef: RefObject<HTMLElement | null>; }): void`
+  Источник: `packages/react/src/hooks/useDialogA11y.ts:26`
+- `useJxToastQueue(initial?: JxToastItem[]): { items: JxToastItem[]; push: (item: Omit<JxToastItem, "id">) => `${string}-${string}-${string}-${string}-${string}`; dismiss: (id: string) => void; clear: () => void; }`
+  Источник: `packages/react/src/components/Toast.tsx:127`
+
+## Токены
+
+- color (21): --jx-accent, --jx-accent-2, --jx-accent-2-ink, --jx-accent-ink, --jx-accent-soft, --jx-bg, --jx-bg-2, --jx-border, --jx-border-2, --jx-danger, --jx-info, --jx-rule, --jx-success, --jx-surface, --jx-surface-2, --jx-surface-3, --jx-text, --jx-text-2, --jx-text-3, --jx-text-4, --jx-warning
+- font (3): --jx-font-display, --jx-font-mono, --jx-font-sans
+- motion (2): --jx-ease, --jx-ease-out
+- radius (6): --jx-r, --jx-r-lg, --jx-r-pill, --jx-r-sm, --jx-r-xl, --jx-r-xs
+- shadow (3): --jx-shadow, --jx-shadow-lg, --jx-shadow-sm
+
+---
+
+# JxAccordion
+
+Список раскрывающихся секций. Элементы описываются типом `JxAccordionItem`: `value`, `title`, `content`. По умолчанию открыта одна секция; `single={false}` разрешает несколько. Открытые секции задаются массивом `value`.
+
+Импорт: `import { JxAccordion } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Accordion.tsx:22`
+Ключевые слова: accordion, аккордеон, раскрывающиеся секции, faq, вопросы и ответы
+
+## Сигнатура
+
+```tsx
+<JxAccordion items: JxAccordionItem[]; className?: string; defaultValue?: string[]; onValueChange?: (value: string[]) => void; single?: boolean = true; value?: string[] />
+```
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `items` | `JxAccordionItem[]` | да |  | секции `{ value, title, content }` |
+| `className` | `string` | нет |  | дополнительный класс корневого элемента |
+| `defaultValue` | `string[]` | нет |  | открытые секции при первом рендере |
+| `onValueChange` | `(value: string[]) => void` | нет |  | вызывается с новым списком открытых секций |
+| `single` | `boolean` | нет | `true` | только одна открытая секция, `true` по умолчанию |
+| `value` | `string[]` | нет |  | открытые секции в управляемом режиме |
+
+## CSS-классы
+
+`jx-accordion`, `jx-accordion-body`, `jx-accordion-content`, `jx-accordion-icon`, `jx-accordion-item`, `jx-accordion-trigger`
+
+## Примеры
+
+### Вопросы и ответы
+
+```tsx
+<JxAccordion
+  defaultValue={['delivery']}
+  items={[
+    { value: 'delivery', title: 'Как быстро доставка?', content: 'От одного до трёх дней.' },
+    { value: 'refund', title: 'Можно вернуть?', content: 'Да, в течение 14 дней.' },
+  ]}
+/>
+```
+
+---
+
+# JxAlert
+
+Встроенное в разметку сообщение с иконкой, заголовком и текстом. В отличие от `JxToast` не исчезает само и не требует очереди.
+
+Импорт: `import { JxAlert } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Alert.tsx:47`
+Ключевые слова: alert, предупреждение, сообщение, ошибка, info, инлайн-уведомление, баннер
+
+## Сигнатура
+
+```tsx
+<JxAlert title: ReactNode; children?: ReactNode; icon?: ReactNode; intent?: JxAlertIntent = 'info' />
+```
+
+Наследует `HTMLAttributes<HTMLDivElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `title` | `ReactNode` | да |  | заголовок сообщения |
+| `children` | `ReactNode` | нет |  | текст сообщения |
+| `icon` | `ReactNode` | нет |  | своя иконка вместо иконки тона |
+| `intent` | `"danger" \\| "warning" \\| "info" \\| "success"` | нет | `'info'` | тон: `info` по умолчанию, `success`, `warning`, `danger` |
+
+## CSS-классы
+
+`jx-alert`, `jx-alert-body`, `jx-alert-icon`, `jx-alert-msg`, `jx-alert-title`
+
+## Примеры
+
+### Предупреждение перед действием
+
+```tsx
+<JxAlert intent="warning" title="Нельзя отменить">
+  После архивации проект пропадёт из списка активных.
+</JxAlert>
+```
+
+---
+
+# JxAvatar
+
+Импорт: `import { JxAvatar } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Avatar.tsx:26`
+
+## Сигнатура
+
+```tsx
+<JxAvatar children?: ReactNode; size?: JxAvatarSize = 'md'; status?: boolean = false; tone?: JxAvatarTone = 'default' />
+```
+
+Наследует `HTMLAttributes<HTMLSpanElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `children` | `ReactNode` | нет |  |  |
+| `size` | `"sm" \\| "md" \\| "lg"` | нет | `'md'` |  |
+| `status` | `boolean` | нет | `false` |  |
+| `tone` | `"alt" \\| "default" \\| "info" \\| "accent"` | нет | `'default'` |  |
+
+## CSS-классы
+
+`jx-avatar`, `jx-avatar--accent`, `jx-avatar--alt`, `jx-avatar--info`, `jx-avatar--lg`, `jx-avatar--sm`, `jx-avatar-status`
+
+---
+
+# JxAvatarStack
+
+Импорт: `import { JxAvatarStack } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Avatar.tsx:42`
+
+## Сигнатура
+
+```tsx
+<JxAvatarStack children?: ReactNode />
+```
+
+Наследует `HTMLAttributes<HTMLDivElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `children` | `ReactNode` | нет |  |  |
+
+## CSS-классы
+
+`jx-avatar-stack`
+
+---
+
+# JxBadge
+
+Небольшая метка статуса или счётчика. Тон задаёт цвет из токенов, `dot` добавляет точку-индикатор перед текстом.
+
+Импорт: `import { JxBadge } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Badge.tsx:22`
+Ключевые слова: badge, бейдж, статус, метка, счётчик, индикатор
+
+## Сигнатура
+
+```tsx
+<JxBadge children?: ReactNode; dot?: boolean = false; tone?: JxBadgeTone = 'default' />
+```
+
+Наследует `HTMLAttributes<HTMLSpanElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `children` | `ReactNode` | нет |  | текст метки |
+| `dot` | `boolean` | нет | `false` | показать точку-индикатор |
+| `tone` | `"alt" \\| "danger" \\| "default" \\| "warning" \\| "info" \\| "success" \\| "accent" \\| "solid"` | нет | `'default'` | цветовой тон: `default`, `accent`, `alt`, `success`, `warning`, `danger`, `info`, `solid` |
+
+## CSS-классы
+
+`jx-badge`, `jx-badge--accent`, `jx-badge--alt`, `jx-badge--danger`, `jx-badge--dot`, `jx-badge--info`, `jx-badge--solid`, `jx-badge--success`, `jx-badge--warning`
+
+## Примеры
+
+### Статусы в таблице
+
+```tsx
+<JxBadge tone="success" dot>Активен</JxBadge>
+<JxBadge tone="warning">Ожидает</JxBadge>
+```
+
+---
+
+# JxBreadcrumbs
+
+Импорт: `import { JxBreadcrumbs } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Breadcrumbs.tsx:15`
+
+## Сигнатура
+
+```tsx
+<JxBreadcrumbs items: JxBreadcrumbItem[]; separator?: ReactNode = '/' />
+```
+
+Наследует `HTMLAttributes<HTMLElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `items` | `JxBreadcrumbItem[]` | да |  |  |
+| `separator` | `ReactNode` | нет | `'/'` |  |
+
+## CSS-классы
+
+`jx-breadcrumbs`
+
+---
+
+# JxButton
+
+Кнопка действия. Шесть визуальных вариантов и три размера, всё остальное берётся из атрибутов `<button>`: `type`, `disabled`, `onClick`, `aria-label`. По умолчанию `type="button"`, поэтому для отправки формы задавайте `type="submit"` явно.
+
+Импорт: `import { JxButton } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Button.tsx:28`
+Ключевые слова: кнопка, button, действие, submit, отправить, сохранить, удалить, cta
+
+## Сигнатура
+
+```tsx
+<JxButton iconOnly?: boolean = false; size?: JxButtonSize = 'md'; variant?: JxButtonVariant = 'primary' />
+```
+
+Наследует `ButtonHTMLAttributes<HTMLButtonElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `iconOnly` | `boolean` | нет | `false` | квадратная кнопка под одну иконку; обязательно добавьте `aria-label` |
+| `size` | `"sm" \\| "md" \\| "lg"` | нет | `'md'` | размер кнопки, `md` по умолчанию |
+| `variant` | `"primary" \\| "alt" \\| "secondary" \\| "ghost" \\| "outline" \\| "danger"` | нет | `'primary'` | визуальный стиль; `primary` для главного действия, `danger` для разрушительного, `outline` и `ghost` для второстепенных |
+
+## CSS-классы
+
+`jx-btn`, `jx-btn--alt`, `jx-btn--danger`, `jx-btn--ghost`, `jx-btn--icon`, `jx-btn--lg`, `jx-btn--outline`, `jx-btn--primary`, `jx-btn--secondary`, `jx-btn--sm`
+
+## Примеры
+
+### Главное и второстепенное действие
+
+```tsx
+<div style={{ display: 'flex', gap: 'var(--jx-gap, 8px)' }}>
+  <JxButton variant="primary" type="submit">Сохранить</JxButton>
+  <JxButton variant="ghost" type="button">Отмена</JxButton>
+</div>
+```
+
+### Разрушительное действие с блокировкой
+
+```tsx
+<JxButton variant="danger" size="sm" disabled={isDeleting} onClick={remove}>
+  Удалить
+</JxButton>
+```
+
+---
+
+# JxCalendar
+
+Календарь на один месяц с выбором одной даты. Значение — `Date` или `null`, управляемое через `value` и `onValueChange`. Диапазон подсвечивается через `rangeHover`, а подпись месяца форматируется `monthFormatter` или локалью.
+
+Импорт: `import { JxCalendar } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Calendar.tsx:59`
+Ключевые слова: календарь, calendar, дата, выбор даты, datepicker, период, месяц
+
+## Сигнатура
+
+```tsx
+<JxCalendar defaultValue?: Date | null; locale?: string = 'en-US'; monthFormatter?: (date: Date) => { month: string; year: string }; onValueChange?: (value: Date | null) => void; rangeHover?: { from: Date; to: Date } | null; value?: Date | null />
+```
+
+Наследует `Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange">`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `defaultValue` | `Date \| null` | нет |  | начальная дата |
+| `locale` | `string` | нет | `'en-US'` | локаль для названий месяцев и дней недели, `en-US` по умолчанию |
+| `monthFormatter` | `(date: Date) => { month: string; year: string }` | нет |  | функция форматирования подписи месяца и года |
+| `onValueChange` | `(value: Date \| null) => void` | нет |  | вызывается с выбранной датой или `null` |
+| `rangeHover` | `{ from: Date; to: Date } \| null` | нет |  | подсветка диапазона `{ from, to }` |
+| `value` | `Date \| null` | нет |  | выбранная дата в управляемом режиме |
+
+## CSS-классы
+
+`jx-cal-day`, `jx-cal-day--in-range`, `jx-cal-day--out`, `jx-cal-day--selected`, `jx-cal-day--today`, `jx-cal-dow`, `jx-cal-grid`, `jx-cal-head`, `jx-cal-month`, `jx-cal-nav`, `jx-calendar`
+
+## Примеры
+
+### Выбор даты с русской локалью
+
+```tsx
+<JxCalendar locale="ru-RU" value={date} onValueChange={setDate} />
+```
+
+---
+
+# JxCheckbox
+
+Флажок с подписью. Внутри обычный `<input type="checkbox">`: `checked`, `onChange`, `name`, `disabled` передаются напрямую. Для взаимоисключающего выбора используйте `JxRadio`, для настроек «вкл/выкл» — `JxSwitch`.
+
+Импорт: `import { JxCheckbox } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Checkbox.tsx:9`
+Ключевые слова: checkbox, чекбокс, флажок, согласие, выбрать несколько, галочка
+
+## Сигнатура
+
+```tsx
+<JxCheckbox label?: ReactNode; wrapClassName?: string />
+```
+
+Наследует `Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size">`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `label` | `ReactNode` | нет |  | подпись рядом с флажком |
+| `wrapClassName` | `string` | нет |  | класс на обёртке с подписью |
+
+## CSS-классы
+
+`jx-check`
+
+## Примеры
+
+### Согласие с условиями
+
+```tsx
+<JxCheckbox
+  label="Согласен с условиями обработки данных"
+  checked={agreed}
+  onChange={(event) => setAgreed(event.target.checked)}
+/>
+```
+
+---
+
+# JxChip
+
+Компактная метка-кнопка для фильтров и быстрого выбора. Может быть активной и удаляемой; клик обрабатывается через обычный `onClick`, так как компонент наследует атрибуты `<span>`.
+
+Импорт: `import { JxChip } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Chip.tsx:11`
+Ключевые слова: chip, чип, фильтр, быстрый выбор, период, удаляемая метка
+
+## Сигнатура
+
+```tsx
+<JxChip active?: boolean = false; children?: ReactNode; onRemove?: () => void; removable?: boolean = false />
+```
+
+Наследует `HTMLAttributes<HTMLSpanElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `active` | `boolean` | нет | `false` | выделить как выбранную |
+| `children` | `ReactNode` | нет |  | текст метки |
+| `onRemove` | `() => void` | нет |  | вызывается по крестику |
+| `removable` | `boolean` | нет | `false` | показать крестик удаления |
+
+## CSS-классы
+
+`jx-chip`, `jx-chip--active`, `jx-chip-x`
+
+## Примеры
+
+### Быстрый выбор периода
+
+```tsx
+<div style={{ display: 'flex', gap: '8px' }}>
+  {periods.map((period) => (
+    <JxChip key={period.value} active={period.value === selected} onClick={() => setSelected(period.value)}>
+      {period.label}
+    </JxChip>
+  ))}
+</div>
+```
+
+---
+
+# JxCombobox
+
+Поле с автодополнением: пользователь печатает, список фильтруется, выбор одного значения. Опции `JxComboboxOption`: `value`, `label`, необязательные `subLabel` и `icon`. Для множественного выбора тегов используйте `JxTagInput`.
+
+Импорт: `import { JxCombobox } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Combobox.tsx:24`
+Ключевые слова: combobox, автодополнение, поиск по списку, autocomplete, подсказки, поиск
+
+## Сигнатура
+
+```tsx
+<JxCombobox options: JxComboboxOption[]; ariaLabel?: string; className?: string; defaultValue?: string; emptyText?: string = 'No matches. Try fewer letters.'; onValueChange?: (value: string) => void; placeholder?: string = 'Search...'; value?: string />
+```
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `options` | `JxComboboxOption[]` | да |  | список опций `{ value, label, subLabel?, icon? }` |
+| `ariaLabel` | `string` | нет |  | доступное имя поля, если нет видимой подписи |
+| `className` | `string` | нет |  | дополнительный класс корневого элемента |
+| `defaultValue` | `string` | нет |  | начальное значение |
+| `emptyText` | `string` | нет | `'No matches. Try fewer letters.'` | текст, когда фильтр ничего не нашёл |
+| `onValueChange` | `(value: string) => void` | нет |  | вызывается с новым значением при выборе |
+| `placeholder` | `string` | нет | `'Search...'` | текст в пустом поле |
+| `value` | `string` | нет |  | выбранное значение в управляемом режиме |
+
+## CSS-классы
+
+`jx-combobox`, `jx-combobox-empty`, `jx-combobox-input`, `jx-combobox-list`, `jx-combobox-option`, `jx-combobox-option-sub`
+
+## Примеры
+
+### Поиск сотрудника
+
+```tsx
+<JxCombobox
+  ariaLabel="Сотрудник"
+  placeholder="Начните вводить имя"
+  emptyText="Никого не нашли"
+  options={people.map((person) => ({ value: person.id, label: person.name, subLabel: person.role }))}
+  value={assigneeId}
+  onValueChange={setAssigneeId}
+/>
+```
+
+---
+
+# JxDivider
+
+Импорт: `import { JxDivider } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Divider.tsx:8`
+
+## Сигнатура
+
+```tsx
+<JxDivider label?: ReactNode />
+```
+
+Наследует `HTMLAttributes<HTMLDivElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `label` | `ReactNode` | нет |  |  |
+
+## CSS-классы
+
+`jx-divider`, `jx-rule`
+
+---
+
+# JxDrawer
+
+Боковая панель, выезжающая слева или справа поверх страницы, с ловушкой фокуса и закрытием по Escape. Управляется парой `open` и `onOpenChange`; содержимое передаётся как `children`.
+
+Импорт: `import { JxDrawer } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Drawer.tsx:20`
+Ключевые слова: drawer, боковая панель, шторка, sidebar, выезжающая панель, меню навигации, фильтры
+
+## Сигнатура
+
+```tsx
+<JxDrawer title: ReactNode; children?: ReactNode; className?: string; defaultOpen?: boolean = false; onOpenChange?: (open: boolean) => void; open?: boolean; side?: JxDrawerSide = 'right' />
+```
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `title` | `ReactNode` | да |  | заголовок панели |
+| `children` | `ReactNode` | нет |  | содержимое панели |
+| `className` | `string` | нет |  | дополнительный класс панели |
+| `defaultOpen` | `boolean` | нет | `false` | начальное состояние в неуправляемом режиме |
+| `onOpenChange` | `(open: boolean) => void` | нет |  | вызывается с новым состоянием при закрытии |
+| `open` | `boolean` | нет |  | открыта ли панель в управляемом режиме |
+| `side` | `"left" \\| "right"` | нет | `'right'` | с какой стороны выезжает, `right` по умолчанию |
+
+## CSS-классы
+
+`jx-drawer`, `jx-drawer-body`, `jx-drawer-head`, `jx-drawer-title`, `jx-modal-close`
+
+## Примеры
+
+### Панель с навигацией
+
+```tsx
+<JxDrawer open={menuOpen} onOpenChange={setMenuOpen} title="Разделы" side="left">
+  <JxMenu
+    items={[
+      { label: 'Проекты', onSelect: () => go('/projects') },
+      { label: 'Команда', onSelect: () => go('/team') },
+      { type: 'divider' },
+      { label: 'Выйти', danger: true, onSelect: logout },
+    ]}
+  />
+</JxDrawer>
+```
+
+---
+
+# JxEmptyState
+
+Импорт: `import { JxEmptyState } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/EmptyState.tsx:18`
+
+## Сигнатура
+
+```tsx
+<JxEmptyState title: ReactNode; action?: ReactNode; icon?: ReactNode; message?: ReactNode />
+```
+
+Наследует `HTMLAttributes<HTMLDivElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `title` | `ReactNode` | да |  |  |
+| `action` | `ReactNode` | нет |  |  |
+| `icon` | `ReactNode` | нет |  |  |
+| `message` | `ReactNode` | нет |  |  |
+
+## CSS-классы
+
+`jx-empty`, `jx-empty-icon`, `jx-empty-msg`, `jx-empty-title`
+
+---
+
+# JxInputField
+
+Текстовое поле с подписью, подсказкой и текстом ошибки. Само поле — обычный `<input>`, поэтому `value`, `onChange`, `placeholder`, `type`, `name` и `disabled` передаются напрямую.
+
+Импорт: `import { JxInputField } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Fields.tsx:17`
+Ключевые слова: поле ввода, input, текстовое поле, форма, имя, email, телефон, ошибка валидации
+
+## Сигнатура
+
+```tsx
+<JxInputField className?: string; errorText?: string; helperText?: string; label?: string; prefix?: string; required?: boolean />
+```
+
+Наследует `InputHTMLAttributes<HTMLInputElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `className` | `string` | нет |  | дополнительный класс корневого элемента |
+| `errorText` | `string` | нет |  | текст ошибки; при наличии поле подсвечивается как невалидное |
+| `helperText` | `string` | нет |  | подсказка под полем |
+| `label` | `string` | нет |  | подпись над полем |
+| `prefix` | `string` | нет |  | короткий текст слева от значения, например `https://` или `+7` |
+| `required` | `boolean` | нет |  | помечает поле обязательным звёздочкой и атрибутом `required` |
+
+## CSS-классы
+
+`jx-field`, `jx-field--error`, `jx-input`, `jx-input-error`, `jx-input-group`, `jx-input-group-affix`, `jx-input-help`, `jx-label`, `jx-label-req`
+
+## Примеры
+
+### Обязательное поле с ошибкой
+
+```tsx
+<JxInputField
+  label="Электронная почта"
+  type="email"
+  required
+  value={email}
+  onChange={(event) => setEmail(event.target.value)}
+  errorText={emailError}
+/>
+```
+
+### Поле с префиксом и подсказкой
+
+```tsx
+<JxInputField label="Сайт" prefix="https://" placeholder="example.com" helperText="Без протокола" />
+```
+
+---
+
+# JxKbd
+
+Импорт: `import { JxKbd } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Kbd.tsx:8`
+
+## Сигнатура
+
+```tsx
+<JxKbd children?: ReactNode />
+```
+
+Наследует `HTMLAttributes<HTMLSpanElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `children` | `ReactNode` | нет |  |  |
+
+## CSS-классы
+
+`jx-kbd`
+
+---
+
+# JxMenu
+
+Вертикальное меню действий. Пункты описываются массивом `JxMenuItem`: обычный пункт с `label` и `onSelect`, разделитель `{ type: 'divider' }` и подпись группы `{ type: 'label', label }`. Опасные действия помечаются `danger`, недоступные — `disabled`.
+
+Импорт: `import { JxMenu } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Menu.tsx:18`
+Ключевые слова: menu, меню, список действий, навигация, контекстное меню, пункты
+
+## Сигнатура
+
+```tsx
+<JxMenu items: JxMenuItem[] />
+```
+
+Наследует `HTMLAttributes<HTMLDivElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `items` | `JxMenuItem[]` | да |  | пункты меню `{ type?, label?, icon?, shortcut?, danger?, onSelect?, disabled? }` |
+
+## CSS-классы
+
+`jx-menu-divider`, `jx-menu-item`, `jx-menu-item--danger`, `jx-menu-item-shortcut`, `jx-menu-label`, `jx-menu-panel`
+
+## Примеры
+
+### Меню действий над проектом
+
+```tsx
+<JxMenu
+  items={[
+    { type: 'label', label: 'Проект' },
+    { label: 'Переименовать', shortcut: 'F2', onSelect: rename },
+    { label: 'Дублировать', onSelect: duplicate },
+    { type: 'divider' },
+    { label: 'Удалить', danger: true, onSelect: remove },
+  ]}
+/>
+```
+
+---
+
+# JxModal
+
+Модальное окно с ловушкой фокуса и закрытием по Escape. Управляется парой `open` и `onOpenChange`; кнопки действий передаются как `children`. У окна нет собственной кнопки закрытия, поэтому в `children` всегда должна быть кнопка, которая вызывает `onOpenChange(false)`.
+
+Импорт: `import { JxModal } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Modal.tsx:67`
+Ключевые слова: модальное окно, модалка, диалог, dialog, подтверждение, confirm, удалить, popup
+
+## Сигнатура
+
+```tsx
+<JxModal title: ReactNode; children?: ReactNode; className?: string; defaultOpen?: boolean = false; icon?: ReactNode; intent?: JxModalIntent = 'default'; message?: ReactNode; onOpenChange?: (open: boolean) => void; open?: boolean />
+```
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `title` | `ReactNode` | да |  | заголовок окна |
+| `children` | `ReactNode` | нет |  | содержимое окна, обычно кнопки действий |
+| `className` | `string` | нет |  | дополнительный класс окна |
+| `defaultOpen` | `boolean` | нет | `false` | начальное состояние в неуправляемом режиме |
+| `icon` | `ReactNode` | нет |  | иконка рядом с заголовком вместо иконки по умолчанию |
+| `intent` | `"danger" \\| "default" \\| "warning" \\| "info" \\| "success"` | нет | `'default'` | смысловой тон; `danger` для разрушительных действий, `warning`, `info`, `success` |
+| `message` | `ReactNode` | нет |  | текст под заголовком |
+| `onOpenChange` | `(open: boolean) => void` | нет |  | вызывается с новым состоянием при закрытии по Escape или клику по подложке |
+| `open` | `boolean` | нет |  | открыто ли окно в управляемом режиме |
+
+## CSS-классы
+
+`jx-modal-actions`, `jx-modal-close`, `jx-modal-frame`, `jx-modal-icon`, `jx-modal-msg`, `jx-modal-title`
+
+## Примеры
+
+### Подтверждение удаления
+
+```tsx
+<JxModal
+  open={confirmOpen}
+  onOpenChange={setConfirmOpen}
+  intent="danger"
+  title="Удалить проект?"
+  message="Проект и все задачи будут удалены безвозвратно."
+>
+  <JxButton variant="ghost" onClick={() => setConfirmOpen(false)}>Отмена</JxButton>
+  <JxButton variant="danger" onClick={removeProject}>Удалить</JxButton>
+</JxModal>
+```
+
+---
+
+# JxPagination
+
+Постраничная навигация с кнопками «назад» и «вперёд» и многоточиями для длинных списков. Страницы нумеруются с единицы; `total` — это количество страниц, а не элементов, поэтому его считают заранее: `Math.ceil(items.length / pageSize)`.
+
+Импорт: `import { JxPagination } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Pagination.tsx:41`
+Ключевые слова: pagination, пагинация, страницы, постраничная навигация, таблица, список
+
+## Сигнатура
+
+```tsx
+<JxPagination total: number; defaultPage?: number; onPageChange?: (page: number) => void; page?: number; siblingCount?: number = 1 />
+```
+
+Наследует `Omit<HTMLAttributes<HTMLElement>, "onChange">`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `total` | `number` | да |  | количество страниц |
+| `defaultPage` | `number` | нет |  | начальная страница в неуправляемом режиме |
+| `onPageChange` | `(page: number) => void` | нет |  | вызывается с номером выбранной страницы |
+| `page` | `number` | нет |  | текущая страница в управляемом режиме, с единицы |
+| `siblingCount` | `number` | нет | `1` | сколько соседних страниц показывать по обе стороны от текущей, 1 по умолчанию |
+
+## CSS-классы
+
+`jx-page-btn`, `jx-page-ellipsis`, `jx-pagination`
+
+## Примеры
+
+### Таблица по десять строк
+
+```tsx
+const pageSize = 10;
+const pageCount = Math.ceil(users.length / pageSize);
+const visible = users.slice((page - 1) * pageSize, page * pageSize);
+
+<JxPagination total={pageCount} page={page} onPageChange={setPage} />
+```
+
+---
+
+# JxProgress
+
+Горизонтальная полоса прогресса. Значение сравнивается с `max`, подпись выводится рядом с полосой.
+
+Импорт: `import { JxProgress } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Progress.tsx:11`
+Ключевые слова: progress, прогресс, полоса загрузки, заполнение, процент выполнения
+
+## Сигнатура
+
+```tsx
+<JxProgress value: number; label?: string; max?: number = 100 />
+```
+
+Наследует `HTMLAttributes<HTMLDivElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `value` | `number` | да |  | текущее значение |
+| `label` | `string` | нет |  | подпись слева от полосы |
+| `max` | `number` | нет | `100` | максимум, 100 по умолчанию |
+
+## CSS-классы
+
+`jx-progress`, `jx-progress-bar`
+
+## Примеры
+
+### Загрузка файла
+
+```tsx
+<JxProgress label="Загрузка" value={uploaded} max={total} />
+```
+
+---
+
+# JxProgressCircle
+
+Импорт: `import { JxProgressCircle } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Progress.tsx:39`
+
+## Сигнатура
+
+```tsx
+<JxProgressCircle value: number; max?: number = 100; showValue?: boolean = true />
+```
+
+Наследует `HTMLAttributes<HTMLDivElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `value` | `number` | да |  |  |
+| `max` | `number` | нет | `100` |  |
+| `showValue` | `boolean` | нет | `true` |  |
+
+## CSS-классы
+
+`jx-progress-circle`, `jx-progress-circle-val`
+
+---
+
+# JxRadio
+
+Радиокнопка с подписью. Внутри обычный `<input type="radio">`; варианты одной группы объединяются одинаковым `name`, выбранный задаётся через `checked` и `onChange`.
+
+Импорт: `import { JxRadio } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Radio.tsx:9`
+Ключевые слова: radio, радиокнопка, один из нескольких, выбор варианта, тариф
+
+## Сигнатура
+
+```tsx
+<JxRadio label?: ReactNode; wrapClassName?: string />
+```
+
+Наследует `Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size">`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `label` | `ReactNode` | нет |  | подпись рядом с радиокнопкой |
+| `wrapClassName` | `string` | нет |  | класс на обёртке с подписью |
+
+## CSS-классы
+
+`jx-radio`
+
+## Примеры
+
+### Выбор тарифа
+
+```tsx
+<div role="radiogroup" aria-label="Тариф">
+  <JxRadio name="plan" value="basic" label="Базовый" checked={plan === 'basic'} onChange={() => setPlan('basic')} />
+  <JxRadio name="plan" value="pro" label="Про" checked={plan === 'pro'} onChange={() => setPlan('pro')} />
+</div>
+```
+
+---
+
+# JxSelect
+
+Выпадающий список с одним выбранным значением, клавиатурной навигацией и группами. Управляемый через `value` и `onValueChange` или неуправляемый через `defaultValue`. Опции описываются массивом `JxSelectOption`: `value`, `label`, необязательные `meta`, `group`, `disabled`.
+
+Импорт: `import { JxSelect } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Select.tsx:45`
+Ключевые слова: select, выпадающий список, выбор, дропдаун, dropdown, язык, статус, категория
+
+## Сигнатура
+
+```tsx
+<JxSelect options: JxSelectOption[]; className?: string; defaultValue?: string; label?: string; onValueChange?: (value: string) => void; placeholder?: string = 'Select'; value?: string />
+```
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `options` | `JxSelectOption[]` | да |  | список опций `{ value, label, meta?, group?, disabled? }` |
+| `className` | `string` | нет |  | дополнительный класс корневого элемента |
+| `defaultValue` | `string` | нет |  | начальное значение в неуправляемом режиме |
+| `label` | `string` | нет |  | подпись над списком |
+| `onValueChange` | `(value: string) => void` | нет |  | вызывается с новым значением при выборе |
+| `placeholder` | `string` | нет | `'Select'` | текст, пока ничего не выбрано |
+| `value` | `string` | нет |  | выбранное значение в управляемом режиме |
+
+## CSS-классы
+
+`jx-field`, `jx-label`, `jx-select`, `jx-select-caret`, `jx-select-check`, `jx-select-divider`, `jx-select-group`, `jx-select-option`, `jx-select-option-label`, `jx-select-option-meta`, `jx-select-placeholder`, `jx-select-trigger`, `jx-select-value`
+
+## Примеры
+
+### Выбор языка интерфейса
+
+```tsx
+<JxSelect
+  label="Язык"
+  options={[
+    { value: 'ru', label: 'Русский' },
+    { value: 'en', label: 'English' },
+  ]}
+  value={language}
+  onValueChange={setLanguage}
+/>
+```
+
+### Опции с группами и подписями
+
+```tsx
+<JxSelect
+  placeholder="Выберите статус"
+  options={[
+    { value: 'new', label: 'Новый', group: 'Активные', meta: '12' },
+    { value: 'in_progress', label: 'В работе', group: 'Активные' },
+    { value: 'closed', label: 'Закрыт', group: 'Архив', disabled: true },
+  ]}
+  defaultValue="new"
+/>
+```
+
+---
+
+# JxSkeleton
+
+Импорт: `import { JxSkeleton } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Skeleton.tsx:10`
+
+## Сигнатура
+
+```tsx
+<JxSkeleton circle?: boolean = false; height?: CSSProperties['height']; width?: CSSProperties['width'] />
+```
+
+Наследует `HTMLAttributes<HTMLDivElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `circle` | `boolean` | нет | `false` |  |
+| `height` | `CSSProperties['height']` | нет |  |  |
+| `width` | `CSSProperties['width']` | нет |  |  |
+
+## CSS-классы
+
+`jx-skeleton`
+
+---
+
+# JxSlider
+
+Импорт: `import { JxSlider } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Slider.tsx:15`
+
+## Сигнатура
+
+```tsx
+<JxSlider defaultValue?: number; label?: ReactNode; onValueChange?: (value: number) => void; showOutput?: boolean = true; unit?: string = ''; value?: number />
+```
+
+Наследует `Omit<InputHTMLAttributes<HTMLInputElement>, "defaultValue" | "value" | "onChange" | "type">`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `defaultValue` | `number` | нет |  |  |
+| `label` | `ReactNode` | нет |  |  |
+| `onValueChange` | `(value: number) => void` | нет |  |  |
+| `showOutput` | `boolean` | нет | `true` |  |
+| `unit` | `string` | нет | `''` |  |
+| `value` | `number` | нет |  |  |
+
+## CSS-классы
+
+`jx-slider`, `jx-slider-wrap`
+
+---
+
+# JxSnip
+
+Импорт: `import { JxSnip } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Snippet.tsx:66`
+
+## Сигнатура
+
+```tsx
+<JxSnip children?: ReactNode />
+```
+
+Наследует `HTMLAttributes<HTMLSpanElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `children` | `ReactNode` | нет |  |  |
+
+## CSS-классы
+
+`jx-snip`
+
+---
+
+# JxSnippet
+
+Импорт: `import { JxSnippet } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Snippet.tsx:27`
+
+## Сигнатура
+
+```tsx
+<JxSnippet block?: boolean = false; children?: ReactNode; copyText?: string; prompt?: ReactNode; tone?: JxSnippetTone = 'default' />
+```
+
+Наследует `HTMLAttributes<HTMLSpanElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `block` | `boolean` | нет | `false` |  |
+| `children` | `ReactNode` | нет |  |  |
+| `copyText` | `string` | нет |  |  |
+| `prompt` | `ReactNode` | нет |  |  |
+| `tone` | `"alt" \\| "default" \\| "info"` | нет | `'default'` |  |
+
+## CSS-классы
+
+`jx-snippet`, `jx-snippet--alt`, `jx-snippet--block`, `jx-snippet--info`, `jx-snippet-code`, `jx-snippet-copy`, `jx-snippet-prompt`
+
+---
+
+# JxSpinner
+
+Импорт: `import { JxSpinner } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Spinner.tsx:9`
+
+## Сигнатура
+
+```tsx
+<JxSpinner size?: number; variant?: 'ring' | 'dots' = 'ring' />
+```
+
+Наследует `HTMLAttributes<HTMLSpanElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `size` | `number` | нет |  |  |
+| `variant` | `"ring" \\| "dots"` | нет | `'ring'` |  |
+
+## CSS-классы
+
+`jx-spinner`, `jx-spinner--dots`
+
+---
+
+# JxStepper
+
+Индикатор шагов для пошаговых форм. Показывает пройденные, текущий и будущие шаги; переключение шагов делает родитель. Шаги описываются массивом `JxStep` с полем `label`, `current` — индекс текущего шага с нуля.
+
+Импорт: `import { JxStepper } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Stepper.tsx:19`
+Ключевые слова: stepper, шаги, пошаговая форма, мастер, wizard, прогресс по шагам
+
+## Сигнатура
+
+```tsx
+<JxStepper current: number; steps: JxStep[] />
+```
+
+Наследует `HTMLAttributes<HTMLDivElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `current` | `number` | да |  | индекс текущего шага, с нуля |
+| `steps` | `JxStep[]` | да |  | список шагов `{ label }` |
+
+## CSS-классы
+
+`jx-step`, `jx-step-bubble`, `jx-step-label`, `jx-stepper`
+
+## Примеры
+
+### Трёхшаговая форма
+
+```tsx
+<>
+  <JxStepper steps={[{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }]} current={step} />
+  <JxButton variant="ghost" disabled={step === 0} onClick={() => setStep(step - 1)}>Назад</JxButton>
+  <JxButton variant="primary" onClick={() => setStep(Math.min(step + 1, 2))}>Дальше</JxButton>
+</>
+```
+
+---
+
+# JxSwitch
+
+Переключатель «включено/выключено» с подписью. Внутри обычный `<input type="checkbox">`, поэтому состояние задаётся через `checked` и `onChange`, а имя для формы через `name`.
+
+Импорт: `import { JxSwitch } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Switch.tsx:9`
+Ключевые слова: switch, переключатель, тумблер, включить, выключить, уведомления, настройка
+
+## Сигнатура
+
+```tsx
+<JxSwitch label?: ReactNode; wrapClassName?: string />
+```
+
+Наследует `Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size">`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `label` | `ReactNode` | нет |  | подпись справа от переключателя |
+| `wrapClassName` | `string` | нет |  | класс на обёртке с подписью |
+
+## CSS-классы
+
+`jx-switch`, `jx-switch-slider`
+
+## Примеры
+
+### Настройка уведомлений
+
+```tsx
+<JxSwitch
+  label="Присылать уведомления на почту"
+  checked={notifications}
+  onChange={(event) => setNotifications(event.target.checked)}
+/>
+```
+
+---
+
+# JxTable
+
+Стилизованная таблица. Собственных пропсов нет: это обычный `<table>` с классом библиотеки, поэтому структура `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>` пишется руками, а пагинация делается отдельно через `JxPagination`.
+
+Импорт: `import { JxTable } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Table.tsx:6`
+Ключевые слова: table, таблица, список пользователей, строки, колонки, данные
+
+## Сигнатура
+
+```tsx
+<JxTable />
+```
+
+Наследует `TableHTMLAttributes<HTMLTableElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+Собственных пропсов нет.
+
+## CSS-классы
+
+`jx-table`
+
+## Примеры
+
+### Таблица пользователей
+
+```tsx
+<JxTable>
+  <thead>
+    <tr>
+      <th>Имя</th>
+      <th>Роль</th>
+      <th>Статус</th>
+    </tr>
+  </thead>
+  <tbody>
+    {users.map((user) => (
+      <tr key={user.id}>
+        <td>{user.name}</td>
+        <td>{user.role}</td>
+        <td><JxBadge tone={user.active ? 'success' : 'default'}>{user.active ? 'Активен' : 'Отключён'}</JxBadge></td>
+      </tr>
+    ))}
+  </tbody>
+</JxTable>
+```
+
+---
+
+# JxTabs
+
+Вкладки с клавиатурной навигацией стрелками. Компонент рендерит только заголовки вкладок: содержимое активной вкладки показывает родитель по текущему `value`. Элементы описываются типом `JxTabItem`: `value` и `label`.
+
+Импорт: `import { JxTabs } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Tabs.tsx:21`
+Ключевые слова: tabs, вкладки, табы, переключение разделов, сегментированный контроль
+
+## Сигнатура
+
+```tsx
+<JxTabs items: JxTabItem[]; ariaLabel?: string; className?: string; defaultValue?: string; onValueChange?: (value: string) => void; value?: string; variant?: 'segmented' | 'underline' = 'segmented' />
+```
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `items` | `JxTabItem[]` | да |  | список вкладок `{ value, label }` |
+| `ariaLabel` | `string` | нет |  | доступное имя списка вкладок |
+| `className` | `string` | нет |  | дополнительный класс корневого элемента |
+| `defaultValue` | `string` | нет |  | активная вкладка при первом рендере |
+| `onValueChange` | `(value: string) => void` | нет |  | вызывается с `value` выбранной вкладки |
+| `value` | `string` | нет |  | активная вкладка в управляемом режиме |
+| `variant` | `"segmented" \\| "underline"` | нет | `'segmented'` | внешний вид: `segmented` по умолчанию или `underline` |
+
+## CSS-классы
+
+`jx-tab`, `jx-tabs`, `jx-tabs--underline`, `jx-tabs-indicator-segment`, `jx-tabs-indicator-underline`
+
+## Примеры
+
+### Вкладки с содержимым
+
+```tsx
+<>
+  <JxTabs
+    ariaLabel="Разделы профиля"
+    items={[
+      { value: 'general', label: 'Общее' },
+      { value: 'security', label: 'Безопасность' },
+    ]}
+    value={tab}
+    onValueChange={setTab}
+  />
+  {tab === 'general' ? <GeneralSettings /> : <SecuritySettings />}
+</>
+```
+
+---
+
+# JxTagInput
+
+Поле для набора тегов: пользователь вводит текст, Enter добавляет тег, Backspace удаляет последний. Значение — массив строк, управляемое через `value` и `onValueChange` или неуправляемое через `defaultValue`.
+
+Импорт: `import { JxTagInput } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/TagInput.tsx:16`
+Ключевые слова: теги, tags, метки, множественный ввод, чипы, ключевые слова
+
+## Сигнатура
+
+```tsx
+<JxTagInput ariaLabel?: string; className?: string; defaultValue?: string[]; onValueChange?: (value: string[]) => void; placeholder?: string = 'Add tag…'; value?: string[] />
+```
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `ariaLabel` | `string` | нет |  | доступное имя поля |
+| `className` | `string` | нет |  | дополнительный класс корневого элемента |
+| `defaultValue` | `string[]` | нет |  | начальный список тегов |
+| `onValueChange` | `(value: string[]) => void` | нет |  | вызывается с новым массивом тегов |
+| `placeholder` | `string` | нет | `'Add tag…'` | подсказка в пустом поле |
+| `value` | `string[]` | нет |  | текущий список тегов в управляемом режиме |
+
+## CSS-классы
+
+`jx-chip-x`, `jx-taginput`
+
+## Примеры
+
+### Ключевые слова статьи
+
+```tsx
+<JxTagInput ariaLabel="Ключевые слова" placeholder="Введите тег и нажмите Enter" value={tags} onValueChange={setTags} />
+```
+
+---
+
+# JxTextareaField
+
+Многострочное поле с подписью, подсказкой и текстом ошибки. Принимает все атрибуты `<textarea>`: `rows`, `value`, `onChange`, `placeholder`, `maxLength`.
+
+Импорт: `import { JxTextareaField } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Fields.tsx:65`
+Ключевые слова: textarea, многострочное поле, комментарий, описание, сообщение
+
+## Сигнатура
+
+```tsx
+<JxTextareaField className?: string; errorText?: string; helperText?: string; label?: string; required?: boolean />
+```
+
+Наследует `TextareaHTMLAttributes<HTMLTextAreaElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `className` | `string` | нет |  | дополнительный класс корневого элемента |
+| `errorText` | `string` | нет |  | текст ошибки; при наличии поле подсвечивается как невалидное |
+| `helperText` | `string` | нет |  | подсказка под полем |
+| `label` | `string` | нет |  | подпись над полем |
+| `required` | `boolean` | нет |  | помечает поле обязательным |
+
+## CSS-классы
+
+`jx-field`, `jx-field--error`, `jx-input-error`, `jx-input-help`, `jx-label`, `jx-label-req`, `jx-textarea`
+
+## Примеры
+
+### Комментарий с ограничением длины
+
+```tsx
+<JxTextareaField
+  label="Комментарий"
+  rows={4}
+  maxLength={500}
+  value={comment}
+  onChange={(event) => setComment(event.target.value)}
+  helperText={`${comment.length}/500`}
+/>
+```
+
+---
+
+# JxToast
+
+Одно всплывающее уведомление с заголовком, текстом и кнопкой закрытия. В приложении обычно не рендерится напрямую: очередь ведёт хук `useJxToastQueue`, а список показывает `JxToastViewport`.
+
+Импорт: `import { JxToast } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Toast.tsx:57`
+Ключевые слова: toast, уведомление, всплывающее сообщение, notification, снэкбар, успешно сохранено
+
+## Сигнатура
+
+```tsx
+<JxToast title: ReactNode; message?: ReactNode; onClose?: () => void; showIcon?: boolean = true; variant?: JxToastVariant = 'default' />
+```
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `title` | `ReactNode` | да |  | заголовок уведомления |
+| `message` | `ReactNode` | нет |  | текст под заголовком |
+| `onClose` | `() => void` | нет |  | вызывается по кнопке закрытия |
+| `showIcon` | `boolean` | нет | `true` | показывать ли иконку тона |
+| `variant` | `"danger" \\| "default" \\| "warning" \\| "success"` | нет | `'default'` | тон уведомления: `default`, `success`, `warning`, `danger` |
+
+## CSS-классы
+
+`jx-toast`, `jx-toast-body`, `jx-toast-close`, `jx-toast-icon`, `jx-toast-msg`, `jx-toast-title`
+
+## Примеры
+
+### Одиночное уведомление
+
+```tsx
+<JxToast variant="success" title="Сохранено" message="Изменения применены" onClose={hide} />
+```
+
+---
+
+# JxToastViewport
+
+Область, в которой показывается очередь уведомлений. Работает в паре с хуком `useJxToastQueue`: хук хранит список `items` и даёт `push` и `dismiss`, компонент рендерит его в выбранном углу экрана. Элементы очереди описываются типом `JxToastItem`: `id`, `title`, необязательные `message`, `variant`, `duration`.
+
+Импорт: `import { JxToastViewport } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Toast.tsx:89`
+Ключевые слова: toast, очередь уведомлений, notifications, показать уведомление после отправки, viewport
+
+## Сигнатура
+
+```tsx
+<JxToastViewport items: JxToastItem[]; onDismiss: (id: string) => void; position?: 'bottom-left' | 'bottom-right' | 'top-right' | 'top-left' = 'bottom-left' />
+```
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `items` | `JxToastItem[]` | да |  | текущая очередь уведомлений |
+| `onDismiss` | `(id: string) => void` | да |  | вызывается с `id` уведомления, которое нужно убрать |
+| `position` | `"bottom-left" \\| "bottom-right" \\| "top-right" \\| "top-left"` | нет | `'bottom-left'` | угол экрана, `bottom-left` по умолчанию |
+
+## Примеры
+
+### Уведомление после отправки формы
+
+```tsx
+function SubscribeForm() {
+  const toasts = useJxToastQueue();
+  const [email, setEmail] = useState('');
+
+  const submit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    toasts.push({ title: 'Готово', message: `Подписали ${email}`, variant: 'success' });
+    setEmail('');
+  };
+
+  return (
+    <form onSubmit={submit}>
+      <JxInputField label="Почта" type="email" required value={email} onChange={(event) => setEmail(event.target.value)} />
+      <JxButton type="submit">Подписаться</JxButton>
+      <JxToastViewport items={toasts.items} onDismiss={toasts.dismiss} position="top-right" />
+    </form>
+  );
+}
+```
+
+---
+
+# JxToggle
+
+Импорт: `import { JxToggle } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Toggle.tsx:19`
+
+## Сигнатура
+
+```tsx
+<JxToggle items: JxToggleItem[]; defaultValue?: string; onValueChange?: (value: string) => void; value?: string />
+```
+
+Наследует `Omit<HTMLAttributes<HTMLDivElement>, "onChange">`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `items` | `JxToggleItem[]` | да |  |  |
+| `defaultValue` | `string` | нет |  |  |
+| `onValueChange` | `(value: string) => void` | нет |  |  |
+| `value` | `string` | нет |  |  |
+
+## CSS-классы
+
+`jx-toggle-btn`, `jx-toggle-group`, `jx-toggle-indicator-bg`
+
+---
+
+# JxTooltip
+
+Импорт: `import { JxTooltip } from '@jinx-ui/react'`  
+Источник: `packages/react/src/components/Tooltip.tsx:9`
+
+## Сигнатура
+
+```tsx
+<JxTooltip children: ReactNode; tip: ReactNode />
+```
+
+Наследует `HTMLAttributes<HTMLDivElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `children` | `ReactNode` | да |  |  |
+| `tip` | `ReactNode` | да |  |  |
+
+## CSS-классы
+
+`jx-tooltip`, `jx-tooltip-tip`
+
+---
+
+# Токены дизайн-системы
+
+Используйте `var(--токен)` вместо значений: цвета меняются по `data-theme`, радиусы по `data-style`.
+
+## color
+
+| Токен | Значение | Переопределения |
+|---|---|---|
+| `--jx-accent` | `#c9a3ff` | `[data-theme="light"]`: `#7747d4`; `[data-style="brutal"]`: `#1a1726`; `[data-style="brutal"][data-theme="dark"]`: `#f5ff3d` |
+| `--jx-accent-2` | `#d4ff3d` | `[data-theme="light"]`: `#859e00` |
+| `--jx-accent-2-ink` | `#0c0a14` | `[data-theme="light"]`: `#fff` |
+| `--jx-accent-ink` | `#0c0a14` | `[data-theme="light"]`: `#fff`; `[data-style="brutal"]`: `#f5ff3d`; `[data-style="brutal"][data-theme="dark"]`: `#1a1726` |
+| `--jx-accent-soft` | `rgba(201, 163, 255, 0.14)` | `[data-theme="light"]`: `rgba(119, 71, 212, 0.12)`; `[data-style="brutal"]`: `rgba(26, 23, 38, 0.08)`; `[data-style="brutal"][data-theme="dark"]`: `rgba(245, 255, 61, 0.14)` |
+| `--jx-bg` | `#0c0a14` | `[data-theme="light"]`: `#f5f2e9`; `[data-style="brutal"]`: `#f5f2e9`; `[data-style="brutal"][data-theme="dark"]`: `#1a1726` |
+| `--jx-bg-2` | `#0f0d18` | `[data-theme="light"]`: `#ece8dc`; `[data-style="brutal"]`: `#ece8dc`; `[data-style="brutal"][data-theme="dark"]`: `#0c0a14` |
+| `--jx-border` | `#221c30` | `[data-theme="light"]`: `#ddd6c4`; `[data-style="brutal"]`: `#1a1726`; `[data-style="brutal"][data-theme="dark"]`: `#f5ff3d` |
+| `--jx-border-2` | `#3a3150` | `[data-theme="light"]`: `#b8ae96`; `[data-style="brutal"]`: `#1a1726`; `[data-style="brutal"][data-theme="dark"]`: `#f5ff3d` |
+| `--jx-danger` | `#ff5470` |  |
+| `--jx-info` | `#79c8ff` |  |
+| `--jx-rule` | `#1c1828` | `[data-theme="light"]`: `#ddd6c4`; `[data-style="brutal"]`: `#1a1726`; `[data-style="brutal"][data-theme="dark"]`: `#f5ff3d` |
+| `--jx-success` | `#6bd97a` |  |
+| `--jx-surface` | `#15121f` | `[data-theme="light"]`: `#ffffff`; `[data-style="brutal"]`: `#ffffff`; `[data-style="brutal"][data-theme="dark"]`: `#1a1726` |
+| `--jx-surface-2` | `#1c1828` | `[data-theme="light"]`: `#f5f1e6`; `[data-style="brutal"]`: `#f0ebdb`; `[data-style="brutal"][data-theme="dark"]`: `#0c0a14` |
+| `--jx-surface-3` | `#2a2438` | `[data-theme="light"]`: `#e6e0d0`; `[data-style="brutal"]`: `#ddd6c4` |
+| `--jx-text` | `#f0ecf5` | `[data-theme="light"]`: `#1a1726`; `[data-style="brutal"]`: `#1a1726`; `[data-style="brutal"][data-theme="dark"]`: `#f5ff3d` |
+| `--jx-text-2` | `#a59cb8` | `[data-theme="light"]`: `#4a4258`; `[data-style="brutal"]`: `#1a1726`; `[data-style="brutal"][data-theme="dark"]`: `#f5ff3d` |
+| `--jx-text-3` | `#6e6386` | `[data-theme="light"]`: `#7a7187`; `[data-style="brutal"][data-theme="dark"]`: `#a59cb8` |
+| `--jx-text-4` | `#463e5a` | `[data-theme="light"]`: `#b4abc0`; `[data-style="brutal"]`: `#b4abc0` |
+| `--jx-warning` | `#ffb547` |  |
+
+## font
+
+| Токен | Значение | Переопределения |
+|---|---|---|
+| `--jx-font-display` | `"Fraunces", ui-serif, serif` |  |
+| `--jx-font-mono` | `"JetBrains Mono", ui-monospace, monospace` |  |
+| `--jx-font-sans` | `"Inter Tight", system-ui, sans-serif` |  |
+
+## motion
+
+| Токен | Значение | Переопределения |
+|---|---|---|
+| `--jx-ease` | `cubic-bezier(0.4, 0, 0.2, 1)` |  |
+| `--jx-ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` |  |
+
+## radius
+
+| Токен | Значение | Переопределения |
+|---|---|---|
+| `--jx-r` | `14px` | `[data-style="brutal"]`: `4px` |
+| `--jx-r-lg` | `14px` | `[data-style="brutal"]`: `4px` |
+| `--jx-r-pill` | `14px` | `[data-style="brutal"]`: `4px` |
+| `--jx-r-sm` | `14px` | `[data-style="brutal"]`: `4px` |
+| `--jx-r-xl` | `14px` | `[data-style="brutal"]`: `4px` |
+| `--jx-r-xs` | `14px` | `[data-style="brutal"]`: `4px` |
+
+## shadow
+
+| Токен | Значение | Переопределения |
+|---|---|---|
+| `--jx-shadow` | `0 8px 24px -8px rgba(0, 0, 0, 0.6)` | `[data-style="brutal"]`: `6px 6px 0 #1a1726`; `[data-style="brutal"][data-theme="dark"]`: `6px 6px 0 #f5ff3d` |
+| `--jx-shadow-lg` | `0 24px 48px -16px rgba(0, 0, 0, 0.7)` | `[data-style="brutal"]`: `10px 10px 0 #1a1726`; `[data-style="brutal"][data-theme="dark"]`: `10px 10px 0 #f5ff3d` |
+| `--jx-shadow-sm` | `0 1px 2px rgba(0, 0, 0, 0.4)` | `[data-style="brutal"]`: `4px 4px 0 #1a1726`; `[data-style="brutal"][data-theme="dark"]`: `4px 4px 0 #f5ff3d` |

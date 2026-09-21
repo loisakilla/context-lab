@@ -1,0 +1,17 @@
+{
+  "name": "@context-lab/checks",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@typescript/vfs": "^1.6.4",
+    "typescript": "~5.9.3"
+  }
+}

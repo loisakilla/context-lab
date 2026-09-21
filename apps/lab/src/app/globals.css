@@ -1,0 +1,22 @@
+@import 'tailwindcss';
+
+body {
+  background: var(--jx-bg);
+  color: var(--jx-text);
+  font-family: var(--jx-font-sans, system-ui, sans-serif);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--jx-font-display, var(--jx-font-sans, system-ui, sans-serif));
+}
+
+.code-block {
+  font: 13px/1.5 var(--jx-font-mono, ui-monospace, monospace);
+  background: var(--jx-surface-2);
+  border: 1px solid var(--jx-border);
+  border-radius: var(--jx-r, 4px);
+  padding: 10px 12px;
+  white-space: pre;
+}

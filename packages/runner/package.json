@@ -1,0 +1,20 @@
+{
+  "name": "@context-lab/runner",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./browser": "./src/browser.ts"
+  },
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.127.0",
+    "@context-lab/checks": "0.1.0",
+    "@context-lab/docgen": "0.1.0",
+    "@context-lab/index-tools": "0.1.0"
+  }
+}

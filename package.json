@@ -1,0 +1,49 @@
+{
+  "name": "context-lab",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-инфраструктура для библиотеки React-компонентов и лаборатория, где видно, как контекст меняет код агента",
+  "type": "module",
+  "engines": {
+    "node": ">=20.11"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*",
+    "vendor/jinx-ui/packages/*"
+  ],
+  "scripts": {
+    "preinstall": "node scripts/check-submodule.mjs",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "vitest run",
+    "verify": "npm run typecheck && npm run test && npm run index:check && npm run docs:check && npm run docs:lint && npm run rules:lint && npm run rules:check",
+    "index": "tsx packages/docgen/src/cli.ts build",
+    "index:check": "tsx packages/docgen/src/cli.ts check",
+    "docs:build": "tsx packages/docs/src/cli.ts build",
+    "docs:check": "tsx packages/docs/src/cli.ts check",
+    "docs:lint": "tsx packages/docs/src/cli.ts lint",
+    "run": "tsx packages/runner/src/cli.ts run",
+    "matrix": "tsx packages/runner/src/cli.ts matrix",
+    "tasks": "tsx packages/runner/src/cli.ts tasks",
+    "lab:dev": "npm run lab:prepare && npm run dev -w @context-lab/lab",
+    "lab:local": "npm run lab:prepare && tsx scripts/lab-local.ts",
+    "lab:build": "npm run lab:prepare && npm run build -w @context-lab/lab",
+    "preview:build": "tsx scripts/build-preview.ts",
+    "types:bundle": "tsx scripts/build-type-bundle.ts",
+    "lab:prepare": "npm run preview:build && npm run types:bundle",
+    "rules:lint": "tsx packages/rules/src/cli.ts lint",
+    "rules:resolve": "tsx packages/rules/src/cli.ts resolve",
+    "rules:compile": "tsx packages/rules/src/cli.ts compile jinx-ui --task ui && tsx packages/rules/src/cli.ts compile jinx-ui --task ui --target claude --targets text --out rules/compiled && tsx packages/rules/src/cli.ts compile context-lab --out rules/compiled/context-lab",
+    "rules:check": "tsx packages/rules/src/cli.ts check jinx-ui --task ui && tsx packages/rules/src/cli.ts check jinx-ui --task ui --target claude --targets text --out rules/compiled && tsx packages/rules/src/cli.ts check context-lab --out rules/compiled/context-lab"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "cross-env": "^7.0.3",
+    "esbuild": "^0.28.2",
+    "jsdom": "^26.1.0",
+    "sucrase": "^3.35.1",
+    "tsx": "^4.23.0",
+    "typescript": "~5.9.3",
+    "vitest": "^5.0.1"
+  }
+}

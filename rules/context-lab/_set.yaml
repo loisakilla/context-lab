@@ -1,0 +1,4 @@
+name: context-lab
+version: 1.0.0
+description: Правила репозитория Context Lab
+extends: [org]

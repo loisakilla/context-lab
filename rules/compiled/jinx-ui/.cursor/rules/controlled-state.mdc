@@ -1,0 +1,12 @@
+---
+description: "Управляемое состояние снаружи"
+globs: []
+alwaysApply: true
+---
+## Управляемое состояние снаружи
+
+Состояние компонентов держи снаружи через пары `value`/`onValueChange` и `open`/`onOpenChange`. Неуправляемый режим включай только через `defaultValue` и `defaultOpen`; внутри библиотеки оба режима реализует хук `useControllableState`.
+
+_Тип задач: ui, refactor_
+
+<!-- jinx-ui/controlled-state@1.0.0 -->
