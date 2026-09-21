@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="ru" data-theme="light" data-style="brutal">
+    <html lang="ru" data-theme="dark" data-style="brutal">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link

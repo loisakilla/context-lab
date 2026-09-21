@@ -12,11 +12,26 @@ h3 {
   font-family: var(--jx-font-display, var(--jx-font-sans, system-ui, sans-serif));
 }
 
-.code-block {
-  font: 13px/1.5 var(--jx-font-mono, ui-monospace, monospace);
-  background: var(--jx-surface-2);
-  border: 1px solid var(--jx-border);
-  border-radius: var(--jx-r, 4px);
-  padding: 10px 12px;
-  white-space: pre;
+@layer components {
+  .code-block {
+    font: 13px/1.5 var(--jx-font-mono, ui-monospace, monospace);
+    background: var(--jx-surface-2);
+    border: 1px solid var(--jx-border);
+    border-radius: var(--jx-r, 4px);
+    padding: 10px 12px;
+    white-space: pre;
+    overflow-x: auto;
+  }
+}
+
+.jx-toggle-btn {
+  position: relative;
+}
+
+.jx-toggle-indicator-bg {
+  background: var(--jx-accent) !important;
+}
+
+[data-style='brutal'] .jx-tabs-indicator-segment {
+  background: var(--jx-accent) !important;
 }

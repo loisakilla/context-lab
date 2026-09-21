@@ -5,6 +5,8 @@ import { JxAlert, JxButton, JxSelect, JxTabs, JxTextareaField } from '@jinx-ui/r
 import type { LibraryIndex } from '@context-lab/index-tools';
 import { CONTEXT_MODES, estimateContext, knownModels, type ContextMode, type Matrix, type RunRecord, type Task } from '@/lib/runner-browser';
 import { describeApiError, runInBrowser, runLocally } from '@/lib/browser-run';
+import { useAppearance } from '@/lib/theme';
+import { ContextPreview } from './ContextPreview';
 import { KeyForm } from './KeyForm';
 import { MatrixTable, MODE_LABELS } from './MatrixTable';
 import { Preview, type RenderStatus } from './Preview';
@@ -35,6 +37,7 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
   const [render, setRender] = useState<RenderStatus | null>(null);
   const [error, setError] = useState<string | null>(null);
   const abort = useRef<AbortController | null>(null);
+  const appearance = useAppearance();
 
   const sources = useMemo(() => ({ index, readme, docs, ...(rules ? { rules } : {}) }), [index, readme, docs, rules]);
   const modeTokens = useMemo(() => estimateContext(sources), [sources]);
@@ -88,7 +91,7 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
 
   return (
     <div className="flex flex-col gap-10">
-      <section className="grid gap-6 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)]">
+      <section className="grid items-start gap-6 lg:grid-cols-[minmax(0,400px)_minmax(0,1fr)] lg:gap-8">
         <div className="flex flex-col gap-4">
           <JxSelect
             label="Задача"
@@ -96,7 +99,7 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
             value={taskId}
             onValueChange={pickTask}
           />
-          <JxTextareaField label="Формулировка" rows={5} value={prompt} onChange={(event) => setPrompt(event.target.value)} />
+          <JxTextareaField label="Формулировка" rows={6} value={prompt} onChange={(event) => setPrompt(event.target.value)} />
 
           <div className="flex flex-col gap-2">
             <span className="text-sm font-semibold">Режим контекста</span>
@@ -122,6 +125,7 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
             <span className="text-sm font-semibold">Как запускать</span>
             <JxTabs
               ariaLabel="Движок"
+              className="self-start"
               items={[...(localRunEnabled ? [{ value: 'local', label: 'Claude Code (локально)' }] : []), { value: 'byok', label: 'Свой ключ API' }]}
               value={engine}
               onValueChange={(value) => setEngine(value as Engine)}
@@ -147,7 +151,12 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
         </div>
 
         <div className="flex flex-col gap-4">
-          {!record && !running && !stream && <JxAlert intent="info" title="Как это работает">Выберите задачу и режим контекста, запустите прогон. Справа появятся код, живой рендер на Jinx UI и отчёт: что выдумано, что нарушено, сколько стоило.</JxAlert>}
+          {!record && !running && !stream && (
+            <>
+              <JxAlert intent="info" title="Как это работает">Выберите задачу и режим контекста, запустите прогон. Здесь появятся код, живой рендер на Jinx UI и отчёт: что выдумано, что нарушено, сколько стоило. Пока прогона нет, показан контекст, который уйдёт в модель.</JxAlert>
+              <ContextPreview mode={mode} task={task} sources={sources} />
+            </>
+          )}
           {running && (
             <pre className="code-block max-h-72 overflow-auto whitespace-pre-wrap">{stream || (engine === 'local' ? 'Claude Code думает… обычно 20–60 секунд.' : 'Ждём первые токены…')}</pre>
           )}
@@ -157,7 +166,7 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
               {record.output.code && (
                 <>
                   <h3 className="font-semibold">Рендер</h3>
-                  <Preview code={record.output.code} onRendered={onRendered} />
+                  <Preview code={record.output.code} theme={appearance.theme} style={appearance.style} onRendered={onRendered} />
                   <details>
                     <summary className="cursor-pointer font-semibold">Код</summary>
                     <pre className="code-block mt-2 overflow-auto">{record.output.code}</pre>

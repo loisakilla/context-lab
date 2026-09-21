@@ -107,5 +107,5 @@ window.addEventListener('message', (event: MessageEvent<RenderMessage>) => {
 });
 
 const params = new URLSearchParams(window.location.search);
-applyMode(params.get('theme') ?? 'light', params.get('style') ?? 'brutal');
+applyMode(params.get('theme') ?? 'dark', params.get('style') ?? 'brutal');
 window.parent.postMessage({ type: 'preview-ready' }, '*');

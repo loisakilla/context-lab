@@ -31,7 +31,7 @@ function loadShell(): Promise<string> {
   return shellPromise;
 }
 
-export function Preview({ code, theme = 'light', style = 'brutal', onRendered }: PreviewProps) {
+export function Preview({ code, theme = 'dark', style = 'brutal', onRendered }: PreviewProps) {
   const frame = useRef<HTMLIFrameElement>(null);
   const [shell, setShell] = useState<string | null>(null);
   const [ready, setReady] = useState(false);

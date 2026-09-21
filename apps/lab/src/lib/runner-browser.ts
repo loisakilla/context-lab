@@ -1,8 +1,8 @@
 import { estimateTokens } from '@context-lab/index-tools';
-import { buildContext, CONTEXT_MODES, contextTokens, knownModels, type ContextMode, type ContextSources, type Matrix, type RunRecord, type Task } from '@context-lab/runner/browser';
+import { buildContext, CONTEXT_MODES, contextTokens, knownModels, type BuiltContext, type ContextMode, type ContextSources, type Matrix, type RunRecord, type Task } from '@context-lab/runner/browser';
 
-export { CONTEXT_MODES, knownModels };
-export type { ContextMode, ContextSources, Matrix, RunRecord, Task };
+export { buildContext, CONTEXT_MODES, contextTokens, knownModels };
+export type { BuiltContext, ContextMode, ContextSources, Matrix, RunRecord, Task };
 
 const PROBE: Task = { id: 'probe', title: 'probe', prompt: 'probe', taskType: 'ui', expects: [] };
 
