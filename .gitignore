@@ -15,3 +15,4 @@ apps/lab/src/generated/
 data/prompts/
 data/outputs/
 apps/lab/public/preview/index.html
+.idea/

@@ -5,7 +5,6 @@ import { JxAlert, JxButton, JxSelect, JxTabs, JxTextareaField } from '@jinx-ui/r
 import type { LibraryIndex } from '@context-lab/index-tools';
 import { CONTEXT_MODES, estimateContext, knownModels, type ContextMode, type Matrix, type RunRecord, type Task } from '@/lib/runner-browser';
 import { describeApiError, runInBrowser, runLocally } from '@/lib/browser-run';
-import { useAppearance } from '@/lib/theme';
 import { ContextPreview } from './ContextPreview';
 import { KeyForm } from './KeyForm';
 import { MatrixTable, MODE_LABELS } from './MatrixTable';
@@ -37,7 +36,6 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
   const [render, setRender] = useState<RenderStatus | null>(null);
   const [error, setError] = useState<string | null>(null);
   const abort = useRef<AbortController | null>(null);
-  const appearance = useAppearance();
 
   const sources = useMemo(() => ({ index, readme, docs, ...(rules ? { rules } : {}) }), [index, readme, docs, rules]);
   const modeTokens = useMemo(() => estimateContext(sources), [sources]);
@@ -166,7 +164,7 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
               {record.output.code && (
                 <>
                   <h3 className="font-semibold">Рендер</h3>
-                  <Preview code={record.output.code} theme={appearance.theme} style={appearance.style} onRendered={onRendered} />
+                  <Preview code={record.output.code} onRendered={onRendered} />
                   <details>
                     <summary className="cursor-pointer font-semibold">Код</summary>
                     <pre className="code-block mt-2 overflow-auto">{record.output.code}</pre>

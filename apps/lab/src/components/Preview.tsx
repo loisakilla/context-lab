@@ -9,8 +9,6 @@ export interface RenderStatus {
 
 interface PreviewProps {
   code: string;
-  theme?: 'light' | 'dark';
-  style?: 'brutal' | 'glass' | 'minimal';
   onRendered?: (status: RenderStatus) => void;
 }
 
@@ -20,6 +18,9 @@ interface PreviewMessage {
   error?: string;
   height?: number;
 }
+
+const MIN_HEIGHT = 320;
+const MAX_HEIGHT = 1200;
 
 let shellPromise: Promise<string> | undefined;
 
@@ -31,11 +32,15 @@ function loadShell(): Promise<string> {
   return shellPromise;
 }
 
-export function Preview({ code, theme = 'dark', style = 'brutal', onRendered }: PreviewProps) {
+function clamp(height: number): number {
+  return Math.min(MAX_HEIGHT, Math.max(MIN_HEIGHT, height + 8));
+}
+
+export function Preview({ code, onRendered }: PreviewProps) {
   const frame = useRef<HTMLIFrameElement>(null);
   const [shell, setShell] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
-  const [height, setHeight] = useState(240);
+  const [height, setHeight] = useState(MIN_HEIGHT);
   const [status, setStatus] = useState<RenderStatus | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -57,10 +62,11 @@ export function Preview({ code, theme = 'dark', style = 'brutal', onRendered }: 
     const onMessage = (event: MessageEvent<PreviewMessage>) => {
       if (event.source !== frame.current?.contentWindow) return;
       if (event.data?.type === 'preview-ready') setReady(true);
+      if (event.data?.type === 'height' && typeof event.data.height === 'number') setHeight(clamp(event.data.height));
       if (event.data?.type === 'rendered') {
         const next: RenderStatus = { ok: event.data.ok === true, ...(event.data.error ? { error: event.data.error } : {}) };
         setStatus(next);
-        if (typeof event.data.height === 'number') setHeight(Math.min(900, Math.max(160, event.data.height + 24)));
+        if (typeof event.data.height === 'number') setHeight(clamp(event.data.height));
         onRendered?.(next);
       }
     };
@@ -70,8 +76,8 @@ export function Preview({ code, theme = 'dark', style = 'brutal', onRendered }: 
 
   useEffect(() => {
     if (!ready || !code) return;
-    frame.current?.contentWindow?.postMessage({ type: 'render', code, theme, style }, '*');
-  }, [ready, code, theme, style]);
+    frame.current?.contentWindow?.postMessage({ type: 'render', code, theme: 'dark', style: 'brutal' }, '*');
+  }, [ready, code]);
 
   if (loadError) return <pre className="code-block text-[var(--jx-danger)]">{loadError}</pre>;
 

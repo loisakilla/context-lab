@@ -24,14 +24,6 @@ h3 {
   }
 }
 
-.jx-toggle-btn {
-  position: relative;
-}
-
-.jx-toggle-indicator-bg {
-  background: var(--jx-accent) !important;
-}
-
 [data-style='brutal'] .jx-tabs-indicator-segment {
   background: var(--jx-accent) !important;
 }

@@ -30,13 +30,53 @@ const modules: Record<string, unknown> = {
   '@jinx-ui/react/runtime': JinxReact,
 };
 
+const MIN_HEIGHT = 320;
+const MAX_HEIGHT = 1200;
+const OVERLAY_PADDING = 120;
+
 const container = document.getElementById('root') as HTMLElement;
 let root: ReactDOMClient.Root | undefined;
 let lastError: string | undefined;
+let watching = false;
+
+function contentHeight(): number {
+  let height = Math.max(document.body.scrollHeight, container.scrollHeight + 32);
+  for (const element of document.body.querySelectorAll<HTMLElement>('*')) {
+    const position = window.getComputedStyle(element).position;
+    if (position !== 'fixed' && position !== 'sticky' && position !== 'absolute') continue;
+    for (const child of element.children) {
+      height = Math.max(height, child.getBoundingClientRect().height + OVERLAY_PADDING);
+    }
+  }
+  return Math.min(MAX_HEIGHT, Math.max(MIN_HEIGHT, Math.ceil(height)));
+}
 
 function reply(message: RenderedMessage, source: MessageEventSource | null): void {
   if (source) (source as Window).postMessage(message, '*');
   else window.parent.postMessage(message, '*');
+}
+
+function watchHeight(): void {
+  if (watching) return;
+  watching = true;
+  let reported = 0;
+  let scheduled = false;
+  const send = () => {
+    scheduled = false;
+    const height = contentHeight();
+    if (height === reported) return;
+    reported = height;
+    window.parent.postMessage({ type: 'height', height }, '*');
+  };
+  const schedule = () => {
+    if (scheduled) return;
+    scheduled = true;
+    window.setTimeout(send, 60);
+  };
+  new ResizeObserver(schedule).observe(document.body);
+  new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'style', 'open', 'aria-hidden'] });
+  document.addEventListener('click', () => window.setTimeout(schedule, 220), true);
+  document.addEventListener('keyup', () => window.setTimeout(schedule, 220), true);
 }
 
 function requireShim(name: string): unknown {
@@ -87,7 +127,8 @@ function render(message: RenderMessage, source: MessageEventSource | null): void
     root.render(React.createElement(Boundary, null, React.createElement(Component)));
     window.setTimeout(() => {
       const error = lastError;
-      reply({ type: 'rendered', ok: !error, ...(error ? { error } : {}), height: document.body.scrollHeight }, source);
+      reply({ type: 'rendered', ok: !error, ...(error ? { error } : {}), height: contentHeight() }, source);
+      watchHeight();
     }, 120);
   } catch (error) {
     const text = error instanceof Error ? error.message : String(error);
@@ -97,7 +138,7 @@ function render(message: RenderMessage, source: MessageEventSource | null): void
     pre.className = 'preview-error';
     pre.textContent = text;
     container.appendChild(pre);
-    reply({ type: 'rendered', ok: false, error: text, height: document.body.scrollHeight }, source);
+    reply({ type: 'rendered', ok: false, error: text, height: contentHeight() }, source);
   }
 }
 
