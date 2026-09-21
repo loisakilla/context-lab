@@ -11,7 +11,7 @@ export default function HomePage() {
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-bold">Context Lab</h1>
-          <p className="max-w-3xl">
+          <p className="max-w-2xl">
             Одна и та же задача, одна и та же модель, разный контекст. Агент пишет компонент на библиотеке {data.index.library.name} ({data.index.components.length} компонентов), а компилятор и линтер показывают, где ему не хватило контекста.
           </p>
         </div>
