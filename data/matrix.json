@@ -5,8 +5,8 @@
     "version": "0.1.0",
     "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
   },
-  "driver": "subagent",
-  "model": "claude-sonnet-5",
+  "driver": "claude-code",
+  "model": "claude-opus-5",
   "tasks": [
     {
       "id": "confirm-delete",
@@ -53,180 +53,206 @@
       "taskId": "confirm-delete",
       "mode": "none",
       "runs": [
-        "confirm-delete__none__subagent__claude-sonnet-5__1"
+        "confirm-delete__none__claude-code__claude-opus-5__1",
+        "confirm-delete__none__claude-code__claude-opus-5__2",
+        "confirm-delete__none__claude-code__claude-opus-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 0,
+      "medianTokens": 31489,
       "medianContextTokens": 111,
-      "medianCostUsd": null,
-      "medianTscErrors": 2,
-      "medianLintErrors": 0,
-      "meanCoverage": 0
-    },
-    {
-      "taskId": "confirm-delete",
-      "mode": "readme",
-      "runs": [
-        "confirm-delete__readme__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 0,
-      "medianTokens": 0,
-      "medianContextTokens": 753,
-      "medianCostUsd": null,
-      "medianTscErrors": 2,
-      "medianLintErrors": 0,
-      "meanCoverage": 0
-    },
-    {
-      "taskId": "confirm-delete",
-      "mode": "docs",
-      "runs": [
-        "confirm-delete__docs__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 16625,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 1
-    },
-    {
-      "taskId": "confirm-delete",
-      "mode": "docs+rules",
-      "runs": [
-        "confirm-delete__docs+rules__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 17366,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 1
-    },
-    {
-      "taskId": "confirm-delete",
-      "mode": "mcp",
-      "runs": [
-        "confirm-delete__mcp__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 1000,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 1
-    },
-    {
-      "taskId": "date-range",
-      "mode": "none",
-      "runs": [
-        "date-range__none__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 0,
-      "medianTokens": 0,
-      "medianContextTokens": 111,
-      "medianCostUsd": null,
-      "medianTscErrors": 3,
-      "medianLintErrors": 0,
-      "meanCoverage": 0
-    },
-    {
-      "taskId": "date-range",
-      "mode": "readme",
-      "runs": [
-        "date-range__readme__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 0,
-      "medianTokens": 0,
-      "medianContextTokens": 753,
-      "medianCostUsd": null,
-      "medianTscErrors": 2,
-      "medianLintErrors": 0,
-      "meanCoverage": 0
-    },
-    {
-      "taskId": "date-range",
-      "mode": "docs",
-      "runs": [
-        "date-range__docs__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 16625,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 1
-    },
-    {
-      "taskId": "date-range",
-      "mode": "docs+rules",
-      "runs": [
-        "date-range__docs+rules__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 17366,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 1
-    },
-    {
-      "taskId": "date-range",
-      "mode": "mcp",
-      "runs": [
-        "date-range__mcp__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 1000,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 1
-    },
-    {
-      "taskId": "settings-form",
-      "mode": "none",
-      "runs": [
-        "settings-form__none__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 0,
-      "medianTokens": 0,
-      "medianContextTokens": 111,
-      "medianCostUsd": null,
-      "medianTscErrors": 5,
-      "medianLintErrors": 0,
-      "meanCoverage": 0.75
-    },
-    {
-      "taskId": "settings-form",
-      "mode": "readme",
-      "runs": [
-        "settings-form__readme__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 0,
-      "medianTokens": 0,
-      "medianContextTokens": 753,
-      "medianCostUsd": null,
+      "medianCostUsd": 0.20274875,
       "medianTscErrors": 4,
       "medianLintErrors": 0,
       "meanCoverage": 0
     },
     {
+      "taskId": "confirm-delete",
+      "mode": "readme",
+      "runs": [
+        "confirm-delete__readme__claude-code__claude-opus-5__1",
+        "confirm-delete__readme__claude-code__claude-opus-5__2",
+        "confirm-delete__readme__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 0,
+      "medianTokens": 17441,
+      "medianContextTokens": 753,
+      "medianCostUsd": 0.11305575000000001,
+      "medianTscErrors": 2,
+      "medianLintErrors": 0,
+      "meanCoverage": 0
+    },
+    {
+      "taskId": "confirm-delete",
+      "mode": "docs",
+      "runs": [
+        "confirm-delete__docs__claude-code__claude-opus-5__1",
+        "confirm-delete__docs__claude-code__claude-opus-5__2",
+        "confirm-delete__docs__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 1,
+      "medianTokens": 45290,
+      "medianContextTokens": 16625,
+      "medianCostUsd": 0.25278025,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "confirm-delete",
+      "mode": "docs+rules",
+      "runs": [
+        "confirm-delete__docs+rules__claude-code__claude-opus-5__1",
+        "confirm-delete__docs+rules__claude-code__claude-opus-5__2",
+        "confirm-delete__docs+rules__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 1,
+      "medianTokens": 45251,
+      "medianContextTokens": 17366,
+      "medianCostUsd": 0.25994325,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "confirm-delete",
+      "mode": "mcp",
+      "runs": [
+        "confirm-delete__mcp__claude-code__claude-opus-5__1",
+        "confirm-delete__mcp__claude-code__claude-opus-5__2",
+        "confirm-delete__mcp__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 1,
+      "medianTokens": 47559,
+      "medianContextTokens": 1000,
+      "medianCostUsd": 0.12301475,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "date-range",
+      "mode": "none",
+      "runs": [
+        "date-range__none__claude-code__claude-opus-5__1",
+        "date-range__none__claude-code__claude-opus-5__2",
+        "date-range__none__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 0,
+      "medianTokens": 34037,
+      "medianContextTokens": 111,
+      "medianCostUsd": 0.12085525,
+      "medianTscErrors": 5,
+      "medianLintErrors": 0,
+      "meanCoverage": 0
+    },
+    {
+      "taskId": "date-range",
+      "mode": "readme",
+      "runs": [
+        "date-range__readme__claude-code__claude-opus-5__1",
+        "date-range__readme__claude-code__claude-opus-5__2",
+        "date-range__readme__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 0,
+      "medianTokens": 20763,
+      "medianContextTokens": 753,
+      "medianCostUsd": 0.162324,
+      "medianTscErrors": 1,
+      "medianLintErrors": 0,
+      "meanCoverage": 0
+    },
+    {
+      "taskId": "date-range",
+      "mode": "docs",
+      "runs": [
+        "date-range__docs__claude-code__claude-opus-5__1",
+        "date-range__docs__claude-code__claude-opus-5__2",
+        "date-range__docs__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 1,
+      "medianTokens": 44444,
+      "medianContextTokens": 16625,
+      "medianCostUsd": 0.2603115,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "date-range",
+      "mode": "docs+rules",
+      "runs": [
+        "date-range__docs+rules__claude-code__claude-opus-5__1",
+        "date-range__docs+rules__claude-code__claude-opus-5__2",
+        "date-range__docs+rules__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 1,
+      "medianTokens": 46728,
+      "medianContextTokens": 17366,
+      "medianCostUsd": 0.26590525,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "date-range",
+      "mode": "mcp",
+      "runs": [
+        "date-range__mcp__claude-code__claude-opus-5__1",
+        "date-range__mcp__claude-code__claude-opus-5__2",
+        "date-range__mcp__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 1,
+      "medianTokens": 69264,
+      "medianContextTokens": 1000,
+      "medianCostUsd": 0.148494,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "settings-form",
+      "mode": "none",
+      "runs": [
+        "settings-form__none__claude-code__claude-opus-5__1",
+        "settings-form__none__claude-code__claude-opus-5__2",
+        "settings-form__none__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 0,
+      "medianTokens": 17246,
+      "medianContextTokens": 111,
+      "medianCostUsd": 0.10687574999999999,
+      "medianTscErrors": 9,
+      "medianLintErrors": 0,
+      "meanCoverage": 0
+    },
+    {
+      "taskId": "settings-form",
+      "mode": "readme",
+      "runs": [
+        "settings-form__readme__claude-code__claude-opus-5__1",
+        "settings-form__readme__claude-code__claude-opus-5__2",
+        "settings-form__readme__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 0,
+      "medianTokens": 36163,
+      "medianContextTokens": 753,
+      "medianCostUsd": 0.15840525,
+      "medianTscErrors": 5,
+      "medianLintErrors": 0,
+      "meanCoverage": 0
+    },
+    {
       "taskId": "settings-form",
       "mode": "docs",
       "runs": [
-        "settings-form__docs__subagent__claude-sonnet-5__1"
+        "settings-form__docs__claude-code__claude-opus-5__1",
+        "settings-form__docs__claude-code__claude-opus-5__2",
+        "settings-form__docs__claude-code__claude-opus-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 0,
+      "medianTokens": 44531,
       "medianContextTokens": 16625,
-      "medianCostUsd": null,
+      "medianCostUsd": 0.26391825,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1
@@ -235,12 +261,14 @@
       "taskId": "settings-form",
       "mode": "docs+rules",
       "runs": [
-        "settings-form__docs+rules__subagent__claude-sonnet-5__1"
+        "settings-form__docs+rules__claude-code__claude-opus-5__1",
+        "settings-form__docs+rules__claude-code__claude-opus-5__2",
+        "settings-form__docs+rules__claude-code__claude-opus-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 0,
+      "medianTokens": 45577,
       "medianContextTokens": 17366,
-      "medianCostUsd": null,
+      "medianCostUsd": 0.26813075,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1
@@ -249,12 +277,14 @@
       "taskId": "settings-form",
       "mode": "mcp",
       "runs": [
-        "settings-form__mcp__subagent__claude-sonnet-5__1"
+        "settings-form__mcp__claude-code__claude-opus-5__1",
+        "settings-form__mcp__claude-code__claude-opus-5__2",
+        "settings-form__mcp__claude-code__claude-opus-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 0,
+      "medianTokens": 76198,
       "medianContextTokens": 1000,
-      "medianCostUsd": null,
+      "medianCostUsd": 0.14504725,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1
@@ -263,320 +293,366 @@
       "taskId": "side-nav",
       "mode": "none",
       "runs": [
-        "side-nav__none__subagent__claude-sonnet-5__1"
+        "side-nav__none__claude-code__claude-opus-5__1",
+        "side-nav__none__claude-code__claude-opus-5__2",
+        "side-nav__none__claude-code__claude-opus-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 0,
+      "medianTokens": 33807,
       "medianContextTokens": 111,
-      "medianCostUsd": null,
+      "medianCostUsd": 0.12028149999999999,
+      "medianTscErrors": 4,
+      "medianLintErrors": 0,
+      "meanCoverage": 0
+    },
+    {
+      "taskId": "side-nav",
+      "mode": "readme",
+      "runs": [
+        "side-nav__readme__claude-code__claude-opus-5__1",
+        "side-nav__readme__claude-code__claude-opus-5__2",
+        "side-nav__readme__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 0,
+      "medianTokens": 18728,
+      "medianContextTokens": 753,
+      "medianCostUsd": 0.11122400000000002,
       "medianTscErrors": 5,
       "medianLintErrors": 0,
       "meanCoverage": 0
     },
     {
       "taskId": "side-nav",
-      "mode": "readme",
+      "mode": "docs",
       "runs": [
-        "side-nav__readme__subagent__claude-sonnet-5__1"
+        "side-nav__docs__claude-code__claude-opus-5__1",
+        "side-nav__docs__claude-code__claude-opus-5__2",
+        "side-nav__docs__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 1,
+      "medianTokens": 45269,
+      "medianContextTokens": 16625,
+      "medianCostUsd": 0.2512995,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "side-nav",
+      "mode": "docs+rules",
+      "runs": [
+        "side-nav__docs+rules__claude-code__claude-opus-5__1",
+        "side-nav__docs+rules__claude-code__claude-opus-5__2",
+        "side-nav__docs+rules__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 1,
+      "medianTokens": 46445,
+      "medianContextTokens": 17366,
+      "medianCostUsd": 0.034135,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "side-nav",
+      "mode": "mcp",
+      "runs": [
+        "side-nav__mcp__claude-code__claude-opus-5__1",
+        "side-nav__mcp__claude-code__claude-opus-5__2",
+        "side-nav__mcp__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 1,
+      "medianTokens": 46240,
+      "medianContextTokens": 1000,
+      "medianCostUsd": 0.07195525,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "subscribe-toast",
+      "mode": "none",
+      "runs": [
+        "subscribe-toast__none__claude-code__claude-opus-5__1",
+        "subscribe-toast__none__claude-code__claude-opus-5__2",
+        "subscribe-toast__none__claude-code__claude-opus-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 0,
+      "medianTokens": 32463,
+      "medianContextTokens": 111,
+      "medianCostUsd": 0.11526025,
+      "medianTscErrors": 6,
+      "medianLintErrors": 0,
+      "meanCoverage": 0
+    },
+    {
+      "taskId": "subscribe-toast",
+      "mode": "readme",
+      "runs": [
+        "subscribe-toast__readme__claude-code__claude-opus-5__1",
+        "subscribe-toast__readme__claude-code__claude-opus-5__2",
+        "subscribe-toast__readme__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 0,
+      "medianTokens": 36623,
       "medianContextTokens": 753,
-      "medianCostUsd": null,
+      "medianCostUsd": 0.13303225000000002,
+      "medianTscErrors": 4,
+      "medianLintErrors": 0,
+      "meanCoverage": 0
+    },
+    {
+      "taskId": "subscribe-toast",
+      "mode": "docs",
+      "runs": [
+        "subscribe-toast__docs__claude-code__claude-opus-5__1",
+        "subscribe-toast__docs__claude-code__claude-opus-5__2",
+        "subscribe-toast__docs__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 1,
+      "medianTokens": 45421,
+      "medianContextTokens": 16625,
+      "medianCostUsd": 0.2566615,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "subscribe-toast",
+      "mode": "docs+rules",
+      "runs": [
+        "subscribe-toast__docs+rules__claude-code__claude-opus-5__1",
+        "subscribe-toast__docs+rules__claude-code__claude-opus-5__2",
+        "subscribe-toast__docs+rules__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 1,
+      "medianTokens": 45220,
+      "medianContextTokens": 17366,
+      "medianCostUsd": 0.25249350000000004,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "subscribe-toast",
+      "mode": "mcp",
+      "runs": [
+        "subscribe-toast__mcp__claude-code__claude-opus-5__1",
+        "subscribe-toast__mcp__claude-code__claude-opus-5__2",
+        "subscribe-toast__mcp__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 1,
+      "medianTokens": 95121,
+      "medianContextTokens": 1000,
+      "medianCostUsd": 0.1304285,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "tag-picker",
+      "mode": "none",
+      "runs": [
+        "tag-picker__none__claude-code__claude-opus-5__1",
+        "tag-picker__none__claude-code__claude-opus-5__2",
+        "tag-picker__none__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 0,
+      "medianTokens": 33823,
+      "medianContextTokens": 111,
+      "medianCostUsd": 0.13953425,
+      "medianTscErrors": 5,
+      "medianLintErrors": 0,
+      "meanCoverage": 0
+    },
+    {
+      "taskId": "tag-picker",
+      "mode": "readme",
+      "runs": [
+        "tag-picker__readme__claude-code__claude-opus-5__1",
+        "tag-picker__readme__claude-code__claude-opus-5__2",
+        "tag-picker__readme__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 0,
+      "medianTokens": 36820,
+      "medianContextTokens": 753,
+      "medianCostUsd": 0.14413125,
+      "medianTscErrors": 3,
+      "medianLintErrors": 0,
+      "meanCoverage": 0
+    },
+    {
+      "taskId": "tag-picker",
+      "mode": "docs",
+      "runs": [
+        "tag-picker__docs__claude-code__claude-opus-5__1",
+        "tag-picker__docs__claude-code__claude-opus-5__2",
+        "tag-picker__docs__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 0.67,
+      "medianTokens": 45627,
+      "medianContextTokens": 16625,
+      "medianCostUsd": 0.046061000000000005,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "tag-picker",
+      "mode": "docs+rules",
+      "runs": [
+        "tag-picker__docs+rules__claude-code__claude-opus-5__1",
+        "tag-picker__docs+rules__claude-code__claude-opus-5__2",
+        "tag-picker__docs+rules__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 1,
+      "medianTokens": 46578,
+      "medianContextTokens": 17366,
+      "medianCostUsd": 0.22705225,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "tag-picker",
+      "mode": "mcp",
+      "runs": [
+        "tag-picker__mcp__claude-code__claude-opus-5__1",
+        "tag-picker__mcp__claude-code__claude-opus-5__2",
+        "tag-picker__mcp__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 1,
+      "medianTokens": 70994,
+      "medianContextTokens": 1000,
+      "medianCostUsd": 0.12702575,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "users-table",
+      "mode": "none",
+      "runs": [
+        "users-table__none__claude-code__claude-opus-5__1",
+        "users-table__none__claude-code__claude-opus-5__2",
+        "users-table__none__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 0,
+      "medianTokens": 17777,
+      "medianContextTokens": 111,
+      "medianCostUsd": 0.11728025,
+      "medianTscErrors": 9,
+      "medianLintErrors": 0,
+      "meanCoverage": 0
+    },
+    {
+      "taskId": "users-table",
+      "mode": "readme",
+      "runs": [
+        "users-table__readme__claude-code__claude-opus-5__1",
+        "users-table__readme__claude-code__claude-opus-5__2",
+        "users-table__readme__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 0,
+      "medianTokens": 19410,
+      "medianContextTokens": 753,
+      "medianCostUsd": 0.1288365,
+      "medianTscErrors": 1,
+      "medianLintErrors": 0,
+      "meanCoverage": 0
+    },
+    {
+      "taskId": "users-table",
+      "mode": "docs",
+      "runs": [
+        "users-table__docs__claude-code__claude-opus-5__1",
+        "users-table__docs__claude-code__claude-opus-5__2",
+        "users-table__docs__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 1,
+      "medianTokens": 44170,
+      "medianContextTokens": 16625,
+      "medianCostUsd": 0.25503075,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "users-table",
+      "mode": "docs+rules",
+      "runs": [
+        "users-table__docs+rules__claude-code__claude-opus-5__1",
+        "users-table__docs+rules__claude-code__claude-opus-5__2",
+        "users-table__docs+rules__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 1,
+      "medianTokens": 46599,
+      "medianContextTokens": 17366,
+      "medianCostUsd": 0.038425,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "users-table",
+      "mode": "mcp",
+      "runs": [
+        "users-table__mcp__claude-code__claude-opus-5__1",
+        "users-table__mcp__claude-code__claude-opus-5__2",
+        "users-table__mcp__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 1,
+      "medianTokens": 51108,
+      "medianContextTokens": 1000,
+      "medianCostUsd": 0.10747224999999999,
+      "medianTscErrors": 0,
+      "medianLintErrors": 0,
+      "meanCoverage": 1
+    },
+    {
+      "taskId": "wizard",
+      "mode": "none",
+      "runs": [
+        "wizard__none__claude-code__claude-opus-5__1",
+        "wizard__none__claude-code__claude-opus-5__2",
+        "wizard__none__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 0,
+      "medianTokens": 34178,
+      "medianContextTokens": 111,
+      "medianCostUsd": 0.14658000000000002,
+      "medianTscErrors": 6,
+      "medianLintErrors": 0,
+      "meanCoverage": 0
+    },
+    {
+      "taskId": "wizard",
+      "mode": "readme",
+      "runs": [
+        "wizard__readme__claude-code__claude-opus-5__1",
+        "wizard__readme__claude-code__claude-opus-5__2",
+        "wizard__readme__claude-code__claude-opus-5__3"
+      ],
+      "passRate": 0,
+      "medianTokens": 38309,
+      "medianContextTokens": 753,
+      "medianCostUsd": 0.15520575,
       "medianTscErrors": 2,
       "medianLintErrors": 0,
       "meanCoverage": 0
     },
     {
-      "taskId": "side-nav",
-      "mode": "docs",
-      "runs": [
-        "side-nav__docs__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 16625,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 1
-    },
-    {
-      "taskId": "side-nav",
-      "mode": "docs+rules",
-      "runs": [
-        "side-nav__docs+rules__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 17366,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 1
-    },
-    {
-      "taskId": "side-nav",
-      "mode": "mcp",
-      "runs": [
-        "side-nav__mcp__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 1000,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 1
-    },
-    {
-      "taskId": "subscribe-toast",
-      "mode": "none",
-      "runs": [
-        "subscribe-toast__none__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 0,
-      "medianTokens": 0,
-      "medianContextTokens": 111,
-      "medianCostUsd": null,
-      "medianTscErrors": 3,
-      "medianLintErrors": 0,
-      "meanCoverage": 0
-    },
-    {
-      "taskId": "subscribe-toast",
-      "mode": "readme",
-      "runs": [
-        "subscribe-toast__readme__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 0,
-      "medianTokens": 0,
-      "medianContextTokens": 753,
-      "medianCostUsd": null,
-      "medianTscErrors": 3,
-      "medianLintErrors": 0,
-      "meanCoverage": 0
-    },
-    {
-      "taskId": "subscribe-toast",
-      "mode": "docs",
-      "runs": [
-        "subscribe-toast__docs__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 16625,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 1
-    },
-    {
-      "taskId": "subscribe-toast",
-      "mode": "docs+rules",
-      "runs": [
-        "subscribe-toast__docs+rules__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 17366,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 1
-    },
-    {
-      "taskId": "subscribe-toast",
-      "mode": "mcp",
-      "runs": [
-        "subscribe-toast__mcp__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 1000,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 1
-    },
-    {
-      "taskId": "tag-picker",
-      "mode": "none",
-      "runs": [
-        "tag-picker__none__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 0,
-      "medianTokens": 0,
-      "medianContextTokens": 111,
-      "medianCostUsd": null,
-      "medianTscErrors": 3,
-      "medianLintErrors": 0,
-      "meanCoverage": 0
-    },
-    {
-      "taskId": "tag-picker",
-      "mode": "readme",
-      "runs": [
-        "tag-picker__readme__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 0,
-      "medianTokens": 0,
-      "medianContextTokens": 753,
-      "medianCostUsd": null,
-      "medianTscErrors": 2,
-      "medianLintErrors": 0,
-      "meanCoverage": 0
-    },
-    {
-      "taskId": "tag-picker",
-      "mode": "docs",
-      "runs": [
-        "tag-picker__docs__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 16625,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 0
-    },
-    {
-      "taskId": "tag-picker",
-      "mode": "docs+rules",
-      "runs": [
-        "tag-picker__docs+rules__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 17366,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 1
-    },
-    {
-      "taskId": "tag-picker",
-      "mode": "mcp",
-      "runs": [
-        "tag-picker__mcp__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 1000,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 1
-    },
-    {
-      "taskId": "users-table",
-      "mode": "none",
-      "runs": [
-        "users-table__none__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 0,
-      "medianTokens": 0,
-      "medianContextTokens": 111,
-      "medianCostUsd": null,
-      "medianTscErrors": 8,
-      "medianLintErrors": 0,
-      "meanCoverage": 0
-    },
-    {
-      "taskId": "users-table",
-      "mode": "readme",
-      "runs": [
-        "users-table__readme__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 0,
-      "medianTokens": 0,
-      "medianContextTokens": 753,
-      "medianCostUsd": null,
-      "medianTscErrors": 8,
-      "medianLintErrors": 0,
-      "meanCoverage": 0
-    },
-    {
-      "taskId": "users-table",
-      "mode": "docs",
-      "runs": [
-        "users-table__docs__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 16625,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 1
-    },
-    {
-      "taskId": "users-table",
-      "mode": "docs+rules",
-      "runs": [
-        "users-table__docs+rules__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 17366,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 1
-    },
-    {
-      "taskId": "users-table",
-      "mode": "mcp",
-      "runs": [
-        "users-table__mcp__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 1,
-      "medianTokens": 0,
-      "medianContextTokens": 1000,
-      "medianCostUsd": null,
-      "medianTscErrors": 0,
-      "medianLintErrors": 0,
-      "meanCoverage": 1
-    },
-    {
-      "taskId": "wizard",
-      "mode": "none",
-      "runs": [
-        "wizard__none__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 0,
-      "medianTokens": 0,
-      "medianContextTokens": 111,
-      "medianCostUsd": null,
-      "medianTscErrors": 8,
-      "medianLintErrors": 0,
-      "meanCoverage": 0
-    },
-    {
-      "taskId": "wizard",
-      "mode": "readme",
-      "runs": [
-        "wizard__readme__subagent__claude-sonnet-5__1"
-      ],
-      "passRate": 0,
-      "medianTokens": 0,
-      "medianContextTokens": 753,
-      "medianCostUsd": null,
-      "medianTscErrors": 3,
-      "medianLintErrors": 0,
-      "meanCoverage": 0
-    },
-    {
       "taskId": "wizard",
       "mode": "docs",
       "runs": [
-        "wizard__docs__subagent__claude-sonnet-5__1"
+        "wizard__docs__claude-code__claude-opus-5__1",
+        "wizard__docs__claude-code__claude-opus-5__2",
+        "wizard__docs__claude-code__claude-opus-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 0,
+      "medianTokens": 47371,
       "medianContextTokens": 16625,
-      "medianCostUsd": null,
+      "medianCostUsd": 0.26868400000000003,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1
@@ -585,12 +661,14 @@
       "taskId": "wizard",
       "mode": "docs+rules",
       "runs": [
-        "wizard__docs+rules__subagent__claude-sonnet-5__1"
+        "wizard__docs+rules__claude-code__claude-opus-5__1",
+        "wizard__docs+rules__claude-code__claude-opus-5__2",
+        "wizard__docs+rules__claude-code__claude-opus-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 0,
+      "medianTokens": 47832,
       "medianContextTokens": 17366,
-      "medianCostUsd": null,
+      "medianCostUsd": 0.25963975,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1
@@ -599,16 +677,18 @@
       "taskId": "wizard",
       "mode": "mcp",
       "runs": [
-        "wizard__mcp__subagent__claude-sonnet-5__1"
+        "wizard__mcp__claude-code__claude-opus-5__1",
+        "wizard__mcp__claude-code__claude-opus-5__2",
+        "wizard__mcp__claude-code__claude-opus-5__3"
       ],
-      "passRate": 1,
-      "medianTokens": 0,
+      "passRate": 0.67,
+      "medianTokens": 75905,
       "medianContextTokens": 1000,
-      "medianCostUsd": null,
+      "medianCostUsd": 0.15043800000000002,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1
     }
   ],
-  "generatedFrom": 40
+  "generatedFrom": 120
 }

@@ -1,0 +1,316 @@
+{
+  "id": "settings-form__mcp__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-21T13:27:01.393Z",
+  "repeat": 3,
+  "durationMs": 28576,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "mcp",
+  "task": {
+    "id": "settings-form",
+    "title": "Форма настроек",
+    "prompt": "Сделай форму настроек профиля: поле «Имя», выбор языка интерфейса из списка (русский, английский), переключатель «Уведомления на почту» и кнопка «Сохранить». Состояние полей храни в компоненте, при отправке вызывай переданный колбэк onSave с объектом настроек.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 1000,
+    "sources": [
+      {
+        "kind": "tools",
+        "id": "search_components,get_component_api,get_component_examples,list_design_tokens",
+        "version": "0.1.0",
+        "tokens": 688
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13922,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13922,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "текстовое поле ввода"
+          },
+          "resultTokens": 469
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13922,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "выбор из списка select"
+          },
+          "resultTokens": 419
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13922,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "переключатель switch toggle"
+          },
+          "resultTokens": 192
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13922,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "кнопка"
+          },
+          "resultTokens": 412
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 13922,
+        "cacheCreation": 2699
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 13922,
+        "cacheCreation": 2699
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 13922,
+        "cacheCreation": 2699
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxInputField"
+          },
+          "resultTokens": 393
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 13922,
+        "cacheCreation": 2699
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxSelect"
+          },
+          "resultTokens": 501
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 13922,
+        "cacheCreation": 2699
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxSwitch"
+          },
+          "resultTokens": 238
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 13922,
+        "cacheCreation": 2699
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxButton"
+          },
+          "resultTokens": 427
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 13922,
+        "cacheCreation": 2699
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_rules",
+          "input": {
+            "task": "ui"
+          },
+          "resultTokens": 870
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 16621,
+        "cacheCreation": 4441
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 16621,
+        "cacheCreation": 4441
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 16621,
+        "cacheCreation": 4441
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__list_design_tokens",
+          "input": {},
+          "resultTokens": 924
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 5,
+        "cacheRead": 21062,
+        "cacheCreation": 2167
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 5,
+        "cacheRead": 21062,
+        "cacheCreation": 2167
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 8,
+    "output": 2163,
+    "cacheRead": 65527,
+    "cacheCreation": 9307
+  },
+  "costUsd": 0.14504725,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, type FormEvent } from 'react';\nimport { JxButton, JxInputField, JxSelect, JxSwitch } from '@jinx-ui/react';\n\nexport type ProfileSettings = {\n  name: string;\n  language: string;\n  emailNotifications: boolean;\n};\n\ntype ProfileSettingsFormProps = {\n  initialSettings?: ProfileSettings;\n  onSave: (settings: ProfileSettings) => void;\n};\n\nconst languageOptions = [\n  { value: 'ru', label: 'Русский' },\n  { value: 'en', label: 'Английский' },\n];\n\nexport default function ProfileSettingsForm({\n  initialSettings,\n  onSave,\n}: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialSettings?.name ?? '');\n  const [language, setLanguage] = useState(initialSettings?.language ?? 'ru');\n  const [emailNotifications, setEmailNotifications] = useState(\n    initialSettings?.emailNotifications ?? false,\n  );\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    onSave({ name, language, emailNotifications });\n  };\n\n  return (\n    <form\n      onSubmit={handleSubmit}\n      style={{\n        display: 'grid',\n        gap: 'var(--jx-gap, 16px)',\n        maxWidth: '420px',\n      }}\n    >\n      <JxInputField\n        label=\"Имя\"\n        name=\"name\"\n        required\n        placeholder=\"Как к вам обращаться\"\n        value={name}\n        onChange={(event) => setName(event.target.value)}\n      />\n\n      <JxSelect\n        label=\"Язык интерфейса\"\n        placeholder=\"Выберите язык\"\n        options={languageOptions}\n        value={language}\n        onValueChange={setLanguage}\n      />\n\n      <JxSwitch\n        label=\"Уведомления на почту\"\n        name=\"emailNotifications\"\n        checked={emailNotifications}\n        onChange={(event) => setEmailNotifications(event.target.checked)}\n      />\n\n      <div style={{ display: 'flex', gap: 'var(--jx-gap, 8px)' }}>\n        <JxButton variant=\"primary\" type=\"submit\">\n          Сохранить\n        </JxButton>\n      </div>\n    </form>\n  );\n}",
+    "text": "```tsx\nimport { useState, type FormEvent } from 'react';\nimport { JxButton, JxInputField, JxSelect, JxSwitch } from '@jinx-ui/react';\n\nexport type ProfileSettings = {\n  name: string;\n  language: string;\n  emailNotifications: boolean;\n};\n\ntype ProfileSettingsFormProps = {\n  initialSettings?: ProfileSettings;\n  onSave: (settings: ProfileSettings) => void;\n};\n\nconst languageOptions = [\n  { value: 'ru', label: 'Русский' },\n  { value: 'en', label: 'Английский' },\n];\n\nexport default function ProfileSettingsForm({\n  initialSettings,\n  onSave,\n}: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialSettings?.name ?? '');\n  const [language, setLanguage] = useState(initialSettings?.language ?? 'ru');\n  const [emailNotifications, setEmailNotifications] = useState(\n    initialSettings?.emailNotifications ?? false,\n  );\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    onSave({ name, language, emailNotifications });\n  };\n\n  return (\n    <form\n      onSubmit={handleSubmit}\n      style={{\n        display: 'grid',\n        gap: 'var(--jx-gap, 16px)',\n        maxWidth: '420px',\n      }}\n    >\n      <JxInputField\n        label=\"Имя\"\n        name=\"name\"\n        required\n        placeholder=\"Как к вам обращаться\"\n        value={name}\n        onChange={(event) => setName(event.target.value)}\n      />\n\n      <JxSelect\n        label=\"Язык интерфейса\"\n        placeholder=\"Выберите язык\"\n        options={languageOptions}\n        value={language}\n        onValueChange={setLanguage}\n      />\n\n      <JxSwitch\n        label=\"Уведомления на почту\"\n        name=\"emailNotifications\"\n        checked={emailNotifications}\n        onChange={(event) => setEmailNotifications(event.target.checked)}\n      />\n\n      <div style={{ display: 'flex', gap: 'var(--jx-gap, 8px)' }}>\n        <JxButton variant=\"primary\" type=\"submit\">\n          Сохранить\n        </JxButton>\n      </div>\n    </form>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 38,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 68,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

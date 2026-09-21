@@ -1,0 +1,419 @@
+{
+  "id": "subscribe-toast__mcp__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-21T13:28:09.297Z",
+  "repeat": 3,
+  "durationMs": 29018,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "mcp",
+  "task": {
+    "id": "subscribe-toast",
+    "title": "Подписка с уведомлением",
+    "prompt": "Сделай форму подписки на рассылку с полем для почты и кнопкой «Подписаться». После отправки поле очищается, а в углу экрана появляется уведомление «Готово» с текстом, что письмо отправлено.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxButton",
+      "JxToastViewport"
+    ]
+  },
+  "context": {
+    "tokens": 1000,
+    "sources": [
+      {
+        "kind": "tools",
+        "id": "search_components,get_component_api,get_component_examples,list_design_tokens",
+        "version": "0.1.0",
+        "tokens": 688
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13892,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13892,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "поле ввода email"
+          },
+          "resultTokens": 472
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13892,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "уведомление toast в углу экрана"
+          },
+          "resultTokens": 285
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 13892,
+        "cacheCreation": 1369
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 13892,
+        "cacheCreation": 1369
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 13892,
+        "cacheCreation": 1369
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxInputField"
+          },
+          "resultTokens": 393
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 13892,
+        "cacheCreation": 1369
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxToastViewport"
+          },
+          "resultTokens": 458
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 13892,
+        "cacheCreation": 1369
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxToast"
+          },
+          "resultTokens": 287
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 13892,
+        "cacheCreation": 1369
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "кнопка",
+            "limit": 3
+          },
+          "resultTokens": 210
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 15261,
+        "cacheCreation": 2498
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 15261,
+        "cacheCreation": 2498
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 15261,
+        "cacheCreation": 2498
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "useJxToastQueue"
+          },
+          "resultTokens": 49,
+          "isError": true
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 15261,
+        "cacheCreation": 2498
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxButton",
+            "detail": "signature"
+          },
+          "resultTokens": 37
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 15261,
+        "cacheCreation": 2498
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__list_design_tokens",
+          "input": {
+            "group": "color"
+          },
+          "resultTokens": 630
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 17759,
+        "cacheCreation": 1810
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 17759,
+        "cacheCreation": 1810
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 17759,
+        "cacheCreation": 1810
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_docs",
+          "input": {
+            "component": "JxToastViewport"
+          },
+          "resultTokens": 521
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 17759,
+        "cacheCreation": 1810
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "карточка и вертикальная раскладка с отступами",
+            "limit": 4
+          },
+          "resultTokens": 49
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 19569,
+        "cacheCreation": 1274
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 19569,
+        "cacheCreation": 1274
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "Card Stack",
+            "limit": 5
+          },
+          "resultTokens": 57
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 20843,
+        "cacheCreation": 231
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 20843,
+        "cacheCreation": 231
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__list_design_tokens",
+          "input": {
+            "group": "radius"
+          },
+          "resultTokens": 90
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 20843,
+        "cacheCreation": 231
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_examples",
+          "input": {
+            "name": "JxButton"
+          },
+          "resultTokens": 122
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 21074,
+        "cacheCreation": 700
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 21074,
+        "cacheCreation": 700
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 14,
+    "output": 2205,
+    "cacheRead": 122290,
+    "cacheCreation": 7882
+  },
+  "costUsd": 0.16560249999999999,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, type FormEvent } from 'react';\nimport {\n  JxButton,\n  JxInputField,\n  JxToastViewport,\n  useJxToastQueue,\n} from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const toasts = useJxToastQueue();\n  const [email, setEmail] = useState('');\n  const [error, setError] = useState('');\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n\n    const value = email.trim();\n    if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value)) {\n      setError('Введите адрес в формате name@example.com');\n      return;\n    }\n\n    setError('');\n    setEmail('');\n    toasts.push({\n      title: 'Готово',\n      message: `Письмо отправлено на ${value}`,\n      variant: 'success',\n    });\n  };\n\n  return (\n    <form\n      onSubmit={submit}\n      noValidate\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-gap, 12px)',\n        maxWidth: '420px',\n        padding: 'var(--jx-gap-lg, 20px)',\n        background: 'var(--jx-surface)',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n        color: 'var(--jx-text)',\n      }}\n    >\n      <JxInputField\n        label=\"Электронная почта\"\n        type=\"email\"\n        name=\"email\"\n        required\n        placeholder=\"name@example.com\"\n        value={email}\n        onChange={(event) => {\n          setEmail(event.target.value);\n          if (error) setError('');\n        }}\n        errorText={error}\n        helperText={error ? undefined : 'Раз в неделю, без спама'}\n      />\n\n      <JxButton type=\"submit\" variant=\"primary\">\n        Подписаться\n      </JxButton>\n\n      <JxToastViewport\n        items={toasts.items}\n        onDismiss={toasts.dismiss}\n        position=\"bottom-right\"\n      />\n    </form>\n  );\n}",
+    "text": "```tsx\nimport { useState, type FormEvent } from 'react';\nimport {\n  JxButton,\n  JxInputField,\n  JxToastViewport,\n  useJxToastQueue,\n} from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const toasts = useJxToastQueue();\n  const [email, setEmail] = useState('');\n  const [error, setError] = useState('');\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n\n    const value = email.trim();\n    if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value)) {\n      setError('Введите адрес в формате name@example.com');\n      return;\n    }\n\n    setError('');\n    setEmail('');\n    toasts.push({\n      title: 'Готово',\n      message: `Письмо отправлено на ${value}`,\n      variant: 'success',\n    });\n  };\n\n  return (\n    <form\n      onSubmit={submit}\n      noValidate\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-gap, 12px)',\n        maxWidth: '420px',\n        padding: 'var(--jx-gap-lg, 20px)',\n        background: 'var(--jx-surface)',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n        color: 'var(--jx-text)',\n      }}\n    >\n      <JxInputField\n        label=\"Электронная почта\"\n        type=\"email\"\n        name=\"email\"\n        required\n        placeholder=\"name@example.com\"\n        value={email}\n        onChange={(event) => {\n          setEmail(event.target.value);\n          if (error) setError('');\n        }}\n        errorText={error}\n        helperText={error ? undefined : 'Раз в неделю, без спама'}\n      />\n\n      <JxButton type=\"submit\" variant=\"primary\">\n        Подписаться\n      </JxButton>\n\n      <JxToastViewport\n        items={toasts.items}\n        onDismiss={toasts.dismiss}\n        position=\"bottom-right\"\n      />\n    </form>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 36,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxInputField",
+      "JxToastViewport"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

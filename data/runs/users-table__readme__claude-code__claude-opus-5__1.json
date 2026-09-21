@@ -1,0 +1,99 @@
+{
+  "id": "users-table__readme__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-21T13:07:19.910Z",
+  "repeat": 1,
+  "durationMs": 24281,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "users-table",
+    "title": "Таблица пользователей с пагинацией",
+    "prompt": "Сделай таблицу пользователей с колонками «Имя», «Роль» и «Статус». Список users передаётся пропсом, показывать по десять строк на страницу с постраничной навигацией под таблицей. Статус показывай цветной меткой: активен или отключён.",
+    "taskType": "ui",
+    "expects": [
+      "JxTable",
+      "JxPagination",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 753,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 5579,
+        "cacheCreation": 10115
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 5579,
+        "cacheCreation": 10115
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1981,
+    "cacheRead": 5579,
+    "cacheCreation": 10115
+  },
+  "costUsd": 0.11554325000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\ntype UserStatus = 'active' | 'disabled';\n\nexport type User = {\n  id: string;\n  name: string;\n  role: string;\n  status: UserStatus;\n};\n\ntype UsersTableProps = {\n  users: User[];\n  pageSize?: number;\n};\n\nconst STATUS_LABEL: Record<UserStatus, string> = {\n  active: 'Активен',\n  disabled: 'Отключён',\n};\n\nfunction UsersTable({ users, pageSize = 10 }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const totalPages = Math.max(1, Math.ceil(users.length / pageSize));\n  const currentPage = Math.min(page, totalPages);\n\n  const rows = useMemo(() => {\n    const start = (currentPage - 1) * pageSize;\n    return users.slice(start, start + pageSize);\n  }, [users, currentPage, pageSize]);\n\n  const pages = useMemo(\n    () => Array.from({ length: totalPages }, (_, index) => index + 1),\n    [totalPages],\n  );\n\n  return (\n    <div className=\"jx-stack\">\n      <table className=\"jx-table\">\n        <caption className=\"jx-visually-hidden\">Пользователи</caption>\n        <thead>\n          <tr>\n            <th scope=\"col\">Имя</th>\n            <th scope=\"col\">Роль</th>\n            <th scope=\"col\">Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {rows.length === 0 ? (\n            <tr>\n              <td colSpan={3} className=\"jx-table__empty\">\n                Пользователей нет\n              </td>\n            </tr>\n          ) : (\n            rows.map((user) => (\n              <tr key={user.id}>\n                <td>{user.name}</td>\n                <td>{user.role}</td>\n                <td>\n                  <span\n                    className=\"jx-badge\"\n                    style={{\n                      color:\n                        user.status === 'active'\n                          ? 'var(--jx-success-fg)'\n                          : 'var(--jx-muted-fg)',\n                      background:\n                        user.status === 'active'\n                          ? 'var(--jx-success-bg)'\n                          : 'var(--jx-muted-bg)',\n                      borderRadius: 'var(--jx-radius)',\n                    }}\n                  >\n                    {STATUS_LABEL[user.status]}\n                  </span>\n                </td>\n              </tr>\n            ))\n          )}\n        </tbody>\n      </table>\n\n      <nav className=\"jx-pagination\" aria-label=\"Постраничная навигация\">\n        <Button\n          variant=\"ghost\"\n          disabled={currentPage === 1}\n          onClick={() => setPage(currentPage - 1)}\n        >\n          Назад\n        </Button>\n        {pages.map((pageNumber) => (\n          <Button\n            key={pageNumber}\n            variant={pageNumber === currentPage ? 'primary' : 'ghost'}\n            aria-current={pageNumber === currentPage ? 'page' : undefined}\n            onClick={() => setPage(pageNumber)}\n          >\n            {pageNumber}\n          </Button>\n        ))}\n        <Button\n          variant=\"ghost\"\n          disabled={currentPage === totalPages}\n          onClick={() => setPage(currentPage + 1)}\n        >\n          Вперёд\n        </Button>\n      </nav>\n    </div>\n  );\n}\n\nexport default UsersTable;",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\ntype UserStatus = 'active' | 'disabled';\n\nexport type User = {\n  id: string;\n  name: string;\n  role: string;\n  status: UserStatus;\n};\n\ntype UsersTableProps = {\n  users: User[];\n  pageSize?: number;\n};\n\nconst STATUS_LABEL: Record<UserStatus, string> = {\n  active: 'Активен',\n  disabled: 'Отключён',\n};\n\nfunction UsersTable({ users, pageSize = 10 }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const totalPages = Math.max(1, Math.ceil(users.length / pageSize));\n  const currentPage = Math.min(page, totalPages);\n\n  const rows = useMemo(() => {\n    const start = (currentPage - 1) * pageSize;\n    return users.slice(start, start + pageSize);\n  }, [users, currentPage, pageSize]);\n\n  const pages = useMemo(\n    () => Array.from({ length: totalPages }, (_, index) => index + 1),\n    [totalPages],\n  );\n\n  return (\n    <div className=\"jx-stack\">\n      <table className=\"jx-table\">\n        <caption className=\"jx-visually-hidden\">Пользователи</caption>\n        <thead>\n          <tr>\n            <th scope=\"col\">Имя</th>\n            <th scope=\"col\">Роль</th>\n            <th scope=\"col\">Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {rows.length === 0 ? (\n            <tr>\n              <td colSpan={3} className=\"jx-table__empty\">\n                Пользователей нет\n              </td>\n            </tr>\n          ) : (\n            rows.map((user) => (\n              <tr key={user.id}>\n                <td>{user.name}</td>\n                <td>{user.role}</td>\n                <td>\n                  <span\n                    className=\"jx-badge\"\n                    style={{\n                      color:\n                        user.status === 'active'\n                          ? 'var(--jx-success-fg)'\n                          : 'var(--jx-muted-fg)',\n                      background:\n                        user.status === 'active'\n                          ? 'var(--jx-success-bg)'\n                          : 'var(--jx-muted-bg)',\n                      borderRadius: 'var(--jx-radius)',\n                    }}\n                  >\n                    {STATUS_LABEL[user.status]}\n                  </span>\n                </td>\n              </tr>\n            ))\n          )}\n        </tbody>\n      </table>\n\n      <nav className=\"jx-pagination\" aria-label=\"Постраничная навигация\">\n        <Button\n          variant=\"ghost\"\n          disabled={currentPage === 1}\n          onClick={() => setPage(currentPage - 1)}\n        >\n          Назад\n        </Button>\n        {pages.map((pageNumber) => (\n          <Button\n            key={pageNumber}\n            variant={pageNumber === currentPage ? 'primary' : 'ghost'}\n            aria-current={pageNumber === currentPage ? 'page' : undefined}\n            onClick={() => setPage(pageNumber)}\n          >\n            {pageNumber}\n          </Button>\n        ))}\n        <Button\n          variant=\"ghost\"\n          disabled={currentPage === totalPages}\n          onClick={() => setPage(currentPage + 1)}\n        >\n          Вперёд\n        </Button>\n      </nav>\n    </div>\n  );\n}\n\nexport default UsersTable;\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        }
+      ],
+      "unknownComponents": [
+        "Button"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 65,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.56
+  }
+}

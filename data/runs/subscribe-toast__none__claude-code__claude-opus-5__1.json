@@ -1,0 +1,170 @@
+{
+  "id": "subscribe-toast__none__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-21T12:54:26.630Z",
+  "repeat": 1,
+  "durationMs": 26274,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "subscribe-toast",
+    "title": "Подписка с уведомлением",
+    "prompt": "Сделай форму подписки на рассылку с полем для почты и кнопкой «Подписаться». После отправки поле очищается, а в углу экрана появляется уведомление «Готово» с текстом, что письмо отправлено.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxButton",
+      "JxToastViewport"
+    ]
+  },
+  "context": {
+    "tokens": 111,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6778,
+        "cacheCreation": 8437
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6778,
+        "cacheCreation": 8437
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6778,
+        "cacheCreation": 8437
+      },
+      "toolCalls": [
+        {
+          "name": "Bash",
+          "input": {
+            "command": "ls C:/Users/kgn20/WebstormProjects/context-lab && ls C:/Users/kgn20/WebstormProjects/context-lab/vendor/jinx-ui 2>/dev/null | head -30",
+            "description": "List repo root and vendor dir"
+          },
+          "resultTokens": 44,
+          "isError": true
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6778,
+        "cacheCreation": 8437
+      },
+      "toolCalls": [
+        {
+          "name": "Bash",
+          "input": {
+            "command": "ls C:/Users/kgn20/WebstormProjects/context-lab/data 2>/dev/null; ls C:/Users/kgn20/WebstormProjects/context-lab/docs 2>/dev/null | head -40",
+            "description": "List data and docs"
+          },
+          "resultTokens": 44,
+          "isError": true
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 15215,
+        "cacheCreation": 626
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 15215,
+        "cacheCreation": 626
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 4,
+    "output": 1904,
+    "cacheRead": 21993,
+    "cacheCreation": 9063
+  },
+  "costUsd": 0.11526025,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, type FormEvent } from 'react';\nimport { Button, Field, Input, Stack, useToast } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const toast = useToast();\n\n  function handleSubmit(event: FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n\n    const address = email.trim();\n    if (!address) {\n      return;\n    }\n\n    toast.show({\n      status: 'success',\n      title: 'Готово',\n      description: `Письмо отправлено на ${address}.`,\n      placement: 'bottom-right',\n    });\n    setEmail('');\n  }\n\n  return (\n    <form onSubmit={handleSubmit} noValidate>\n      <Stack direction=\"column\" gap=\"md\" align=\"stretch\">\n        <Field label=\"Почта\" htmlFor=\"newsletter-email\">\n          <Input\n            id=\"newsletter-email\"\n            name=\"email\"\n            type=\"email\"\n            value={email}\n            autoComplete=\"email\"\n            placeholder=\"you@example.com\"\n            onChange={(event) => setEmail(event.target.value)}\n          />\n        </Field>\n        <Button type=\"submit\" variant=\"primary\" disabled={email.trim() === ''}>\n          Подписаться\n        </Button>\n      </Stack>\n    </form>\n  );\n}",
+    "text": "```tsx\nimport { useState, type FormEvent } from 'react';\nimport { Button, Field, Input, Stack, useToast } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const toast = useToast();\n\n  function handleSubmit(event: FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n\n    const address = email.trim();\n    if (!address) {\n      return;\n    }\n\n    toast.show({\n      status: 'success',\n      title: 'Готово',\n      description: `Письмо отправлено на ${address}.`,\n      placement: 'bottom-right',\n    });\n    setEmail('');\n  }\n\n  return (\n    <form onSubmit={handleSubmit} noValidate>\n      <Stack direction=\"column\" gap=\"md\" align=\"stretch\">\n        <Field label=\"Почта\" htmlFor=\"newsletter-email\">\n          <Input\n            id=\"newsletter-email\"\n            name=\"email\"\n            type=\"email\"\n            value={email}\n            autoComplete=\"email\"\n            placeholder=\"you@example.com\"\n            onChange={(event) => setEmail(event.target.value)}\n          />\n        </Field>\n        <Button type=\"submit\" variant=\"primary\" disabled={email.trim() === ''}>\n          Подписаться\n        </Button>\n      </Stack>\n    </form>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Field'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'useToast'."
+        },
+        {
+          "code": 7006,
+          "line": 36,
+          "message": "Parameter 'event' implicitly has an 'any' type."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Field",
+        "Input",
+        "Stack",
+        "useToast"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

@@ -1,0 +1,238 @@
+{
+  "id": "users-table__mcp__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-21T13:28:25.140Z",
+  "repeat": 1,
+  "durationMs": 15842,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "mcp",
+  "task": {
+    "id": "users-table",
+    "title": "Таблица пользователей с пагинацией",
+    "prompt": "Сделай таблицу пользователей с колонками «Имя», «Роль» и «Статус». Список users передаётся пропсом, показывать по десять строк на страницу с постраничной навигацией под таблицей. Статус показывай цветной меткой: активен или отключён.",
+    "taskType": "ui",
+    "expects": [
+      "JxTable",
+      "JxPagination",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 1000,
+    "sources": [
+      {
+        "kind": "tools",
+        "id": "search_components,get_component_api,get_component_examples,list_design_tokens",
+        "version": "0.1.0",
+        "tokens": 688
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 4980,
+        "cacheCreation": 8962
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 4980,
+        "cacheCreation": 8962
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "таблица",
+            "limit": 5
+          },
+          "resultTokens": 150
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 4980,
+        "cacheCreation": 8962
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "постраничная навигация пагинация",
+            "limit": 5
+          },
+          "resultTokens": 195
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 4980,
+        "cacheCreation": 8962
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "цветная метка статус badge",
+            "limit": 5
+          },
+          "resultTokens": 308
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13942,
+        "cacheCreation": 1395
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13942,
+        "cacheCreation": 1395
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13942,
+        "cacheCreation": 1395
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxTable",
+            "detail": "full"
+          },
+          "resultTokens": 281
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13942,
+        "cacheCreation": 1395
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_examples",
+          "input": {
+            "name": "JxTable"
+          },
+          "resultTokens": 141
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13942,
+        "cacheCreation": 1395
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxBadge",
+            "detail": "full"
+          },
+          "resultTokens": 274
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13942,
+        "cacheCreation": 1395
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxPagination",
+            "detail": "full"
+          },
+          "resultTokens": 359
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 15337,
+        "cacheCreation": 2189
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 6,
+    "output": 1222,
+    "cacheRead": 34259,
+    "cacheCreation": 12546
+  },
+  "costUsd": 0.12612199999999998,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\nimport { JxBadge, JxPagination, JxTable } from '@jinx-ui/react';\n\nconst PAGE_SIZE = 10;\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\nexport interface UsersTableProps {\n  users: User[];\n}\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n\n  const visible = useMemo(\n    () => users.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),\n    [users, currentPage],\n  );\n\n  return (\n    <div style={{ display: 'grid', gap: 'var(--jx-space-4)' }}>\n      <JxTable>\n        <thead>\n          <tr>\n            <th>Имя</th>\n            <th>Роль</th>\n            <th>Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'danger'} dot>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n      {pageCount > 1 && (\n        <JxPagination total={pageCount} page={currentPage} onPageChange={setPage} />\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport { JxBadge, JxPagination, JxTable } from '@jinx-ui/react';\n\nconst PAGE_SIZE = 10;\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\nexport interface UsersTableProps {\n  users: User[];\n}\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n\n  const visible = useMemo(\n    () => users.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),\n    [users, currentPage],\n  );\n\n  return (\n    <div style={{ display: 'grid', gap: 'var(--jx-space-4)' }}>\n      <JxTable>\n        <thead>\n          <tr>\n            <th>Имя</th>\n            <th>Роль</th>\n            <th>Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'danger'} dot>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n      {pageCount > 1 && (\n        <JxPagination total={pageCount} page={currentPage} onPageChange={setPage} />\n      )}\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 29,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxBadge",
+      "JxPagination",
+      "JxTable"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

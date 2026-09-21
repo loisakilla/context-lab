@@ -61,7 +61,7 @@ const headers = [
   'Контекст до задачи',
   ...(withUsage ? ['Токенов на задачу'] : []),
   ...(withCost ? ['Цена задачи'] : []),
-  'Задач без ошибок',
+  'Задач, где прошли все прогоны',
   'Ошибок компилятора на задачу',
   'Нарушений правил',
   'Покрытие нужных компонентов',
@@ -82,12 +82,15 @@ for (const mode of modes) {
   summary.push(`| ${columns.join(' | ')} |`);
 }
 
-const perTask: string[] = ['', '<details><summary>По задачам: ошибок компилятора в каждой ячейке</summary>', '', `| Задача | ${modes.map((mode) => MODE_LABELS[mode] ?? mode).join(' | ')} |`, `|---|${modes.map(() => '---').join('|')}|`];
+const perTask: string[] = ['', '<details><summary>По задачам: сколько прогонов прошли проверки и медиана ошибок компилятора</summary>', '', `| Задача | ${modes.map((mode) => MODE_LABELS[mode] ?? mode).join(' | ')} |`, `|---|${modes.map(() => '---').join('|')}|`];
 for (const task of matrix.tasks) {
   const cells = modes.map((mode) => {
     const cell = matrix.cells.find((candidate) => candidate.taskId === task.id && candidate.mode === mode);
     if (!cell) return '—';
-    return cell.passRate === 1 ? '✅ 0' : `${cell.passRate > 0 ? '⚠️' : '❌'} ${cell.medianTscErrors}`;
+    const total = cell.runs.length;
+    const passed = Math.round(cell.passRate * total);
+    const icon = cell.passRate === 1 ? '✅' : cell.passRate === 0 ? '❌' : '⚠️';
+    return `${icon} ${passed}/${total} · ${cell.medianTscErrors} ош.`;
   });
   perTask.push(`| ${task.title} | ${cells.join(' | ')} |`);
 }

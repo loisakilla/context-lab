@@ -1,0 +1,150 @@
+{
+  "id": "tag-picker__none__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-21T12:58:52.229Z",
+  "repeat": 1,
+  "durationMs": 26961,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 111,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 5579,
+        "cacheCreation": 8642
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 5579,
+        "cacheCreation": 8642
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 5579,
+        "cacheCreation": 8642
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__claude_ai_Claude_Docs__guide",
+          "input": {
+            "items": [
+              "topic.index"
+            ]
+          },
+          "resultTokens": 29,
+          "isError": true
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6778,
+        "cacheCreation": 8938
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6778,
+        "cacheCreation": 8938
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 4,
+    "output": 1894,
+    "cacheRead": 12357,
+    "cacheCreation": 17580
+  },
+  "costUsd": 0.1634235,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, type KeyboardEvent } from 'react';\nimport { Stack, Field, Input, Tag, Text } from '@jinx-ui/react';\n\ntype TagPickerProps = {\n  label?: string;\n  placeholder?: string;\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n};\n\nexport default function TagPicker({\n  label = 'Теги',\n  placeholder = 'Введите тег и нажмите Enter',\n  defaultValue = [],\n  onChange,\n}: TagPickerProps) {\n  const [tags, setTags] = useState<string[]>(defaultValue);\n  const [draft, setDraft] = useState('');\n\n  const commit = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  const addTag = () => {\n    const tag = draft.trim();\n    if (!tag) return;\n    if (tags.some((existing) => existing.toLowerCase() === tag.toLowerCase())) {\n      setDraft('');\n      return;\n    }\n    commit([...tags, tag]);\n    setDraft('');\n  };\n\n  const removeTag = (tag: string) => {\n    commit(tags.filter((existing) => existing !== tag));\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag();\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  return (\n    <Stack direction=\"column\" gap=\"var(--jx-space-2)\">\n      <Field label={label}>\n        <Input\n          value={draft}\n          placeholder={placeholder}\n          onChange={(event) => setDraft(event.target.value)}\n          onKeyDown={handleKeyDown}\n          onBlur={addTag}\n        />\n      </Field>\n\n      {tags.length > 0 ? (\n        <Stack direction=\"row\" gap=\"var(--jx-space-1)\" wrap>\n          {tags.map((tag) => (\n            <Tag\n              key={tag}\n              onRemove={() => removeTag(tag)}\n              removeLabel={`Удалить тег ${tag}`}\n            >\n              {tag}\n            </Tag>\n          ))}\n        </Stack>\n      ) : (\n        <Text tone=\"muted\" size=\"sm\">\n          Теги пока не выбраны\n        </Text>\n      )}\n    </Stack>\n  );\n}",
+    "text": "Файловых инструментов в этой сессии нет, так что API Jinx UI я проверить по `vendor/jinx-ui` не смог — сверьте имена компонентов с индексом.\n\n```tsx\nimport { useState, type KeyboardEvent } from 'react';\nimport { Stack, Field, Input, Tag, Text } from '@jinx-ui/react';\n\ntype TagPickerProps = {\n  label?: string;\n  placeholder?: string;\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n};\n\nexport default function TagPicker({\n  label = 'Теги',\n  placeholder = 'Введите тег и нажмите Enter',\n  defaultValue = [],\n  onChange,\n}: TagPickerProps) {\n  const [tags, setTags] = useState<string[]>(defaultValue);\n  const [draft, setDraft] = useState('');\n\n  const commit = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  const addTag = () => {\n    const tag = draft.trim();\n    if (!tag) return;\n    if (tags.some((existing) => existing.toLowerCase() === tag.toLowerCase())) {\n      setDraft('');\n      return;\n    }\n    commit([...tags, tag]);\n    setDraft('');\n  };\n\n  const removeTag = (tag: string) => {\n    commit(tags.filter((existing) => existing !== tag));\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag();\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  return (\n    <Stack direction=\"column\" gap=\"var(--jx-space-2)\">\n      <Field label={label}>\n        <Input\n          value={draft}\n          placeholder={placeholder}\n          onChange={(event) => setDraft(event.target.value)}\n          onKeyDown={handleKeyDown}\n          onBlur={addTag}\n        />\n      </Field>\n\n      {tags.length > 0 ? (\n        <Stack direction=\"row\" gap=\"var(--jx-space-1)\" wrap>\n          {tags.map((tag) => (\n            <Tag\n              key={tag}\n              onRemove={() => removeTag(tag)}\n              removeLabel={`Удалить тег ${tag}`}\n            >\n              {tag}\n            </Tag>\n          ))}\n        </Stack>\n      ) : (\n        <Text tone=\"muted\" size=\"sm\">\n          Теги пока не выбраны\n        </Text>\n      )}\n    </Stack>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Field'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Tag'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        },
+        {
+          "code": 7006,
+          "line": 57,
+          "message": "Parameter 'event' implicitly has an 'any' type."
+        }
+      ],
+      "unknownComponents": [
+        "Field",
+        "Input",
+        "Stack",
+        "Tag",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

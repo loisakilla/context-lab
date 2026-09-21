@@ -1,0 +1,152 @@
+{
+  "id": "side-nav__readme__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-21T13:13:56.453Z",
+  "repeat": 3,
+  "durationMs": 21702,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "side-nav",
+    "title": "Боковая панель навигации",
+    "prompt": "Сделай кнопку «Меню», по которой слева выезжает панель с навигацией: пункты «Проекты», «Команда», «Настройки», разделитель и пункт «Выйти», выделенный как опасный. Выбор пункта вызывает переданный колбэк onNavigate с ключом пункта и закрывает панель.",
+    "taskType": "ui",
+    "expects": [
+      "JxDrawer",
+      "JxMenu",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 753,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 5579,
+        "cacheCreation": 10144
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 5579,
+        "cacheCreation": 10144
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__claude_ai_Claude_Docs__guide",
+          "input": {
+            "items": [
+              "topic.index"
+            ]
+          },
+          "resultTokens": 29,
+          "isError": true
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6778,
+        "cacheCreation": 10585
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6778,
+        "cacheCreation": 10585
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 4,
+    "output": 1479,
+    "cacheRead": 12357,
+    "cacheCreation": 20729
+  },
+  "costUsd": 0.17272975000000002,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useCallback, useState } from 'react';\nimport { Button, Drawer, Menu, MenuItem, MenuSeparator } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ntype SideNavProps = {\n  onNavigate: (key: NavKey) => void;\n};\n\nconst ITEMS: Array<{ key: NavKey; label: string }> = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function SideNav({ onNavigate }: SideNavProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = useCallback(\n    (key: NavKey) => {\n      onNavigate(key);\n      setOpen(false);\n    },\n    [onNavigate],\n  );\n\n  return (\n    <div className=\"jx-stack\">\n      <Button type=\"button\" aria-expanded={open} onClick={() => setOpen(true)}>\n        Меню\n      </Button>\n\n      <Drawer\n        open={open}\n        side=\"left\"\n        title=\"Навигация\"\n        onClose={() => setOpen(false)}\n      >\n        <Menu\n          className=\"jx-stack\"\n          style={{ gap: 'var(--jx-space-1)', padding: 'var(--jx-space-2)' }}\n        >\n          {ITEMS.map((item) => (\n            <MenuItem key={item.key} onSelect={() => select(item.key)}>\n              {item.label}\n            </MenuItem>\n          ))}\n          <MenuSeparator />\n          <MenuItem tone=\"danger\" onSelect={() => select('logout')}>\n            Выйти\n          </MenuItem>\n        </Menu>\n      </Drawer>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useState } from 'react';\nimport { Button, Drawer, Menu, MenuItem, MenuSeparator } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ntype SideNavProps = {\n  onNavigate: (key: NavKey) => void;\n};\n\nconst ITEMS: Array<{ key: NavKey; label: string }> = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function SideNav({ onNavigate }: SideNavProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = useCallback(\n    (key: NavKey) => {\n      onNavigate(key);\n      setOpen(false);\n    },\n    [onNavigate],\n  );\n\n  return (\n    <div className=\"jx-stack\">\n      <Button type=\"button\" aria-expanded={open} onClick={() => setOpen(true)}>\n        Меню\n      </Button>\n\n      <Drawer\n        open={open}\n        side=\"left\"\n        title=\"Навигация\"\n        onClose={() => setOpen(false)}\n      >\n        <Menu\n          className=\"jx-stack\"\n          style={{ gap: 'var(--jx-space-1)', padding: 'var(--jx-space-2)' }}\n        >\n          {ITEMS.map((item) => (\n            <MenuItem key={item.key} onSelect={() => select(item.key)}>\n              {item.label}\n            </MenuItem>\n          ))}\n          <MenuSeparator />\n          <MenuItem tone=\"danger\" onSelect={() => select('logout')}>\n            Выйти\n          </MenuItem>\n        </Menu>\n      </Drawer>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Drawer'. Did you mean 'JxDrawer'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Menu'."
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'MenuItem'. Did you mean 'JxMenuItem'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'MenuSeparator'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Drawer",
+        "Menu",
+        "MenuItem",
+        "MenuSeparator"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 41,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

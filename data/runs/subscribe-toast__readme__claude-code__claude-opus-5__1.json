@@ -1,0 +1,146 @@
+{
+  "id": "subscribe-toast__readme__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-21T13:05:53.270Z",
+  "repeat": 1,
+  "durationMs": 25070,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "subscribe-toast",
+    "title": "Подписка с уведомлением",
+    "prompt": "Сделай форму подписки на рассылку с полем для почты и кнопкой «Подписаться». После отправки поле очищается, а в углу экрана появляется уведомление «Готово» с текстом, что письмо отправлено.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxButton",
+      "JxToastViewport"
+    ]
+  },
+  "context": {
+    "tokens": 753,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 5579,
+        "cacheCreation": 10012
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 5579,
+        "cacheCreation": 10012
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2031,
+    "cacheRead": 5579,
+    "cacheCreation": 10012
+  },
+  "costUsd": 0.1161495,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useId, useState, type FormEvent } from 'react';\nimport { Button, Input, Toast } from '@jinx-ui/react';\n\nexport default function SubscribeForm() {\n  const emailId = useId();\n  const [email, setEmail] = useState('');\n  const [sentTo, setSentTo] = useState('');\n  const [toastOpen, setToastOpen] = useState(false);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    const value = email.trim();\n    if (!value) return;\n    setSentTo(value);\n    setEmail('');\n    setToastOpen(true);\n  };\n\n  return (\n    <section\n      className=\"jx-card\"\n      style={{ display: 'grid', gap: 'var(--jx-space-4)', padding: 'var(--jx-space-5)' }}\n    >\n      <header style={{ display: 'grid', gap: 'var(--jx-space-2)' }}>\n        <h2 className=\"jx-heading\" style={{ margin: 0 }}>\n          Подписка на рассылку\n        </h2>\n        <p className=\"jx-text jx-text-muted\" style={{ margin: 0 }}>\n          Раз в неделю присылаем обновления библиотеки.\n        </p>\n      </header>\n\n      <form\n        className=\"jx-form\"\n        onSubmit={handleSubmit}\n        noValidate={false}\n        style={{ display: 'grid', gap: 'var(--jx-space-3)' }}\n      >\n        <div className=\"jx-field\" style={{ display: 'grid', gap: 'var(--jx-space-2)' }}>\n          <label className=\"jx-label\" htmlFor={emailId}>\n            Электронная почта\n          </label>\n          <Input\n            id={emailId}\n            name=\"email\"\n            type=\"email\"\n            required\n            autoComplete=\"email\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={(event) => setEmail(event.target.value)}\n          />\n        </div>\n\n        <Button type=\"submit\" variant=\"primary\" disabled={email.trim().length === 0}>\n          Подписаться\n        </Button>\n      </form>\n\n      <Toast\n        open={toastOpen}\n        onOpenChange={setToastOpen}\n        placement=\"bottom-right\"\n        duration={5000}\n        title=\"Готово\"\n        description={\n          sentTo\n            ? `Письмо с подтверждением отправлено на ${sentTo}.`\n            : 'Письмо с подтверждением отправлено.'\n        }\n      />\n    </section>\n  );\n}",
+    "text": "```tsx\nimport { useId, useState, type FormEvent } from 'react';\nimport { Button, Input, Toast } from '@jinx-ui/react';\n\nexport default function SubscribeForm() {\n  const emailId = useId();\n  const [email, setEmail] = useState('');\n  const [sentTo, setSentTo] = useState('');\n  const [toastOpen, setToastOpen] = useState(false);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    const value = email.trim();\n    if (!value) return;\n    setSentTo(value);\n    setEmail('');\n    setToastOpen(true);\n  };\n\n  return (\n    <section\n      className=\"jx-card\"\n      style={{ display: 'grid', gap: 'var(--jx-space-4)', padding: 'var(--jx-space-5)' }}\n    >\n      <header style={{ display: 'grid', gap: 'var(--jx-space-2)' }}>\n        <h2 className=\"jx-heading\" style={{ margin: 0 }}>\n          Подписка на рассылку\n        </h2>\n        <p className=\"jx-text jx-text-muted\" style={{ margin: 0 }}>\n          Раз в неделю присылаем обновления библиотеки.\n        </p>\n      </header>\n\n      <form\n        className=\"jx-form\"\n        onSubmit={handleSubmit}\n        noValidate={false}\n        style={{ display: 'grid', gap: 'var(--jx-space-3)' }}\n      >\n        <div className=\"jx-field\" style={{ display: 'grid', gap: 'var(--jx-space-2)' }}>\n          <label className=\"jx-label\" htmlFor={emailId}>\n            Электронная почта\n          </label>\n          <Input\n            id={emailId}\n            name=\"email\"\n            type=\"email\"\n            required\n            autoComplete=\"email\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={(event) => setEmail(event.target.value)}\n          />\n        </div>\n\n        <Button type=\"submit\" variant=\"primary\" disabled={email.trim().length === 0}>\n          Подписаться\n        </Button>\n      </form>\n\n      <Toast\n        open={toastOpen}\n        onOpenChange={setToastOpen}\n        placement=\"bottom-right\"\n        duration={5000}\n        title=\"Готово\"\n        description={\n          sentTo\n            ? `Письмо с подтверждением отправлено на ${sentTo}.`\n            : 'Письмо с подтверждением отправлено.'\n        }\n      />\n    </section>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Toast'. Did you mean 'JxToast'?"
+        },
+        {
+          "code": 7006,
+          "line": 51,
+          "message": "Parameter 'event' implicitly has an 'any' type."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Input",
+        "Toast"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 22,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 24,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 25,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 28,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 37,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 39,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.14
+  }
+}

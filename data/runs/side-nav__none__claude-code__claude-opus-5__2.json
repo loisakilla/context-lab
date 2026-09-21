@@ -1,0 +1,103 @@
+{
+  "id": "side-nav__none__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-21T13:00:45.597Z",
+  "repeat": 2,
+  "durationMs": 22636,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "side-nav",
+    "title": "Боковая панель навигации",
+    "prompt": "Сделай кнопку «Меню», по которой слева выезжает панель с навигацией: пункты «Проекты», «Команда», «Настройки», разделитель и пункт «Выйти», выделенный как опасный. Выбор пункта вызывает переданный колбэк onNavigate с ключом пункта и закрывает панель.",
+    "taskType": "ui",
+    "expects": [
+      "JxDrawer",
+      "JxMenu",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 111,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6778,
+        "cacheCreation": 8816
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6778,
+        "cacheCreation": 8816
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1758,
+    "cacheRead": 6778,
+    "cacheCreation": 8816
+  },
+  "costUsd": 0.10244900000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useCallback, useState } from 'react';\nimport { Button, Divider, Drawer, Stack } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ntype SideNavProps = {\n  onNavigate: (key: NavKey) => void;\n};\n\nconst NAV_ITEMS: ReadonlyArray<{ key: NavKey; label: string }> = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function SideNav({ onNavigate }: SideNavProps) {\n  const [open, setOpen] = useState(false);\n\n  const close = useCallback(() => setOpen(false), []);\n\n  const select = useCallback(\n    (key: NavKey) => {\n      onNavigate(key);\n      setOpen(false);\n    },\n    [onNavigate],\n  );\n\n  return (\n    <>\n      <Button variant=\"secondary\" onClick={() => setOpen(true)}>\n        Меню\n      </Button>\n\n      <Drawer open={open} onClose={close} placement=\"left\" title=\"Навигация\">\n        <Stack as=\"nav\" direction=\"column\" gap=\"var(--jx-space-1)\">\n          {NAV_ITEMS.map((item) => (\n            <Button\n              key={item.key}\n              variant=\"ghost\"\n              align=\"start\"\n              fullWidth\n              onClick={() => select(item.key)}\n            >\n              {item.label}\n            </Button>\n          ))}\n\n          <Divider spacing=\"var(--jx-space-2)\" />\n\n          <Button\n            variant=\"ghost\"\n            tone=\"danger\"\n            align=\"start\"\n            fullWidth\n            onClick={() => select('logout')}\n          >\n            Выйти\n          </Button>\n        </Stack>\n      </Drawer>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useState } from 'react';\nimport { Button, Divider, Drawer, Stack } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ntype SideNavProps = {\n  onNavigate: (key: NavKey) => void;\n};\n\nconst NAV_ITEMS: ReadonlyArray<{ key: NavKey; label: string }> = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function SideNav({ onNavigate }: SideNavProps) {\n  const [open, setOpen] = useState(false);\n\n  const close = useCallback(() => setOpen(false), []);\n\n  const select = useCallback(\n    (key: NavKey) => {\n      onNavigate(key);\n      setOpen(false);\n    },\n    [onNavigate],\n  );\n\n  return (\n    <>\n      <Button variant=\"secondary\" onClick={() => setOpen(true)}>\n        Меню\n      </Button>\n\n      <Drawer open={open} onClose={close} placement=\"left\" title=\"Навигация\">\n        <Stack as=\"nav\" direction=\"column\" gap=\"var(--jx-space-1)\">\n          {NAV_ITEMS.map((item) => (\n            <Button\n              key={item.key}\n              variant=\"ghost\"\n              align=\"start\"\n              fullWidth\n              onClick={() => select(item.key)}\n            >\n              {item.label}\n            </Button>\n          ))}\n\n          <Divider spacing=\"var(--jx-space-2)\" />\n\n          <Button\n            variant=\"ghost\"\n            tone=\"danger\"\n            align=\"start\"\n            fullWidth\n            onClick={() => select('logout')}\n          >\n            Выйти\n          </Button>\n        </Stack>\n      </Drawer>\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Divider'. Did you mean 'JxDivider'?"
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Drawer'. Did you mean 'JxDrawer'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Divider",
+        "Drawer",
+        "Stack"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.14
+  }
+}

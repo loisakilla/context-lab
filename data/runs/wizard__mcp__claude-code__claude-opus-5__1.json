@@ -1,0 +1,334 @@
+{
+  "id": "wizard__mcp__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-21T13:29:27.829Z",
+  "repeat": 1,
+  "durationMs": 27123,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "mcp",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 1000,
+    "sources": [
+      {
+        "kind": "tools",
+        "id": "search_components,get_component_api,get_component_examples,list_design_tokens",
+        "version": "0.1.0",
+        "tokens": 688
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 5,
+        "cacheRead": 11601,
+        "cacheCreation": 2359
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 5,
+        "cacheRead": 11601,
+        "cacheCreation": 2359
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "индикатор шагов степпер"
+          },
+          "resultTokens": 139
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 5,
+        "cacheRead": 11601,
+        "cacheCreation": 2359
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "поле ввода текста форма"
+          },
+          "resultTokens": 477
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 5,
+        "cacheRead": 11601,
+        "cacheCreation": 2359
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_rules",
+          "input": {
+            "task": "ui"
+          },
+          "resultTokens": 870
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 13960,
+        "cacheCreation": 2739
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 13960,
+        "cacheCreation": 2739
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 13960,
+        "cacheCreation": 2739
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxStepper"
+          },
+          "resultTokens": 284
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 13960,
+        "cacheCreation": 2739
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxInputField"
+          },
+          "resultTokens": 393
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 13960,
+        "cacheCreation": 2739
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "кнопка"
+          },
+          "resultTokens": 412
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 13960,
+        "cacheCreation": 2739
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "карточка контейнер"
+          },
+          "resultTokens": 42
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 32,
+        "cacheRead": 16699,
+        "cacheCreation": 2198
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxButton"
+          },
+          "resultTokens": 427
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 32,
+        "cacheRead": 16699,
+        "cacheCreation": 2198
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__list_design_tokens",
+          "input": {
+            "group": "color"
+          },
+          "resultTokens": 630
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 18897,
+        "cacheCreation": 2203
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 18897,
+        "cacheCreation": 2203
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__list_design_tokens",
+          "input": {
+            "group": "radius"
+          },
+          "resultTokens": 90
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 21100,
+        "cacheCreation": 335
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 10,
+    "output": 2416,
+    "cacheRead": 82257,
+    "cacheCreation": 9834
+  },
+  "costUsd": 0.16304100000000002,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, type FormEvent } from 'react';\nimport { JxButton, JxInputField, JxStepper } from '@jinx-ui/react';\n\nexport type SignupValues = {\n  name: string;\n  email: string;\n  phone: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\nexport type SignupWizardProps = {\n  onSubmit: (values: SignupValues) => void;\n};\n\nconst steps = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nconst emptyValues: SignupValues = {\n  name: '',\n  email: '',\n  phone: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst SignupWizard = ({ onSubmit }: SignupWizardProps) => {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<SignupValues>(emptyValues);\n\n  const setField = (field: keyof SignupValues) => (event: { target: { value: string } }) =>\n    setValues((current) => ({ ...current, [field]: event.target.value }));\n\n  const isLast = step === steps.length - 1;\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (isLast) {\n      onSubmit(values);\n      return;\n    }\n    setStep((current) => Math.min(current + 1, steps.length - 1));\n  };\n\n  const summary: Array<[string, string]> = [\n    ['Имя', values.name],\n    ['Электронная почта', values.email],\n    ['Телефон', values.phone],\n    ['Город', values.city],\n    ['Улица и дом', values.street],\n    ['Индекс', values.zip],\n  ];\n\n  return (\n    <form\n      onSubmit={handleSubmit}\n      style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-gap, 16px)' }}\n    >\n      <JxStepper steps={steps} current={step} />\n\n      {step === 0 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-gap, 12px)' }}>\n          <JxInputField\n            label=\"Имя\"\n            required\n            value={values.name}\n            onChange={setField('name')}\n            placeholder=\"Как к вам обращаться\"\n          />\n          <JxInputField\n            label=\"Электронная почта\"\n            type=\"email\"\n            required\n            value={values.email}\n            onChange={setField('email')}\n            helperText=\"На неё придёт письмо с подтверждением\"\n          />\n          <JxInputField\n            label=\"Телефон\"\n            type=\"tel\"\n            prefix=\"+7\"\n            value={values.phone}\n            onChange={setField('phone')}\n          />\n        </div>\n      )}\n\n      {step === 1 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-gap, 12px)' }}>\n          <JxInputField label=\"Город\" required value={values.city} onChange={setField('city')} />\n          <JxInputField\n            label=\"Улица и дом\"\n            required\n            value={values.street}\n            onChange={setField('street')}\n          />\n          <JxInputField\n            label=\"Индекс\"\n            inputMode=\"numeric\"\n            value={values.zip}\n            onChange={setField('zip')}\n            helperText=\"Шесть цифр\"\n          />\n        </div>\n      )}\n\n      {step === 2 && (\n        <dl\n          style={{\n            display: 'grid',\n            gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',\n            gap: 'var(--jx-gap, 12px)',\n            margin: 0,\n            padding: 'var(--jx-gap, 16px)',\n            background: 'var(--jx-surface-2)',\n            border: '1px solid var(--jx-border)',\n            borderRadius: 'var(--jx-r)',\n          }}\n        >\n          {summary.map(([label, value]) => (\n            <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>\n              <dt style={{ color: 'var(--jx-text-3)' }}>{label}</dt>\n              <dd style={{ margin: 0, color: 'var(--jx-text)' }}>{value || '—'}</dd>\n            </div>\n          ))}\n        </dl>\n      )}\n\n      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--jx-gap, 8px)' }}>\n        <JxButton\n          variant=\"ghost\"\n          type=\"button\"\n          disabled={step === 0}\n          onClick={() => setStep((current) => Math.max(current - 1, 0))}\n        >\n          Назад\n        </JxButton>\n        <JxButton variant=\"primary\" type=\"submit\">\n          {isLast ? 'Отправить' : 'Дальше'}\n        </JxButton>\n      </div>\n    </form>\n  );\n};\n\nexport default SignupWizard;",
+    "text": "```tsx\nimport { useState, type FormEvent } from 'react';\nimport { JxButton, JxInputField, JxStepper } from '@jinx-ui/react';\n\nexport type SignupValues = {\n  name: string;\n  email: string;\n  phone: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\nexport type SignupWizardProps = {\n  onSubmit: (values: SignupValues) => void;\n};\n\nconst steps = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nconst emptyValues: SignupValues = {\n  name: '',\n  email: '',\n  phone: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst SignupWizard = ({ onSubmit }: SignupWizardProps) => {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<SignupValues>(emptyValues);\n\n  const setField = (field: keyof SignupValues) => (event: { target: { value: string } }) =>\n    setValues((current) => ({ ...current, [field]: event.target.value }));\n\n  const isLast = step === steps.length - 1;\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (isLast) {\n      onSubmit(values);\n      return;\n    }\n    setStep((current) => Math.min(current + 1, steps.length - 1));\n  };\n\n  const summary: Array<[string, string]> = [\n    ['Имя', values.name],\n    ['Электронная почта', values.email],\n    ['Телефон', values.phone],\n    ['Город', values.city],\n    ['Улица и дом', values.street],\n    ['Индекс', values.zip],\n  ];\n\n  return (\n    <form\n      onSubmit={handleSubmit}\n      style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-gap, 16px)' }}\n    >\n      <JxStepper steps={steps} current={step} />\n\n      {step === 0 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-gap, 12px)' }}>\n          <JxInputField\n            label=\"Имя\"\n            required\n            value={values.name}\n            onChange={setField('name')}\n            placeholder=\"Как к вам обращаться\"\n          />\n          <JxInputField\n            label=\"Электронная почта\"\n            type=\"email\"\n            required\n            value={values.email}\n            onChange={setField('email')}\n            helperText=\"На неё придёт письмо с подтверждением\"\n          />\n          <JxInputField\n            label=\"Телефон\"\n            type=\"tel\"\n            prefix=\"+7\"\n            value={values.phone}\n            onChange={setField('phone')}\n          />\n        </div>\n      )}\n\n      {step === 1 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-gap, 12px)' }}>\n          <JxInputField label=\"Город\" required value={values.city} onChange={setField('city')} />\n          <JxInputField\n            label=\"Улица и дом\"\n            required\n            value={values.street}\n            onChange={setField('street')}\n          />\n          <JxInputField\n            label=\"Индекс\"\n            inputMode=\"numeric\"\n            value={values.zip}\n            onChange={setField('zip')}\n            helperText=\"Шесть цифр\"\n          />\n        </div>\n      )}\n\n      {step === 2 && (\n        <dl\n          style={{\n            display: 'grid',\n            gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',\n            gap: 'var(--jx-gap, 12px)',\n            margin: 0,\n            padding: 'var(--jx-gap, 16px)',\n            background: 'var(--jx-surface-2)',\n            border: '1px solid var(--jx-border)',\n            borderRadius: 'var(--jx-r)',\n          }}\n        >\n          {summary.map(([label, value]) => (\n            <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>\n              <dt style={{ color: 'var(--jx-text-3)' }}>{label}</dt>\n              <dd style={{ margin: 0, color: 'var(--jx-text)' }}>{value || '—'}</dd>\n            </div>\n          ))}\n        </dl>\n      )}\n\n      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--jx-gap, 8px)' }}>\n        <JxButton\n          variant=\"ghost\"\n          type=\"button\"\n          disabled={step === 0}\n          onClick={() => setStep((current) => Math.max(current - 1, 0))}\n        >\n          Назад\n        </JxButton>\n        <JxButton variant=\"primary\" type=\"submit\">\n          {isLast ? 'Отправить' : 'Дальше'}\n        </JxButton>\n      </div>\n    </form>\n  );\n};\n\nexport default SignupWizard;\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 58,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 63,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 90,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 110,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 122,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 123,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 124,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 130,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxInputField",
+      "JxStepper"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

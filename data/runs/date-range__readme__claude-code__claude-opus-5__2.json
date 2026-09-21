@@ -1,0 +1,178 @@
+{
+  "id": "date-range__readme__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-21T13:15:21.637Z",
+  "repeat": 2,
+  "durationMs": 48412,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "date-range",
+    "title": "Выбор периода",
+    "prompt": "Сделай выбор даты отчёта: календарь на месяц и над ним ряд быстрых вариантов «Сегодня», «Вчера», «Неделя назад», при нажатии на которые дата подставляется в календарь. Выбранная дата отдаётся наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxCalendar",
+      "JxChip"
+    ]
+  },
+  "context": {
+    "tokens": 753,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 6778,
+        "cacheCreation": 10170
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 6778,
+        "cacheCreation": 10170
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 6778,
+        "cacheCreation": 10170
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__claude_ai_Claude_Docs__guide",
+          "input": {
+            "items": [
+              "topic.index"
+            ]
+          },
+          "resultTokens": 29,
+          "isError": true
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 16948,
+        "cacheCreation": 244
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 16948,
+        "cacheCreation": 244
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 4,
+    "output": 4521,
+    "cacheRead": 23726,
+    "cacheCreation": 10414
+  },
+  "costUsd": 0.18999549999999998,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date;\n  defaultValue?: Date;\n  onChange: (date: Date) => void;\n};\n\nconst WEEKDAY_LABELS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];\n\nconst MONTH_LABELS = [\n  'Январь',\n  'Февраль',\n  'Март',\n  'Апрель',\n  'Май',\n  'Июнь',\n  'Июль',\n  'Август',\n  'Сентябрь',\n  'Октябрь',\n  'Ноябрь',\n  'Декабрь',\n];\n\nfunction startOfDay(date: Date): Date {\n  return new Date(date.getFullYear(), date.getMonth(), date.getDate());\n}\n\nfunction shiftDays(date: Date, amount: number): Date {\n  const next = startOfDay(date);\n  next.setDate(next.getDate() + amount);\n  return next;\n}\n\nfunction shiftMonths(date: Date, amount: number): Date {\n  return new Date(date.getFullYear(), date.getMonth() + amount, 1);\n}\n\nfunction isSameDay(a: Date, b: Date): boolean {\n  return (\n    a.getFullYear() === b.getFullYear() &&\n    a.getMonth() === b.getMonth() &&\n    a.getDate() === b.getDate()\n  );\n}\n\nfunction buildMonthGrid(month: Date): Date[] {\n  const firstDay = new Date(month.getFullYear(), month.getMonth(), 1);\n  const leadingBlanks = (firstDay.getDay() + 6) % 7;\n  const gridStart = shiftDays(firstDay, -leadingBlanks);\n  return Array.from({ length: 42 }, (_, index) => shiftDays(gridStart, index));\n}\n\nfunction formatFullDate(date: Date): string {\n  return `${date.getDate()} ${MONTH_LABELS[date.getMonth()]} ${date.getFullYear()}`;\n}\n\nexport default function ReportDatePicker({\n  value,\n  defaultValue,\n  onChange,\n}: ReportDatePickerProps) {\n  const today = useMemo(() => startOfDay(new Date()), []);\n  const [internalValue, setInternalValue] = useState<Date>(() =>\n    startOfDay(defaultValue ?? new Date()),\n  );\n\n  const selected = value ? startOfDay(value) : internalValue;\n\n  const [visibleMonth, setVisibleMonth] = useState<Date>(\n    () => new Date(selected.getFullYear(), selected.getMonth(), 1),\n  );\n\n  const days = useMemo(() => buildMonthGrid(visibleMonth), [visibleMonth]);\n\n  const quickOptions = useMemo(\n    () => [\n      { id: 'today', label: 'Сегодня', date: today },\n      { id: 'yesterday', label: 'Вчера', date: shiftDays(today, -1) },\n      { id: 'week-ago', label: 'Неделя назад', date: shiftDays(today, -7) },\n    ],\n    [today],\n  );\n\n  const selectDate = (date: Date) => {\n    const normalized = startOfDay(date);\n    setInternalValue(normalized);\n    setVisibleMonth(new Date(normalized.getFullYear(), normalized.getMonth(), 1));\n    onChange(normalized);\n  };\n\n  return (\n    <section\n      className=\"jx-card\"\n      aria-label=\"Выбор даты отчёта\"\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-4, 16px)',\n        padding: 'var(--jx-space-4, 16px)',\n        borderRadius: 'var(--jx-radius, 4px)',\n        inlineSize: 'fit-content',\n      }}\n    >\n      <div\n        role=\"group\"\n        aria-label=\"Быстрый выбор\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--jx-space-2, 8px)' }}\n      >\n        {quickOptions.map((option) => (\n          <Button\n            key={option.id}\n            type=\"button\"\n            aria-pressed={isSameDay(option.date, selected)}\n            onClick={() => selectDate(option.date)}\n          >\n            {option.label}\n          </Button>\n        ))}\n      </div>\n\n      <header\n        style={{\n          display: 'flex',\n          alignItems: 'center',\n          justifyContent: 'space-between',\n          gap: 'var(--jx-space-3, 12px)',\n        }}\n      >\n        <Button\n          type=\"button\"\n          aria-label=\"Предыдущий месяц\"\n          onClick={() => setVisibleMonth((month) => shiftMonths(month, -1))}\n        >\n          ←\n        </Button>\n        <strong aria-live=\"polite\" style={{ color: 'var(--jx-fg, inherit)' }}>\n          {MONTH_LABELS[visibleMonth.getMonth()]} {visibleMonth.getFullYear()}\n        </strong>\n        <Button\n          type=\"button\"\n          aria-label=\"Следующий месяц\"\n          onClick={() => setVisibleMonth((month) => shiftMonths(month, 1))}\n        >\n          →\n        </Button>\n      </header>\n\n      <div\n        style={{\n          display: 'grid',\n          gridTemplateColumns: 'repeat(7, minmax(var(--jx-space-8, 40px), 1fr))',\n          gap: 'var(--jx-space-1, 4px)',\n        }}\n      >\n        {WEEKDAY_LABELS.map((weekday) => (\n          <span\n            key={weekday}\n            aria-hidden=\"true\"\n            style={{\n              textAlign: 'center',\n              color: 'var(--jx-fg-muted, inherit)',\n              fontSize: 'var(--jx-font-size-sm, 0.85em)',\n              paddingBlock: 'var(--jx-space-1, 4px)',\n            }}\n          >\n            {weekday}\n          </span>\n        ))}\n\n        {days.map((day) => {\n          const isSelected = isSameDay(day, selected);\n          const isOutsideMonth = day.getMonth() !== visibleMonth.getMonth();\n\n          return (\n            <Button\n              key={day.toISOString()}\n              type=\"button\"\n              aria-label={formatFullDate(day)}\n              aria-pressed={isSelected}\n              aria-current={isSameDay(day, today) ? 'date' : undefined}\n              onClick={() => selectDate(day)}\n              style={{\n                inlineSize: '100%',\n                opacity: isOutsideMonth ? 0.45 : 1,\n                outline: isSelected ? '2px solid var(--jx-accent, currentColor)' : undefined,\n                outlineOffset: 'var(--jx-space-05, 2px)',\n              }}\n            >\n              {day.getDate()}\n            </Button>\n          );\n        })}\n      </div>\n\n      <p style={{ margin: 0, color: 'var(--jx-fg-muted, inherit)' }}>\n        Дата отчёта: {formatFullDate(selected)}\n      </p>\n    </section>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date;\n  defaultValue?: Date;\n  onChange: (date: Date) => void;\n};\n\nconst WEEKDAY_LABELS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];\n\nconst MONTH_LABELS = [\n  'Январь',\n  'Февраль',\n  'Март',\n  'Апрель',\n  'Май',\n  'Июнь',\n  'Июль',\n  'Август',\n  'Сентябрь',\n  'Октябрь',\n  'Ноябрь',\n  'Декабрь',\n];\n\nfunction startOfDay(date: Date): Date {\n  return new Date(date.getFullYear(), date.getMonth(), date.getDate());\n}\n\nfunction shiftDays(date: Date, amount: number): Date {\n  const next = startOfDay(date);\n  next.setDate(next.getDate() + amount);\n  return next;\n}\n\nfunction shiftMonths(date: Date, amount: number): Date {\n  return new Date(date.getFullYear(), date.getMonth() + amount, 1);\n}\n\nfunction isSameDay(a: Date, b: Date): boolean {\n  return (\n    a.getFullYear() === b.getFullYear() &&\n    a.getMonth() === b.getMonth() &&\n    a.getDate() === b.getDate()\n  );\n}\n\nfunction buildMonthGrid(month: Date): Date[] {\n  const firstDay = new Date(month.getFullYear(), month.getMonth(), 1);\n  const leadingBlanks = (firstDay.getDay() + 6) % 7;\n  const gridStart = shiftDays(firstDay, -leadingBlanks);\n  return Array.from({ length: 42 }, (_, index) => shiftDays(gridStart, index));\n}\n\nfunction formatFullDate(date: Date): string {\n  return `${date.getDate()} ${MONTH_LABELS[date.getMonth()]} ${date.getFullYear()}`;\n}\n\nexport default function ReportDatePicker({\n  value,\n  defaultValue,\n  onChange,\n}: ReportDatePickerProps) {\n  const today = useMemo(() => startOfDay(new Date()), []);\n  const [internalValue, setInternalValue] = useState<Date>(() =>\n    startOfDay(defaultValue ?? new Date()),\n  );\n\n  const selected = value ? startOfDay(value) : internalValue;\n\n  const [visibleMonth, setVisibleMonth] = useState<Date>(\n    () => new Date(selected.getFullYear(), selected.getMonth(), 1),\n  );\n\n  const days = useMemo(() => buildMonthGrid(visibleMonth), [visibleMonth]);\n\n  const quickOptions = useMemo(\n    () => [\n      { id: 'today', label: 'Сегодня', date: today },\n      { id: 'yesterday', label: 'Вчера', date: shiftDays(today, -1) },\n      { id: 'week-ago', label: 'Неделя назад', date: shiftDays(today, -7) },\n    ],\n    [today],\n  );\n\n  const selectDate = (date: Date) => {\n    const normalized = startOfDay(date);\n    setInternalValue(normalized);\n    setVisibleMonth(new Date(normalized.getFullYear(), normalized.getMonth(), 1));\n    onChange(normalized);\n  };\n\n  return (\n    <section\n      className=\"jx-card\"\n      aria-label=\"Выбор даты отчёта\"\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-4, 16px)',\n        padding: 'var(--jx-space-4, 16px)',\n        borderRadius: 'var(--jx-radius, 4px)',\n        inlineSize: 'fit-content',\n      }}\n    >\n      <div\n        role=\"group\"\n        aria-label=\"Быстрый выбор\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--jx-space-2, 8px)' }}\n      >\n        {quickOptions.map((option) => (\n          <Button\n            key={option.id}\n            type=\"button\"\n            aria-pressed={isSameDay(option.date, selected)}\n            onClick={() => selectDate(option.date)}\n          >\n            {option.label}\n          </Button>\n        ))}\n      </div>\n\n      <header\n        style={{\n          display: 'flex',\n          alignItems: 'center',\n          justifyContent: 'space-between',\n          gap: 'var(--jx-space-3, 12px)',\n        }}\n      >\n        <Button\n          type=\"button\"\n          aria-label=\"Предыдущий месяц\"\n          onClick={() => setVisibleMonth((month) => shiftMonths(month, -1))}\n        >\n          ←\n        </Button>\n        <strong aria-live=\"polite\" style={{ color: 'var(--jx-fg, inherit)' }}>\n          {MONTH_LABELS[visibleMonth.getMonth()]} {visibleMonth.getFullYear()}\n        </strong>\n        <Button\n          type=\"button\"\n          aria-label=\"Следующий месяц\"\n          onClick={() => setVisibleMonth((month) => shiftMonths(month, 1))}\n        >\n          →\n        </Button>\n      </header>\n\n      <div\n        style={{\n          display: 'grid',\n          gridTemplateColumns: 'repeat(7, minmax(var(--jx-space-8, 40px), 1fr))',\n          gap: 'var(--jx-space-1, 4px)',\n        }}\n      >\n        {WEEKDAY_LABELS.map((weekday) => (\n          <span\n            key={weekday}\n            aria-hidden=\"true\"\n            style={{\n              textAlign: 'center',\n              color: 'var(--jx-fg-muted, inherit)',\n              fontSize: 'var(--jx-font-size-sm, 0.85em)',\n              paddingBlock: 'var(--jx-space-1, 4px)',\n            }}\n          >\n            {weekday}\n          </span>\n        ))}\n\n        {days.map((day) => {\n          const isSelected = isSameDay(day, selected);\n          const isOutsideMonth = day.getMonth() !== visibleMonth.getMonth();\n\n          return (\n            <Button\n              key={day.toISOString()}\n              type=\"button\"\n              aria-label={formatFullDate(day)}\n              aria-pressed={isSelected}\n              aria-current={isSameDay(day, today) ? 'date' : undefined}\n              onClick={() => selectDate(day)}\n              style={{\n                inlineSize: '100%',\n                opacity: isOutsideMonth ? 0.45 : 1,\n                outline: isSelected ? '2px solid var(--jx-accent, currentColor)' : undefined,\n                outlineOffset: 'var(--jx-space-05, 2px)',\n              }}\n            >\n              {day.getDate()}\n            </Button>\n          );\n        })}\n      </div>\n\n      <p style={{ margin: 0, color: 'var(--jx-fg-muted, inherit)' }}>\n        Дата отчёта: {formatFullDate(selected)}\n      </p>\n    </section>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        }
+      ],
+      "unknownComponents": [
+        "Button"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 98,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 110,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 125,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 139,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 152,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 162,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 185,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 198,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.56
+  }
+}

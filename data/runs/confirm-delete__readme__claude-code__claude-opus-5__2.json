@@ -1,0 +1,101 @@
+{
+  "id": "confirm-delete__readme__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-21T13:03:19.988Z",
+  "repeat": 2,
+  "durationMs": 10677,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "confirm-delete",
+    "title": "Подтверждение удаления",
+    "prompt": "Сделай компонент с кнопкой «Удалить проект». По клику открывается окно подтверждения с заголовком «Удалить проект?», текстом о том, что действие необратимо, и двумя кнопками: отмена и подтверждение удаления. Подтверждение вызывает переданный колбэк onConfirm.",
+    "taskType": "ui",
+    "expects": [
+      "JxModal",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 753,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 6778,
+        "cacheCreation": 9943
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 707,
+    "cacheRead": 6778,
+    "cacheCreation": 9943
+  },
+  "costUsd": 0.08321775000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useCallback, useState } from 'react';\nimport { Button, Dialog } from '@jinx-ui/react';\n\ntype DeleteProjectButtonProps = {\n  projectName?: string;\n  onConfirm: () => void;\n};\n\nexport default function DeleteProjectButton({ projectName, onConfirm }: DeleteProjectButtonProps) {\n  const [open, setOpen] = useState(false);\n\n  const close = useCallback(() => setOpen(false), []);\n\n  const confirm = useCallback(() => {\n    setOpen(false);\n    onConfirm();\n  }, [onConfirm]);\n\n  return (\n    <>\n      <Button className=\"jx-btn jx-btn--danger\" onClick={() => setOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Dialog\n        open={open}\n        onClose={close}\n        aria-labelledby=\"delete-project-title\"\n        aria-describedby=\"delete-project-description\"\n      >\n        <div className=\"jx-dialog__header\">\n          <h2 id=\"delete-project-title\" className=\"jx-dialog__title\">\n            Удалить проект?\n          </h2>\n        </div>\n\n        <div className=\"jx-dialog__body\">\n          <p\n            id=\"delete-project-description\"\n            className=\"jx-text\"\n            style={{ color: 'var(--jx-color-text-muted)' }}\n          >\n            {projectName\n              ? `Проект «${projectName}» будет удалён без возможности восстановления.`\n              : 'Проект будет удалён без возможности восстановления.'}{' '}\n            Это действие необратимо.\n          </p>\n        </div>\n\n        <div\n          className=\"jx-dialog__footer\"\n          style={{ display: 'flex', gap: 'var(--jx-space-2)', justifyContent: 'flex-end' }}\n        >\n          <Button className=\"jx-btn jx-btn--ghost\" onClick={close}>\n            Отмена\n          </Button>\n          <Button className=\"jx-btn jx-btn--danger\" onClick={confirm}>\n            Удалить\n          </Button>\n        </div>\n      </Dialog>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useState } from 'react';\nimport { Button, Dialog } from '@jinx-ui/react';\n\ntype DeleteProjectButtonProps = {\n  projectName?: string;\n  onConfirm: () => void;\n};\n\nexport default function DeleteProjectButton({ projectName, onConfirm }: DeleteProjectButtonProps) {\n  const [open, setOpen] = useState(false);\n\n  const close = useCallback(() => setOpen(false), []);\n\n  const confirm = useCallback(() => {\n    setOpen(false);\n    onConfirm();\n  }, [onConfirm]);\n\n  return (\n    <>\n      <Button className=\"jx-btn jx-btn--danger\" onClick={() => setOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Dialog\n        open={open}\n        onClose={close}\n        aria-labelledby=\"delete-project-title\"\n        aria-describedby=\"delete-project-description\"\n      >\n        <div className=\"jx-dialog__header\">\n          <h2 id=\"delete-project-title\" className=\"jx-dialog__title\">\n            Удалить проект?\n          </h2>\n        </div>\n\n        <div className=\"jx-dialog__body\">\n          <p\n            id=\"delete-project-description\"\n            className=\"jx-text\"\n            style={{ color: 'var(--jx-color-text-muted)' }}\n          >\n            {projectName\n              ? `Проект «${projectName}» будет удалён без возможности восстановления.`\n              : 'Проект будет удалён без возможности восстановления.'}{' '}\n            Это действие необратимо.\n          </p>\n        </div>\n\n        <div\n          className=\"jx-dialog__footer\"\n          style={{ display: 'flex', gap: 'var(--jx-space-2)', justifyContent: 'flex-end' }}\n        >\n          <Button className=\"jx-btn jx-btn--ghost\" onClick={close}>\n            Отмена\n          </Button>\n          <Button className=\"jx-btn jx-btn--danger\" onClick={confirm}>\n            Удалить\n          </Button>\n        </div>\n      </Dialog>\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Dialog'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Dialog"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 41,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 52,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.42
+  }
+}

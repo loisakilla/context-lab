@@ -1,0 +1,178 @@
+{
+  "id": "subscribe-toast__readme__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-21T13:06:55.629Z",
+  "repeat": 3,
+  "durationMs": 29294,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "subscribe-toast",
+    "title": "Подписка с уведомлением",
+    "prompt": "Сделай форму подписки на рассылку с полем для почты и кнопкой «Подписаться». После отправки поле очищается, а в углу экрана появляется уведомление «Готово» с текстом, что письмо отправлено.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxButton",
+      "JxToastViewport"
+    ]
+  },
+  "context": {
+    "tokens": 753,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 6778,
+        "cacheCreation": 10139
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 6778,
+        "cacheCreation": 10139
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 6778,
+        "cacheCreation": 10139
+      },
+      "toolCalls": [
+        {
+          "name": "Bash",
+          "input": {
+            "command": "ls ../../ && ls ../../vendor/jinx-ui 2>/dev/null | head -30",
+            "description": "List repo root and vendor"
+          },
+          "resultTokens": 44,
+          "isError": true
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 6778,
+        "cacheCreation": 10139
+      },
+      "toolCalls": [
+        {
+          "name": "Bash",
+          "input": {
+            "command": "ls ../../docs 2>/dev/null; ls ../../data 2>/dev/null",
+            "description": "List docs and data"
+          },
+          "resultTokens": 44,
+          "isError": true
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 16917,
+        "cacheCreation": 540
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 16917,
+        "cacheCreation": 540
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 4,
+    "output": 2245,
+    "cacheRead": 23695,
+    "cacheCreation": 10679
+  },
+  "costUsd": 0.13473625,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useEffect, useRef, useState, type FormEvent } from 'react';\nimport { Button, Input, Toast } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [sentTo, setSentTo] = useState('');\n  const [toastOpen, setToastOpen] = useState(false);\n  const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  useEffect(\n    () => () => {\n      if (hideTimer.current) clearTimeout(hideTimer.current);\n    },\n    [],\n  );\n\n  function handleSubmit(event: FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n    const address = email.trim();\n    if (!address) return;\n\n    setSentTo(address);\n    setEmail('');\n    setToastOpen(true);\n\n    if (hideTimer.current) clearTimeout(hideTimer.current);\n    hideTimer.current = setTimeout(() => setToastOpen(false), 5000);\n  }\n\n  return (\n    <>\n      <form\n        className=\"jx-form jx-stack\"\n        onSubmit={handleSubmit}\n        style={{ gap: 'var(--jx-space-3)', maxInlineSize: 'var(--jx-size-sm)' }}\n      >\n        <div className=\"jx-field\">\n          <label className=\"jx-label\" htmlFor=\"newsletter-email\">\n            Почта\n          </label>\n          <Input\n            id=\"newsletter-email\"\n            type=\"email\"\n            name=\"email\"\n            required\n            autoComplete=\"email\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={(event) => setEmail(event.target.value)}\n          />\n        </div>\n        <Button type=\"submit\" variant=\"primary\">\n          Подписаться\n        </Button>\n      </form>\n\n      <div\n        className=\"jx-toast-viewport\"\n        style={{\n          position: 'fixed',\n          insetBlockEnd: 'var(--jx-space-4)',\n          insetInlineEnd: 'var(--jx-space-4)',\n          zIndex: 'var(--jx-z-toast)',\n        }}\n      >\n        <Toast\n          open={toastOpen}\n          onOpenChange={setToastOpen}\n          title=\"Готово\"\n          description={`Письмо с подтверждением отправлено на ${sentTo}`}\n        />\n      </div>\n    </>\n  );\n}",
+    "text": "Инструментов чтения файлов в этой сессии нет, поэтому сверить точные экспорты `@jinx-ui/react` по сабмодулю я не смог — код ниже опирается на рантайм-примитивы `Input`/`Button`/`Toast` из описания пакета.\n\n```tsx\nimport { useEffect, useRef, useState, type FormEvent } from 'react';\nimport { Button, Input, Toast } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [sentTo, setSentTo] = useState('');\n  const [toastOpen, setToastOpen] = useState(false);\n  const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  useEffect(\n    () => () => {\n      if (hideTimer.current) clearTimeout(hideTimer.current);\n    },\n    [],\n  );\n\n  function handleSubmit(event: FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n    const address = email.trim();\n    if (!address) return;\n\n    setSentTo(address);\n    setEmail('');\n    setToastOpen(true);\n\n    if (hideTimer.current) clearTimeout(hideTimer.current);\n    hideTimer.current = setTimeout(() => setToastOpen(false), 5000);\n  }\n\n  return (\n    <>\n      <form\n        className=\"jx-form jx-stack\"\n        onSubmit={handleSubmit}\n        style={{ gap: 'var(--jx-space-3)', maxInlineSize: 'var(--jx-size-sm)' }}\n      >\n        <div className=\"jx-field\">\n          <label className=\"jx-label\" htmlFor=\"newsletter-email\">\n            Почта\n          </label>\n          <Input\n            id=\"newsletter-email\"\n            type=\"email\"\n            name=\"email\"\n            required\n            autoComplete=\"email\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={(event) => setEmail(event.target.value)}\n          />\n        </div>\n        <Button type=\"submit\" variant=\"primary\">\n          Подписаться\n        </Button>\n      </form>\n\n      <div\n        className=\"jx-toast-viewport\"\n        style={{\n          position: 'fixed',\n          insetBlockEnd: 'var(--jx-space-4)',\n          insetInlineEnd: 'var(--jx-space-4)',\n          zIndex: 'var(--jx-z-toast)',\n        }}\n      >\n        <Toast\n          open={toastOpen}\n          onOpenChange={setToastOpen}\n          title=\"Готово\"\n          description={`Письмо с подтверждением отправлено на ${sentTo}`}\n        />\n      </div>\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Toast'. Did you mean 'JxToast'?"
+        },
+        {
+          "code": 7006,
+          "line": 49,
+          "message": "Parameter 'event' implicitly has an 'any' type."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Input",
+        "Toast"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 35,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 59,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.14
+  }
+}

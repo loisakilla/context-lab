@@ -1,0 +1,171 @@
+{
+  "id": "date-range__none__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-21T13:02:06.349Z",
+  "repeat": 2,
+  "durationMs": 25094,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "date-range",
+    "title": "Выбор периода",
+    "prompt": "Сделай выбор даты отчёта: календарь на месяц и над ним ряд быстрых вариантов «Сегодня», «Вчера», «Неделя назад», при нажатии на которые дата подставляется в календарь. Выбранная дата отдаётся наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxCalendar",
+      "JxChip"
+    ]
+  },
+  "context": {
+    "tokens": 111,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6778,
+        "cacheCreation": 8882
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6778,
+        "cacheCreation": 8882
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6778,
+        "cacheCreation": 8882
+      },
+      "toolCalls": [
+        {
+          "name": "PowerShell",
+          "input": {
+            "command": "cd C:\\Users\\kgn20\\WebstormProjects\\context-lab; ls; ls vendor/jinx-ui 2>$null; ls data 2>$null",
+            "description": "List repo structure"
+          },
+          "resultTokens": 47,
+          "isError": true
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6778,
+        "cacheCreation": 8882
+      },
+      "toolCalls": [
+        {
+          "name": "PowerShell",
+          "input": {
+            "command": "cd C:\\Users\\kgn20\\WebstormProjects\\context-lab; Get-ChildItem -Recurse -Filter *.json -Path . -Depth 2 | Where-Object { $_.Name -match 'index|components' } | Select-Object FullName -First 20",
+            "description": "Find component index files"
+          },
+          "resultTokens": 47,
+          "isError": true
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 5,
+        "cacheRead": 15660,
+        "cacheCreation": 789
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 5,
+        "cacheRead": 15660,
+        "cacheCreation": 789
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 4,
+    "output": 1924,
+    "cacheRead": 22438,
+    "cacheCreation": 9671
+  },
+  "costUsd": 0.11978275,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useCallback, useMemo, useState } from 'react';\nimport { Button, Calendar, Card, Stack, Text } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date;\n  onChange: (date: Date) => void;\n  label?: string;\n};\n\nconst startOfDay = (date: Date) => {\n  const next = new Date(date);\n  next.setHours(0, 0, 0, 0);\n  return next;\n};\n\nconst addDays = (date: Date, days: number) => {\n  const next = startOfDay(date);\n  next.setDate(next.getDate() + days);\n  return next;\n};\n\nconst isSameDay = (left: Date, right: Date) =>\n  left.getFullYear() === right.getFullYear() &&\n  left.getMonth() === right.getMonth() &&\n  left.getDate() === right.getDate();\n\nexport default function ReportDatePicker({ value, onChange, label = 'Дата отчёта' }: ReportDatePickerProps) {\n  const [internalDate, setInternalDate] = useState<Date>(() => startOfDay(value ?? new Date()));\n  const selected = value ? startOfDay(value) : internalDate;\n\n  const presets = useMemo(() => {\n    const today = startOfDay(new Date());\n    return [\n      { id: 'today', label: 'Сегодня', date: today },\n      { id: 'yesterday', label: 'Вчера', date: addDays(today, -1) },\n      { id: 'week-ago', label: 'Неделя назад', date: addDays(today, -7) },\n    ];\n  }, []);\n\n  const select = useCallback(\n    (date: Date) => {\n      const normalized = startOfDay(date);\n      setInternalDate(normalized);\n      onChange(normalized);\n    },\n    [onChange],\n  );\n\n  return (\n    <Card padding=\"md\" style={{ maxWidth: 'var(--jx-size-card-md)' }}>\n      <Stack direction=\"column\" gap=\"md\">\n        <Text as=\"h3\" size=\"sm\" weight=\"medium\" color=\"var(--jx-color-text-secondary)\">\n          {label}\n        </Text>\n\n        <Stack direction=\"row\" gap=\"sm\" wrap role=\"group\" aria-label=\"Быстрый выбор даты\">\n          {presets.map((preset) => {\n            const active = isSameDay(preset.date, selected);\n            return (\n              <Button\n                key={preset.id}\n                type=\"button\"\n                size=\"sm\"\n                variant={active ? 'primary' : 'secondary'}\n                aria-pressed={active}\n                onClick={() => select(preset.date)}\n              >\n                {preset.label}\n              </Button>\n            );\n          })}\n        </Stack>\n\n        <Calendar value={selected} onChange={select} aria-label={label} />\n      </Stack>\n    </Card>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useMemo, useState } from 'react';\nimport { Button, Calendar, Card, Stack, Text } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date;\n  onChange: (date: Date) => void;\n  label?: string;\n};\n\nconst startOfDay = (date: Date) => {\n  const next = new Date(date);\n  next.setHours(0, 0, 0, 0);\n  return next;\n};\n\nconst addDays = (date: Date, days: number) => {\n  const next = startOfDay(date);\n  next.setDate(next.getDate() + days);\n  return next;\n};\n\nconst isSameDay = (left: Date, right: Date) =>\n  left.getFullYear() === right.getFullYear() &&\n  left.getMonth() === right.getMonth() &&\n  left.getDate() === right.getDate();\n\nexport default function ReportDatePicker({ value, onChange, label = 'Дата отчёта' }: ReportDatePickerProps) {\n  const [internalDate, setInternalDate] = useState<Date>(() => startOfDay(value ?? new Date()));\n  const selected = value ? startOfDay(value) : internalDate;\n\n  const presets = useMemo(() => {\n    const today = startOfDay(new Date());\n    return [\n      { id: 'today', label: 'Сегодня', date: today },\n      { id: 'yesterday', label: 'Вчера', date: addDays(today, -1) },\n      { id: 'week-ago', label: 'Неделя назад', date: addDays(today, -7) },\n    ];\n  }, []);\n\n  const select = useCallback(\n    (date: Date) => {\n      const normalized = startOfDay(date);\n      setInternalDate(normalized);\n      onChange(normalized);\n    },\n    [onChange],\n  );\n\n  return (\n    <Card padding=\"md\" style={{ maxWidth: 'var(--jx-size-card-md)' }}>\n      <Stack direction=\"column\" gap=\"md\">\n        <Text as=\"h3\" size=\"sm\" weight=\"medium\" color=\"var(--jx-color-text-secondary)\">\n          {label}\n        </Text>\n\n        <Stack direction=\"row\" gap=\"sm\" wrap role=\"group\" aria-label=\"Быстрый выбор даты\">\n          {presets.map((preset) => {\n            const active = isSameDay(preset.date, selected);\n            return (\n              <Button\n                key={preset.id}\n                type=\"button\"\n                size=\"sm\"\n                variant={active ? 'primary' : 'secondary'}\n                aria-pressed={active}\n                onClick={() => select(preset.date)}\n              >\n                {preset.label}\n              </Button>\n            );\n          })}\n        </Stack>\n\n        <Calendar value={selected} onChange={select} aria-label={label} />\n      </Stack>\n    </Card>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Calendar'. Did you mean 'JxCalendar'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Card'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Calendar",
+        "Card",
+        "Stack",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 50,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

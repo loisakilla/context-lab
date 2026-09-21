@@ -1,0 +1,187 @@
+{
+  "id": "side-nav__none__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-21T13:00:22.961Z",
+  "repeat": 1,
+  "durationMs": 28918,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "side-nav",
+    "title": "Боковая панель навигации",
+    "prompt": "Сделай кнопку «Меню», по которой слева выезжает панель с навигацией: пункты «Проекты», «Команда», «Настройки», разделитель и пункт «Выйти», выделенный как опасный. Выбор пункта вызывает переданный колбэк onNavigate с ключом пункта и закрывает панель.",
+    "taskType": "ui",
+    "expects": [
+      "JxDrawer",
+      "JxMenu",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 111,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 6778,
+        "cacheCreation": 8790
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 6778,
+        "cacheCreation": 8790
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 6778,
+        "cacheCreation": 8790
+      },
+      "toolCalls": [
+        {
+          "name": "Bash",
+          "input": {
+            "command": "ls C:/Users/kgn20/WebstormProjects/context-lab && ls C:/Users/kgn20/WebstormProjects/context-lab/vendor/jinx-ui 2>/dev/null | head -30",
+            "description": "List repo root and vendor"
+          },
+          "resultTokens": 44,
+          "isError": true
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 17,
+        "cacheRead": 15568,
+        "cacheCreation": 335
+      },
+      "toolCalls": [
+        {
+          "name": "PowerShell",
+          "input": {
+            "command": "Get-ChildItem C:/Users/kgn20/WebstormProjects/context-lab | Select-Object Name; Get-ChildItem C:/Users/kgn20/WebstormProjects/context-lab/vendor/jinx-ui | Select-Object Name",
+            "description": "List repo root and vendor"
+          },
+          "resultTokens": 47,
+          "isError": true
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 5,
+        "cacheRead": 15903,
+        "cacheCreation": 234
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 5,
+        "cacheRead": 15903,
+        "cacheCreation": 234
+      },
+      "toolCalls": [
+        {
+          "name": "Glob",
+          "input": {
+            "pattern": "**/*.md",
+            "path": "C:/Users/kgn20/WebstormProjects/context-lab/docs"
+          },
+          "resultTokens": 44,
+          "isError": true
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 16137,
+        "cacheCreation": 250
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 16137,
+        "cacheCreation": 250
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 8,
+    "output": 2300,
+    "cacheRead": 54386,
+    "cacheCreation": 9609
+  },
+  "costUsd": 0.14478925,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { Button, Divider, Drawer, Menu } from '@jinx-ui/react';\n\nexport type NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\nexport interface NavigationDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nconst NAV_ITEMS: ReadonlyArray<{ key: NavKey; label: string }> = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function NavigationDrawer({ onNavigate }: NavigationDrawerProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = (key: NavKey) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <Button variant=\"secondary\" onClick={() => setOpen(true)}>\n        Меню\n      </Button>\n\n      <Drawer\n        open={open}\n        placement=\"left\"\n        title=\"Навигация\"\n        onClose={() => setOpen(false)}\n      >\n        <Menu aria-label=\"Навигация\">\n          {NAV_ITEMS.map((item) => (\n            <Menu.Item key={item.key} onSelect={() => select(item.key)}>\n              {item.label}\n            </Menu.Item>\n          ))}\n          <Divider />\n          <Menu.Item tone=\"danger\" onSelect={() => select('logout')}>\n            Выйти\n          </Menu.Item>\n        </Menu>\n      </Drawer>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { Button, Divider, Drawer, Menu } from '@jinx-ui/react';\n\nexport type NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\nexport interface NavigationDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nconst NAV_ITEMS: ReadonlyArray<{ key: NavKey; label: string }> = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function NavigationDrawer({ onNavigate }: NavigationDrawerProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = (key: NavKey) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <Button variant=\"secondary\" onClick={() => setOpen(true)}>\n        Меню\n      </Button>\n\n      <Drawer\n        open={open}\n        placement=\"left\"\n        title=\"Навигация\"\n        onClose={() => setOpen(false)}\n      >\n        <Menu aria-label=\"Навигация\">\n          {NAV_ITEMS.map((item) => (\n            <Menu.Item key={item.key} onSelect={() => select(item.key)}>\n              {item.label}\n            </Menu.Item>\n          ))}\n          <Divider />\n          <Menu.Item tone=\"danger\" onSelect={() => select('logout')}>\n            Выйти\n          </Menu.Item>\n        </Menu>\n      </Drawer>\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Divider'. Did you mean 'JxDivider'?"
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Drawer'. Did you mean 'JxDrawer'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Menu'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Divider",
+        "Drawer",
+        "Menu"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.14
+  }
+}

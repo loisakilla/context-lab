@@ -1,0 +1,121 @@
+{
+  "id": "subscribe-toast__none__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-21T12:55:22.949Z",
+  "repeat": 3,
+  "durationMs": 33102,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "subscribe-toast",
+    "title": "Подписка с уведомлением",
+    "prompt": "Сделай форму подписки на рассылку с полем для почты и кнопкой «Подписаться». После отправки поле очищается, а в углу экрана появляется уведомление «Готово» с текстом, что письмо отправлено.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxButton",
+      "JxToastViewport"
+    ]
+  },
+  "context": {
+    "tokens": 111,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6794,
+        "cacheCreation": 8495
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6794,
+        "cacheCreation": 8495
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2564,
+    "cacheRead": 6794,
+    "cacheCreation": 8495
+  },
+  "costUsd": 0.12060074999999998,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useEffect, useRef, useState } from 'react';\nimport type { ChangeEvent, FormEvent } from 'react';\nimport { Button, Input, Stack, Text, Toast } from '@jinx-ui/react';\n\nexport default function SubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [isSent, setIsSent] = useState(false);\n  const hideTimer = useRef<number>();\n\n  useEffect(() => () => window.clearTimeout(hideTimer.current), []);\n\n  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {\n    setEmail(event.target.value);\n  };\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    setEmail('');\n    setIsSent(true);\n    window.clearTimeout(hideTimer.current);\n    hideTimer.current = window.setTimeout(() => setIsSent(false), 5000);\n  };\n\n  return (\n    <>\n      <form onSubmit={handleSubmit} noValidate={false}>\n        <Stack direction=\"row\" gap=\"sm\" align=\"end\">\n          <Input\n            type=\"email\"\n            name=\"email\"\n            label=\"Почта\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={handleChange}\n            required\n          />\n          <Button type=\"submit\" variant=\"primary\">\n            Подписаться\n          </Button>\n        </Stack>\n      </form>\n\n      {isSent && (\n        <div\n          style={{\n            position: 'fixed',\n            insetInlineEnd: 'var(--jx-space-4)',\n            insetBlockEnd: 'var(--jx-space-4)',\n            maxInlineSize: 'var(--jx-size-toast, 20rem)',\n          }}\n        >\n          <Toast\n            status=\"success\"\n            title=\"Готово\"\n            onClose={() => setIsSent(false)}\n          >\n            <Text>Письмо отправлено — проверьте почту и подтвердите подписку.</Text>\n          </Toast>\n        </div>\n      )}\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useEffect, useRef, useState } from 'react';\nimport type { ChangeEvent, FormEvent } from 'react';\nimport { Button, Input, Stack, Text, Toast } from '@jinx-ui/react';\n\nexport default function SubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [isSent, setIsSent] = useState(false);\n  const hideTimer = useRef<number>();\n\n  useEffect(() => () => window.clearTimeout(hideTimer.current), []);\n\n  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {\n    setEmail(event.target.value);\n  };\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    setEmail('');\n    setIsSent(true);\n    window.clearTimeout(hideTimer.current);\n    hideTimer.current = window.setTimeout(() => setIsSent(false), 5000);\n  };\n\n  return (\n    <>\n      <form onSubmit={handleSubmit} noValidate={false}>\n        <Stack direction=\"row\" gap=\"sm\" align=\"end\">\n          <Input\n            type=\"email\"\n            name=\"email\"\n            label=\"Почта\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={handleChange}\n            required\n          />\n          <Button type=\"submit\" variant=\"primary\">\n            Подписаться\n          </Button>\n        </Stack>\n      </form>\n\n      {isSent && (\n        <div\n          style={{\n            position: 'fixed',\n            insetInlineEnd: 'var(--jx-space-4)',\n            insetBlockEnd: 'var(--jx-space-4)',\n            maxInlineSize: 'var(--jx-size-toast, 20rem)',\n          }}\n        >\n          <Toast\n            status=\"success\"\n            title=\"Готово\"\n            onClose={() => setIsSent(false)}\n          >\n            <Text>Письмо отправлено — проверьте почту и подтвердите подписку.</Text>\n          </Toast>\n        </div>\n      )}\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 3,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
+        },
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        },
+        {
+          "code": 2724,
+          "line": 3,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Toast'. Did you mean 'JxToast'?"
+        },
+        {
+          "code": 2554,
+          "line": 8,
+          "message": "Expected 1 arguments, but got 0."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Input",
+        "Stack",
+        "Text",
+        "Toast"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 45,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

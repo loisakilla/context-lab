@@ -1,0 +1,105 @@
+{
+  "id": "users-table__readme__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-21T13:08:28.070Z",
+  "repeat": 3,
+  "durationMs": 29171,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "users-table",
+    "title": "Таблица пользователей с пагинацией",
+    "prompt": "Сделай таблицу пользователей с колонками «Имя», «Роль» и «Статус». Список users передаётся пропсом, показывать по десять строк на страницу с постраничной навигацией под таблицей. Статус показывай цветной меткой: активен или отключён.",
+    "taskType": "ui",
+    "expects": [
+      "JxTable",
+      "JxPagination",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 753,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 6778,
+        "cacheCreation": 10150
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 6778,
+        "cacheCreation": 10150
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2480,
+    "cacheRead": 6778,
+    "cacheCreation": 10150
+  },
+  "costUsd": 0.1288365,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\nexport type UserStatus = 'active' | 'disabled';\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  status: UserStatus;\n}\n\nexport interface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nconst STATUS_LABEL: Record<UserStatus, string> = {\n  active: 'Активен',\n  disabled: 'Отключён',\n};\n\nconst STATUS_CLASS: Record<UserStatus, string> = {\n  active: 'jx-badge jx-badge--success',\n  disabled: 'jx-badge jx-badge--muted',\n};\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [requestedPage, setRequestedPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const page = Math.min(requestedPage, pageCount);\n  const pages = useMemo(\n    () => Array.from({ length: pageCount }, (_, index) => index + 1),\n    [pageCount],\n  );\n  const rows = useMemo(\n    () => users.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),\n    [users, page],\n  );\n\n  return (\n    <div\n      className=\"jx-stack\"\n      style={{ display: 'grid', gap: 'var(--jx-space-4)' }}\n    >\n      <table className=\"jx-table\">\n        <caption className=\"jx-visually-hidden\">Пользователи</caption>\n        <thead className=\"jx-table__head\">\n          <tr>\n            <th scope=\"col\">Имя</th>\n            <th scope=\"col\">Роль</th>\n            <th scope=\"col\">Статус</th>\n          </tr>\n        </thead>\n        <tbody className=\"jx-table__body\">\n          {rows.length === 0 ? (\n            <tr>\n              <td colSpan={3} className=\"jx-table__empty\">\n                Пользователей нет\n              </td>\n            </tr>\n          ) : (\n            rows.map((user) => (\n              <tr key={user.id} className=\"jx-table__row\">\n                <td>{user.name}</td>\n                <td>{user.role}</td>\n                <td>\n                  <span className={STATUS_CLASS[user.status]}>\n                    {STATUS_LABEL[user.status]}\n                  </span>\n                </td>\n              </tr>\n            ))\n          )}\n        </tbody>\n      </table>\n\n      <nav\n        className=\"jx-pagination\"\n        aria-label=\"Навигация по страницам\"\n        style={{\n          display: 'flex',\n          alignItems: 'center',\n          gap: 'var(--jx-space-2)',\n        }}\n      >\n        <Button\n          type=\"button\"\n          disabled={page === 1}\n          onClick={() => setRequestedPage(page - 1)}\n        >\n          Назад\n        </Button>\n        {pages.map((pageNumber) => (\n          <Button\n            key={pageNumber}\n            type=\"button\"\n            aria-current={pageNumber === page ? 'page' : undefined}\n            onClick={() => setRequestedPage(pageNumber)}\n          >\n            {pageNumber}\n          </Button>\n        ))}\n        <Button\n          type=\"button\"\n          disabled={page === pageCount}\n          onClick={() => setRequestedPage(page + 1)}\n        >\n          Вперёд\n        </Button>\n      </nav>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\nexport type UserStatus = 'active' | 'disabled';\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  status: UserStatus;\n}\n\nexport interface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nconst STATUS_LABEL: Record<UserStatus, string> = {\n  active: 'Активен',\n  disabled: 'Отключён',\n};\n\nconst STATUS_CLASS: Record<UserStatus, string> = {\n  active: 'jx-badge jx-badge--success',\n  disabled: 'jx-badge jx-badge--muted',\n};\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [requestedPage, setRequestedPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const page = Math.min(requestedPage, pageCount);\n  const pages = useMemo(\n    () => Array.from({ length: pageCount }, (_, index) => index + 1),\n    [pageCount],\n  );\n  const rows = useMemo(\n    () => users.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),\n    [users, page],\n  );\n\n  return (\n    <div\n      className=\"jx-stack\"\n      style={{ display: 'grid', gap: 'var(--jx-space-4)' }}\n    >\n      <table className=\"jx-table\">\n        <caption className=\"jx-visually-hidden\">Пользователи</caption>\n        <thead className=\"jx-table__head\">\n          <tr>\n            <th scope=\"col\">Имя</th>\n            <th scope=\"col\">Роль</th>\n            <th scope=\"col\">Статус</th>\n          </tr>\n        </thead>\n        <tbody className=\"jx-table__body\">\n          {rows.length === 0 ? (\n            <tr>\n              <td colSpan={3} className=\"jx-table__empty\">\n                Пользователей нет\n              </td>\n            </tr>\n          ) : (\n            rows.map((user) => (\n              <tr key={user.id} className=\"jx-table__row\">\n                <td>{user.name}</td>\n                <td>{user.role}</td>\n                <td>\n                  <span className={STATUS_CLASS[user.status]}>\n                    {STATUS_LABEL[user.status]}\n                  </span>\n                </td>\n              </tr>\n            ))\n          )}\n        </tbody>\n      </table>\n\n      <nav\n        className=\"jx-pagination\"\n        aria-label=\"Навигация по страницам\"\n        style={{\n          display: 'flex',\n          alignItems: 'center',\n          gap: 'var(--jx-space-2)',\n        }}\n      >\n        <Button\n          type=\"button\"\n          disabled={page === 1}\n          onClick={() => setRequestedPage(page - 1)}\n        >\n          Назад\n        </Button>\n        {pages.map((pageNumber) => (\n          <Button\n            key={pageNumber}\n            type=\"button\"\n            aria-current={pageNumber === page ? 'page' : undefined}\n            onClick={() => setRequestedPage(pageNumber)}\n          >\n            {pageNumber}\n          </Button>\n        ))}\n        <Button\n          type=\"button\"\n          disabled={page === pageCount}\n          onClick={() => setRequestedPage(page + 1)}\n        >\n          Вперёд\n        </Button>\n      </nav>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        }
+      ],
+      "unknownComponents": [
+        "Button"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 46,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 83,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.56
+  }
+}

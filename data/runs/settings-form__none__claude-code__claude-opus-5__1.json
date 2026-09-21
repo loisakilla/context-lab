@@ -1,0 +1,167 @@
+{
+  "id": "settings-form__none__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-21T12:53:13.536Z",
+  "repeat": 1,
+  "durationMs": 30818,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "settings-form",
+    "title": "Форма настроек",
+    "prompt": "Сделай форму настроек профиля: поле «Имя», выбор языка интерфейса из списка (русский, английский), переключатель «Уведомления на почту» и кнопка «Сохранить». Состояние полей храни в компоненте, при отправке вызывай переданный колбэк onSave с объектом настроек.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 111,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6778,
+        "cacheCreation": 8389
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6778,
+        "cacheCreation": 8389
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__claude_ai_Claude_Docs__guide",
+          "input": {
+            "items": [
+              "topic.index"
+            ]
+          },
+          "resultTokens": 29,
+          "isError": true
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 15167,
+        "cacheCreation": 562
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 15167,
+        "cacheCreation": 562
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 4,
+    "output": 2344,
+    "cacheRead": 21945,
+    "cacheCreation": 8951
+  },
+  "costUsd": 0.12553625000000002,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, type FormEvent } from 'react';\nimport { Button, Card, Input, Select, Stack, Switch } from '@jinx-ui/react';\n\ntype InterfaceLanguage = 'ru' | 'en';\n\ntype ProfileSettings = {\n  name: string;\n  language: InterfaceLanguage;\n  emailNotifications: boolean;\n};\n\ntype ProfileSettingsFormProps = {\n  initialSettings?: ProfileSettings;\n  onSave: (settings: ProfileSettings) => void;\n};\n\nconst languageOptions: Array<{ value: InterfaceLanguage; label: string }> = [\n  { value: 'ru', label: 'Русский' },\n  { value: 'en', label: 'Английский' },\n];\n\nconst defaultSettings: ProfileSettings = {\n  name: '',\n  language: 'ru',\n  emailNotifications: false,\n};\n\nexport default function ProfileSettingsForm({\n  initialSettings = defaultSettings,\n  onSave,\n}: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialSettings.name);\n  const [language, setLanguage] = useState<InterfaceLanguage>(initialSettings.language);\n  const [emailNotifications, setEmailNotifications] = useState(initialSettings.emailNotifications);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    onSave({ name: name.trim(), language, emailNotifications });\n  };\n\n  return (\n    <Card>\n      <form onSubmit={handleSubmit} style={{ padding: 'var(--jx-space-4)' }}>\n        <Stack direction=\"column\" gap=\"md\">\n          <Input\n            id=\"profile-name\"\n            name=\"name\"\n            label=\"Имя\"\n            value={name}\n            onChange={(event) => setName(event.target.value)}\n            placeholder=\"Введите имя\"\n            autoComplete=\"name\"\n          />\n          <Select\n            id=\"profile-language\"\n            name=\"language\"\n            label=\"Язык интерфейса\"\n            value={language}\n            onChange={(event) => setLanguage(event.target.value as InterfaceLanguage)}\n            options={languageOptions}\n          />\n          <Switch\n            id=\"profile-email-notifications\"\n            name=\"emailNotifications\"\n            label=\"Уведомления на почту\"\n            checked={emailNotifications}\n            onChange={(event) => setEmailNotifications(event.target.checked)}\n          />\n          <Button type=\"submit\" variant=\"primary\">\n            Сохранить\n          </Button>\n        </Stack>\n      </form>\n    </Card>\n  );\n}",
+    "text": "```tsx\nimport { useState, type FormEvent } from 'react';\nimport { Button, Card, Input, Select, Stack, Switch } from '@jinx-ui/react';\n\ntype InterfaceLanguage = 'ru' | 'en';\n\ntype ProfileSettings = {\n  name: string;\n  language: InterfaceLanguage;\n  emailNotifications: boolean;\n};\n\ntype ProfileSettingsFormProps = {\n  initialSettings?: ProfileSettings;\n  onSave: (settings: ProfileSettings) => void;\n};\n\nconst languageOptions: Array<{ value: InterfaceLanguage; label: string }> = [\n  { value: 'ru', label: 'Русский' },\n  { value: 'en', label: 'Английский' },\n];\n\nconst defaultSettings: ProfileSettings = {\n  name: '',\n  language: 'ru',\n  emailNotifications: false,\n};\n\nexport default function ProfileSettingsForm({\n  initialSettings = defaultSettings,\n  onSave,\n}: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialSettings.name);\n  const [language, setLanguage] = useState<InterfaceLanguage>(initialSettings.language);\n  const [emailNotifications, setEmailNotifications] = useState(initialSettings.emailNotifications);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    onSave({ name: name.trim(), language, emailNotifications });\n  };\n\n  return (\n    <Card>\n      <form onSubmit={handleSubmit} style={{ padding: 'var(--jx-space-4)' }}>\n        <Stack direction=\"column\" gap=\"md\">\n          <Input\n            id=\"profile-name\"\n            name=\"name\"\n            label=\"Имя\"\n            value={name}\n            onChange={(event) => setName(event.target.value)}\n            placeholder=\"Введите имя\"\n            autoComplete=\"name\"\n          />\n          <Select\n            id=\"profile-language\"\n            name=\"language\"\n            label=\"Язык интерфейса\"\n            value={language}\n            onChange={(event) => setLanguage(event.target.value as InterfaceLanguage)}\n            options={languageOptions}\n          />\n          <Switch\n            id=\"profile-email-notifications\"\n            name=\"emailNotifications\"\n            label=\"Уведомления на почту\"\n            checked={emailNotifications}\n            onChange={(event) => setEmailNotifications(event.target.checked)}\n          />\n          <Button type=\"submit\" variant=\"primary\">\n            Сохранить\n          </Button>\n        </Stack>\n      </form>\n    </Card>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Card'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Select'. Did you mean 'JxSelect'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Switch'. Did you mean 'JxSwitch'?"
+        },
+        {
+          "code": 7006,
+          "line": 50,
+          "message": "Parameter 'event' implicitly has an 'any' type."
+        },
+        {
+          "code": 7006,
+          "line": 59,
+          "message": "Parameter 'event' implicitly has an 'any' type."
+        },
+        {
+          "code": 7006,
+          "line": 67,
+          "message": "Parameter 'event' implicitly has an 'any' type."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Card",
+        "Input",
+        "Select",
+        "Stack",
+        "Switch"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 43,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

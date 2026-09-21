@@ -1,0 +1,140 @@
+{
+  "id": "settings-form__none__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-21T12:53:38.823Z",
+  "repeat": 2,
+  "durationMs": 25286,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "settings-form",
+    "title": "Форма настроек",
+    "prompt": "Сделай форму настроек профиля: поле «Имя», выбор языка интерфейса из списка (русский, английский), переключатель «Уведомления на почту» и кнопка «Сохранить». Состояние полей храни в компоненте, при отправке вызывай переданный колбэк onSave с объектом настроек.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 111,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6794,
+        "cacheCreation": 8415
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 6794,
+        "cacheCreation": 8415
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2035,
+    "cacheRead": 6794,
+    "cacheCreation": 8415
+  },
+  "costUsd": 0.10687574999999999,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { Button, Card, Field, Form, Input, Select, Stack, Switch } from '@jinx-ui/react';\n\nexport type ProfileSettings = {\n  name: string;\n  language: 'ru' | 'en';\n  emailNotifications: boolean;\n};\n\ntype ProfileSettingsFormProps = {\n  initialSettings?: ProfileSettings;\n  onSave: (settings: ProfileSettings) => void;\n};\n\nconst LANGUAGE_OPTIONS = [\n  { value: 'ru', label: 'Русский' },\n  { value: 'en', label: 'Английский' },\n];\n\nconst DEFAULT_SETTINGS: ProfileSettings = {\n  name: '',\n  language: 'ru',\n  emailNotifications: false,\n};\n\nexport default function ProfileSettingsForm({\n  initialSettings = DEFAULT_SETTINGS,\n  onSave,\n}: ProfileSettingsFormProps) {\n  const [settings, setSettings] = useState<ProfileSettings>(initialSettings);\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    onSave(settings);\n  };\n\n  return (\n    <Card style={{ maxWidth: 'var(--jx-size-form-md)', padding: 'var(--jx-space-6)' }}>\n      <Form onSubmit={handleSubmit}>\n        <Stack direction=\"column\" gap=\"var(--jx-space-5)\">\n          <Field label=\"Имя\" htmlFor=\"profile-name\">\n            <Input\n              id=\"profile-name\"\n              value={settings.name}\n              onChange={(event) =>\n                setSettings((current) => ({ ...current, name: event.target.value }))\n              }\n            />\n          </Field>\n\n          <Field label=\"Язык интерфейса\" htmlFor=\"profile-language\">\n            <Select\n              id=\"profile-language\"\n              value={settings.language}\n              options={LANGUAGE_OPTIONS}\n              onChange={(value: ProfileSettings['language']) =>\n                setSettings((current) => ({ ...current, language: value }))\n              }\n            />\n          </Field>\n\n          <Switch\n            id=\"profile-email-notifications\"\n            label=\"Уведомления на почту\"\n            checked={settings.emailNotifications}\n            onChange={(checked: boolean) =>\n              setSettings((current) => ({ ...current, emailNotifications: checked }))\n            }\n          />\n\n          <Button type=\"submit\" variant=\"primary\">\n            Сохранить\n          </Button>\n        </Stack>\n      </Form>\n    </Card>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { Button, Card, Field, Form, Input, Select, Stack, Switch } from '@jinx-ui/react';\n\nexport type ProfileSettings = {\n  name: string;\n  language: 'ru' | 'en';\n  emailNotifications: boolean;\n};\n\ntype ProfileSettingsFormProps = {\n  initialSettings?: ProfileSettings;\n  onSave: (settings: ProfileSettings) => void;\n};\n\nconst LANGUAGE_OPTIONS = [\n  { value: 'ru', label: 'Русский' },\n  { value: 'en', label: 'Английский' },\n];\n\nconst DEFAULT_SETTINGS: ProfileSettings = {\n  name: '',\n  language: 'ru',\n  emailNotifications: false,\n};\n\nexport default function ProfileSettingsForm({\n  initialSettings = DEFAULT_SETTINGS,\n  onSave,\n}: ProfileSettingsFormProps) {\n  const [settings, setSettings] = useState<ProfileSettings>(initialSettings);\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    onSave(settings);\n  };\n\n  return (\n    <Card style={{ maxWidth: 'var(--jx-size-form-md)', padding: 'var(--jx-space-6)' }}>\n      <Form onSubmit={handleSubmit}>\n        <Stack direction=\"column\" gap=\"var(--jx-space-5)\">\n          <Field label=\"Имя\" htmlFor=\"profile-name\">\n            <Input\n              id=\"profile-name\"\n              value={settings.name}\n              onChange={(event) =>\n                setSettings((current) => ({ ...current, name: event.target.value }))\n              }\n            />\n          </Field>\n\n          <Field label=\"Язык интерфейса\" htmlFor=\"profile-language\">\n            <Select\n              id=\"profile-language\"\n              value={settings.language}\n              options={LANGUAGE_OPTIONS}\n              onChange={(value: ProfileSettings['language']) =>\n                setSettings((current) => ({ ...current, language: value }))\n              }\n            />\n          </Field>\n\n          <Switch\n            id=\"profile-email-notifications\"\n            label=\"Уведомления на почту\"\n            checked={settings.emailNotifications}\n            onChange={(checked: boolean) =>\n              setSettings((current) => ({ ...current, emailNotifications: checked }))\n            }\n          />\n\n          <Button type=\"submit\" variant=\"primary\">\n            Сохранить\n          </Button>\n        </Stack>\n      </Form>\n    </Card>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Card'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Field'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Form'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Select'. Did you mean 'JxSelect'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Switch'. Did you mean 'JxSwitch'?"
+        },
+        {
+          "code": 7006,
+          "line": 45,
+          "message": "Parameter 'event' implicitly has an 'any' type."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Card",
+        "Field",
+        "Form",
+        "Input",
+        "Select",
+        "Stack",
+        "Switch"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 38,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}
