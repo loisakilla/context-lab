@@ -28,7 +28,7 @@ interface StreamEvent {
 }
 
 export const NOT_LOGGED_IN_HINT =
-  'Claude Code не авторизован в дочернем процессе. Выполните один раз `claude login` в терминале; учётные данные десктопного приложения дочернему процессу недоступны.';
+  'Claude Code не авторизован в дочернем процессе. Выполните один раз `claude auth login` в терминале (или /login в интерактивной сессии); учётные данные десктопного приложения дочернему процессу недоступны.';
 
 function usageFrom(raw: Record<string, number> | undefined): Usage {
   return {
