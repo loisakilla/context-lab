@@ -58,7 +58,7 @@ export function Report({ record, render }: ReportProps) {
             ) : (
               <ul className="flex flex-col gap-1 text-sm">
                 {checks.tsc.errors.map((error, position) => (
-                  <li key={position} className="code-block">
+                  <li key={position} className="code-block break-words whitespace-pre-wrap">
                     <span className="opacity-60">строка {error.line} · TS{error.code}</span>
                     <br />
                     {error.message.split('\n')[0]}
@@ -111,7 +111,7 @@ export function Report({ record, render }: ReportProps) {
           <ol className="flex flex-col gap-1 text-sm">
             {record.turns.flatMap((turn, turnIndex) =>
               turn.toolCalls.map((call, callIndex) => (
-                <li key={`${turnIndex}-${callIndex}`} className="code-block">
+                <li key={`${turnIndex}-${callIndex}`} className="code-block break-words whitespace-pre-wrap">
                   {call.name}({JSON.stringify(call.input)}) → ~{call.resultTokens} токенов{call.isError ? ' · ошибка' : ''}
                 </li>
               )),

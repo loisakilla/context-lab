@@ -50,6 +50,12 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
 
       {prompt && <p className="max-w-4xl">{prompt}</p>}
 
+      {leftRun && rightRun && (leftRun.model !== rightRun.model || leftRun.driver !== rightRun.driver) && (
+        <JxAlert intent="warning" title="Прогоны сделаны по-разному">
+          Слева {leftRun.model} через {leftRun.driver}, справа {rightRun.model} через {rightRun.driver}. Сравнивать их между собой некорректно: перезапишите недостающие ячейки одной моделью.
+        </JxAlert>
+      )}
+
       <section className="grid items-start gap-8 xl:grid-cols-2">
         {leftRun ? (
           <RunPane record={leftRun} title={MODE_LABELS[left] ?? left} />

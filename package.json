@@ -37,7 +37,8 @@
     "rules:check": "tsx packages/rules/src/cli.ts check jinx-ui --task ui && tsx packages/rules/src/cli.ts check jinx-ui --task ui --target claude --targets text --out rules/compiled && tsx packages/rules/src/cli.ts check context-lab --out rules/compiled/context-lab",
     "prompts": "tsx scripts/emit-prompts.ts",
     "record": "tsx scripts/record-run.ts",
-    "readme": "tsx scripts/update-readme.ts"
+    "readme": "tsx scripts/update-readme.ts",
+    "screenshots": "tsx scripts/screenshots.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
