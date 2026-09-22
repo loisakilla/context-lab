@@ -11,6 +11,9 @@ export interface MatrixCell {
   medianTscErrors: number;
   medianLintErrors: number;
   meanCoverage: number;
+  medianTurns: number;
+  medianToolCalls: number;
+  medianSeconds: number;
 }
 
 export interface Matrix {
@@ -58,6 +61,9 @@ export function buildMatrix(runs: RunRecord[]): Matrix {
       medianTscErrors: median(bucket.map((run) => run.checks?.tsc.errors.length ?? 0)),
       medianLintErrors: median(bucket.map((run) => run.checks?.lint.filter((finding) => finding.severity === 'error').length ?? 0)),
       meanCoverage: Number((bucket.reduce((sum, run) => sum + (run.checks?.expectedCoverage ?? 0), 0) / bucket.length).toFixed(2)),
+      medianTurns: median(bucket.map((run) => run.turns.length)),
+      medianToolCalls: median(bucket.map((run) => run.turns.reduce((sum, turn) => sum + turn.toolCalls.length, 0))),
+      medianSeconds: Number(median(bucket.map((run) => run.durationMs / 1000)).toFixed(1)),
     });
   }
   cells.sort((a, b) => (a.taskId === b.taskId ? CONTEXT_MODES.indexOf(a.mode) - CONTEXT_MODES.indexOf(b.mode) : a.taskId.localeCompare(b.taskId)));

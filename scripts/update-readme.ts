@@ -33,6 +33,7 @@ const matrix = JSON.parse(readFileSync(matrixFile, 'utf8')) as Matrix;
 const modes = matrix.modes;
 const withUsage = matrix.cells.some((cell) => cell.medianTokens > 0);
 const withCost = matrix.cells.some((cell) => cell.medianCostUsd !== null);
+const withTurns = matrix.cells.some((cell) => cell.medianTurns > 0);
 
 function cellsOf(mode: string) {
   return matrix.cells.filter((cell) => cell.mode === mode);
@@ -61,6 +62,7 @@ const headers = [
   'Контекст до задачи',
   ...(withUsage ? ['Токенов на задачу'] : []),
   ...(withCost ? ['Цена задачи'] : []),
+  ...(withTurns ? ['Ходов', 'Секунд'] : []),
   'Задач, где прошли все прогоны',
   'Ошибок компилятора на задачу',
   'Нарушений правил',
@@ -74,6 +76,7 @@ for (const mode of modes) {
     `~${Math.round(mean(mode, (cell) => cell.medianContextTokens)).toLocaleString('ru-RU')} ток.`,
     ...(withUsage ? [`${Math.round(mean(mode, (cell) => cell.medianTokens)).toLocaleString('ru-RU')} ток.`] : []),
     ...(withCost ? [meanCost(mode)] : []),
+    ...(withTurns ? [mean(mode, (cell) => cell.medianTurns).toFixed(1), mean(mode, (cell) => cell.medianSeconds).toFixed(0)] : []),
     share(mode, (value) => value === 1, (cell) => cell.passRate),
     mean(mode, (cell) => cell.medianTscErrors).toFixed(1),
     mean(mode, (cell) => cell.medianLintErrors).toFixed(1),

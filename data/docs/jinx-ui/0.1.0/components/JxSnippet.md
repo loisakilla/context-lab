@@ -1,7 +1,10 @@
 # JxSnippet
 
+Блок кода или команды с кнопкой копирования. `prompt` рисует приглашение терминала, `block` разворачивает сниппет на всю ширину.
+
 Импорт: `import { JxSnippet } from '@jinx-ui/react'`  
 Источник: `packages/react/src/components/Snippet.tsx:27`
+Ключевые слова: snippet, код, команда, копировать, терминал
 
 ## Сигнатура
 
@@ -15,12 +18,22 @@
 
 | Проп | Тип | Обязателен | По умолчанию | Описание |
 |---|---|---|---|---|
-| `block` | `boolean` | нет | `false` |  |
-| `children` | `ReactNode` | нет |  |  |
-| `copyText` | `string` | нет |  |  |
-| `prompt` | `ReactNode` | нет |  |  |
-| `tone` | `"alt" \\| "default" \\| "info"` | нет | `'default'` |  |
+| `block` | `boolean` | нет | `false` | занять всю ширину контейнера |
+| `children` | `ReactNode` | нет |  | текст команды или кода |
+| `copyText` | `string` | нет |  | что копировать, если это отличается от видимого текста |
+| `prompt` | `ReactNode` | нет |  | приглашение перед командой, например `$` |
+| `tone` | `"alt" \\| "default" \\| "info"` | нет | `'default'` | тон блока: `default`, `accent`, `alt`, `info` |
 
 ## CSS-классы
 
 `jx-snippet`, `jx-snippet--alt`, `jx-snippet--block`, `jx-snippet--info`, `jx-snippet-code`, `jx-snippet-copy`, `jx-snippet-prompt`
+
+## Примеры
+
+### Команда установки
+
+```tsx
+<JxSnippet prompt="$" block>
+  npm install @jinx-ui/react
+</JxSnippet>
+```

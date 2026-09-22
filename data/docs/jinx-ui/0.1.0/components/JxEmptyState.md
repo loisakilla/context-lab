@@ -1,7 +1,10 @@
 # JxEmptyState
 
+Пустое состояние списка или раздела: что здесь появится и что для этого сделать. Ставьте вместо пустой таблицы или нулевого счётчика.
+
 Импорт: `import { JxEmptyState } from '@jinx-ui/react'`  
 Источник: `packages/react/src/components/EmptyState.tsx:18`
+Ключевые слова: empty state, пустой экран, нет данных, заглушка, первый запуск
 
 ## Сигнатура
 
@@ -15,11 +18,23 @@
 
 | Проп | Тип | Обязателен | По умолчанию | Описание |
 |---|---|---|---|---|
-| `title` | `ReactNode` | да |  |  |
-| `action` | `ReactNode` | нет |  |  |
-| `icon` | `ReactNode` | нет |  |  |
-| `message` | `ReactNode` | нет |  |  |
+| `title` | `ReactNode` | да |  | заголовок пустого состояния |
+| `action` | `ReactNode` | нет |  | кнопка основного действия |
+| `icon` | `ReactNode` | нет |  | иллюстрация или иконка над заголовком |
+| `message` | `ReactNode` | нет |  | пояснение под заголовком |
 
 ## CSS-классы
 
 `jx-empty`, `jx-empty-icon`, `jx-empty-msg`, `jx-empty-title`
+
+## Примеры
+
+### Пустой список проектов
+
+```tsx
+<JxEmptyState
+  title="Проектов пока нет"
+  message="Создайте первый проект, чтобы начать работу."
+  action={<JxButton variant="primary">Создать проект</JxButton>}
+/>
+```

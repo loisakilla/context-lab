@@ -3,7 +3,7 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['@jinx-ui/react', '@context-lab/runner', '@context-lab/index-tools', '@context-lab/checks', '@context-lab/docgen'],
+  transpilePackages: ['@jinx-ui/react', '@context-lab/runner', '@context-lab/index-tools', '@context-lab/checks', '@context-lab/docgen', '@context-lab/rules'],
   serverExternalPackages: ['typescript', '@typescript/vfs', 'postcss', 'gray-matter'],
   outputFileTracingRoot: path.join(import.meta.dirname, '..', '..'),
   outputFileTracingExcludes: {

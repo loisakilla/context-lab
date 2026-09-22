@@ -144,13 +144,20 @@
       "name": "JxAvatar",
       "file": "packages/react/src/components/Avatar.tsx",
       "line": 26,
-      "keywords": [],
+      "keywords": [
+        "avatar",
+        "аватар",
+        "пользователь",
+        "инициалы",
+        "фото профиля"
+      ],
       "status": "stable",
       "props": [
         {
           "name": "children",
           "type": "ReactNode",
-          "required": false
+          "required": false,
+          "description": "инициалы или изображение внутри аватара"
         },
         {
           "name": "tone",
@@ -162,7 +169,8 @@
             "\"info\"",
             "\"accent\""
           ],
-          "defaultValue": "'default'"
+          "defaultValue": "'default'",
+          "description": "цветовой тон фона: `default`, `accent`, `alt`, `info`"
         },
         {
           "name": "size",
@@ -173,13 +181,15 @@
             "\"md\"",
             "\"lg\""
           ],
-          "defaultValue": "'md'"
+          "defaultValue": "'md'",
+          "description": "размер: `sm`, `md`, `lg`"
         },
         {
           "name": "status",
           "type": "boolean",
           "required": false,
-          "defaultValue": "false"
+          "defaultValue": "false",
+          "description": "показать точку присутствия"
         }
       ],
       "inheritsFrom": [
@@ -194,19 +204,31 @@
         "jx-avatar--sm",
         "jx-avatar-status"
       ],
-      "examples": []
+      "examples": [
+        {
+          "title": "Аватар с индикатором присутствия",
+          "code": "<JxAvatar tone=\"accent\" size=\"md\" status>\n  ГК\n</JxAvatar>"
+        }
+      ],
+      "description": "Аватар пользователя: инициалы или изображение внутри круга. Тон задаёт цвет фона из токенов, `status` добавляет точку присутствия в углу."
     },
     {
       "name": "JxAvatarStack",
       "file": "packages/react/src/components/Avatar.tsx",
       "line": 42,
-      "keywords": [],
+      "keywords": [
+        "avatar stack",
+        "группа аватаров",
+        "участники",
+        "наложение"
+      ],
       "status": "stable",
       "props": [
         {
           "name": "children",
           "type": "ReactNode",
-          "required": false
+          "required": false,
+          "description": "аватары участников"
         }
       ],
       "inheritsFrom": [
@@ -215,7 +237,13 @@
       "cssClasses": [
         "jx-avatar-stack"
       ],
-      "examples": []
+      "examples": [
+        {
+          "title": "Участники задачи",
+          "code": "<JxAvatarStack>\n  <JxAvatar>ГК</JxAvatar>\n  <JxAvatar tone=\"info\">АС</JxAvatar>\n  <JxAvatar tone=\"alt\">МП</JxAvatar>\n</JxAvatarStack>"
+        }
+      ],
+      "description": "Группа аватаров внахлёст: участники проекта, исполнители задачи, читатели документа. Принимает готовые `JxAvatar` и сдвигает их друг на друга."
     },
     {
       "name": "JxBadge",
@@ -288,19 +316,27 @@
       "name": "JxBreadcrumbs",
       "file": "packages/react/src/components/Breadcrumbs.tsx",
       "line": 15,
-      "keywords": [],
+      "keywords": [
+        "breadcrumbs",
+        "хлебные крошки",
+        "навигация",
+        "путь",
+        "иерархия"
+      ],
       "status": "stable",
       "props": [
         {
           "name": "items",
           "type": "JxBreadcrumbItem[]",
-          "required": true
+          "required": true,
+          "description": "элементы пути, каждый с подписью `label` и необязательной ссылкой `href`"
         },
         {
           "name": "separator",
           "type": "ReactNode",
           "required": false,
-          "defaultValue": "'/'"
+          "defaultValue": "'/'",
+          "description": "разделитель между элементами, по умолчанию стрелка"
         }
       ],
       "inheritsFrom": [
@@ -309,7 +345,13 @@
       "cssClasses": [
         "jx-breadcrumbs"
       ],
-      "examples": []
+      "examples": [
+        {
+          "title": "Путь до настроек проекта",
+          "code": "<JxBreadcrumbs\n  items={[\n    { label: 'Проекты', href: '/projects' },\n    { label: 'Контекст', href: '/projects/context' },\n    { label: 'Настройки' },\n  ]}\n/>"
+        }
+      ],
+      "description": "Хлебные крошки: путь от корня раздела до текущей страницы. Элемент без `href` считается текущим и ссылкой не становится."
     },
     {
       "name": "JxButton",
@@ -650,13 +692,19 @@
       "name": "JxDivider",
       "file": "packages/react/src/components/Divider.tsx",
       "line": 8,
-      "keywords": [],
+      "keywords": [
+        "divider",
+        "разделитель",
+        "линия",
+        "секция"
+      ],
       "status": "stable",
       "props": [
         {
           "name": "label",
           "type": "ReactNode",
-          "required": false
+          "required": false,
+          "description": "подпись в середине разделителя"
         }
       ],
       "inheritsFrom": [
@@ -666,7 +714,13 @@
         "jx-divider",
         "jx-rule"
       ],
-      "examples": []
+      "examples": [
+        {
+          "title": "Разделитель с подписью",
+          "code": "<JxDivider label=\"Дополнительно\" />"
+        }
+      ],
+      "description": "Горизонтальный разделитель между блоками. С подписью превращается в заголовок секции с линиями по бокам."
     },
     {
       "name": "JxDrawer",
@@ -752,28 +806,38 @@
       "name": "JxEmptyState",
       "file": "packages/react/src/components/EmptyState.tsx",
       "line": 18,
-      "keywords": [],
+      "keywords": [
+        "empty state",
+        "пустой экран",
+        "нет данных",
+        "заглушка",
+        "первый запуск"
+      ],
       "status": "stable",
       "props": [
         {
           "name": "title",
           "type": "ReactNode",
-          "required": true
+          "required": true,
+          "description": "заголовок пустого состояния"
         },
         {
           "name": "icon",
           "type": "ReactNode",
-          "required": false
+          "required": false,
+          "description": "иллюстрация или иконка над заголовком"
         },
         {
           "name": "message",
           "type": "ReactNode",
-          "required": false
+          "required": false,
+          "description": "пояснение под заголовком"
         },
         {
           "name": "action",
           "type": "ReactNode",
-          "required": false
+          "required": false,
+          "description": "кнопка основного действия"
         }
       ],
       "inheritsFrom": [
@@ -785,7 +849,13 @@
         "jx-empty-msg",
         "jx-empty-title"
       ],
-      "examples": []
+      "examples": [
+        {
+          "title": "Пустой список проектов",
+          "code": "<JxEmptyState\n  title=\"Проектов пока нет\"\n  message=\"Создайте первый проект, чтобы начать работу.\"\n  action={<JxButton variant=\"primary\">Создать проект</JxButton>}\n/>"
+        }
+      ],
+      "description": "Пустое состояние списка или раздела: что здесь появится и что для этого сделать. Ставьте вместо пустой таблицы или нулевого счётчика."
     },
     {
       "name": "JxInputField",
@@ -870,13 +940,20 @@
       "name": "JxKbd",
       "file": "packages/react/src/components/Kbd.tsx",
       "line": 8,
-      "keywords": [],
+      "keywords": [
+        "kbd",
+        "клавиша",
+        "горячие клавиши",
+        "сочетание",
+        "shortcut"
+      ],
       "status": "stable",
       "props": [
         {
           "name": "children",
           "type": "ReactNode",
-          "required": false
+          "required": false,
+          "description": "название клавиши"
         }
       ],
       "inheritsFrom": [
@@ -885,7 +962,13 @@
       "cssClasses": [
         "jx-kbd"
       ],
-      "examples": []
+      "examples": [
+        {
+          "title": "Сочетание клавиш в подсказке",
+          "code": "<span>\n  Сохранить: <JxKbd>Ctrl</JxKbd> <JxKbd>S</JxKbd>\n</span>"
+        }
+      ],
+      "description": "Клавиша в тексте: обозначение горячих клавиш и сочетаний. Для сочетания ставьте несколько элементов подряд."
     },
     {
       "name": "JxMenu",
@@ -1138,25 +1221,34 @@
       "name": "JxProgressCircle",
       "file": "packages/react/src/components/Progress.tsx",
       "line": 39,
-      "keywords": [],
+      "keywords": [
+        "progress circle",
+        "круговой прогресс",
+        "индикатор",
+        "проценты",
+        "загрузка"
+      ],
       "status": "stable",
       "props": [
         {
           "name": "value",
           "type": "number",
-          "required": true
+          "required": true,
+          "description": "текущее значение"
         },
         {
           "name": "max",
           "type": "number",
           "required": false,
-          "defaultValue": "100"
+          "defaultValue": "100",
+          "description": "максимум шкалы, по умолчанию 100"
         },
         {
           "name": "showValue",
           "type": "boolean",
           "required": false,
-          "defaultValue": "true"
+          "defaultValue": "true",
+          "description": "показать проценты в центре круга"
         }
       ],
       "inheritsFrom": [
@@ -1166,7 +1258,13 @@
         "jx-progress-circle",
         "jx-progress-circle-val"
       ],
-      "examples": []
+      "examples": [
+        {
+          "title": "Заполненность квоты",
+          "code": "<JxProgressCircle value={72} showValue />"
+        }
+      ],
+      "description": "Круговой индикатор прогресса для компактных мест: карточек, плиток, строк таблицы. Для полосы во всю ширину есть `JxProgress`."
     },
     {
       "name": "JxRadio",
@@ -1300,24 +1398,33 @@
       "name": "JxSkeleton",
       "file": "packages/react/src/components/Skeleton.tsx",
       "line": 10,
-      "keywords": [],
+      "keywords": [
+        "skeleton",
+        "скелетон",
+        "загрузка",
+        "заглушка",
+        "плейсхолдер"
+      ],
       "status": "stable",
       "props": [
         {
           "name": "width",
           "type": "CSSProperties['width']",
-          "required": false
+          "required": false,
+          "description": "ширина заглушки"
         },
         {
           "name": "height",
           "type": "CSSProperties['height']",
-          "required": false
+          "required": false,
+          "description": "высота заглушки"
         },
         {
           "name": "circle",
           "type": "boolean",
           "required": false,
-          "defaultValue": "false"
+          "defaultValue": "false",
+          "description": "сделать заглушку круглой, для аватаров"
         }
       ],
       "inheritsFrom": [
@@ -1326,46 +1433,65 @@
       "cssClasses": [
         "jx-skeleton"
       ],
-      "examples": []
+      "examples": [
+        {
+          "title": "Загрузка строки списка",
+          "code": "<div className=\"jx-row\">\n  <JxSkeleton width={40} height={40} circle />\n  <JxSkeleton width=\"60%\" height={16} />\n</div>"
+        }
+      ],
+      "description": "Заглушка на время загрузки: прямоугольник или круг с мерцанием на месте будущего содержимого. Размеры задавайте такими же, как у настоящего блока, иначе вёрстка дёрнется."
     },
     {
       "name": "JxSlider",
       "file": "packages/react/src/components/Slider.tsx",
       "line": 15,
-      "keywords": [],
+      "keywords": [
+        "slider",
+        "слайдер",
+        "ползунок",
+        "диапазон",
+        "громкость",
+        "значение"
+      ],
       "status": "stable",
       "props": [
         {
           "name": "value",
           "type": "number",
-          "required": false
+          "required": false,
+          "description": "текущее значение в управляемом режиме"
         },
         {
           "name": "defaultValue",
           "type": "number",
-          "required": false
+          "required": false,
+          "description": "начальное значение в неуправляемом режиме"
         },
         {
           "name": "onValueChange",
           "type": "(value: number) => void",
-          "required": false
+          "required": false,
+          "description": "вызывается при изменении значения"
         },
         {
           "name": "unit",
           "type": "string",
           "required": false,
-          "defaultValue": "''"
+          "defaultValue": "''",
+          "description": "единица измерения рядом со значением"
         },
         {
           "name": "label",
           "type": "ReactNode",
-          "required": false
+          "required": false,
+          "description": "подпись над ползунком"
         },
         {
           "name": "showOutput",
           "type": "boolean",
           "required": false,
-          "defaultValue": "true"
+          "defaultValue": "true",
+          "description": "показать текущее значение рядом с подписью"
         }
       ],
       "inheritsFrom": [
@@ -1375,19 +1501,31 @@
         "jx-slider",
         "jx-slider-wrap"
       ],
-      "examples": []
+      "examples": [
+        {
+          "title": "Бюджет контекста",
+          "code": "<JxSlider label=\"Бюджет контекста\" defaultValue={2500} unit=\"ток.\" showOutput />"
+        }
+      ],
+      "description": "Ползунок для выбора числа в диапазоне: громкость, масштаб, бюджет. Управляемый через `value` и `onValueChange`, неуправляемый — через `defaultValue`."
     },
     {
       "name": "JxSnip",
       "file": "packages/react/src/components/Snippet.tsx",
       "line": 66,
-      "keywords": [],
+      "keywords": [
+        "snip",
+        "инлайновый код",
+        "моноширинный",
+        "имя пропса"
+      ],
       "status": "stable",
       "props": [
         {
           "name": "children",
           "type": "ReactNode",
-          "required": false
+          "required": false,
+          "description": "текст кода"
         }
       ],
       "inheritsFrom": [
@@ -1396,24 +1534,38 @@
       "cssClasses": [
         "jx-snip"
       ],
-      "examples": []
+      "examples": [
+        {
+          "title": "Упоминание пропса в тексте",
+          "code": "<p>\n  Передайте <JxSnip>onValueChange</JxSnip>, чтобы получать изменения.\n</p>"
+        }
+      ],
+      "description": "Инлайновый код внутри строки текста: имя пропса, путь файла, короткая команда. Для многострочного кода с копированием есть `JxSnippet`."
     },
     {
       "name": "JxSnippet",
       "file": "packages/react/src/components/Snippet.tsx",
       "line": 27,
-      "keywords": [],
+      "keywords": [
+        "snippet",
+        "код",
+        "команда",
+        "копировать",
+        "терминал"
+      ],
       "status": "stable",
       "props": [
         {
           "name": "children",
           "type": "ReactNode",
-          "required": false
+          "required": false,
+          "description": "текст команды или кода"
         },
         {
           "name": "prompt",
           "type": "ReactNode",
-          "required": false
+          "required": false,
+          "description": "приглашение перед командой, например `$`"
         },
         {
           "name": "tone",
@@ -1424,18 +1576,21 @@
             "\"default\"",
             "\"info\""
           ],
-          "defaultValue": "'default'"
+          "defaultValue": "'default'",
+          "description": "тон блока: `default`, `accent`, `alt`, `info`"
         },
         {
           "name": "block",
           "type": "boolean",
           "required": false,
-          "defaultValue": "false"
+          "defaultValue": "false",
+          "description": "занять всю ширину контейнера"
         },
         {
           "name": "copyText",
           "type": "string",
-          "required": false
+          "required": false,
+          "description": "что копировать, если это отличается от видимого текста"
         }
       ],
       "inheritsFrom": [
@@ -1450,13 +1605,25 @@
         "jx-snippet-copy",
         "jx-snippet-prompt"
       ],
-      "examples": []
+      "examples": [
+        {
+          "title": "Команда установки",
+          "code": "<JxSnippet prompt=\"$\" block>\n  npm install @jinx-ui/react\n</JxSnippet>"
+        }
+      ],
+      "description": "Блок кода или команды с кнопкой копирования. `prompt` рисует приглашение терминала, `block` разворачивает сниппет на всю ширину."
     },
     {
       "name": "JxSpinner",
       "file": "packages/react/src/components/Spinner.tsx",
       "line": 9,
-      "keywords": [],
+      "keywords": [
+        "spinner",
+        "спиннер",
+        "загрузка",
+        "ожидание",
+        "индикатор"
+      ],
       "status": "stable",
       "props": [
         {
@@ -1467,12 +1634,14 @@
             "\"ring\"",
             "\"dots\""
           ],
-          "defaultValue": "'ring'"
+          "defaultValue": "'ring'",
+          "description": "вид индикатора: `ring` — кольцо, `dots` — точки"
         },
         {
           "name": "size",
           "type": "number",
-          "required": false
+          "required": false,
+          "description": "размер в пикселях"
         }
       ],
       "inheritsFrom": [
@@ -1482,7 +1651,13 @@
         "jx-spinner",
         "jx-spinner--dots"
       ],
-      "examples": []
+      "examples": [
+        {
+          "title": "Ожидание ответа",
+          "code": "<JxSpinner variant=\"ring\" size={20} />"
+        }
+      ],
+      "description": "Индикатор неопределённой загрузки. Если известно, сколько осталось, берите `JxProgress` или `JxProgressCircle`, а если грузится содержимое блока — `JxSkeleton`."
     },
     {
       "name": "JxStepper",
@@ -1928,28 +2103,38 @@
       "name": "JxToggle",
       "file": "packages/react/src/components/Toggle.tsx",
       "line": 19,
-      "keywords": [],
+      "keywords": [
+        "toggle",
+        "переключатель",
+        "сегментированный контрол",
+        "режим",
+        "выбор одного"
+      ],
       "status": "stable",
       "props": [
         {
           "name": "defaultValue",
           "type": "string",
-          "required": false
+          "required": false,
+          "description": "начальное значение в неуправляемом режиме"
         },
         {
           "name": "items",
           "type": "JxToggleItem[]",
-          "required": true
+          "required": true,
+          "description": "варианты переключателя, каждый со значением `value` и подписью `label`"
         },
         {
           "name": "value",
           "type": "string",
-          "required": false
+          "required": false,
+          "description": "выбранное значение в управляемом режиме"
         },
         {
           "name": "onValueChange",
           "type": "(value: string) => void",
-          "required": false
+          "required": false,
+          "description": "вызывается при выборе варианта"
         }
       ],
       "inheritsFrom": [
@@ -1960,24 +2145,38 @@
         "jx-toggle-group",
         "jx-toggle-indicator-bg"
       ],
-      "examples": []
+      "examples": [
+        {
+          "title": "Выбор периода",
+          "code": "<JxToggle\n  items={[\n    { value: 'day', label: 'День' },\n    { value: 'week', label: 'Неделя' },\n    { value: 'month', label: 'Месяц' },\n  ]}\n  defaultValue=\"week\"\n  onValueChange={(value) => setPeriod(value)}\n/>"
+        }
+      ],
+      "description": "Сегментированный переключатель на два-три коротких варианта: режим отображения, тема, период. Для большего числа вариантов берите `JxSelect`, для навигации между разделами — `JxTabs`."
     },
     {
       "name": "JxTooltip",
       "file": "packages/react/src/components/Tooltip.tsx",
       "line": 9,
-      "keywords": [],
+      "keywords": [
+        "tooltip",
+        "подсказка",
+        "всплывающая подсказка",
+        "пояснение",
+        "hover"
+      ],
       "status": "stable",
       "props": [
         {
           "name": "children",
           "type": "ReactNode",
-          "required": true
+          "required": true,
+          "description": "элемент, к которому привязана подсказка"
         },
         {
           "name": "tip",
           "type": "ReactNode",
-          "required": true
+          "required": true,
+          "description": "текст подсказки"
         }
       ],
       "inheritsFrom": [
@@ -1987,7 +2186,13 @@
         "jx-tooltip",
         "jx-tooltip-tip"
       ],
-      "examples": []
+      "examples": [
+        {
+          "title": "Пояснение к кнопке",
+          "code": "<JxTooltip tip=\"Запустить прогон в выбранном режиме\">\n  <JxButton variant=\"primary\">Запустить</JxButton>\n</JxTooltip>"
+        }
+      ],
+      "description": "Всплывающая подсказка к элементу: появляется при наведении и фокусе. Подсказка дополняет интерфейс, но не заменяет подпись — важный текст выносите на страницу."
     }
   ],
   "hooks": [

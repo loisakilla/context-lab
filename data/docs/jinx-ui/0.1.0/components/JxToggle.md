@@ -1,7 +1,10 @@
 # JxToggle
 
+Сегментированный переключатель на два-три коротких варианта: режим отображения, тема, период. Для большего числа вариантов берите `JxSelect`, для навигации между разделами — `JxTabs`.
+
 Импорт: `import { JxToggle } from '@jinx-ui/react'`  
 Источник: `packages/react/src/components/Toggle.tsx:19`
+Ключевые слова: toggle, переключатель, сегментированный контрол, режим, выбор одного
 
 ## Сигнатура
 
@@ -15,11 +18,27 @@
 
 | Проп | Тип | Обязателен | По умолчанию | Описание |
 |---|---|---|---|---|
-| `items` | `JxToggleItem[]` | да |  |  |
-| `defaultValue` | `string` | нет |  |  |
-| `onValueChange` | `(value: string) => void` | нет |  |  |
-| `value` | `string` | нет |  |  |
+| `items` | `JxToggleItem[]` | да |  | варианты переключателя, каждый со значением `value` и подписью `label` |
+| `defaultValue` | `string` | нет |  | начальное значение в неуправляемом режиме |
+| `onValueChange` | `(value: string) => void` | нет |  | вызывается при выборе варианта |
+| `value` | `string` | нет |  | выбранное значение в управляемом режиме |
 
 ## CSS-классы
 
 `jx-toggle-btn`, `jx-toggle-group`, `jx-toggle-indicator-bg`
+
+## Примеры
+
+### Выбор периода
+
+```tsx
+<JxToggle
+  items={[
+    { value: 'day', label: 'День' },
+    { value: 'week', label: 'Неделя' },
+    { value: 'month', label: 'Месяц' },
+  ]}
+  defaultValue="week"
+  onValueChange={(value) => setPeriod(value)}
+/>
+```

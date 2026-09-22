@@ -1,7 +1,10 @@
 # JxSkeleton
 
+Заглушка на время загрузки: прямоугольник или круг с мерцанием на месте будущего содержимого. Размеры задавайте такими же, как у настоящего блока, иначе вёрстка дёрнется.
+
 Импорт: `import { JxSkeleton } from '@jinx-ui/react'`  
 Источник: `packages/react/src/components/Skeleton.tsx:10`
+Ключевые слова: skeleton, скелетон, загрузка, заглушка, плейсхолдер
 
 ## Сигнатура
 
@@ -15,10 +18,21 @@
 
 | Проп | Тип | Обязателен | По умолчанию | Описание |
 |---|---|---|---|---|
-| `circle` | `boolean` | нет | `false` |  |
-| `height` | `CSSProperties['height']` | нет |  |  |
-| `width` | `CSSProperties['width']` | нет |  |  |
+| `circle` | `boolean` | нет | `false` | сделать заглушку круглой, для аватаров |
+| `height` | `CSSProperties['height']` | нет |  | высота заглушки |
+| `width` | `CSSProperties['width']` | нет |  | ширина заглушки |
 
 ## CSS-классы
 
 `jx-skeleton`
+
+## Примеры
+
+### Загрузка строки списка
+
+```tsx
+<div className="jx-row">
+  <JxSkeleton width={40} height={40} circle />
+  <JxSkeleton width="60%" height={16} />
+</div>
+```

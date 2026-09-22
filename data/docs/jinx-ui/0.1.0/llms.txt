@@ -15,13 +15,13 @@
   `<JxAccordion items: JxAccordionItem[]; className?: string; defaultValue?: string[]; onValueChange?: (value: string[]) => void; single?: boolean = true; value?: string[] />`
 - **JxAlert** — Встроенное в разметку сообщение с иконкой, заголовком и текстом.
   `<JxAlert title: ReactNode; children?: ReactNode; icon?: ReactNode; intent?: JxAlertIntent = 'info' />` extends HTMLAttributes<HTMLDivElement>
-- **JxAvatar**
+- **JxAvatar** — Аватар пользователя: инициалы или изображение внутри круга.
   `<JxAvatar children?: ReactNode; size?: JxAvatarSize = 'md'; status?: boolean = false; tone?: JxAvatarTone = 'default' />` extends HTMLAttributes<HTMLSpanElement>
-- **JxAvatarStack**
+- **JxAvatarStack** — Группа аватаров внахлёст: участники проекта, исполнители задачи, читатели документа.
   `<JxAvatarStack children?: ReactNode />` extends HTMLAttributes<HTMLDivElement>
 - **JxBadge** — Небольшая метка статуса или счётчика.
   `<JxBadge children?: ReactNode; dot?: boolean = false; tone?: JxBadgeTone = 'default' />` extends HTMLAttributes<HTMLSpanElement>
-- **JxBreadcrumbs**
+- **JxBreadcrumbs** — Хлебные крошки: путь от корня раздела до текущей страницы.
   `<JxBreadcrumbs items: JxBreadcrumbItem[]; separator?: ReactNode = '/' />` extends HTMLAttributes<HTMLElement>
 - **JxButton** — Кнопка действия.
   `<JxButton iconOnly?: boolean = false; size?: JxButtonSize = 'md'; variant?: JxButtonVariant = 'primary' />` extends ButtonHTMLAttributes<HTMLButtonElement>
@@ -33,15 +33,15 @@
   `<JxChip active?: boolean = false; children?: ReactNode; onRemove?: () => void; removable?: boolean = false />` extends HTMLAttributes<HTMLSpanElement>
 - **JxCombobox** — Поле с автодополнением: пользователь печатает, список фильтруется, выбор одного значения.
   `<JxCombobox options: JxComboboxOption[]; ariaLabel?: string; className?: string; defaultValue?: string; emptyText?: string = 'No matches. Try fewer letters.'; onValueChange?: (value: string) => void; placeholder?: string = 'Search...'; value?: string />`
-- **JxDivider**
+- **JxDivider** — Горизонтальный разделитель между блоками.
   `<JxDivider label?: ReactNode />` extends HTMLAttributes<HTMLDivElement>
 - **JxDrawer** — Боковая панель, выезжающая слева или справа поверх страницы, с ловушкой фокуса и закрытием по Escape.
   `<JxDrawer title: ReactNode; children?: ReactNode; className?: string; defaultOpen?: boolean = false; onOpenChange?: (open: boolean) => void; open?: boolean; side?: JxDrawerSide = 'right' />`
-- **JxEmptyState**
+- **JxEmptyState** — Пустое состояние списка или раздела: что здесь появится и что для этого сделать.
   `<JxEmptyState title: ReactNode; action?: ReactNode; icon?: ReactNode; message?: ReactNode />` extends HTMLAttributes<HTMLDivElement>
 - **JxInputField** — Текстовое поле с подписью, подсказкой и текстом ошибки.
   `<JxInputField className?: string; errorText?: string; helperText?: string; label?: string; prefix?: string; required?: boolean />` extends InputHTMLAttributes<HTMLInputElement>
-- **JxKbd**
+- **JxKbd** — Клавиша в тексте: обозначение горячих клавиш и сочетаний.
   `<JxKbd children?: ReactNode />` extends HTMLAttributes<HTMLSpanElement>
 - **JxMenu** — Вертикальное меню действий.
   `<JxMenu items: JxMenuItem[] />` extends HTMLAttributes<HTMLDivElement>
@@ -51,21 +51,21 @@
   `<JxPagination total: number; defaultPage?: number; onPageChange?: (page: number) => void; page?: number; siblingCount?: number = 1 />` extends Omit<HTMLAttributes<HTMLElement>, "onChange">
 - **JxProgress** — Горизонтальная полоса прогресса.
   `<JxProgress value: number; label?: string; max?: number = 100 />` extends HTMLAttributes<HTMLDivElement>
-- **JxProgressCircle**
+- **JxProgressCircle** — Круговой индикатор прогресса для компактных мест: карточек, плиток, строк таблицы.
   `<JxProgressCircle value: number; max?: number = 100; showValue?: boolean = true />` extends HTMLAttributes<HTMLDivElement>
 - **JxRadio** — Радиокнопка с подписью.
   `<JxRadio label?: ReactNode; wrapClassName?: string />` extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size">
 - **JxSelect** — Выпадающий список с одним выбранным значением, клавиатурной навигацией и группами.
   `<JxSelect options: JxSelectOption[]; className?: string; defaultValue?: string; label?: string; onValueChange?: (value: string) => void; placeholder?: string = 'Select'; value?: string />`
-- **JxSkeleton**
+- **JxSkeleton** — Заглушка на время загрузки: прямоугольник или круг с мерцанием на месте будущего содержимого.
   `<JxSkeleton circle?: boolean = false; height?: CSSProperties['height']; width?: CSSProperties['width'] />` extends HTMLAttributes<HTMLDivElement>
-- **JxSlider**
+- **JxSlider** — Ползунок для выбора числа в диапазоне: громкость, масштаб, бюджет.
   `<JxSlider defaultValue?: number; label?: ReactNode; onValueChange?: (value: number) => void; showOutput?: boolean = true; unit?: string = ''; value?: number />` extends Omit<InputHTMLAttributes<HTMLInputElement>, "defaultValue" | "value" | "onChange" | "type">
-- **JxSnip**
+- **JxSnip** — Инлайновый код внутри строки текста: имя пропса, путь файла, короткая команда.
   `<JxSnip children?: ReactNode />` extends HTMLAttributes<HTMLSpanElement>
-- **JxSnippet**
+- **JxSnippet** — Блок кода или команды с кнопкой копирования.
   `<JxSnippet block?: boolean = false; children?: ReactNode; copyText?: string; prompt?: ReactNode; tone?: JxSnippetTone = 'default' />` extends HTMLAttributes<HTMLSpanElement>
-- **JxSpinner**
+- **JxSpinner** — Индикатор неопределённой загрузки.
   `<JxSpinner size?: number; variant?: 'ring' | 'dots' = 'ring' />` extends HTMLAttributes<HTMLSpanElement>
 - **JxStepper** — Индикатор шагов для пошаговых форм.
   `<JxStepper current: number; steps: JxStep[] />` extends HTMLAttributes<HTMLDivElement>
@@ -83,9 +83,9 @@
   `<JxToast title: ReactNode; message?: ReactNode; onClose?: () => void; showIcon?: boolean = true; variant?: JxToastVariant = 'default' />`
 - **JxToastViewport** — Область, в которой показывается очередь уведомлений.
   `<JxToastViewport items: JxToastItem[]; onDismiss: (id: string) => void; position?: 'bottom-left' | 'bottom-right' | 'top-right' | 'top-left' = 'bottom-left' />`
-- **JxToggle**
+- **JxToggle** — Сегментированный переключатель на два-три коротких варианта: режим отображения, тема, период.
   `<JxToggle items: JxToggleItem[]; defaultValue?: string; onValueChange?: (value: string) => void; value?: string />` extends Omit<HTMLAttributes<HTMLDivElement>, "onChange">
-- **JxTooltip**
+- **JxTooltip** — Всплывающая подсказка к элементу: появляется при наведении и фокусе.
   `<JxTooltip children: ReactNode; tip: ReactNode />` extends HTMLAttributes<HTMLDivElement>
 
 ## Хуки

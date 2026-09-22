@@ -46,6 +46,11 @@ export function MatrixTable({ matrix }: { matrix: Matrix }) {
                             ? `${Math.round(cell.medianTokens).toLocaleString('ru-RU')} ток. · ${formatCost(cell.medianCostUsd)}`
                             : `контекст ~${Math.round(cell.medianContextTokens).toLocaleString('ru-RU')} ток.`}
                         </span>
+                        {cell.medianTurns > 0 && (
+                          <span className="opacity-70">
+                            {cell.medianTurns} ход. · {cell.medianToolCalls} выз. · {cell.medianSeconds} с
+                          </span>
+                        )}
                         {first && (
                           <Link href={`/run/${first}`} className="underline">
                             прогоны ({cell.runs.length})
