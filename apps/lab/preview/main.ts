@@ -19,6 +19,7 @@ interface RenderedMessage {
   ok: boolean;
   error?: string;
   height?: number;
+  filledProps?: string[];
 }
 
 const modules: Record<string, unknown> = {
@@ -38,6 +39,7 @@ const container = document.getElementById('root') as HTMLElement;
 let root: ReactDOMClient.Root | undefined;
 let lastError: string | undefined;
 let watching = false;
+let attempt = 0;
 
 function contentHeight(): number {
   let height = Math.max(document.body.scrollHeight, container.scrollHeight + 32);
@@ -95,6 +97,38 @@ function evaluate(code: string): React.ComponentType {
   return candidate as React.ComponentType;
 }
 
+function missingExports(code: string): string[] {
+  const library = JinxReact as unknown as Record<string, unknown>;
+  const groups = [...code.matchAll(/import\s*\{([^}]*)\}\s*from\s*['"]@jinx-ui\/react(?:\/runtime)?['"]/g)];
+  const names = groups
+    .flatMap((group) => (group[1] ?? '').split(','))
+    .map((part) => part.split(' as ')[0]?.replace(/\btype\b/, '').trim() ?? '')
+    .filter((name) => /^[A-Za-z_$][\w$]*$/.test(name));
+  return [...new Set(names.filter((name) => library[name] === undefined))];
+}
+
+function requiredPropNames(code: string): string[] {
+  const signature = code.match(/export\s+default\s+function\s+\w*\s*\(\s*\{([^}]*)\}/);
+  if (!signature?.[1]) return [];
+  return signature[1]
+    .split(',')
+    .filter((part) => !part.includes('='))
+    .map((part) => part.split(':')[0]?.trim() ?? '')
+    .filter((name) => /^[A-Za-z_$][\w$]*$/.test(name));
+}
+
+function guessProp(name: string): unknown {
+  if (/^on[A-Z]/.test(name)) return () => undefined;
+  if (/^(is|has|can|should)[A-Z]/.test(name)) return false;
+  if (/(s|list|data|rows|items|options|columns)$/i.test(name)) return [];
+  if (/(count|total|index|page|size|step)$/i.test(name)) return 0;
+  return '';
+}
+
+function fillProps(names: string[]): Record<string, unknown> {
+  return Object.fromEntries(names.map((name) => [name, guessProp(name)]));
+}
+
 class Boundary extends React.Component<{ children: React.ReactNode }, { error?: string }> {
   override state: { error?: string } = {};
 
@@ -118,17 +152,39 @@ function applyMode(theme?: string, style?: string): void {
   if (style) html.setAttribute('data-style', style);
 }
 
-function render(message: RenderMessage, source: MessageEventSource | null): void {
+function mount(Component: React.ComponentType, props?: Record<string, unknown>): void {
   lastError = undefined;
+  root ??= ReactDOMClient.createRoot(container);
+  attempt += 1;
+  root.render(React.createElement(Boundary, { key: String(attempt), children: React.createElement(Component, props) }));
+}
+
+function render(message: RenderMessage, source: MessageEventSource | null): void {
   applyMode(message.theme, message.style);
   try {
+    const missing = missingExports(message.code);
+    if (missing.length > 0) {
+      throw new Error(`В библиотеке @jinx-ui/react нет: ${missing.join(', ')}. Превью не строится, пока компонент ссылается на то, чего не существует.`);
+    }
     const Component = evaluate(message.code);
-    root ??= ReactDOMClient.createRoot(container);
-    root.render(React.createElement(Boundary, null, React.createElement(Component)));
+    mount(Component);
     window.setTimeout(() => {
-      const error = lastError;
-      reply({ type: 'rendered', ok: !error, ...(error ? { error } : {}), height: contentHeight() }, source);
-      watchHeight();
+      const failed = lastError;
+      const names = failed ? requiredPropNames(message.code) : [];
+      if (!failed || names.length === 0) {
+        reply({ type: 'rendered', ok: !failed, ...(failed ? { error: failed } : {}), height: contentHeight() }, source);
+        watchHeight();
+        return;
+      }
+      mount(Component, fillProps(names));
+      window.setTimeout(() => {
+        const error = lastError;
+        reply(
+          { type: 'rendered', ok: !error, ...(error ? { error } : {}), ...(error ? {} : { filledProps: names }), height: contentHeight() },
+          source,
+        );
+        watchHeight();
+      }, 120);
     }, 120);
   } catch (error) {
     const text = error instanceof Error ? error.message : String(error);

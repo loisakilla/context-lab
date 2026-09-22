@@ -23,11 +23,15 @@ export interface RunOptions {
 }
 
 export function modelSlug(model: string): string {
-  return model.replace(/[^a-z0-9.-]+/gi, '-');
+  return slugify(model);
+}
+
+export function slugify(value: string): string {
+  return value.replace(/[^a-z0-9.-]+/gi, '-');
 }
 
 export function runFileName(task: Task, mode: ContextMode, driver: string, model: string, repeat: number): string {
-  return `${task.id}__${mode}__${driver}__${modelSlug(model)}__${repeat}.json`;
+  return `${task.id}__${slugify(mode)}__${driver}__${modelSlug(model)}__${repeat}.json`;
 }
 
 export function scoreOf(record: Pick<RunRecord, 'checks'>): number {

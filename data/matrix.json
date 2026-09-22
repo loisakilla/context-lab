@@ -122,9 +122,9 @@
       "taskId": "appearance-settings",
       "mode": "docs+rules",
       "runs": [
-        "appearance-settings__docs+rules__claude-code__claude-opus-5__1",
-        "appearance-settings__docs+rules__claude-code__claude-opus-5__2",
-        "appearance-settings__docs+rules__claude-code__claude-opus-5__3"
+        "appearance-settings__docs-rules__claude-code__claude-opus-5__1",
+        "appearance-settings__docs-rules__claude-code__claude-opus-5__2",
+        "appearance-settings__docs-rules__claude-code__claude-opus-5__3"
       ],
       "passRate": 1,
       "medianTokens": 43169,
@@ -217,9 +217,9 @@
       "taskId": "confirm-delete",
       "mode": "docs+rules",
       "runs": [
-        "confirm-delete__docs+rules__claude-code__claude-opus-5__1",
-        "confirm-delete__docs+rules__claude-code__claude-opus-5__2",
-        "confirm-delete__docs+rules__claude-code__claude-opus-5__3"
+        "confirm-delete__docs-rules__claude-code__claude-opus-5__1",
+        "confirm-delete__docs-rules__claude-code__claude-opus-5__2",
+        "confirm-delete__docs-rules__claude-code__claude-opus-5__3"
       ],
       "passRate": 1,
       "medianTokens": 39087,
@@ -312,9 +312,9 @@
       "taskId": "date-range",
       "mode": "docs+rules",
       "runs": [
-        "date-range__docs+rules__claude-code__claude-opus-5__1",
-        "date-range__docs+rules__claude-code__claude-opus-5__2",
-        "date-range__docs+rules__claude-code__claude-opus-5__3"
+        "date-range__docs-rules__claude-code__claude-opus-5__1",
+        "date-range__docs-rules__claude-code__claude-opus-5__2",
+        "date-range__docs-rules__claude-code__claude-opus-5__3"
       ],
       "passRate": 1,
       "medianTokens": 39462,
@@ -407,9 +407,9 @@
       "taskId": "invite-form",
       "mode": "docs+rules",
       "runs": [
-        "invite-form__docs+rules__claude-code__claude-opus-5__1",
-        "invite-form__docs+rules__claude-code__claude-opus-5__2",
-        "invite-form__docs+rules__claude-code__claude-opus-5__3"
+        "invite-form__docs-rules__claude-code__claude-opus-5__1",
+        "invite-form__docs-rules__claude-code__claude-opus-5__2",
+        "invite-form__docs-rules__claude-code__claude-opus-5__3"
       ],
       "passRate": 1,
       "medianTokens": 42936,
@@ -502,9 +502,9 @@
       "taskId": "settings-form",
       "mode": "docs+rules",
       "runs": [
-        "settings-form__docs+rules__claude-code__claude-opus-5__1",
-        "settings-form__docs+rules__claude-code__claude-opus-5__2",
-        "settings-form__docs+rules__claude-code__claude-opus-5__3"
+        "settings-form__docs-rules__claude-code__claude-opus-5__1",
+        "settings-form__docs-rules__claude-code__claude-opus-5__2",
+        "settings-form__docs-rules__claude-code__claude-opus-5__3"
       ],
       "passRate": 1,
       "medianTokens": 39477,
@@ -597,9 +597,9 @@
       "taskId": "side-nav",
       "mode": "docs+rules",
       "runs": [
-        "side-nav__docs+rules__claude-code__claude-opus-5__1",
-        "side-nav__docs+rules__claude-code__claude-opus-5__2",
-        "side-nav__docs+rules__claude-code__claude-opus-5__3"
+        "side-nav__docs-rules__claude-code__claude-opus-5__1",
+        "side-nav__docs-rules__claude-code__claude-opus-5__2",
+        "side-nav__docs-rules__claude-code__claude-opus-5__3"
       ],
       "passRate": 1,
       "medianTokens": 39067,
@@ -692,9 +692,9 @@
       "taskId": "subscribe-toast",
       "mode": "docs+rules",
       "runs": [
-        "subscribe-toast__docs+rules__claude-code__claude-opus-5__1",
-        "subscribe-toast__docs+rules__claude-code__claude-opus-5__2",
-        "subscribe-toast__docs+rules__claude-code__claude-opus-5__3"
+        "subscribe-toast__docs-rules__claude-code__claude-opus-5__1",
+        "subscribe-toast__docs-rules__claude-code__claude-opus-5__2",
+        "subscribe-toast__docs-rules__claude-code__claude-opus-5__3"
       ],
       "passRate": 1,
       "medianTokens": 39076,
@@ -787,9 +787,9 @@
       "taskId": "tag-picker",
       "mode": "docs+rules",
       "runs": [
-        "tag-picker__docs+rules__claude-code__claude-opus-5__1",
-        "tag-picker__docs+rules__claude-code__claude-opus-5__2",
-        "tag-picker__docs+rules__claude-code__claude-opus-5__3"
+        "tag-picker__docs-rules__claude-code__claude-opus-5__1",
+        "tag-picker__docs-rules__claude-code__claude-opus-5__2",
+        "tag-picker__docs-rules__claude-code__claude-opus-5__3"
       ],
       "passRate": 1,
       "medianTokens": 39175,
@@ -882,9 +882,9 @@
       "taskId": "usage-dashboard",
       "mode": "docs+rules",
       "runs": [
-        "usage-dashboard__docs+rules__claude-code__claude-opus-5__1",
-        "usage-dashboard__docs+rules__claude-code__claude-opus-5__2",
-        "usage-dashboard__docs+rules__claude-code__claude-opus-5__3"
+        "usage-dashboard__docs-rules__claude-code__claude-opus-5__1",
+        "usage-dashboard__docs-rules__claude-code__claude-opus-5__2",
+        "usage-dashboard__docs-rules__claude-code__claude-opus-5__3"
       ],
       "passRate": 1,
       "medianTokens": 43878,
@@ -977,9 +977,9 @@
       "taskId": "users-table",
       "mode": "docs+rules",
       "runs": [
-        "users-table__docs+rules__claude-code__claude-opus-5__1",
-        "users-table__docs+rules__claude-code__claude-opus-5__2",
-        "users-table__docs+rules__claude-code__claude-opus-5__3"
+        "users-table__docs-rules__claude-code__claude-opus-5__1",
+        "users-table__docs-rules__claude-code__claude-opus-5__2",
+        "users-table__docs-rules__claude-code__claude-opus-5__3"
       ],
       "passRate": 1,
       "medianTokens": 39208,
@@ -1072,9 +1072,9 @@
       "taskId": "wizard",
       "mode": "docs+rules",
       "runs": [
-        "wizard__docs+rules__claude-code__claude-opus-5__1",
-        "wizard__docs+rules__claude-code__claude-opus-5__2",
-        "wizard__docs+rules__claude-code__claude-opus-5__3"
+        "wizard__docs-rules__claude-code__claude-opus-5__1",
+        "wizard__docs-rules__claude-code__claude-opus-5__2",
+        "wizard__docs-rules__claude-code__claude-opus-5__3"
       ],
       "passRate": 1,
       "medianTokens": 40292,

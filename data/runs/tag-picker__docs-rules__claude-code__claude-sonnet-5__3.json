@@ -1,0 +1,104 @@
+{
+  "id": "tag-picker__docs-rules__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-22T09:58:48.587Z",
+  "repeat": 3,
+  "durationMs": 21631,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "docs+rules",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 19445,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.0",
+        "tokens": 18550
+      },
+      {
+        "kind": "rules",
+        "id": "jinx-ui",
+        "version": "0.1.0",
+        "tokens": 741
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 41790,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 41790,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2603,
+    "cacheRead": 41790,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.08597999999999999,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { KeyboardEvent, useState } from 'react';\nimport { JxInputField, JxChip, useControllableState } from '@jinx-ui/react';\n\ninterface TagCollectorProps {\n  value?: string[];\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n  label?: string;\n  placeholder?: string;\n}\n\nexport default function TagCollector({\n  value,\n  defaultValue = [],\n  onChange,\n  label = 'Теги',\n  placeholder = 'Введите тег и нажмите Enter',\n}: TagCollectorProps) {\n  const [tags, setTags] = useControllableState<string[]>(value, defaultValue, onChange);\n  const [draft, setDraft] = useState('');\n\n  const addTag = () => {\n    const trimmed = draft.trim();\n    if (!trimmed || tags.includes(trimmed)) {\n      setDraft('');\n      return;\n    }\n    setTags([...tags, trimmed]);\n    setDraft('');\n  };\n\n  const removeTag = (tag: string) => {\n    setTags(tags.filter((item) => item !== tag));\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter') {\n      event.preventDefault();\n      addTag();\n    } else if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      setTags(tags.slice(0, -1));\n    }\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-gap, 8px)' }}>\n      <JxInputField\n        label={label}\n        placeholder={placeholder}\n        value={draft}\n        onChange={(event) => setDraft(event.target.value)}\n        onKeyDown={handleKeyDown}\n      />\n      {tags.length > 0 && (\n        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--jx-gap, 8px)' }}>\n          {tags.map((tag) => (\n            <JxChip key={tag} removable onRemove={() => removeTag(tag)}>\n              {tag}\n            </JxChip>\n          ))}\n        </div>\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { KeyboardEvent, useState } from 'react';\nimport { JxInputField, JxChip, useControllableState } from '@jinx-ui/react';\n\ninterface TagCollectorProps {\n  value?: string[];\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n  label?: string;\n  placeholder?: string;\n}\n\nexport default function TagCollector({\n  value,\n  defaultValue = [],\n  onChange,\n  label = 'Теги',\n  placeholder = 'Введите тег и нажмите Enter',\n}: TagCollectorProps) {\n  const [tags, setTags] = useControllableState<string[]>(value, defaultValue, onChange);\n  const [draft, setDraft] = useState('');\n\n  const addTag = () => {\n    const trimmed = draft.trim();\n    if (!trimmed || tags.includes(trimmed)) {\n      setDraft('');\n      return;\n    }\n    setTags([...tags, trimmed]);\n    setDraft('');\n  };\n\n  const removeTag = (tag: string) => {\n    setTags(tags.filter((item) => item !== tag));\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter') {\n      event.preventDefault();\n      addTag();\n    } else if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      setTags(tags.slice(0, -1));\n    }\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-gap, 8px)' }}>\n      <JxInputField\n        label={label}\n        placeholder={placeholder}\n        value={draft}\n        onChange={(event) => setDraft(event.target.value)}\n        onKeyDown={handleKeyDown}\n      />\n      {tags.length > 0 && (\n        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--jx-gap, 8px)' }}>\n          {tags.map((tag) => (\n            <JxChip key={tag} removable onRemove={() => removeTag(tag)}>\n              {tag}\n            </JxChip>\n          ))}\n        </div>\n      )}\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 46,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 55,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxChip",
+      "JxInputField"
+    ],
+    "expectedCoverage": 0,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.7
+  }
+}

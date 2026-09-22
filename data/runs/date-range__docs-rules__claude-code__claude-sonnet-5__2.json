@@ -1,0 +1,96 @@
+{
+  "id": "date-range__docs-rules__claude-code__claude-sonnet-5__2",
+  "createdAt": "2026-09-22T09:59:18.886Z",
+  "repeat": 2,
+  "durationMs": 7611,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "docs+rules",
+  "task": {
+    "id": "date-range",
+    "title": "Выбор периода",
+    "prompt": "Сделай выбор даты отчёта: календарь на месяц и над ним ряд быстрых вариантов «Сегодня», «Вчера», «Неделя назад», при нажатии на которые дата подставляется в календарь. Выбранная дата отдаётся наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxCalendar",
+      "JxChip"
+    ]
+  },
+  "context": {
+    "tokens": 19445,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.0",
+        "tokens": 18550
+      },
+      {
+        "kind": "rules",
+        "id": "jinx-ui",
+        "version": "0.1.0",
+        "tokens": 741
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 41807,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 769,
+    "cacheRead": 41807,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0401385,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ninterface ReportDatePickerProps {\n  onChange?: (date: Date) => void;\n}\n\nfunction startOfDay(date: Date): Date {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n}\n\nfunction addDays(date: Date, days: number): Date {\n  const result = new Date(date);\n  result.setDate(result.getDate() + days);\n  return result;\n}\n\nfunction isSameDay(a: Date, b: Date): boolean {\n  return (\n    a.getFullYear() === b.getFullYear() &&\n    a.getMonth() === b.getMonth() &&\n    a.getDate() === b.getDate()\n  );\n}\n\nexport default function ReportDatePicker({ onChange }: ReportDatePickerProps) {\n  const [selectedDate, setSelectedDate] = useState<Date>(() => startOfDay(new Date()));\n\n  const today = startOfDay(new Date());\n  const yesterday = addDays(today, -1);\n  const weekAgo = addDays(today, -7);\n\n  const quickOptions = [\n    { label: 'Сегодня', date: today },\n    { label: 'Вчера', date: yesterday },\n    { label: 'Неделя назад', date: weekAgo },\n  ];\n\n  const applyDate = (date: Date) => {\n    setSelectedDate(date);\n    onChange?.(date);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-r-sm)' }}>\n      <div style={{ display: 'flex', gap: 'var(--jx-r-sm)' }}>\n        {quickOptions.map((option) => (\n          <JxChip\n            key={option.label}\n            active={isSameDay(selectedDate, option.date)}\n            onClick={() => applyDate(option.date)}\n          >\n            {option.label}\n          </JxChip>\n        ))}\n      </div>\n      <JxCalendar\n        locale=\"ru-RU\"\n        value={selectedDate}\n        onValueChange={(date) => {\n          if (date) {\n            applyDate(startOfDay(date));\n          }\n        }}\n      />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ninterface ReportDatePickerProps {\n  onChange?: (date: Date) => void;\n}\n\nfunction startOfDay(date: Date): Date {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n}\n\nfunction addDays(date: Date, days: number): Date {\n  const result = new Date(date);\n  result.setDate(result.getDate() + days);\n  return result;\n}\n\nfunction isSameDay(a: Date, b: Date): boolean {\n  return (\n    a.getFullYear() === b.getFullYear() &&\n    a.getMonth() === b.getMonth() &&\n    a.getDate() === b.getDate()\n  );\n}\n\nexport default function ReportDatePicker({ onChange }: ReportDatePickerProps) {\n  const [selectedDate, setSelectedDate] = useState<Date>(() => startOfDay(new Date()));\n\n  const today = startOfDay(new Date());\n  const yesterday = addDays(today, -1);\n  const weekAgo = addDays(today, -7);\n\n  const quickOptions = [\n    { label: 'Сегодня', date: today },\n    { label: 'Вчера', date: yesterday },\n    { label: 'Неделя назад', date: weekAgo },\n  ];\n\n  const applyDate = (date: Date) => {\n    setSelectedDate(date);\n    onChange?.(date);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-r-sm)' }}>\n      <div style={{ display: 'flex', gap: 'var(--jx-r-sm)' }}>\n        {quickOptions.map((option) => (\n          <JxChip\n            key={option.label}\n            active={isSameDay(selectedDate, option.date)}\n            onClick={() => applyDate(option.date)}\n          >\n            {option.label}\n          </JxChip>\n        ))}\n      </div>\n      <JxCalendar\n        locale=\"ru-RU\"\n        value={selectedDate}\n        onValueChange={(date) => {\n          if (date) {\n            applyDate(startOfDay(date));\n          }\n        }}\n      />\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 47,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 48,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxCalendar",
+      "JxChip"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

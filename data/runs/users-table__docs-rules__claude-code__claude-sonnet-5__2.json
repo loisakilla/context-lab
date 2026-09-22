@@ -1,0 +1,92 @@
+{
+  "id": "users-table__docs-rules__claude-code__claude-sonnet-5__2",
+  "createdAt": "2026-09-22T09:57:11.722Z",
+  "repeat": 2,
+  "durationMs": 5739,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "docs+rules",
+  "task": {
+    "id": "users-table",
+    "title": "Таблица пользователей с пагинацией",
+    "prompt": "Сделай таблицу пользователей с колонками «Имя», «Роль» и «Статус». Список users передаётся пропсом, показывать по десять строк на страницу с постраничной навигацией под таблицей. Статус показывай цветной меткой: активен или отключён.",
+    "taskType": "ui",
+    "expects": [
+      "JxTable",
+      "JxPagination",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 19445,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.0",
+        "tokens": 18550
+      },
+      {
+        "kind": "rules",
+        "id": "jinx-ui",
+        "version": "0.1.0",
+        "tokens": 741
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 41798,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 542,
+    "cacheRead": 41798,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.034459000000000004,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxTable, JxBadge, JxPagination } from '@jinx-ui/react';\n\ninterface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\ninterface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const visible = users.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-r-sm)' }}>\n      <JxTable>\n        <thead>\n          <tr>\n            <th>Имя</th>\n            <th>Роль</th>\n            <th>Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'default'} dot>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n      <JxPagination total={pageCount} page={page} onPageChange={setPage} />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxTable, JxBadge, JxPagination } from '@jinx-ui/react';\n\ninterface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\ninterface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const visible = users.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-r-sm)' }}>\n      <JxTable>\n        <thead>\n          <tr>\n            <th>Имя</th>\n            <th>Роль</th>\n            <th>Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'default'} dot>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n      <JxPagination total={pageCount} page={page} onPageChange={setPage} />\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 23,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxBadge",
+      "JxPagination",
+      "JxTable"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

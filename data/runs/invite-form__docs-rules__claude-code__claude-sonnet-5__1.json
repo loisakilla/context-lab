@@ -1,0 +1,107 @@
+{
+  "id": "invite-form__docs-rules__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-22T10:00:38.945Z",
+  "repeat": 1,
+  "durationMs": 9215,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "docs+rules",
+  "task": {
+    "id": "invite-form",
+    "title": "Приглашение в команду с валидацией",
+    "prompt": "Сделай форму приглашения в команду: поле почты с подсказкой под ним, выбор роли из списка, переключатель «отправить уведомление» и кнопка отправки. Пока почта не похожа на адрес, поле показывает ошибку и кнопка заблокирована. После отправки над формой появляется сообщение об успехе, которое можно закрыть.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxAlert",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 19445,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.0",
+        "tokens": 18550
+      },
+      {
+        "kind": "rules",
+        "id": "jinx-ui",
+        "version": "0.1.0",
+        "tokens": 741
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 8235,
+        "cacheCreation": 33593
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 815,
+    "cacheRead": 8235,
+    "cacheCreation": 33593
+  },
+  "costUsd": 0.23445875,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport {\n  JxInputField,\n  JxSelect,\n  JxSwitch,\n  JxButton,\n  JxAlert,\n} from '@jinx-ui/react';\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nconst roleOptions = [\n  { value: 'member', label: 'Участник' },\n  { value: 'admin', label: 'Администратор' },\n  { value: 'viewer', label: 'Наблюдатель' },\n];\n\nexport default function InviteMemberForm() {\n  const [email, setEmail] = useState('');\n  const [role, setRole] = useState('member');\n  const [notify, setNotify] = useState(true);\n  const [submitted, setSubmitted] = useState(false);\n\n  const isEmailValid = EMAIL_PATTERN.test(email);\n  const showError = email.length > 0 && !isEmailValid;\n\n  const handleSubmit = () => {\n    if (!isEmailValid) return;\n    setSubmitted(true);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-r-sm, 12px)' }}>\n      {submitted && (\n        <JxAlert\n          intent=\"success\"\n          title=\"Приглашение отправлено\"\n          onClose={() => setSubmitted(false)}\n        >\n          Мы пригласили {email} в команду.\n        </JxAlert>\n      )}\n\n      <JxInputField\n        label=\"Электронная почта\"\n        type=\"email\"\n        required\n        placeholder=\"name@company.com\"\n        helperText=\"Мы отправим приглашение на этот адрес\"\n        errorText={showError ? 'Похоже, это не адрес почты' : undefined}\n        value={email}\n        onChange={(event) => setEmail(event.target.value)}\n      />\n\n      <JxSelect\n        label=\"Роль\"\n        options={roleOptions}\n        value={role}\n        onValueChange={setRole}\n      />\n\n      <JxSwitch\n        label=\"Отправить уведомление о приглашении\"\n        checked={notify}\n        onChange={(event) => setNotify(event.target.checked)}\n      />\n\n      <JxButton\n        variant=\"primary\"\n        type=\"button\"\n        disabled={!isEmailValid}\n        onClick={handleSubmit}\n      >\n        Пригласить\n      </JxButton>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport {\n  JxInputField,\n  JxSelect,\n  JxSwitch,\n  JxButton,\n  JxAlert,\n} from '@jinx-ui/react';\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nconst roleOptions = [\n  { value: 'member', label: 'Участник' },\n  { value: 'admin', label: 'Администратор' },\n  { value: 'viewer', label: 'Наблюдатель' },\n];\n\nexport default function InviteMemberForm() {\n  const [email, setEmail] = useState('');\n  const [role, setRole] = useState('member');\n  const [notify, setNotify] = useState(true);\n  const [submitted, setSubmitted] = useState(false);\n\n  const isEmailValid = EMAIL_PATTERN.test(email);\n  const showError = email.length > 0 && !isEmailValid;\n\n  const handleSubmit = () => {\n    if (!isEmailValid) return;\n    setSubmitted(true);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-r-sm, 12px)' }}>\n      {submitted && (\n        <JxAlert\n          intent=\"success\"\n          title=\"Приглашение отправлено\"\n          onClose={() => setSubmitted(false)}\n        >\n          Мы пригласили {email} в команду.\n        </JxAlert>\n      )}\n\n      <JxInputField\n        label=\"Электронная почта\"\n        type=\"email\"\n        required\n        placeholder=\"name@company.com\"\n        helperText=\"Мы отправим приглашение на этот адрес\"\n        errorText={showError ? 'Похоже, это не адрес почты' : undefined}\n        value={email}\n        onChange={(event) => setEmail(event.target.value)}\n      />\n\n      <JxSelect\n        label=\"Роль\"\n        options={roleOptions}\n        value={role}\n        onValueChange={setRole}\n      />\n\n      <JxSwitch\n        label=\"Отправить уведомление о приглашении\"\n        checked={notify}\n        onChange={(event) => setNotify(event.target.checked)}\n      />\n\n      <JxButton\n        variant=\"primary\"\n        type=\"button\"\n        disabled={!isEmailValid}\n        onClick={handleSubmit}\n      >\n        Пригласить\n      </JxButton>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2322,
+          "line": 38,
+          "message": "Type '{ children: string[]; intent: \"success\"; title: string; onClose: () => void; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributes<HTMLDivElement> & { intent?: JxAlertIntent | undefined; title: ReactNode; icon?: ReactNode; children?: ReactNode; }'.\n  Property 'onClose' does not exist on type 'IntrinsicAttributes & HTMLAttributes<HTMLDivElement> & { intent?: JxAlertIntent | undefined; title: ReactNode; icon?: ReactNode; children?: ReactNode; }'."
+        }
+      ],
+      "unknownComponents": [],
+      "unknownProps": [
+        {
+          "component": "JxAlert",
+          "prop": "onClose"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 33,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxAlert",
+      "JxButton",
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch"
+    ],
+    "expectedCoverage": 1,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.86
+  }
+}

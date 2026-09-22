@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 export interface RenderStatus {
   ok: boolean;
   error?: string;
+  filledProps?: string[];
 }
 
 interface PreviewProps {
@@ -17,6 +18,7 @@ interface PreviewMessage {
   ok?: boolean;
   error?: string;
   height?: number;
+  filledProps?: string[];
 }
 
 const MIN_HEIGHT = 320;
@@ -64,7 +66,11 @@ export function Preview({ code, onRendered }: PreviewProps) {
       if (event.data?.type === 'preview-ready') setReady(true);
       if (event.data?.type === 'height' && typeof event.data.height === 'number') setHeight(clamp(event.data.height));
       if (event.data?.type === 'rendered') {
-        const next: RenderStatus = { ok: event.data.ok === true, ...(event.data.error ? { error: event.data.error } : {}) };
+        const next: RenderStatus = {
+          ok: event.data.ok === true,
+          ...(event.data.error ? { error: event.data.error } : {}),
+          ...(event.data.filledProps ? { filledProps: event.data.filledProps } : {}),
+        };
         setStatus(next);
         if (typeof event.data.height === 'number') setHeight(clamp(event.data.height));
         onRendered?.(next);
@@ -92,6 +98,11 @@ export function Preview({ code, onRendered }: PreviewProps) {
         style={{ height, width: '100%', border: '2px solid var(--jx-border)', borderRadius: 'var(--jx-r, 4px)', background: 'var(--jx-bg)' }}
       />
       {status && !status.ok && <pre className="code-block text-[var(--jx-danger)]">{status.error}</pre>}
+      {status?.filledProps && status.filledProps.length > 0 && (
+        <p className="text-sm opacity-70">
+          Компонент требует пропсы, поэтому превью подставило пустые значения: {status.filledProps.join(', ')}.
+        </p>
+      )}
     </div>
   );
 }
