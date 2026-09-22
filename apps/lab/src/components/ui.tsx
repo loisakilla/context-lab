@@ -1,13 +1,23 @@
 'use client';
 
-import type { ChangeEvent, ReactNode, TextareaHTMLAttributes } from 'react';
+import type { ReactNode, TextareaHTMLAttributes } from 'react';
+import { JxAlert, JxBadge, JxButton, JxSelect, JxTabs, JxTextareaField } from '@jinx-ui/react';
 
-export function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
+type Tone = 'default' | 'ok' | 'bad' | 'warn' | 'accent';
+
+const BADGE_TONES: Record<Tone, 'default' | 'success' | 'danger' | 'warning' | 'accent'> = {
+  default: 'default',
+  ok: 'success',
+  bad: 'danger',
+  warn: 'warning',
+  accent: 'accent',
+};
+
+export function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <label className="field">
-      <span className="label">{label}</span>
+    <label className="jx-field">
+      <span className="jx-label">{label}</span>
       {children}
-      {hint && <span className="dim text-[13px] leading-snug">{hint}</span>}
     </label>
   );
 }
@@ -23,25 +33,11 @@ export function Select({
   options: { value: string; label: string }[];
   onValueChange: (value: string) => void;
 }) {
-  return (
-    <Field label={label}>
-      <select className="input" value={value} onChange={(event: ChangeEvent<HTMLSelectElement>) => onValueChange(event.target.value)}>
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </Field>
-  );
+  return <JxSelect label={label} options={options} value={value} onValueChange={onValueChange} />;
 }
 
 export function Textarea({ label, ...rest }: { label: string } & TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return (
-    <Field label={label}>
-      <textarea className="input" {...rest} />
-    </Field>
-  );
+  return <JxTextareaField label={label} {...rest} />;
 }
 
 export function Tabs({
@@ -49,30 +45,13 @@ export function Tabs({
   items,
   value,
   onValueChange,
-  block = false,
 }: {
   ariaLabel: string;
   items: { value: string; label: string }[];
   value: string;
   onValueChange: (value: string) => void;
-  block?: boolean;
 }) {
-  return (
-    <div className={block ? 'seg seg--block' : 'seg'} role="tablist" aria-label={ariaLabel}>
-      {items.map((item) => (
-        <button
-          key={item.value}
-          type="button"
-          role="tab"
-          aria-selected={item.value === value}
-          className="seg__item"
-          onClick={() => onValueChange(item.value)}
-        >
-          {item.label}
-        </button>
-      ))}
-    </div>
-  );
+  return <JxTabs ariaLabel={ariaLabel} items={items} value={value} onValueChange={onValueChange} />;
 }
 
 export function Button({
@@ -89,47 +68,33 @@ export function Button({
   type?: 'button' | 'submit';
 }) {
   return (
-    <button type={type} className={`btn btn--${variant}`} onClick={onClick} disabled={disabled}>
+    <JxButton type={type} variant={variant === 'flat' ? 'secondary' : variant} onClick={onClick} disabled={disabled}>
       {children}
-    </button>
+    </JxButton>
   );
 }
 
-export function Badge({
-  children,
-  tone = 'default',
-  dot = false,
-  mono = false,
-}: {
-  children: ReactNode;
-  tone?: 'default' | 'ok' | 'bad' | 'warn' | 'accent';
-  dot?: boolean;
-  mono?: boolean;
-}) {
-  const classes = ['chip', tone === 'default' ? '' : `chip--${tone}`, mono ? 'chip--mono' : ''].filter(Boolean).join(' ');
+export function Badge({ children, tone = 'default', dot = false }: { children: ReactNode; tone?: Tone; dot?: boolean }) {
   return (
-    <span className={classes}>
-      {dot && <span className="dot" />}
+    <JxBadge tone={BADGE_TONES[tone]} dot={dot}>
       {children}
-    </span>
+    </JxBadge>
   );
 }
 
 export function Note({ tone = 'warn', title, children }: { tone?: 'warn' | 'bad'; title: string; children: ReactNode }) {
   return (
-    <div className={`note note--${tone}`}>
-      <span className="note__title">{title}</span>
-      <div className="note__body">{children}</div>
-    </div>
+    <JxAlert intent={tone === 'bad' ? 'danger' : 'warning'} title={title}>
+      {children}
+    </JxAlert>
   );
 }
 
 export function Stat({ label, value, tone }: { label: string; value: string; tone?: 'accent' | 'ok' | 'bad' }) {
-  const color = tone === 'bad' ? 'var(--danger)' : tone === 'ok' ? 'var(--success)' : tone === 'accent' ? 'var(--accent-text)' : 'var(--fg)';
   return (
     <div className="stat">
-      <span className="label">{label}</span>
-      <span className="stat__value" style={{ color }}>
+      <span className="jx-label">{label}</span>
+      <span className="stat__value" style={tone === 'bad' ? { color: 'var(--jx-danger)' } : undefined}>
         {value}
       </span>
     </div>

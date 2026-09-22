@@ -50,10 +50,10 @@ export function ContextPreview({ mode, task, sources }: ContextPreviewProps) {
 
   return (
     <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]">
-      <div className="card card--lg flex flex-col gap-5">
+      <div className="jx-card flex flex-col gap-5">
         <div className="flex flex-col gap-1">
-          <span className="label">Контекст до задачи</span>
-          <span className="mono text-[28px] leading-none" style={{ color: 'var(--accent-text)' }}>
+          <span className="jx-label">Контекст до задачи</span>
+          <span className="mono text-[28px] leading-none" style={{ color: 'var(--jx-accent)' }}>
             ~{contextTokens(built).toLocaleString('ru-RU')}
             <span className="dim text-[15px]"> токенов</span>
           </span>
@@ -61,7 +61,7 @@ export function ContextPreview({ mode, task, sources }: ContextPreviewProps) {
         <p className="muted text-sm">{MODE_NOTES[mode] ?? ''}</p>
         {built.sources.length > 0 && (
           <>
-            <hr className="divider" />
+            <hr className="rule" />
             <ul className="flex flex-col gap-2">
               {built.sources.map((source) => (
                 <li key={`${source.kind}-${source.id}`} className="flex items-baseline justify-between gap-4 text-sm">
@@ -77,11 +77,11 @@ export function ContextPreview({ mode, task, sources }: ContextPreviewProps) {
       <div className="flex flex-col gap-6">
         {built.tools && (
           <section className="flex flex-col gap-3">
-            <span className="label">Инструменты · {built.tools.length}</span>
+            <span className="jx-label">Инструменты · {built.tools.length}</span>
             <ul className="flex flex-col gap-2 text-sm">
               {built.tools.map((tool) => (
                 <li key={tool.name} className="flex flex-wrap items-baseline gap-x-2">
-                  <code className="mono text-[13px]" style={{ color: 'var(--accent-text)' }}>
+                  <code className="mono text-[13px]" style={{ color: 'var(--jx-accent)' }}>
                     {tool.name}
                   </code>
                   <span className="muted">{shorten(tool.description)}</span>
@@ -92,7 +92,7 @@ export function ContextPreview({ mode, task, sources }: ContextPreviewProps) {
         )}
 
         <section className="flex flex-col gap-3">
-          <span className="label">Задача агенту</span>
+          <span className="jx-label">Задача агенту</span>
           <pre className="code max-h-80 overflow-auto">{built.taskText}</pre>
         </section>
 

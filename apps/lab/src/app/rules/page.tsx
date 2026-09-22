@@ -24,7 +24,7 @@ function RuleBody({ text }: { text: string }) {
     <p className="max-w-[80ch]">
       {parts.map((part, index) =>
         index % 2 === 1 ? (
-          <code key={index} className="mono rounded-[5px] px-1.5 py-0.5 text-[13.5px]" style={{ background: 'var(--surface-2)' }}>
+          <code key={index} className="mono rounded-[5px] px-1.5 py-0.5 text-[13.5px]" style={{ background: 'var(--jx-surface-2)' }}>
             {part}
           </code>
         ) : (
@@ -38,13 +38,13 @@ function RuleBody({ text }: { text: string }) {
 function Switcher({ label, values, current, href }: { label: string; values: string[]; current: string; href: (value: string) => string }) {
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-      <span className="label w-24 shrink-0">{label}</span>
-      <div className="seg">
+      <span className="jx-label w-24 shrink-0">{label}</span>
+      <div className="flex flex-wrap gap-2">
         {values.map((value) => (
           <Link
             key={value}
             href={href(value)}
-            className="seg__item seg__item--link"
+            className={value === current ? 'jx-btn jx-btn--sm jx-btn--primary' : 'jx-btn jx-btn--sm jx-btn--secondary'}
             {...(value === current ? { 'aria-current': 'page' as const } : {})}
           >
             {value}
@@ -74,12 +74,12 @@ export default async function RulesPage({ searchParams }: { searchParams: Promis
           </p>
         </header>
 
-        <div className="card card--lg flex flex-col gap-5">
+        <div className="jx-card flex flex-col gap-5">
           <Switcher label="Набор" values={sets} current={set} href={(value) => `/rules?set=${value}&task=${taskType}`} />
           <Switcher label="Тип задачи" values={TASK_TYPES} current={taskType} href={(value) => `/rules?set=${set}&task=${value}`} />
           {resolution && (
             <>
-              <hr className="divider" />
+              <hr className="rule" />
               <div className="grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-3">
                 <Stat label="Цепочка наследования" value={resolution.chain.join(' → ')} />
                 <Stat label="Правил в наборе" value={String(resolution.rules.length)} />
@@ -95,7 +95,7 @@ export default async function RulesPage({ searchParams }: { searchParams: Promis
           <>
             <section className="flex flex-col gap-4">
               {resolution.rules.map((rule) => (
-                <article key={rule.qualifiedId} className="card card--lg flex flex-col gap-3">
+                <article key={rule.qualifiedId} className="jx-card flex flex-col gap-3">
                   <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
                     <h2>{rule.title}</h2>
                     <code className="dim mono text-[13px]">
@@ -106,10 +106,10 @@ export default async function RulesPage({ searchParams }: { searchParams: Promis
                   <div className="flex flex-wrap items-center gap-2 pt-1">
                     <Badge>из {rule.definedIn}</Badge>
                     <Badge>приоритет {rule.priority}</Badge>
-                    <Badge mono>~{rule.tokens} ток.</Badge>
+                    <Badge>~{rule.tokens} ток.</Badge>
                     {rule.overrides && <Badge tone="warn">переопределяет {rule.overrides}</Badge>}
                     {rule.refines && <Badge tone="accent">уточняет {rule.refines}</Badge>}
-                    {rule.appliesTo.length > 0 && <Badge mono>{rule.appliesTo.join(', ')}</Badge>}
+                    {rule.appliesTo.length > 0 && <Badge>{rule.appliesTo.join(', ')}</Badge>}
                     {rule.taskTypes.length > 0 && <Badge>задачи: {rule.taskTypes.join(', ')}</Badge>}
                   </div>
                 </article>
@@ -118,7 +118,7 @@ export default async function RulesPage({ searchParams }: { searchParams: Promis
 
             {resolution.omitted.length > 0 && (
               <section className="flex flex-col gap-3">
-                <span className="label">Не поместились в бюджет</span>
+                <span className="jx-label">Не поместились в бюджет</span>
                 <ul className="muted flex flex-col gap-1 text-sm">
                   {resolution.omitted.map((rule) => (
                     <li key={rule.qualifiedId}>
@@ -136,10 +136,10 @@ export default async function RulesPage({ searchParams }: { searchParams: Promis
             <h2>Куда это компилируется</h2>
             <p className="muted max-w-[72ch] text-sm">Один источник, четыре цели. CI падает, если файлы разошлись с реестром.</p>
           </div>
-          <ul className="card flex flex-col gap-3">
+          <ul className="jx-card flex flex-col gap-3">
             {TARGET_FILES.map(([target, files]) => (
               <li key={target} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm">
-                <code className="mono text-[13px]" style={{ color: 'var(--accent-text)' }}>
+                <code className="mono text-[13px]" style={{ color: 'var(--jx-accent)' }}>
                   {target}
                 </code>
                 <span className="muted">{files}</span>

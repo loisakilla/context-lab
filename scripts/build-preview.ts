@@ -28,7 +28,7 @@ const styles = result.outputFiles.find((file) => file.path.endsWith('.css'))?.te
 if (script.length === 0) throw new Error('esbuild не собрал скрипт превью');
 
 const shell = `<!doctype html>
-<html lang="ru" data-theme="dark" data-style="brutal">
+<html lang="ru" data-theme="light" data-style="brutal">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

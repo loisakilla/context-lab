@@ -16,7 +16,7 @@ export function RunPane({ record, title }: { record: RunRecord; title: string })
       {record.output.code ? (
         <>
           <section className="flex flex-col gap-3">
-            <span className="label">Рендер</span>
+            <span className="jx-label">Рендер</span>
             <Preview code={record.output.code} onRendered={onRendered} />
           </section>
           <details>

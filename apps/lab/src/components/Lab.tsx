@@ -89,7 +89,7 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
 
   return (
     <div className="flex flex-col gap-12">
-      <section className="card card--lg flex flex-col gap-6">
+      <section className="jx-card flex flex-col gap-6">
         <div className="grid gap-5 lg:grid-cols-[2fr_1fr]">
           <Select
             label="Задача"
@@ -105,37 +105,41 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
         <div className="flex flex-col gap-3">
           {localRunEnabled && (
             <>
-              <span className="label">Как запускать</span>
-              <Tabs
-                ariaLabel="Движок"
-                items={[
-                  { value: 'local', label: 'Claude Code' },
-                  { value: 'byok', label: 'Свой ключ API' },
-                ]}
-                value={engine}
-                onValueChange={(value) => setEngine(value as Engine)}
-              />
+              <span className="jx-label">Как запускать</span>
+              <div className="scroller">
+                <Tabs
+                  ariaLabel="Движок"
+                  items={[
+                    { value: 'local', label: 'Claude Code' },
+                    { value: 'byok', label: 'Свой ключ API' },
+                  ]}
+                  value={engine}
+                  onValueChange={(value) => setEngine(value as Engine)}
+                />
+              </div>
             </>
           )}
           {engine === 'local' ? (
-            <p className="dim max-w-[68ch] text-[13px]">Прогон делает установленный на этой машине Claude Code по подписке, без ключа API.</p>
+            <p className="dim max-w-[68ch]">Прогон делает установленный на этой машине Claude Code по подписке, без ключа API.</p>
           ) : (
             <KeyForm onChange={setApiKey} />
           )}
         </div>
 
-        <hr className="divider" />
+        <hr className="rule" />
 
         <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-5">
-          <div className="field">
-            <span className="label">Режим контекста</span>
-            <Tabs
-              ariaLabel="Режим контекста"
-              items={availableModes.map((candidate) => ({ value: candidate, label: MODE_LABELS[candidate] ?? candidate }))}
-              value={availableModes.includes(mode) ? mode : 'none'}
-              onValueChange={(value) => setMode(value as ContextMode)}
-            />
-            <span className="dim text-[13px]">
+          <div className="jx-field">
+            <span className="jx-label">Режим контекста</span>
+            <div className="scroller">
+              <Tabs
+                ariaLabel="Режим контекста"
+                items={availableModes.map((candidate) => ({ value: candidate, label: MODE_LABELS[candidate] ?? candidate }))}
+                value={availableModes.includes(mode) ? mode : 'none'}
+                onValueChange={(value) => setMode(value as ContextMode)}
+              />
+            </div>
+            <span className="dim">
               {mode === 'mcp'
                 ? engine === 'local'
                   ? 'Claude Code берёт контекст через MCP-сервер репозитория.'

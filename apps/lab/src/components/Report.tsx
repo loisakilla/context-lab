@@ -54,10 +54,10 @@ function Invented({ title, names }: { title: string; names: string[] }) {
   if (names.length === 0) return null;
   return (
     <div className="flex flex-col gap-2">
-      <span className="label">{title}</span>
+      <span className="jx-label">{title}</span>
       <div className="flex flex-wrap gap-1.5">
         {names.map((name) => (
-          <Badge key={name} tone="bad" mono>
+          <Badge key={name} tone="bad">
             {name}
           </Badge>
         ))}
@@ -76,12 +76,12 @@ export function Report({ record, render }: ReportProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="card card--lg flex flex-col gap-6">
-        <div className="card__head">
+      <div className="jx-card flex flex-col gap-6">
+        <div className="card-head">
           <Badge tone={passed ? 'ok' : 'bad'} dot>
             {passed ? 'проверки пройдены' : 'есть проблемы'}
           </Badge>
-          <span className="dim text-[13px]">
+          <span className="dim">
             {MODE_LABELS[record.mode] ?? record.mode} · {record.model} · {DRIVER_LABELS[record.driver] ?? record.driver}
           </span>
         </div>
@@ -101,7 +101,7 @@ export function Report({ record, render }: ReportProps) {
 
       {checks && (
         <div className="grid gap-4 md:grid-cols-2">
-          <section className="card flex flex-col gap-4">
+          <section className="jx-card flex flex-col gap-4">
             <h3>Компилятор</h3>
             {checks.tsc.errors.length === 0 ? (
               <p className="muted text-sm">Ошибок нет: все компоненты и пропсы существуют.</p>
@@ -122,7 +122,7 @@ export function Report({ record, render }: ReportProps) {
             <Invented title="Выдуманные пропсы" names={checks.tsc.unknownProps.map((item) => `${item.component}.${item.prop}`)} />
           </section>
 
-          <section className="card flex flex-col gap-4">
+          <section className="jx-card flex flex-col gap-4">
             <h3>Линтер и покрытие</h3>
             {lintErrors.length === 0 && lintWarnings.length === 0 ? (
               <p className="muted text-sm">Замечаний нет.</p>
@@ -131,7 +131,7 @@ export function Report({ record, render }: ReportProps) {
                 {groupLint([...lintErrors, ...lintWarnings]).map((finding, position) => (
                   <li key={position} className="flex flex-col gap-1.5">
                     <div className="flex flex-wrap items-center gap-2">
-                      <Badge tone={finding.severity === 'error' ? 'bad' : 'warn'} mono>
+                      <Badge tone={finding.severity === 'error' ? 'bad' : 'warn'}>
                         {finding.rule}
                       </Badge>
                       <span className="dim mono text-[12.5px]">
@@ -144,16 +144,16 @@ export function Report({ record, render }: ReportProps) {
               </ul>
             )}
             <div className="flex flex-col gap-1.5">
-              <span className="label">Компоненты библиотеки</span>
+              <span className="jx-label">Компоненты библиотеки</span>
               <p className="text-sm">{checks.usedComponents.length > 0 ? checks.usedComponents.join(', ') : 'ни одного'}</p>
               {record.task.expects.length > 0 && (
-                <p className="dim text-[13px]">
+                <p className="dim">
                   ожидались {record.task.expects.join(', ')} · покрытие {Math.round(checks.expectedCoverage * 100)}%
                 </p>
               )}
             </div>
             {render && (
-              <p className="text-sm" style={{ color: render.ok ? 'var(--muted)' : 'var(--danger)' }}>
+              <p className="text-sm" style={{ color: render.ok ? 'var(--jx-text-3)' : 'var(--jx-danger)' }}>
                 Рендер: {render.ok ? 'без ошибок' : `упал (${render.error ?? 'ошибка'})`}
               </p>
             )}
@@ -163,11 +163,11 @@ export function Report({ record, render }: ReportProps) {
 
       {toolCalls.length > 0 && (
         <section className="flex flex-col gap-2">
-          <span className="label">Вызовы инструментов · {toolCalls.length}</span>
+          <span className="jx-label">Вызовы инструментов · {toolCalls.length}</span>
           <ol className="flex flex-col gap-1">
             {toolCalls.map((call, position) => (
               <li key={position} className="code code--row text-[12.5px]">
-                <span style={{ color: 'var(--accent-text)' }}>{call.name.replace('mcp__context-lab__', '')}</span>
+                <span style={{ color: 'var(--jx-accent)' }}>{call.name.replace('mcp__context-lab__', '')}</span>
                 <span className="dim">({JSON.stringify(call.input)})</span>
                 <span className="muted">
                   {' → '}~{call.resultTokens} токенов{call.isError ? ' · ошибка' : ''}
@@ -179,20 +179,20 @@ export function Report({ record, render }: ReportProps) {
       )}
 
       <section className="flex flex-col gap-1.5">
-        <span className="label">Контекст</span>
+        <span className="jx-label">Контекст</span>
         <p className="muted text-sm">
           {record.context.sources.length > 0
             ? record.context.sources.map((source) => `${source.kind} (${source.id}, ~${source.tokens})`).join(' · ')
             : 'только формулировка задачи'}
         </p>
         {tokens > 0 ? (
-          <p className="dim text-[13px]">
+          <p className="dim">
             вход {record.usage.input.toLocaleString('ru-RU')} · выход {record.usage.output.toLocaleString('ru-RU')} · из кэша{' '}
             {record.usage.cacheRead.toLocaleString('ru-RU')} · в кэш {record.usage.cacheCreation.toLocaleString('ru-RU')}
             {record.durationMs > 0 && ` · ${Math.round(record.durationMs / 1000)} с`}
           </p>
         ) : (
-          <p className="dim text-[13px]">Расход токенов не записан: драйвер {record.driver} его не сообщает.</p>
+          <p className="dim">Расход токенов не записан: драйвер {record.driver} его не сообщает.</p>
         )}
       </section>
     </div>

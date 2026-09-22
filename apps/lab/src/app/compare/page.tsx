@@ -41,13 +41,13 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
           </p>
         </header>
 
-        <div className="card card--lg flex flex-col gap-6">
+        <div className="jx-card flex flex-col gap-6">
           <CompareControls tasks={tasks} modes={modes} task={task} left={left} right={right} />
           {prompt && (
             <>
-              <hr className="divider" />
+              <hr className="rule" />
               <div className="flex flex-col gap-2">
-                <span className="label">Формулировка задачи</span>
+                <span className="jx-label">Формулировка задачи</span>
                 <p className="max-w-[80ch]">{prompt}</p>
               </div>
             </>

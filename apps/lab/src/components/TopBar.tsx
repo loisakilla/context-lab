@@ -12,15 +12,15 @@ export function TopBar({ current }: { current: Page }) {
   return (
     <header className="bar">
       <div className="wrap wrap--wide bar__inner">
-        <Link href="/" className="mark">
-          <span className="mark__glyph" aria-hidden="true">
-            cl
+        <Link href="/" className="jx-logo">
+          <span className="jx-logo-name">
+            Context <em>Lab</em>
           </span>
-          Context&nbsp;Lab
+          <span className="jx-logo-stamp">jinx-ui</span>
         </Link>
         <nav className="nav" aria-label="Разделы">
           {LINKS.map((link) => (
-            <Link key={link.page} href={link.href} className="nav__link" {...(link.page === current ? { 'aria-current': 'page' as const } : {})}>
+            <Link key={link.page} href={link.href} {...(link.page === current ? { 'aria-current': 'page' as const } : {})}>
               {link.label}
             </Link>
           ))}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { JxAlert } from '@jinx-ui/react';
 
 export interface RenderStatus {
   ok: boolean;
@@ -21,7 +22,7 @@ interface PreviewMessage {
   filledProps?: string[];
 }
 
-const MIN_HEIGHT = 320;
+const MIN_HEIGHT = 200;
 const MAX_HEIGHT = 1200;
 
 let shellPromise: Promise<string> | undefined;
@@ -83,10 +84,10 @@ export function Preview({ code, onRendered }: PreviewProps) {
   useEffect(() => {
     if (!ready || !code) return;
     setStatus(null);
-    frame.current?.contentWindow?.postMessage({ type: 'render', code, theme: 'dark', style: 'brutal' }, '*');
+    frame.current?.contentWindow?.postMessage({ type: 'render', code, theme: 'light', style: 'brutal' }, '*');
   }, [ready, code]);
 
-  if (loadError) return <pre className="code" style={{ color: 'var(--danger)' }}>{loadError}</pre>;
+  if (loadError) return <pre className="code" style={{ color: 'var(--jx-danger)' }}>{loadError}</pre>;
 
   const broken = status !== null && !status.ok;
 
@@ -101,20 +102,19 @@ export function Preview({ code, onRendered }: PreviewProps) {
         style={{
           height: broken ? 0 : height,
           width: '100%',
-          border: 'none',
-          borderRadius: 'var(--radius-lg)',
-          background: 'var(--surface)',
+          border: broken ? 'none' : '2px solid var(--jx-border)',
+          borderRadius: 'var(--jx-r)',
+          background: 'var(--jx-bg)',
           display: 'block',
         }}
       />
       {broken && (
-        <div className="note note--bad">
-          <span className="note__title">Превью не построено</span>
-          <p className="note__body">{status?.error}</p>
-        </div>
+        <JxAlert intent="danger" title="Превью не построено">
+          {status?.error}
+        </JxAlert>
       )}
       {status?.filledProps && status.filledProps.length > 0 && (
-        <p className="dim text-[13px]">Компонент требует пропсы, превью подставило пустые значения: {status.filledProps.join(', ')}.</p>
+        <p className="dim">Компонент требует пропсы, превью подставило пустые значения: {status.filledProps.join(', ')}.</p>
       )}
     </div>
   );
