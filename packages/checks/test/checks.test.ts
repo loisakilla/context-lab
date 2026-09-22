@@ -57,6 +57,18 @@ describe('бандл типов', () => {
     expect(Object.keys(bundle.files)).toEqual(expect.arrayContaining(['/node_modules/@jinx-ui/react/src/runtime.d.ts', '/node_modules/@types/react/index.d.ts', '/lib.dom.d.ts']));
     expect(bundle.files['/node_modules/@jinx-ui/react/package.json']).toMatch(/"types"/);
   });
+
+  it('переводит условные exports пакета в пути до d.ts и пропускает лишнее', () => {
+    const manifest = JSON.parse(bundle.files['/node_modules/@jinx-ui/react/package.json'] ?? '{}') as {
+      exports: Record<string, { types: string }>;
+    };
+    expect(manifest.exports['.']?.types).toBe('./src/index.d.ts');
+    expect(manifest.exports['./runtime']?.types).toBe('./src/runtime.d.ts');
+    expect(manifest.exports['./package.json']).toBeUndefined();
+    Object.values(manifest.exports).forEach((entry) => {
+      expect(bundle.files[`/node_modules/@jinx-ui/react/${entry.types.slice(2)}`]).toBeTruthy();
+    });
+  });
 });
 
 describe('проверка компилятором', () => {

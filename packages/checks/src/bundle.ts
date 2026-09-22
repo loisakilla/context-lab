@@ -79,24 +79,41 @@ function emitDeclarations(packageRoot: string, packageName: string, into: Record
   return written;
 }
 
-function readPackageExports(packageRoot: string): Record<string, string> {
+type ExportTarget = string | Record<string, string> | null;
+
+function readPackageExports(packageRoot: string): Record<string, ExportTarget> {
   try {
-    const raw = JSON.parse(readFileSync(path.join(packageRoot, 'package.json'), 'utf8')) as { exports?: Record<string, string> };
+    const raw = JSON.parse(readFileSync(path.join(packageRoot, 'package.json'), 'utf8')) as { exports?: Record<string, ExportTarget> };
     return raw.exports ?? {};
   } catch {
     return {};
   }
 }
 
+function targetPath(target: ExportTarget): string | undefined {
+  if (typeof target === 'string') return target;
+  if (!target) return undefined;
+  return target.types ?? target.import ?? target.default;
+}
+
+function declarationFor(target: ExportTarget): string | undefined {
+  const file = targetPath(target);
+  if (!file || !/\.(ts|tsx|js|mjs|d\.ts)$/.test(file)) return undefined;
+  return file.replace(/^\.\/dist\//, './src/').replace(/\.(d\.ts|tsx?|mjs|js)$/, '.d.ts');
+}
+
 export function buildNodeTypeBundle(options: BundleOptions): TypeBundle {
   const files: Record<string, string> = {};
   for (const [name, content] of createDefaultMapFromNodeModules({ target: ts.ScriptTarget.ES2022 }, ts)) files[name] = content;
 
-  emitDeclarations(options.packageRoot, options.packageName, files);
+  const emitted = new Set(emitDeclarations(options.packageRoot, options.packageName, files));
   const exportsMap = readPackageExports(options.packageRoot);
   const typedExports: Record<string, { types: string }> = {};
   for (const [subpath, target] of Object.entries(exportsMap)) {
-    typedExports[subpath] = { types: target.replace(/\.tsx?$/, '.d.ts') };
+    const declaration = declarationFor(target);
+    if (!declaration) continue;
+    if (!emitted.has(`/node_modules/${options.packageName}/${declaration.replace(/^\.\//, '')}`)) continue;
+    typedExports[subpath] = { types: declaration };
   }
   files[`/node_modules/${options.packageName}/package.json`] = JSON.stringify({ name: options.packageName, types: typedExports['.']?.types ?? './src/index.d.ts', exports: typedExports }, null, 2);
 
