@@ -4,7 +4,7 @@
     "name": "jinx-ui",
     "package": "@jinx-ui/react",
     "version": "0.1.0",
-    "commit": "a0dd3dd743503fbf74146d42928c7811c652e0db"
+    "commit": "9ba963649fa44f02943740d94c87047011089265"
   },
   "components": [
     {
@@ -1220,7 +1220,7 @@
     {
       "name": "JxProgressCircle",
       "file": "packages/react/src/components/Progress.tsx",
-      "line": 39,
+      "line": 40,
       "keywords": [
         "progress circle",
         "круговой прогресс",
