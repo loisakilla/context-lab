@@ -88,100 +88,121 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
   const canRun = !running && task.prompt.length > 0 && (engine === 'local' || (apiKey !== null && apiKey.length > 0));
 
   return (
-    <div className="flex flex-col gap-16">
-      <section className="grid items-start gap-10 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:gap-16">
-        <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-12">
+      <section className="card card--lg flex flex-col gap-6">
+        <div className="grid gap-5 lg:grid-cols-[2fr_1fr]">
           <Select
             label="Задача"
             options={[...tasks.map((item) => ({ value: item.id, label: item.title })), { value: 'custom', label: 'Своя задача' }]}
             value={taskId}
             onValueChange={pickTask}
           />
-          <Textarea label="Формулировка" rows={6} value={prompt} onChange={(event) => setPrompt(event.target.value)} />
+          <Select label="Модель" options={knownModels().map((name) => ({ value: name, label: name }))} value={model} onValueChange={setModel} />
+        </div>
 
-          <div className="flex flex-col gap-3">
-            <span className="field-label">Режим контекста</span>
+        <Textarea label="Формулировка" rows={3} value={prompt} onChange={(event) => setPrompt(event.target.value)} />
+
+        <div className="flex flex-col gap-3">
+          {localRunEnabled && (
+            <>
+              <span className="label">Как запускать</span>
+              <Tabs
+                ariaLabel="Движок"
+                items={[
+                  { value: 'local', label: 'Claude Code' },
+                  { value: 'byok', label: 'Свой ключ API' },
+                ]}
+                value={engine}
+                onValueChange={(value) => setEngine(value as Engine)}
+              />
+            </>
+          )}
+          {engine === 'local' ? (
+            <p className="dim max-w-[68ch] text-[13px]">Прогон делает установленный на этой машине Claude Code по подписке, без ключа API.</p>
+          ) : (
+            <KeyForm onChange={setApiKey} />
+          )}
+        </div>
+
+        <hr className="divider" />
+
+        <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-5">
+          <div className="field">
+            <span className="label">Режим контекста</span>
             <Tabs
               ariaLabel="Режим контекста"
               items={availableModes.map((candidate) => ({ value: candidate, label: MODE_LABELS[candidate] ?? candidate }))}
               value={availableModes.includes(mode) ? mode : 'none'}
               onValueChange={(value) => setMode(value as ContextMode)}
             />
-            <p className="quiet text-sm">
+            <span className="dim text-[13px]">
               {mode === 'mcp'
                 ? engine === 'local'
-                  ? 'Claude Code подключает MCP-сервер репозитория и берёт контекст точечно.'
-                  : 'Те же инструменты, что у MCP-сервера, вызываются через tool use по ходу генерации.'
+                  ? 'Claude Code берёт контекст через MCP-сервер репозитория.'
+                  : 'Инструменты MCP вызываются через tool use по ходу генерации.'
                 : `≈ ${modeTokens[mode].toLocaleString('ru-RU')} токенов контекста до задачи.`}
-            </p>
+            </span>
           </div>
-
-          <Select label="Модель" options={knownModels().map((name) => ({ value: name, label: name }))} value={model} onValueChange={setModel} />
-
-          <div className="flex flex-col gap-3">
-            <span className="field-label">Как запускать</span>
-            <Tabs
-              ariaLabel="Движок"
-              items={[...(localRunEnabled ? [{ value: 'local', label: 'Claude Code' }] : []), { value: 'byok', label: 'Свой ключ API' }]}
-              value={engine}
-              onValueChange={(value) => setEngine(value as Engine)}
-            />
-            {engine === 'local' ? (
-              <p className="quiet text-sm">Прогон делает установленный на этой машине Claude Code по подписке, без ключа API.</p>
-            ) : (
-              <KeyForm onChange={setApiKey} />
-            )}
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Button variant="primary" onClick={start} disabled={!canRun}>
-              {running ? 'Генерируем…' : 'Запустить'}
-            </Button>
+          <div className="flex items-center gap-2">
             {running && (
               <Button variant="ghost" onClick={() => abort.current?.abort()}>
                 Отменить
               </Button>
             )}
+            <Button variant="primary" onClick={start} disabled={!canRun}>
+              {running ? 'Генерируем…' : 'Запустить'}
+            </Button>
           </div>
-          {error && (
-            <Note tone="bad" title="Не получилось">
-              {error}
-            </Note>
-          )}
         </div>
 
-        <div className="flex flex-col gap-5">
-          {!record && !running && !stream && <ContextPreview mode={mode} task={task} sources={sources} />}
-          {running && (
-            <pre className="code max-h-96 overflow-auto">
-              {stream || (engine === 'local' ? 'Claude Code думает… обычно 20–60 секунд.' : 'Ждём первые токены…')}
-            </pre>
-          )}
-          {record && (
-            <>
-              <Report record={record} render={render} />
-              {record.output.code ? (
-                <>
-                  <div className="flex flex-col gap-2">
-                    <span className="field-label">Рендер на Jinx UI</span>
-                    <Preview code={record.output.code} onRendered={onRendered} />
-                  </div>
-                  <details>
-                    <summary>Код</summary>
-                    <pre className="code mt-2 max-h-[32rem] overflow-auto">{record.output.code}</pre>
-                  </details>
-                </>
-              ) : (
-                <pre className="code">{record.output.text}</pre>
-              )}
-            </>
-          )}
-        </div>
+        {error && (
+          <Note tone="bad" title="Не получилось">
+            {error}
+          </Note>
+        )}
       </section>
 
-      <section className="flex flex-col gap-4">
-        <h2>Записанные прогоны</h2>
-        {matrix ? <MatrixTable matrix={matrix} /> : <p className="muted text-sm">Матрица ещё не записана.</p>}
+      <section className="flex flex-col gap-6">
+        {!record && !running && !stream && <ContextPreview mode={mode} task={task} sources={sources} />}
+        {running && (
+          <pre className="code max-h-[32rem] overflow-auto">
+            {stream || (engine === 'local' ? 'Claude Code думает… обычно 20–60 секунд.' : 'Ждём первые токены…')}
+          </pre>
+        )}
+        {record && (
+          <>
+            <Report record={record} render={render} />
+            {record.output.code ? (
+              <>
+                <div className="flex flex-col gap-3">
+                  <h2>Рендер на Jinx UI</h2>
+                  <Preview code={record.output.code} onRendered={onRendered} />
+                </div>
+                <details>
+                  <summary>Код компонента</summary>
+                  <pre className="code mt-3 max-h-[32rem] overflow-auto">{record.output.code}</pre>
+                </details>
+              </>
+            ) : (
+              <pre className="code">{record.output.text}</pre>
+            )}
+          </>
+        )}
+      </section>
+
+      <section className="flex flex-col gap-5">
+        <div className="flex flex-col gap-2">
+          <h2>Записанные прогоны</h2>
+          {matrix ? (
+            <p className="muted max-w-[72ch] text-sm">
+              {matrix.generatedFrom} прогонов · модель {matrix.model} · библиотека {matrix.library?.name}@{matrix.library?.version}. В ячейке: доля прогонов
+              без ошибок, медиана токенов и цены, ходы и время.
+            </p>
+          ) : (
+            <p className="muted text-sm">Матрица ещё не записана.</p>
+          )}
+        </div>
+        {matrix && <MatrixTable matrix={matrix} />}
       </section>
     </div>
   );

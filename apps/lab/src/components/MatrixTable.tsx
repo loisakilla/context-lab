@@ -10,28 +10,22 @@ export const MODE_LABELS: Record<string, string> = {
   mcp: 'MCP',
 };
 
-function verdictColor(passRate: number): string {
-  if (passRate === 1) return 'var(--ok)';
-  if (passRate === 0) return 'var(--bad)';
-  return 'var(--warn)';
+function tone(passRate: number): string {
+  if (passRate === 1) return 'chip chip--ok chip--mono';
+  if (passRate === 0) return 'chip chip--bad chip--mono';
+  return 'chip chip--warn chip--mono';
 }
 
 export function MatrixTable({ matrix }: { matrix: Matrix }) {
   return (
-    <div className="flex flex-col gap-4">
-      <p className="muted max-w-[70ch] text-sm">
-        {matrix.generatedFrom} прогонов · модель {matrix.model} · библиотека {matrix.library?.name}@{matrix.library?.version}. В ячейке: доля прогонов без
-        ошибок, медиана токенов и цены, ходы и время.
-      </p>
+    <div className="card card--flush">
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-sm">
+        <table className="table">
           <thead>
             <tr>
-              <th className="field-label border-b px-3 py-2 text-left" style={{ borderColor: 'var(--line)' }}>
-                Задача
-              </th>
+              <th scope="col">Задача</th>
               {matrix.modes.map((mode) => (
-                <th key={mode} className="field-label border-b px-3 py-2 text-left" style={{ borderColor: 'var(--line)' }}>
+                <th key={mode} scope="col">
                   {MODE_LABELS[mode] ?? mode}
                 </th>
               ))}
@@ -40,42 +34,45 @@ export function MatrixTable({ matrix }: { matrix: Matrix }) {
           <tbody>
             {matrix.tasks.map((task) => (
               <tr key={task.id}>
-                <td className="border-b px-3 py-3 align-top" style={{ borderColor: 'var(--line)' }}>
-                  {task.title}
-                </td>
+                <th scope="row">{task.title}</th>
                 {matrix.modes.map((mode) => {
                   const cell = matrix.cells.find((candidate) => candidate.taskId === task.id && candidate.mode === mode);
                   if (!cell) {
                     return (
-                      <td key={mode} className="quiet border-b px-3 py-3 align-top" style={{ borderColor: 'var(--line)' }}>
+                      <td key={mode} className="dim">
                         —
                       </td>
                     );
                   }
                   const first = cell.runs[0];
                   const passed = Math.round(cell.passRate * cell.runs.length);
-                  return (
-                    <td key={mode} className="border-b px-3 py-3 align-top" style={{ borderColor: 'var(--line)' }}>
-                      <div className="flex flex-col gap-1">
-                        <span className="font-mono" style={{ color: verdictColor(cell.passRate) }}>
-                          {passed}/{cell.runs.length} без ошибок
-                        </span>
-                        <span className="muted">
-                          {cell.medianTokens > 0
-                            ? `${Math.round(cell.medianTokens).toLocaleString('ru-RU')} ток. · ${formatCost(cell.medianCostUsd)}`
-                            : `контекст ~${Math.round(cell.medianContextTokens).toLocaleString('ru-RU')} ток.`}
-                        </span>
+                  const body = (
+                    <>
+                      <span className={tone(cell.passRate)}>
+                        {passed}/{cell.runs.length}
+                      </span>
+                      <span className="muted mono text-[12.5px] leading-snug">
+                        {cell.medianTokens > 0
+                          ? `${Math.round(cell.medianTokens).toLocaleString('ru-RU')} ток · ${formatCost(cell.medianCostUsd)}`
+                          : `контекст ~${Math.round(cell.medianContextTokens).toLocaleString('ru-RU')}`}
                         {cell.medianTurns > 0 && (
-                          <span className="quiet">
-                            {cell.medianTurns} ход. · {cell.medianSeconds} с
-                          </span>
+                          <>
+                            <br />
+                            {cell.medianTurns} ход · {cell.medianSeconds} с
+                          </>
                         )}
-                        {first && (
-                          <Link href={`/run/${first}`} className="link link--accent">
-                            прогон
-                          </Link>
-                        )}
-                      </div>
+                      </span>
+                    </>
+                  );
+                  return (
+                    <td key={mode}>
+                      {first ? (
+                        <Link href={`/run/${first}`} className="cell" aria-label={`${task.title}, режим «${MODE_LABELS[mode] ?? mode}»: открыть прогон`}>
+                          {body}
+                        </Link>
+                      ) : (
+                        <div className="cell">{body}</div>
+                      )}
                     </td>
                   );
                 })}

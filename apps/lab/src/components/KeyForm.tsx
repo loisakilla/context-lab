@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { forgetKey, maskKey, readKey, saveKey, type KeyScope } from '@/lib/key-store';
-import { Button, Field } from './ui';
+import { Button } from './ui';
 
 interface KeyFormProps {
   onChange: (key: string | null) => void;
@@ -37,11 +37,11 @@ export function KeyForm({ onChange }: KeyFormProps) {
 
   if (stored) {
     return (
-      <div className="flex flex-col gap-3">
-        <p className="quiet text-sm">
-          Ключ {maskKey(stored.key)} хранится {stored.scope === 'session' ? 'до закрытия вкладки' : 'в этом браузере'}. Запросы идут напрямую в
-          api.anthropic.com.
-        </p>
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+        <span className="mono text-sm">{maskKey(stored.key)}</span>
+        <span className="dim max-w-[62ch] text-[13px]">
+          хранится {stored.scope === 'session' ? 'до закрытия вкладки' : 'в этом браузере'}; запросы идут напрямую в api.anthropic.com.
+        </span>
         <Button variant="ghost" onClick={forget}>
           Забыть ключ
         </Button>
@@ -51,26 +51,24 @@ export function KeyForm({ onChange }: KeyFormProps) {
 
   return (
     <div className="flex flex-col gap-3">
-      <Field label="Ключ Anthropic API">
-        <input
-          className="control"
-          type="password"
-          placeholder="sk-ant-…"
-          value={draft}
-          onChange={(event) => setDraft(event.target.value)}
-          autoComplete="off"
-        />
-      </Field>
-      <p className="quiet text-sm">
-        Ключ остаётся в браузере: страница вызывает api.anthropic.com напрямую, сервер лаборатории получает только сгенерированный код для проверки.
-      </p>
-      <label className="flex items-center gap-2 text-sm">
-        <input type="checkbox" checked={sessionOnly} onChange={(event) => setSessionOnly(event.target.checked)} />
-        <span className="muted">Помнить только до закрытия вкладки</span>
-      </label>
-      <Button variant="primary" onClick={save} disabled={draft.trim().length === 0}>
-        Сохранить ключ
-      </Button>
+      <div className="flex flex-wrap items-end gap-2">
+        <label className="field min-w-[18rem] flex-1">
+          <span className="label">Ключ Anthropic API</span>
+          <input className="input" type="password" placeholder="sk-ant-…" value={draft} onChange={(event) => setDraft(event.target.value)} autoComplete="off" />
+        </label>
+        <Button variant="flat" onClick={save} disabled={draft.trim().length === 0}>
+          Сохранить
+        </Button>
+      </div>
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+        <label className="muted flex items-center gap-2 text-[13px]">
+          <input type="checkbox" checked={sessionOnly} onChange={(event) => setSessionOnly(event.target.checked)} />
+          Помнить только до закрытия вкладки
+        </label>
+        <span className="dim max-w-[68ch] text-[13px]">
+          Ключ остаётся в браузере: страница вызывает api.anthropic.com напрямую, сервер лаборатории получает только сгенерированный код для проверки.
+        </span>
+      </div>
     </div>
   );
 }

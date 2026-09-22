@@ -3,7 +3,6 @@
 import { useMemo } from 'react';
 import { Note } from './ui';
 import { buildContext, contextTokens, type ContextMode, type ContextSources, type Task } from '@/lib/runner-browser';
-import { MODE_LABELS } from './MatrixTable';
 
 interface ContextPreviewProps {
   mode: ContextMode;
@@ -43,66 +42,68 @@ export function ContextPreview({ mode, task, sources }: ContextPreviewProps) {
   }, [mode, task, sources]);
 
   if (typeof built === 'string') {
-    return (
-      <Note title="Контекст не собрался">
-        {built}
-      </Note>
-    );
+    return <Note title="Контекст не собрался">{built}</Note>;
   }
 
   const body = built.contextText.length > 0 ? built.contextText : built.system;
   const rest = body.length - BODY_LIMIT;
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className="panel flex flex-col gap-4">
-        <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-          <h2 className="text-lg font-bold">Что уйдёт в модель</h2>
-          <span className="font-mono text-base" style={{ color: 'var(--accent)' }}>
-            ~{contextTokens(built).toLocaleString('ru-RU')} токенов
+    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]">
+      <div className="card card--lg flex flex-col gap-5">
+        <div className="flex flex-col gap-1">
+          <span className="label">Контекст до задачи</span>
+          <span className="mono text-[28px] leading-none" style={{ color: 'var(--accent-text)' }}>
+            ~{contextTokens(built).toLocaleString('ru-RU')}
+            <span className="dim text-[15px]"> токенов</span>
           </span>
         </div>
         <p className="muted text-sm">{MODE_NOTES[mode] ?? ''}</p>
         {built.sources.length > 0 && (
-          <ul className="flex flex-col gap-1 text-sm">
-            {built.sources.map((source) => (
-              <li key={`${source.kind}-${source.id}`} className="flex items-baseline justify-between gap-4">
-                <span className="muted">{SOURCE_LABELS[source.kind] ?? source.kind}</span>
-                <span className="quiet font-mono">~{source.tokens.toLocaleString('ru-RU')}</span>
-              </li>
-            ))}
-          </ul>
+          <>
+            <hr className="divider" />
+            <ul className="flex flex-col gap-2">
+              {built.sources.map((source) => (
+                <li key={`${source.kind}-${source.id}`} className="flex items-baseline justify-between gap-4 text-sm">
+                  <span>{SOURCE_LABELS[source.kind] ?? source.kind}</span>
+                  <span className="dim mono text-[13px]">~{source.tokens.toLocaleString('ru-RU')}</span>
+                </li>
+              ))}
+            </ul>
+          </>
         )}
       </div>
 
-      {built.tools && (
-        <section className="flex flex-col gap-2">
-          <span className="field-label">Инструменты · {built.tools.length}</span>
-          <ul className="flex flex-col gap-1 text-sm">
-            {built.tools.map((tool) => (
-              <li key={tool.name} className="flex flex-wrap gap-x-2">
-                <code className="font-mono" style={{ color: 'var(--accent)' }}>
-                  {tool.name}
-                </code>
-                <span className="muted">{shorten(tool.description)}</span>
-              </li>
-            ))}
-          </ul>
+      <div className="flex flex-col gap-6">
+        {built.tools && (
+          <section className="flex flex-col gap-3">
+            <span className="label">Инструменты · {built.tools.length}</span>
+            <ul className="flex flex-col gap-2 text-sm">
+              {built.tools.map((tool) => (
+                <li key={tool.name} className="flex flex-wrap items-baseline gap-x-2">
+                  <code className="mono text-[13px]" style={{ color: 'var(--accent-text)' }}>
+                    {tool.name}
+                  </code>
+                  <span className="muted">{shorten(tool.description)}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <section className="flex flex-col gap-3">
+          <span className="label">Задача агенту</span>
+          <pre className="code max-h-80 overflow-auto">{built.taskText}</pre>
         </section>
-      )}
 
-      <section className="flex flex-col gap-2">
-        <span className="field-label">Задача агенту</span>
-        <pre className="code max-h-72 overflow-auto whitespace-pre-wrap">{built.taskText}</pre>
-      </section>
-
-      <details>
-        <summary className="field-label cursor-pointer">Текст контекста · {body.length.toLocaleString('ru-RU')} символов</summary>
-        <pre className="code mt-2 max-h-96 overflow-auto whitespace-pre-wrap">
-          {body.slice(0, BODY_LIMIT)}
-          {rest > 0 ? `\n\n… и ещё ${rest.toLocaleString('ru-RU')} символов` : ''}
-        </pre>
-      </details>
+        <details>
+          <summary>Текст контекста · {body.length.toLocaleString('ru-RU')} символов</summary>
+          <pre className="code mt-3 max-h-96 overflow-auto">
+            {body.slice(0, BODY_LIMIT)}
+            {rest > 0 ? `\n\n… и ещё ${rest.toLocaleString('ru-RU')} символов` : ''}
+          </pre>
+        </details>
+      </div>
     </div>
   );
 }

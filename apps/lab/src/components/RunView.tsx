@@ -10,30 +10,30 @@ export function RunView({ record }: { record: RunRecord }) {
   const onRendered = useCallback((status: RenderStatus) => setRender(status), []);
 
   return (
-    <div className="flex flex-col gap-8">
-      <section className="flex flex-col gap-3">
-        <h1 className="text-3xl font-bold">{record.task.title}</h1>
-        <p className="max-w-[80ch]">{record.task.prompt}</p>
-        <p className="quiet font-mono text-sm">
+    <div className="flex flex-col gap-10">
+      <header className="flex flex-col gap-4">
+        <h1>{record.task.title}</h1>
+        <p className="lede">{record.task.prompt}</p>
+        <p className="dim mono text-[13px]">
           {record.id} · {new Date(record.createdAt).toLocaleString('ru-RU')}
         </p>
-      </section>
+      </header>
 
       <Report record={record} render={render} />
 
       {record.output.code ? (
         <>
-          <section className="flex flex-col gap-2">
-            <span className="field-label">Рендер</span>
+          <section className="flex flex-col gap-3">
+            <h2>Рендер</h2>
             <Preview code={record.output.code} onRendered={onRendered} />
           </section>
-          <section className="flex flex-col gap-2">
-            <span className="field-label">Код</span>
+          <section className="flex flex-col gap-3">
+            <h2>Код компонента</h2>
             <pre className="code overflow-auto">{record.output.code}</pre>
           </section>
         </>
       ) : (
-        <pre className="code whitespace-pre-wrap">{record.output.text}</pre>
+        <pre className="code">{record.output.text}</pre>
       )}
     </div>
   );

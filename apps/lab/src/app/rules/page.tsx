@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { TopBar } from '@/components/TopBar';
+import { Badge, Stat } from '@/components/ui';
 import { loadRuleResolution } from '@/lib/data';
 
 export const dynamic = 'force-dynamic';
@@ -17,21 +18,39 @@ function first(value: string | string[] | undefined, fallback: string): string {
   return (Array.isArray(value) ? value[0] : value) ?? fallback;
 }
 
-function Switcher({ label, values, current, href }: { label: string; values: string[]; current: string; href: (value: string) => string }) {
+function RuleBody({ text }: { text: string }) {
+  const parts = text.split(/`([^`]+)`/g);
   return (
-    <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
-      <span className="field-label">{label}</span>
-      {values.map((value) =>
-        value === current ? (
-          <span key={value} className="mono text-sm" style={{ color: 'var(--accent)' }}>
-            {value}
-          </span>
+    <p className="max-w-[80ch]">
+      {parts.map((part, index) =>
+        index % 2 === 1 ? (
+          <code key={index} className="mono rounded-[5px] px-1.5 py-0.5 text-[13.5px]" style={{ background: 'var(--surface-2)' }}>
+            {part}
+          </code>
         ) : (
-          <Link key={value} href={href(value)} className="muted mono text-sm underline">
-            {value}
-          </Link>
+          part
         ),
       )}
+    </p>
+  );
+}
+
+function Switcher({ label, values, current, href }: { label: string; values: string[]; current: string; href: (value: string) => string }) {
+  return (
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+      <span className="label w-24 shrink-0">{label}</span>
+      <div className="seg">
+        {values.map((value) => (
+          <Link
+            key={value}
+            href={href(value)}
+            className="seg__item seg__item--link"
+            {...(value === current ? { 'aria-current': 'page' as const } : {})}
+          >
+            {value}
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }
@@ -43,93 +62,95 @@ export default async function RulesPage({ searchParams }: { searchParams: Promis
   const { resolution, sets } = loadRuleResolution(set, taskType);
 
   return (
-    <main className="mx-auto flex max-w-5xl flex-col gap-10 px-4 py-8 sm:px-6">
+    <>
       <TopBar current="rules" />
+      <main className="wrap flex flex-col gap-10 pt-10 pb-24">
+        <header className="flex flex-col gap-4">
+          <h1>Реестр правил</h1>
+          <p className="lede">
+            Правила лежат в репозитории как Markdown с frontmatter и собираются в наборы. Набор наследует правила родителей, правило с тем же идентификатором
+            переопределяет родительское, <code className="mono text-[15px]">extends</code> уточняет его. Резолвер отдаёт эффективный набор под тип задачи с
+            провенансом.
+          </p>
+        </header>
 
-      <div className="flex flex-col gap-3">
-        <h1 className="text-3xl font-bold">Реестр правил</h1>
-        <p className="muted max-w-[62ch] text-lg">
-          Правила лежат в репозитории как Markdown с frontmatter и собираются в наборы. Набор наследует правила родителей, правило с тем же идентификатором переопределяет родительское, <code>extends</code> уточняет его. Резолвер отдаёт эффективный набор под тип задачи с провенансом.
-        </p>
-      </div>
-
-      <div className="flex flex-col gap-3">
-        <Switcher label="Набор" values={sets} current={set} href={(value) => `/rules?set=${value}&task=${taskType}`} />
-        <Switcher label="Тип задачи" values={TASK_TYPES} current={taskType} href={(value) => `/rules?set=${set}&task=${value}`} />
-      </div>
-
-      {!resolution && <p>Набора «{set}» в реестре нет.</p>}
-
-      {resolution && (
-        <>
-          <div className="panel flex flex-wrap items-baseline gap-x-10 gap-y-4">
-            <div className="flex flex-col gap-1">
-              <span className="field-label">Цепочка</span>
-              <span className="mono">{resolution.chain.join(' → ')}</span>
-            </div>
-            <div className="flex flex-col gap-1">
-              <span className="field-label">Правил</span>
-              <span className="mono">{resolution.rules.length}</span>
-            </div>
-            <div className="flex flex-col gap-1">
-              <span className="field-label">Стоимость набора</span>
-              <span className="mono" style={{ color: 'var(--accent)' }}>
-                ~{resolution.tokens.toLocaleString('ru-RU')} токенов
-              </span>
-            </div>
-          </div>
-
-          <section className="flex flex-col gap-4">
-            {resolution.rules.map((rule) => (
-              <article key={rule.qualifiedId} className="panel flex flex-col gap-3">
-                <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-                  <h2 className="text-lg font-bold">{rule.title}</h2>
-                  <code className="quiet text-sm">
-                    {rule.qualifiedId}@{rule.version}
-                  </code>
-                </div>
-                <p className="max-w-[80ch]">{rule.body}</p>
-                <div className="quiet flex flex-wrap gap-x-4 gap-y-1 text-sm">
-                  <span>из {rule.definedIn}</span>
-                  <span>приоритет {rule.priority}</span>
-                  <span>~{rule.tokens} ток.</span>
-                  {rule.overrides && <span style={{ color: 'var(--warn)' }}>переопределяет {rule.overrides}</span>}
-                  {rule.refines && <span style={{ color: 'var(--accent)' }}>уточняет {rule.refines}</span>}
-                  {rule.appliesTo.length > 0 && <span>{rule.appliesTo.join(', ')}</span>}
-                  {rule.taskTypes.length > 0 && <span>задачи: {rule.taskTypes.join(', ')}</span>}
-                </div>
-              </article>
-            ))}
-          </section>
-
-          {resolution.omitted.length > 0 && (
-            <section className="flex flex-col gap-2">
-              <span className="field-label">Не поместились в бюджет</span>
-              <ul className="muted flex flex-col gap-1 text-sm">
-                {resolution.omitted.map((rule) => (
-                  <li key={rule.qualifiedId}>
-                    {rule.title} · {rule.qualifiedId}@{rule.version} · ~{rule.tokens} ток.
-                  </li>
-                ))}
-              </ul>
-            </section>
+        <div className="card card--lg flex flex-col gap-5">
+          <Switcher label="Набор" values={sets} current={set} href={(value) => `/rules?set=${value}&task=${taskType}`} />
+          <Switcher label="Тип задачи" values={TASK_TYPES} current={taskType} href={(value) => `/rules?set=${set}&task=${value}`} />
+          {resolution && (
+            <>
+              <hr className="divider" />
+              <div className="grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-3">
+                <Stat label="Цепочка наследования" value={resolution.chain.join(' → ')} />
+                <Stat label="Правил в наборе" value={String(resolution.rules.length)} />
+                <Stat label="Стоимость набора" value={`~${resolution.tokens.toLocaleString('ru-RU')} ток.`} tone="accent" />
+              </div>
+            </>
           )}
-        </>
-      )}
+        </div>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-2xl font-bold">Куда это компилируется</h2>
-        <p className="muted max-w-[70ch] text-sm">Один источник, четыре цели. CI падает, если файлы разошлись с реестром.</p>
-        <ul className="flex flex-col gap-1 text-sm">
-          {TARGET_FILES.map(([target, files]) => (
-            <li key={target} className="flex flex-wrap gap-x-2">
-              <code style={{ color: 'var(--accent)' }}>{target}</code>
-              <span className="muted">{files}</span>
-            </li>
-          ))}
-        </ul>
-        <pre className="code whitespace-pre-wrap">npm run rules:resolve -- {set} --task {taskType}</pre>
-      </section>
-    </main>
+        {!resolution && <p>Набора «{set}» в реестре нет.</p>}
+
+        {resolution && (
+          <>
+            <section className="flex flex-col gap-4">
+              {resolution.rules.map((rule) => (
+                <article key={rule.qualifiedId} className="card card--lg flex flex-col gap-3">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+                    <h2>{rule.title}</h2>
+                    <code className="dim mono text-[13px]">
+                      {rule.qualifiedId}@{rule.version}
+                    </code>
+                  </div>
+                  <RuleBody text={rule.body} />
+                  <div className="flex flex-wrap items-center gap-2 pt-1">
+                    <Badge>из {rule.definedIn}</Badge>
+                    <Badge>приоритет {rule.priority}</Badge>
+                    <Badge mono>~{rule.tokens} ток.</Badge>
+                    {rule.overrides && <Badge tone="warn">переопределяет {rule.overrides}</Badge>}
+                    {rule.refines && <Badge tone="accent">уточняет {rule.refines}</Badge>}
+                    {rule.appliesTo.length > 0 && <Badge mono>{rule.appliesTo.join(', ')}</Badge>}
+                    {rule.taskTypes.length > 0 && <Badge>задачи: {rule.taskTypes.join(', ')}</Badge>}
+                  </div>
+                </article>
+              ))}
+            </section>
+
+            {resolution.omitted.length > 0 && (
+              <section className="flex flex-col gap-3">
+                <span className="label">Не поместились в бюджет</span>
+                <ul className="muted flex flex-col gap-1 text-sm">
+                  {resolution.omitted.map((rule) => (
+                    <li key={rule.qualifiedId}>
+                      {rule.title} · {rule.qualifiedId}@{rule.version} · ~{rule.tokens} ток.
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+          </>
+        )}
+
+        <section className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <h2>Куда это компилируется</h2>
+            <p className="muted max-w-[72ch] text-sm">Один источник, четыре цели. CI падает, если файлы разошлись с реестром.</p>
+          </div>
+          <ul className="card flex flex-col gap-3">
+            {TARGET_FILES.map(([target, files]) => (
+              <li key={target} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm">
+                <code className="mono text-[13px]" style={{ color: 'var(--accent-text)' }}>
+                  {target}
+                </code>
+                <span className="muted">{files}</span>
+              </li>
+            ))}
+          </ul>
+          <pre className="code">
+            npm run rules:resolve -- {set} --task {taskType}
+          </pre>
+        </section>
+      </main>
+    </>
   );
 }

@@ -10,24 +10,22 @@ const LINKS: { page: Page; href: string; label: string }[] = [
 
 export function TopBar({ current }: { current: Page }) {
   return (
-    <header className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-b pb-4" style={{ borderColor: 'var(--line)' }}>
-      <Link href="/" className="flex items-baseline gap-2">
-        <span className="text-[15px] font-semibold">Context Lab</span>
-        <span className="quiet mono text-xs">jinx-ui</span>
-      </Link>
-      <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
-        {LINKS.map((link) =>
-          link.page === current ? (
-            <span key={link.page} aria-current="page">
-              {link.label}
-            </span>
-          ) : (
-            <Link key={link.page} href={link.href} className="link">
+    <header className="bar">
+      <div className="wrap wrap--wide bar__inner">
+        <Link href="/" className="mark">
+          <span className="mark__glyph" aria-hidden="true">
+            cl
+          </span>
+          Context&nbsp;Lab
+        </Link>
+        <nav className="nav" aria-label="Разделы">
+          {LINKS.map((link) => (
+            <Link key={link.page} href={link.href} className="nav__link" {...(link.page === current ? { 'aria-current': 'page' as const } : {})}>
               {link.label}
             </Link>
-          ),
-        )}
-      </nav>
+          ))}
+        </nav>
+      </div>
     </header>
   );
 }

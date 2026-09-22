@@ -10,9 +10,11 @@ export default async function RunPage({ params }: { params: Promise<{ id: string
   const record = loadRun(id);
   if (!record) notFound();
   return (
-    <main className="mx-auto flex max-w-4xl flex-col gap-10 px-4 py-8 sm:px-6">
+    <>
       <TopBar current="lab" />
-      <RunView record={record} />
-    </main>
+      <main className="wrap flex flex-col gap-10 pt-10 pb-24">
+        <RunView record={record} />
+      </main>
+    </>
   );
 }

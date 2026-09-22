@@ -30,47 +30,50 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
   const mismatched = leftRun && rightRun && (leftRun.model !== rightRun.model || leftRun.driver !== rightRun.driver);
 
   return (
-    <main className="mx-auto flex max-w-[104rem] flex-col gap-10 px-4 py-8 sm:px-6">
+    <>
       <TopBar current="compare" />
+      <main className="wrap wrap--wide flex flex-col gap-10 pt-10 pb-24">
+        <header className="flex flex-col gap-4">
+          <h1>Один запрос, разный контекст</h1>
+          <p className="lede">
+            Слева и справа — записанные прогоны одной задачи в двух режимах: та же модель, тот же промпт, разный контекст. Сравнивайте не только вердикт, но и
+            цену.
+          </p>
+        </header>
 
-      <div className="flex flex-col gap-3">
-        <h1 className="text-3xl font-bold">Один и тот же запрос, разный контекст</h1>
-        <p className="muted max-w-[62ch] text-lg">
-          Слева и справа — записанные прогоны одной задачи в двух режимах: та же модель, тот же промпт, разный контекст. Сравнивайте не только вердикт, но и цену.
-        </p>
-      </div>
-
-      <CompareControls tasks={tasks} modes={modes} task={task} left={left} right={right} />
-
-      {prompt && (
-        <div className="panel flex flex-col gap-2">
-          <span className="field-label">Задача</span>
-          <p className="max-w-[80ch]">{prompt}</p>
+        <div className="card card--lg flex flex-col gap-6">
+          <CompareControls tasks={tasks} modes={modes} task={task} left={left} right={right} />
+          {prompt && (
+            <>
+              <hr className="divider" />
+              <div className="flex flex-col gap-2">
+                <span className="label">Формулировка задачи</span>
+                <p className="max-w-[80ch]">{prompt}</p>
+              </div>
+            </>
+          )}
         </div>
-      )}
 
-      {mismatched && leftRun && rightRun && (
-        <Note title="Прогоны сделаны по-разному">
-          Слева {leftRun.model} через {leftRun.driver}, справа {rightRun.model} через {rightRun.driver}. Сравнивать их между собой некорректно: перезапишите недостающие ячейки одной моделью.
-        </Note>
-      )}
-
-      <section className="grid items-start gap-10 xl:grid-cols-2 xl:gap-14">
-        {leftRun ? (
-          <RunPane record={leftRun} title={MODE_LABELS[left] ?? left} />
-        ) : (
-          <Note title="Прогона нет">
-            Для этой задачи в режиме «{MODE_LABELS[left] ?? left}» записи нет.
+        {mismatched && leftRun && rightRun && (
+          <Note title="Прогоны сделаны по-разному">
+            Слева {leftRun.model} через {leftRun.driver}, справа {rightRun.model} через {rightRun.driver}. Сравнивать их между собой некорректно: перезапишите
+            недостающие ячейки одной моделью.
           </Note>
         )}
-        {rightRun ? (
-          <RunPane record={rightRun} title={MODE_LABELS[right] ?? right} />
-        ) : (
-          <Note title="Прогона нет">
-            Для этой задачи в режиме «{MODE_LABELS[right] ?? right}» записи нет.
-          </Note>
-        )}
-      </section>
-    </main>
+
+        <section className="grid items-start gap-10 xl:grid-cols-2 xl:gap-12">
+          {leftRun ? (
+            <RunPane record={leftRun} title={MODE_LABELS[left] ?? left} />
+          ) : (
+            <Note title="Прогона нет">Для этой задачи в режиме «{MODE_LABELS[left] ?? left}» записи нет.</Note>
+          )}
+          {rightRun ? (
+            <RunPane record={rightRun} title={MODE_LABELS[right] ?? right} />
+          ) : (
+            <Note title="Прогона нет">Для этой задачи в режиме «{MODE_LABELS[right] ?? right}» записи нет.</Note>
+          )}
+        </section>
+      </main>
+    </>
   );
 }

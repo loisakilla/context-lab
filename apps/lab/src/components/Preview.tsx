@@ -86,7 +86,7 @@ export function Preview({ code, onRendered }: PreviewProps) {
     frame.current?.contentWindow?.postMessage({ type: 'render', code, theme: 'dark', style: 'brutal' }, '*');
   }, [ready, code]);
 
-  if (loadError) return <pre className="code" style={{ color: 'var(--bad)' }}>{loadError}</pre>;
+  if (loadError) return <pre className="code" style={{ color: 'var(--danger)' }}>{loadError}</pre>;
 
   const broken = status !== null && !status.ok;
 
@@ -101,24 +101,20 @@ export function Preview({ code, onRendered }: PreviewProps) {
         style={{
           height: broken ? 0 : height,
           width: '100%',
-          border: broken ? 'none' : '1px solid var(--line)',
-          borderRadius: 'var(--radius-sm)',
-          background: 'var(--surface-2)',
+          border: 'none',
+          borderRadius: 'var(--radius-lg)',
+          background: 'var(--surface)',
           display: 'block',
         }}
       />
       {broken && (
-        <div className="panel flex flex-col gap-2" style={{ borderColor: 'color-mix(in oklab, var(--bad) 35%, transparent)' }}>
-          <span className="text-sm font-medium" style={{ color: 'var(--bad)' }}>
-            Превью не построено
-          </span>
-          <p className="text-sm">{status?.error}</p>
+        <div className="note note--bad">
+          <span className="note__title">Превью не построено</span>
+          <p className="note__body">{status?.error}</p>
         </div>
       )}
       {status?.filledProps && status.filledProps.length > 0 && (
-        <p className="quiet text-sm">
-          Компонент требует пропсы, превью подставило пустые значения: {status.filledProps.join(', ')}.
-        </p>
+        <p className="dim text-[13px]">Компонент требует пропсы, превью подставило пустые значения: {status.filledProps.join(', ')}.</p>
       )}
     </div>
   );
