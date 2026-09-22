@@ -4,7 +4,7 @@
     "name": "jinx-ui",
     "package": "@jinx-ui/react",
     "version": "0.1.0",
-    "commit": "9ba963649fa44f02943740d94c87047011089265"
+    "commit": "e141e2a552120a82833cd809d2eabaf56420ee06"
   },
   "components": [
     {
@@ -2223,7 +2223,7 @@
       "scopes": {
         ":root": "#c9a3ff",
         "[data-theme=\"dark\"]": "#c9a3ff",
-        "[data-theme=\"light\"]": "#7747d4",
+        "[data-theme=\"light\"]": "#6f3fcc",
         "[data-style=\"brutal\"]": "#1a1726",
         "[data-style=\"brutal\"][data-theme=\"dark\"]": "#f5ff3d"
       }
@@ -2245,7 +2245,7 @@
       "scopes": {
         ":root": "#0c0a14",
         "[data-theme=\"dark\"]": "#0c0a14",
-        "[data-theme=\"light\"]": "#fff"
+        "[data-theme=\"light\"]": "#14180a"
       }
     },
     {
@@ -2267,7 +2267,7 @@
       "scopes": {
         ":root": "rgba(201, 163, 255, 0.14)",
         "[data-theme=\"dark\"]": "rgba(201, 163, 255, 0.14)",
-        "[data-theme=\"light\"]": "rgba(119, 71, 212, 0.12)",
+        "[data-theme=\"light\"]": "rgba(111, 63, 204, 0.12)",
         "[data-style=\"brutal\"]": "rgba(26, 23, 38, 0.08)",
         "[data-style=\"brutal\"][data-theme=\"dark\"]": "rgba(245, 255, 61, 0.14)"
       }
@@ -2327,7 +2327,7 @@
       "scopes": {
         ":root": "#ff5470",
         "[data-theme=\"dark\"]": "#ff5470",
-        "[data-theme=\"light\"]": "#c81e3c"
+        "[data-theme=\"light\"]": "#b01834"
       }
     },
     {
@@ -2377,7 +2377,7 @@
       "scopes": {
         ":root": "#79c8ff",
         "[data-theme=\"dark\"]": "#79c8ff",
-        "[data-theme=\"light\"]": "#1d5fb0"
+        "[data-theme=\"light\"]": "#17518f"
       }
     },
     {
@@ -2498,7 +2498,7 @@
       "scopes": {
         ":root": "#6bd97a",
         "[data-theme=\"dark\"]": "#6bd97a",
-        "[data-theme=\"light\"]": "#1f7a45"
+        "[data-theme=\"light\"]": "#176034"
       }
     },
     {
@@ -2564,11 +2564,11 @@
     {
       "name": "--jx-text-3",
       "group": "color",
-      "value": "#6e6386",
+      "value": "#8d84a8",
       "scopes": {
-        ":root": "#6e6386",
-        "[data-theme=\"dark\"]": "#6e6386",
-        "[data-theme=\"light\"]": "#7a7187",
+        ":root": "#8d84a8",
+        "[data-theme=\"dark\"]": "#8d84a8",
+        "[data-theme=\"light\"]": "#6b6379",
         "[data-style=\"brutal\"]": "#6e6386",
         "[data-style=\"brutal\"][data-theme=\"dark\"]": "#a59cb8"
       }
@@ -2592,7 +2592,7 @@
       "scopes": {
         ":root": "#ffb547",
         "[data-theme=\"dark\"]": "#ffb547",
-        "[data-theme=\"light\"]": "#9a6300"
+        "[data-theme=\"light\"]": "#7d4f00"
       }
     }
   ]
