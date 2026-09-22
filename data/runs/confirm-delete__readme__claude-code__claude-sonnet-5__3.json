@@ -1,0 +1,104 @@
+{
+  "id": "confirm-delete__readme__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-22T09:40:20.249Z",
+  "repeat": 3,
+  "durationMs": 9962,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "confirm-delete",
+    "title": "Подтверждение удаления",
+    "prompt": "Сделай компонент с кнопкой «Удалить проект». По клику открывается окно подтверждения с заголовком «Удалить проект?», текстом о том, что действие необратимо, и двумя кнопками: отмена и подтверждение удаления. Подтверждение вызывает переданный колбэк onConfirm.",
+    "taskType": "ui",
+    "expects": [
+      "JxModal",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 6,
+        "cacheRead": 9578,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 6,
+        "cacheRead": 9578,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1043,
+    "cacheRead": 9578,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.030874,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { Button, Dialog } from '@jinx-ui/react';\n\ninterface DeleteProjectButtonProps {\n  onConfirm: () => void;\n  projectName?: string;\n}\n\nexport default function DeleteProjectButton({\n  onConfirm,\n  projectName,\n}: DeleteProjectButtonProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const handleConfirm = () => {\n    onConfirm();\n    setIsOpen(false);\n  };\n\n  return (\n    <>\n      <Button\n        type=\"button\"\n        variant=\"danger\"\n        className=\"jx-btn jx-btn--danger\"\n        onClick={() => setIsOpen(true)}\n      >\n        Удалить проект\n      </Button>\n\n      <Dialog\n        open={isOpen}\n        onOpenChange={setIsOpen}\n        className=\"jx-dialog\"\n      >\n        <Dialog.Header className=\"jx-dialog__header\">\n          <Dialog.Title className=\"jx-dialog__title\">\n            Удалить проект?\n          </Dialog.Title>\n        </Dialog.Header>\n\n        <Dialog.Body className=\"jx-dialog__body\">\n          <p\n            className=\"jx-text jx-text--muted\"\n            style={{ color: 'var(--jx-color-text-secondary)' }}\n          >\n            {projectName\n              ? `Проект «${projectName}» будет удалён без возможности восстановления.`\n              : 'Это действие необратимо и не может быть отменено.'}\n          </p>\n        </Dialog.Body>\n\n        <Dialog.Footer className=\"jx-dialog__footer\">\n          <Button\n            type=\"button\"\n            variant=\"secondary\"\n            className=\"jx-btn jx-btn--secondary\"\n            onClick={() => setIsOpen(false)}\n          >\n            Отмена\n          </Button>\n          <Button\n            type=\"button\"\n            variant=\"danger\"\n            className=\"jx-btn jx-btn--danger\"\n            onClick={handleConfirm}\n          >\n            Удалить\n          </Button>\n        </Dialog.Footer>\n      </Dialog>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { Button, Dialog } from '@jinx-ui/react';\n\ninterface DeleteProjectButtonProps {\n  onConfirm: () => void;\n  projectName?: string;\n}\n\nexport default function DeleteProjectButton({\n  onConfirm,\n  projectName,\n}: DeleteProjectButtonProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const handleConfirm = () => {\n    onConfirm();\n    setIsOpen(false);\n  };\n\n  return (\n    <>\n      <Button\n        type=\"button\"\n        variant=\"danger\"\n        className=\"jx-btn jx-btn--danger\"\n        onClick={() => setIsOpen(true)}\n      >\n        Удалить проект\n      </Button>\n\n      <Dialog\n        open={isOpen}\n        onOpenChange={setIsOpen}\n        className=\"jx-dialog\"\n      >\n        <Dialog.Header className=\"jx-dialog__header\">\n          <Dialog.Title className=\"jx-dialog__title\">\n            Удалить проект?\n          </Dialog.Title>\n        </Dialog.Header>\n\n        <Dialog.Body className=\"jx-dialog__body\">\n          <p\n            className=\"jx-text jx-text--muted\"\n            style={{ color: 'var(--jx-color-text-secondary)' }}\n          >\n            {projectName\n              ? `Проект «${projectName}» будет удалён без возможности восстановления.`\n              : 'Это действие необратимо и не может быть отменено.'}\n          </p>\n        </Dialog.Body>\n\n        <Dialog.Footer className=\"jx-dialog__footer\">\n          <Button\n            type=\"button\"\n            variant=\"secondary\"\n            className=\"jx-btn jx-btn--secondary\"\n            onClick={() => setIsOpen(false)}\n          >\n            Отмена\n          </Button>\n          <Button\n            type=\"button\"\n            variant=\"danger\"\n            className=\"jx-btn jx-btn--danger\"\n            onClick={handleConfirm}\n          >\n            Удалить\n          </Button>\n        </Dialog.Footer>\n      </Dialog>\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Dialog'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Dialog"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 45,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.42
+  }
+}

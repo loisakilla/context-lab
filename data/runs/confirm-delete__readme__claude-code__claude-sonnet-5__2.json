@@ -1,0 +1,97 @@
+{
+  "id": "confirm-delete__readme__claude-code__claude-sonnet-5__2",
+  "createdAt": "2026-09-22T09:40:10.286Z",
+  "repeat": 2,
+  "durationMs": 8696,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "confirm-delete",
+    "title": "Подтверждение удаления",
+    "prompt": "Сделай компонент с кнопкой «Удалить проект». По клику открывается окно подтверждения с заголовком «Удалить проект?», текстом о том, что действие необратимо, и двумя кнопками: отмена и подтверждение удаления. Подтверждение вызывает переданный колбэк onConfirm.",
+    "taskType": "ui",
+    "expects": [
+      "JxModal",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 9578,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 9578,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 784,
+    "cacheRead": 9578,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.024398999999999997,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { Button, Dialog } from '@jinx-ui/react';\n\ninterface DeleteProjectButtonProps {\n  onConfirm: () => void;\n  projectName?: string;\n}\n\nexport default function DeleteProjectButton({\n  onConfirm,\n  projectName,\n}: DeleteProjectButtonProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const handleConfirm = () => {\n    onConfirm();\n    setIsOpen(false);\n  };\n\n  return (\n    <>\n      <Button\n        className=\"jx-button jx-button--danger\"\n        onClick={() => setIsOpen(true)}\n      >\n        Удалить проект\n      </Button>\n\n      <Dialog\n        open={isOpen}\n        onOpenChange={setIsOpen}\n        className=\"jx-dialog\"\n      >\n        <div className=\"jx-dialog__header\">\n          <h2 className=\"jx-dialog__title\">Удалить проект?</h2>\n        </div>\n        <div className=\"jx-dialog__body\">\n          <p className=\"jx-text jx-text--muted\">\n            {projectName\n              ? `Проект «${projectName}» будет удалён безвозвратно. Это действие необратимо.`\n              : 'Это действие необратимо. Все данные проекта будут удалены без возможности восстановления.'}\n          </p>\n        </div>\n        <div className=\"jx-dialog__footer\">\n          <Button\n            className=\"jx-button jx-button--secondary\"\n            onClick={() => setIsOpen(false)}\n          >\n            Отмена\n          </Button>\n          <Button\n            className=\"jx-button jx-button--danger\"\n            onClick={handleConfirm}\n          >\n            Удалить\n          </Button>\n        </div>\n      </Dialog>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { Button, Dialog } from '@jinx-ui/react';\n\ninterface DeleteProjectButtonProps {\n  onConfirm: () => void;\n  projectName?: string;\n}\n\nexport default function DeleteProjectButton({\n  onConfirm,\n  projectName,\n}: DeleteProjectButtonProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const handleConfirm = () => {\n    onConfirm();\n    setIsOpen(false);\n  };\n\n  return (\n    <>\n      <Button\n        className=\"jx-button jx-button--danger\"\n        onClick={() => setIsOpen(true)}\n      >\n        Удалить проект\n      </Button>\n\n      <Dialog\n        open={isOpen}\n        onOpenChange={setIsOpen}\n        className=\"jx-dialog\"\n      >\n        <div className=\"jx-dialog__header\">\n          <h2 className=\"jx-dialog__title\">Удалить проект?</h2>\n        </div>\n        <div className=\"jx-dialog__body\">\n          <p className=\"jx-text jx-text--muted\">\n            {projectName\n              ? `Проект «${projectName}» будет удалён безвозвратно. Это действие необратимо.`\n              : 'Это действие необратимо. Все данные проекта будут удалены без возможности восстановления.'}\n          </p>\n        </div>\n        <div className=\"jx-dialog__footer\">\n          <Button\n            className=\"jx-button jx-button--secondary\"\n            onClick={() => setIsOpen(false)}\n          >\n            Отмена\n          </Button>\n          <Button\n            className=\"jx-button jx-button--danger\"\n            onClick={handleConfirm}\n          >\n            Удалить\n          </Button>\n        </div>\n      </Dialog>\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Dialog'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Dialog"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.42
+  }
+}

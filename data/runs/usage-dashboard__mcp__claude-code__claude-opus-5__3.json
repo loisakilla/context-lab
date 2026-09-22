@@ -1,0 +1,76 @@
+{
+  "id": "usage-dashboard__mcp__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-22T10:13:05.030Z",
+  "repeat": 3,
+  "durationMs": 7449,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "mcp",
+  "task": {
+    "id": "usage-dashboard",
+    "title": "Панель расхода с фильтрами",
+    "prompt": "Сделай панель расхода по проектам. Сверху чипы-фильтры по статусу, которые можно снимать. Под ними на каждый проект строка с названием, круговым индикатором заполненности квоты в процентах и меткой статуса. Список постраничный, по пять строк. Если после фильтрации ничего не осталось, вместо списка показывается пустое состояние с кнопкой сброса фильтров.",
+    "taskType": "ui",
+    "expects": [
+      "JxChip",
+      "JxProgressCircle",
+      "JxBadge",
+      "JxPagination",
+      "JxEmptyState"
+    ]
+  },
+  "context": {
+    "tokens": 1000,
+    "sources": [
+      {
+        "kind": "tools",
+        "id": "search_components,get_component_api,get_component_examples,list_design_tokens",
+        "version": "0.1.0",
+        "tokens": 688
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 3067,
+        "cacheCreation": 5842
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 3067,
+        "cacheCreation": 5842
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 220,
+    "cacheRead": 3067,
+    "cacheCreation": 5842
+  },
+  "costUsd": 0.043556000000000004,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "",
+    "text": "Сначала проверю, доступен ли MCP-сервер jinx-ui в этой сессии."
+  },
+  "checks": null,
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

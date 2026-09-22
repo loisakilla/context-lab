@@ -1,0 +1,366 @@
+{
+  "id": "invite-form__mcp__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-22T10:13:35.899Z",
+  "repeat": 1,
+  "durationMs": 30868,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "mcp",
+  "task": {
+    "id": "invite-form",
+    "title": "Приглашение в команду с валидацией",
+    "prompt": "Сделай форму приглашения в команду: поле почты с подсказкой под ним, выбор роли из списка, переключатель «отправить уведомление» и кнопка отправки. Пока почта не похожа на адрес, поле показывает ошибку и кнопка заблокирована. После отправки над формой появляется сообщение об успехе, которое можно закрыть.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxAlert",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 1000,
+    "sources": [
+      {
+        "kind": "tools",
+        "id": "search_components,get_component_api,get_component_examples,list_design_tokens",
+        "version": "0.1.0",
+        "tokens": 688
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 10,
+        "cacheRead": 10382,
+        "cacheCreation": 683
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 10,
+        "cacheRead": 10382,
+        "cacheCreation": 683
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_rules",
+          "input": {
+            "task": "ui"
+          },
+          "resultTokens": 870
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 10,
+        "cacheRead": 10382,
+        "cacheCreation": 683
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "поле ввода текста с ошибкой и подсказкой"
+          },
+          "resultTokens": 422
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 10,
+        "cacheRead": 10382,
+        "cacheCreation": 683
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "выбор из списка select"
+          },
+          "resultTokens": 462
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 10,
+        "cacheRead": 10382,
+        "cacheCreation": 683
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "переключатель switch toggle"
+          },
+          "resultTokens": 227
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 10,
+        "cacheRead": 10382,
+        "cacheCreation": 683
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "сообщение об успехе алерт закрываемый"
+          },
+          "resultTokens": 396
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 10,
+        "cacheRead": 10382,
+        "cacheCreation": 683
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "кнопка отправки формы"
+          },
+          "resultTokens": 408
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 11065,
+        "cacheCreation": 5064
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 11065,
+        "cacheCreation": 5064
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 11065,
+        "cacheCreation": 5064
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxInputField"
+          },
+          "resultTokens": 393
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 11065,
+        "cacheCreation": 5064
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxSelect"
+          },
+          "resultTokens": 501
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 11065,
+        "cacheCreation": 5064
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxSwitch"
+          },
+          "resultTokens": 238
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 11065,
+        "cacheCreation": 5064
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxButton"
+          },
+          "resultTokens": 427
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 11065,
+        "cacheCreation": 5064
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxAlert"
+          },
+          "resultTokens": 277
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 11065,
+        "cacheCreation": 5064
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxToast"
+          },
+          "resultTokens": 287
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 16129,
+        "cacheCreation": 4043
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 16129,
+        "cacheCreation": 4043
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__list_design_tokens",
+          "input": {},
+          "resultTokens": 924
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 20172,
+        "cacheCreation": 2303
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 20172,
+        "cacheCreation": 2303
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 8,
+    "output": 2712,
+    "cacheRead": 57748,
+    "cacheCreation": 12093
+  },
+  "costUsd": 0.17229525,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, type FormEvent } from 'react';\nimport { JxButton, JxInputField, JxSelect, JxSwitch, JxToast } from '@jinx-ui/react';\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nconst ROLE_OPTIONS = [\n  { value: 'viewer', label: 'Наблюдатель', meta: 'только чтение' },\n  { value: 'editor', label: 'Редактор', meta: 'правки и комментарии' },\n  { value: 'admin', label: 'Администратор', meta: 'полный доступ' },\n];\n\nexport default function TeamInviteForm() {\n  const [email, setEmail] = useState('');\n  const [touched, setTouched] = useState(false);\n  const [role, setRole] = useState('editor');\n  const [notify, setNotify] = useState(true);\n  const [invitedEmail, setInvitedEmail] = useState<string | null>(null);\n\n  const isValid = EMAIL_PATTERN.test(email.trim());\n  const errorText = touched && !isValid ? 'Введите адрес вида name@company.com' : undefined;\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    setTouched(true);\n    if (!isValid) return;\n    setInvitedEmail(email.trim());\n    setEmail('');\n    setTouched(false);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 420 }}>\n      {invitedEmail && (\n        <JxToast\n          variant=\"success\"\n          title=\"Приглашение отправлено\"\n          message={`Мы позвали ${invitedEmail} в команду.`}\n          onClose={() => setInvitedEmail(null)}\n        />\n      )}\n\n      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>\n        <JxInputField\n          label=\"Электронная почта\"\n          type=\"email\"\n          name=\"email\"\n          required\n          placeholder=\"name@company.com\"\n          value={email}\n          onChange={(event) => setEmail(event.target.value)}\n          onBlur={() => setTouched(true)}\n          helperText=\"Приглашение действует 7 дней\"\n          errorText={errorText}\n        />\n\n        <JxSelect\n          label=\"Роль в команде\"\n          placeholder=\"Выберите роль\"\n          options={ROLE_OPTIONS}\n          value={role}\n          onValueChange={setRole}\n        />\n\n        <JxSwitch\n          label=\"Отправить уведомление на почту\"\n          name=\"notify\"\n          checked={notify}\n          onChange={(event) => setNotify(event.target.checked)}\n        />\n\n        <div style={{ display: 'flex', gap: 8 }}>\n          <JxButton type=\"submit\" variant=\"primary\" disabled={!isValid}>\n            Отправить приглашение\n          </JxButton>\n        </div>\n      </form>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState, type FormEvent } from 'react';\nimport { JxButton, JxInputField, JxSelect, JxSwitch, JxToast } from '@jinx-ui/react';\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nconst ROLE_OPTIONS = [\n  { value: 'viewer', label: 'Наблюдатель', meta: 'только чтение' },\n  { value: 'editor', label: 'Редактор', meta: 'правки и комментарии' },\n  { value: 'admin', label: 'Администратор', meta: 'полный доступ' },\n];\n\nexport default function TeamInviteForm() {\n  const [email, setEmail] = useState('');\n  const [touched, setTouched] = useState(false);\n  const [role, setRole] = useState('editor');\n  const [notify, setNotify] = useState(true);\n  const [invitedEmail, setInvitedEmail] = useState<string | null>(null);\n\n  const isValid = EMAIL_PATTERN.test(email.trim());\n  const errorText = touched && !isValid ? 'Введите адрес вида name@company.com' : undefined;\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    setTouched(true);\n    if (!isValid) return;\n    setInvitedEmail(email.trim());\n    setEmail('');\n    setTouched(false);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 420 }}>\n      {invitedEmail && (\n        <JxToast\n          variant=\"success\"\n          title=\"Приглашение отправлено\"\n          message={`Мы позвали ${invitedEmail} в команду.`}\n          onClose={() => setInvitedEmail(null)}\n        />\n      )}\n\n      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>\n        <JxInputField\n          label=\"Электронная почта\"\n          type=\"email\"\n          name=\"email\"\n          required\n          placeholder=\"name@company.com\"\n          value={email}\n          onChange={(event) => setEmail(event.target.value)}\n          onBlur={() => setTouched(true)}\n          helperText=\"Приглашение действует 7 дней\"\n          errorText={errorText}\n        />\n\n        <JxSelect\n          label=\"Роль в команде\"\n          placeholder=\"Выберите роль\"\n          options={ROLE_OPTIONS}\n          value={role}\n          onValueChange={setRole}\n        />\n\n        <JxSwitch\n          label=\"Отправить уведомление на почту\"\n          name=\"notify\"\n          checked={notify}\n          onChange={(event) => setNotify(event.target.checked)}\n        />\n\n        <div style={{ display: 'flex', gap: 8 }}>\n          <JxButton type=\"submit\" variant=\"primary\" disabled={!isValid}>\n            Отправить приглашение\n          </JxButton>\n        </div>\n      </form>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 32,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 42,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 71,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxToast"
+    ],
+    "expectedCoverage": 0.8,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.94
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "id": "wizard__readme__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-22T09:44:08.238Z",
+  "repeat": 3,
+  "durationMs": 26531,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 9580,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 9580,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 3268,
+    "cacheRead": 9580,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0865,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\ninterface ContactsData {\n  fullName: string;\n  email: string;\n  phone: string;\n}\n\ninterface AddressData {\n  street: string;\n  city: string;\n  zip: string;\n}\n\nexport interface RegistrationData {\n  contacts: ContactsData;\n  address: AddressData;\n}\n\ninterface RegistrationFormProps {\n  onSubmit: (data: RegistrationData) => void;\n}\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nexport default function RegistrationForm({ onSubmit }: RegistrationFormProps) {\n  const [step, setStep] = useState(0);\n  const [contacts, setContacts] = useState<ContactsData>({\n    fullName: '',\n    email: '',\n    phone: '',\n  });\n  const [address, setAddress] = useState<AddressData>({\n    street: '',\n    city: '',\n    zip: '',\n  });\n\n  const isLastStep = step === STEPS.length - 1;\n  const isFirstStep = step === 0;\n\n  const handleNext = () => {\n    if (!isLastStep) {\n      setStep((current) => current + 1);\n    }\n  };\n\n  const handleBack = () => {\n    if (!isFirstStep) {\n      setStep((current) => current - 1);\n    }\n  };\n\n  const handleSubmit = () => {\n    onSubmit({ contacts, address });\n  };\n\n  return (\n    <div className=\"jx-card jx-stack\" style={{ gap: 'var(--jx-space-lg)' }}>\n      <ol className=\"jx-stepper\" aria-label=\"Шаги регистрации\">\n        {STEPS.map((label, index) => {\n          const status =\n            index === step ? 'active' : index < step ? 'done' : 'upcoming';\n          return (\n            <li\n              key={label}\n              className={`jx-step jx-step--${status}`}\n              aria-current={index === step ? 'step' : undefined}\n            >\n              <span className=\"jx-step__index\">{index + 1}</span>\n              <span className=\"jx-step__label\">{label}</span>\n            </li>\n          );\n        })}\n      </ol>\n\n      {step === 0 && (\n        <fieldset className=\"jx-fieldset jx-stack\" style={{ gap: 'var(--jx-space-md)' }}>\n          <legend className=\"jx-legend\">Контакты</legend>\n\n          <div className=\"jx-field\">\n            <label className=\"jx-label\" htmlFor=\"fullName\">\n              Имя и фамилия\n            </label>\n            <input\n              id=\"fullName\"\n              className=\"jx-input\"\n              type=\"text\"\n              value={contacts.fullName}\n              onChange={(event) =>\n                setContacts((prev) => ({ ...prev, fullName: event.target.value }))\n              }\n            />\n          </div>\n\n          <div className=\"jx-field\">\n            <label className=\"jx-label\" htmlFor=\"email\">\n              Email\n            </label>\n            <input\n              id=\"email\"\n              className=\"jx-input\"\n              type=\"email\"\n              value={contacts.email}\n              onChange={(event) =>\n                setContacts((prev) => ({ ...prev, email: event.target.value }))\n              }\n            />\n          </div>\n\n          <div className=\"jx-field\">\n            <label className=\"jx-label\" htmlFor=\"phone\">\n              Телефон\n            </label>\n            <input\n              id=\"phone\"\n              className=\"jx-input\"\n              type=\"tel\"\n              value={contacts.phone}\n              onChange={(event) =>\n                setContacts((prev) => ({ ...prev, phone: event.target.value }))\n              }\n            />\n          </div>\n        </fieldset>\n      )}\n\n      {step === 1 && (\n        <fieldset className=\"jx-fieldset jx-stack\" style={{ gap: 'var(--jx-space-md)' }}>\n          <legend className=\"jx-legend\">Адрес</legend>\n\n          <div className=\"jx-field\">\n            <label className=\"jx-label\" htmlFor=\"street\">\n              Улица и дом\n            </label>\n            <input\n              id=\"street\"\n              className=\"jx-input\"\n              type=\"text\"\n              value={address.street}\n              onChange={(event) =>\n                setAddress((prev) => ({ ...prev, street: event.target.value }))\n              }\n            />\n          </div>\n\n          <div className=\"jx-field\">\n            <label className=\"jx-label\" htmlFor=\"city\">\n              Город\n            </label>\n            <input\n              id=\"city\"\n              className=\"jx-input\"\n              type=\"text\"\n              value={address.city}\n              onChange={(event) =>\n                setAddress((prev) => ({ ...prev, city: event.target.value }))\n              }\n            />\n          </div>\n\n          <div className=\"jx-field\">\n            <label className=\"jx-label\" htmlFor=\"zip\">\n              Индекс\n            </label>\n            <input\n              id=\"zip\"\n              className=\"jx-input\"\n              type=\"text\"\n              value={address.zip}\n              onChange={(event) =>\n                setAddress((prev) => ({ ...prev, zip: event.target.value }))\n              }\n            />\n          </div>\n        </fieldset>\n      )}\n\n      {step === 2 && (\n        <div className=\"jx-stack\" style={{ gap: 'var(--jx-space-md)' }}>\n          <h3 className=\"jx-heading\">Проверка данных</h3>\n\n          <dl className=\"jx-summary\">\n            <dt className=\"jx-summary__term\">Имя и фамилия</dt>\n            <dd className=\"jx-summary__value\">{contacts.fullName || '—'}</dd>\n\n            <dt className=\"jx-summary__term\">Email</dt>\n            <dd className=\"jx-summary__value\">{contacts.email || '—'}</dd>\n\n            <dt className=\"jx-summary__term\">Телефон</dt>\n            <dd className=\"jx-summary__value\">{contacts.phone || '—'}</dd>\n\n            <dt className=\"jx-summary__term\">Улица и дом</dt>\n            <dd className=\"jx-summary__value\">{address.street || '—'}</dd>\n\n            <dt className=\"jx-summary__term\">Город</dt>\n            <dd className=\"jx-summary__value\">{address.city || '—'}</dd>\n\n            <dt className=\"jx-summary__term\">Индекс</dt>\n            <dd className=\"jx-summary__value\">{address.zip || '—'}</dd>\n          </dl>\n        </div>\n      )}\n\n      <div className=\"jx-row\" style={{ justifyContent: 'space-between' }}>\n        <Button variant=\"secondary\" onClick={handleBack} disabled={isFirstStep}>\n          Назад\n        </Button>\n\n        {isLastStep ? (\n          <Button variant=\"primary\" onClick={handleSubmit}>\n            Отправить\n          </Button>\n        ) : (\n          <Button variant=\"primary\" onClick={handleNext}>\n            Дальше\n          </Button>\n        )}\n      </div>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\ninterface ContactsData {\n  fullName: string;\n  email: string;\n  phone: string;\n}\n\ninterface AddressData {\n  street: string;\n  city: string;\n  zip: string;\n}\n\nexport interface RegistrationData {\n  contacts: ContactsData;\n  address: AddressData;\n}\n\ninterface RegistrationFormProps {\n  onSubmit: (data: RegistrationData) => void;\n}\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nexport default function RegistrationForm({ onSubmit }: RegistrationFormProps) {\n  const [step, setStep] = useState(0);\n  const [contacts, setContacts] = useState<ContactsData>({\n    fullName: '',\n    email: '',\n    phone: '',\n  });\n  const [address, setAddress] = useState<AddressData>({\n    street: '',\n    city: '',\n    zip: '',\n  });\n\n  const isLastStep = step === STEPS.length - 1;\n  const isFirstStep = step === 0;\n\n  const handleNext = () => {\n    if (!isLastStep) {\n      setStep((current) => current + 1);\n    }\n  };\n\n  const handleBack = () => {\n    if (!isFirstStep) {\n      setStep((current) => current - 1);\n    }\n  };\n\n  const handleSubmit = () => {\n    onSubmit({ contacts, address });\n  };\n\n  return (\n    <div className=\"jx-card jx-stack\" style={{ gap: 'var(--jx-space-lg)' }}>\n      <ol className=\"jx-stepper\" aria-label=\"Шаги регистрации\">\n        {STEPS.map((label, index) => {\n          const status =\n            index === step ? 'active' : index < step ? 'done' : 'upcoming';\n          return (\n            <li\n              key={label}\n              className={`jx-step jx-step--${status}`}\n              aria-current={index === step ? 'step' : undefined}\n            >\n              <span className=\"jx-step__index\">{index + 1}</span>\n              <span className=\"jx-step__label\">{label}</span>\n            </li>\n          );\n        })}\n      </ol>\n\n      {step === 0 && (\n        <fieldset className=\"jx-fieldset jx-stack\" style={{ gap: 'var(--jx-space-md)' }}>\n          <legend className=\"jx-legend\">Контакты</legend>\n\n          <div className=\"jx-field\">\n            <label className=\"jx-label\" htmlFor=\"fullName\">\n              Имя и фамилия\n            </label>\n            <input\n              id=\"fullName\"\n              className=\"jx-input\"\n              type=\"text\"\n              value={contacts.fullName}\n              onChange={(event) =>\n                setContacts((prev) => ({ ...prev, fullName: event.target.value }))\n              }\n            />\n          </div>\n\n          <div className=\"jx-field\">\n            <label className=\"jx-label\" htmlFor=\"email\">\n              Email\n            </label>\n            <input\n              id=\"email\"\n              className=\"jx-input\"\n              type=\"email\"\n              value={contacts.email}\n              onChange={(event) =>\n                setContacts((prev) => ({ ...prev, email: event.target.value }))\n              }\n            />\n          </div>\n\n          <div className=\"jx-field\">\n            <label className=\"jx-label\" htmlFor=\"phone\">\n              Телефон\n            </label>\n            <input\n              id=\"phone\"\n              className=\"jx-input\"\n              type=\"tel\"\n              value={contacts.phone}\n              onChange={(event) =>\n                setContacts((prev) => ({ ...prev, phone: event.target.value }))\n              }\n            />\n          </div>\n        </fieldset>\n      )}\n\n      {step === 1 && (\n        <fieldset className=\"jx-fieldset jx-stack\" style={{ gap: 'var(--jx-space-md)' }}>\n          <legend className=\"jx-legend\">Адрес</legend>\n\n          <div className=\"jx-field\">\n            <label className=\"jx-label\" htmlFor=\"street\">\n              Улица и дом\n            </label>\n            <input\n              id=\"street\"\n              className=\"jx-input\"\n              type=\"text\"\n              value={address.street}\n              onChange={(event) =>\n                setAddress((prev) => ({ ...prev, street: event.target.value }))\n              }\n            />\n          </div>\n\n          <div className=\"jx-field\">\n            <label className=\"jx-label\" htmlFor=\"city\">\n              Город\n            </label>\n            <input\n              id=\"city\"\n              className=\"jx-input\"\n              type=\"text\"\n              value={address.city}\n              onChange={(event) =>\n                setAddress((prev) => ({ ...prev, city: event.target.value }))\n              }\n            />\n          </div>\n\n          <div className=\"jx-field\">\n            <label className=\"jx-label\" htmlFor=\"zip\">\n              Индекс\n            </label>\n            <input\n              id=\"zip\"\n              className=\"jx-input\"\n              type=\"text\"\n              value={address.zip}\n              onChange={(event) =>\n                setAddress((prev) => ({ ...prev, zip: event.target.value }))\n              }\n            />\n          </div>\n        </fieldset>\n      )}\n\n      {step === 2 && (\n        <div className=\"jx-stack\" style={{ gap: 'var(--jx-space-md)' }}>\n          <h3 className=\"jx-heading\">Проверка данных</h3>\n\n          <dl className=\"jx-summary\">\n            <dt className=\"jx-summary__term\">Имя и фамилия</dt>\n            <dd className=\"jx-summary__value\">{contacts.fullName || '—'}</dd>\n\n            <dt className=\"jx-summary__term\">Email</dt>\n            <dd className=\"jx-summary__value\">{contacts.email || '—'}</dd>\n\n            <dt className=\"jx-summary__term\">Телефон</dt>\n            <dd className=\"jx-summary__value\">{contacts.phone || '—'}</dd>\n\n            <dt className=\"jx-summary__term\">Улица и дом</dt>\n            <dd className=\"jx-summary__value\">{address.street || '—'}</dd>\n\n            <dt className=\"jx-summary__term\">Город</dt>\n            <dd className=\"jx-summary__value\">{address.city || '—'}</dd>\n\n            <dt className=\"jx-summary__term\">Индекс</dt>\n            <dd className=\"jx-summary__value\">{address.zip || '—'}</dd>\n          </dl>\n        </div>\n      )}\n\n      <div className=\"jx-row\" style={{ justifyContent: 'space-between' }}>\n        <Button variant=\"secondary\" onClick={handleBack} disabled={isFirstStep}>\n          Назад\n        </Button>\n\n        {isLastStep ? (\n          <Button variant=\"primary\" onClick={handleSubmit}>\n            Отправить\n          </Button>\n        ) : (\n          <Button variant=\"primary\" onClick={handleNext}>\n            Дальше\n          </Button>\n        )}\n      </div>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        }
+      ],
+      "unknownComponents": [
+        "Button"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 60,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 79,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 130,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 181,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 206,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.56
+  }
+}

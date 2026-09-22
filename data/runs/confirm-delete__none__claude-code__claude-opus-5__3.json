@@ -1,8 +1,8 @@
 {
   "id": "confirm-delete__none__claude-code__claude-opus-5__3",
-  "createdAt": "2026-09-21T12:52:42.717Z",
+  "createdAt": "2026-09-22T09:34:36.571Z",
   "repeat": 3,
-  "durationMs": 16511,
+  "durationMs": 15994,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -23,40 +23,40 @@
     ]
   },
   "context": {
-    "tokens": 111,
+    "tokens": 154,
     "sources": []
   },
   "turns": [
     {
       "usage": {
         "input": 2,
-        "output": 8,
-        "cacheRead": 6794,
-        "cacheCreation": 8362
+        "output": 4,
+        "cacheRead": 8601,
+        "cacheCreation": 0
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 8,
-        "cacheRead": 6794,
-        "cacheCreation": 8362
+        "output": 4,
+        "cacheRead": 8601,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
     "input": 2,
-    "output": 1090,
-    "cacheRead": 6794,
-    "cacheCreation": 8362
+    "output": 1257,
+    "cacheRead": 8601,
+    "cacheCreation": 0
   },
-  "costUsd": 0.0829195,
+  "costUsd": 0.0357355,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useCallback, useState } from 'react';\nimport { Button, Modal, Stack, Text } from '@jinx-ui/react';\n\ntype DeleteProjectButtonProps = {\n  projectName?: string;\n  onConfirm: () => void;\n};\n\nexport default function DeleteProjectButton({ projectName, onConfirm }: DeleteProjectButtonProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const close = useCallback(() => setIsOpen(false), []);\n\n  const confirm = useCallback(() => {\n    setIsOpen(false);\n    onConfirm();\n  }, [onConfirm]);\n\n  return (\n    <>\n      <Button variant=\"danger\" onClick={() => setIsOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Modal open={isOpen} onClose={close} title=\"Удалить проект?\" size=\"sm\">\n        <Stack gap=\"md\" style={{ paddingBlock: 'var(--jx-space-2)' }}>\n          <Text color=\"muted\">\n            {projectName\n              ? `Проект «${projectName}» будет удалён без возможности восстановления.`\n              : 'Проект будет удалён без возможности восстановления.'}{' '}\n            Это действие необратимо.\n          </Text>\n\n          <Stack direction=\"row\" gap=\"sm\" justify=\"end\">\n            <Button variant=\"secondary\" onClick={close}>\n              Отмена\n            </Button>\n            <Button variant=\"danger\" onClick={confirm}>\n              Удалить\n            </Button>\n          </Stack>\n        </Stack>\n      </Modal>\n    </>\n  );\n}",
-    "text": "```tsx\nimport { useCallback, useState } from 'react';\nimport { Button, Modal, Stack, Text } from '@jinx-ui/react';\n\ntype DeleteProjectButtonProps = {\n  projectName?: string;\n  onConfirm: () => void;\n};\n\nexport default function DeleteProjectButton({ projectName, onConfirm }: DeleteProjectButtonProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const close = useCallback(() => setIsOpen(false), []);\n\n  const confirm = useCallback(() => {\n    setIsOpen(false);\n    onConfirm();\n  }, [onConfirm]);\n\n  return (\n    <>\n      <Button variant=\"danger\" onClick={() => setIsOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Modal open={isOpen} onClose={close} title=\"Удалить проект?\" size=\"sm\">\n        <Stack gap=\"md\" style={{ paddingBlock: 'var(--jx-space-2)' }}>\n          <Text color=\"muted\">\n            {projectName\n              ? `Проект «${projectName}» будет удалён без возможности восстановления.`\n              : 'Проект будет удалён без возможности восстановления.'}{' '}\n            Это действие необратимо.\n          </Text>\n\n          <Stack direction=\"row\" gap=\"sm\" justify=\"end\">\n            <Button variant=\"secondary\" onClick={close}>\n              Отмена\n            </Button>\n            <Button variant=\"danger\" onClick={confirm}>\n              Удалить\n            </Button>\n          </Stack>\n        </Stack>\n      </Modal>\n    </>\n  );\n}\n```"
+    "code": "import { useState } from 'react';\nimport { Button, Modal, Stack, Text } from '@jinx-ui/react';\n\ntype DeleteProjectButtonProps = {\n  onConfirm: () => void;\n};\n\nexport default function DeleteProjectButton({ onConfirm }: DeleteProjectButtonProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const close = () => setIsOpen(false);\n\n  const handleConfirm = () => {\n    close();\n    onConfirm();\n  };\n\n  return (\n    <>\n      <Button variant=\"danger\" onClick={() => setIsOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Modal open={isOpen} onClose={close} title=\"Удалить проект?\">\n        <Stack direction=\"column\" gap=\"var(--jx-space-4)\">\n          <Text tone=\"muted\">\n            Проект и все его данные будут удалены безвозвратно. Это действие нельзя отменить.\n          </Text>\n\n          <Stack direction=\"row\" gap=\"var(--jx-space-2)\" justify=\"end\">\n            <Button variant=\"secondary\" onClick={close}>\n              Отмена\n            </Button>\n            <Button variant=\"danger\" onClick={handleConfirm}>\n              Удалить\n            </Button>\n          </Stack>\n        </Stack>\n      </Modal>\n    </>\n  );\n}",
+    "text": "Я не могу проверить реальный API `@jinx-ui/react` (нет доступа к пакету), поэтому имена компонентов и пропсов ниже — предположение по типовым соглашениям; сверьтесь с документацией библиотеки.\n\n```tsx\nimport { useState } from 'react';\nimport { Button, Modal, Stack, Text } from '@jinx-ui/react';\n\ntype DeleteProjectButtonProps = {\n  onConfirm: () => void;\n};\n\nexport default function DeleteProjectButton({ onConfirm }: DeleteProjectButtonProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const close = () => setIsOpen(false);\n\n  const handleConfirm = () => {\n    close();\n    onConfirm();\n  };\n\n  return (\n    <>\n      <Button variant=\"danger\" onClick={() => setIsOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Modal open={isOpen} onClose={close} title=\"Удалить проект?\">\n        <Stack direction=\"column\" gap=\"var(--jx-space-4)\">\n          <Text tone=\"muted\">\n            Проект и все его данные будут удалены безвозвратно. Это действие нельзя отменить.\n          </Text>\n\n          <Stack direction=\"row\" gap=\"var(--jx-space-2)\" justify=\"end\">\n            <Button variant=\"secondary\" onClick={close}>\n              Отмена\n            </Button>\n            <Button variant=\"danger\" onClick={handleConfirm}>\n              Удалить\n            </Button>\n          </Stack>\n        </Stack>\n      </Modal>\n    </>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
@@ -90,14 +90,7 @@
       ],
       "unknownProps": []
     },
-    "lint": [
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 26,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      }
-    ],
+    "lint": [],
     "usedComponents": [],
     "expectedCoverage": 0,
     "passed": false

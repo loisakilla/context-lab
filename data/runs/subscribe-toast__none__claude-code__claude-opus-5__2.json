@@ -1,8 +1,8 @@
 {
   "id": "subscribe-toast__none__claude-code__claude-opus-5__2",
-  "createdAt": "2026-09-21T12:54:49.846Z",
+  "createdAt": "2026-09-22T09:36:19.517Z",
   "repeat": 2,
-  "durationMs": 23216,
+  "durationMs": 21415,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -24,106 +24,78 @@
     ]
   },
   "context": {
-    "tokens": 111,
+    "tokens": 154,
     "sources": []
   },
   "turns": [
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 6778,
-        "cacheCreation": 8466
+        "output": 8,
+        "cacheRead": 8570,
+        "cacheCreation": 0
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 6778,
-        "cacheCreation": 8466
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 6778,
-        "cacheCreation": 8466
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__claude_ai_Claude_Docs__guide",
-          "input": {
-            "items": [
-              "topic.index"
-            ]
-          },
-          "resultTokens": 29,
-          "isError": true
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 15244,
-        "cacheCreation": 313
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 15244,
-        "cacheCreation": 313
+        "output": 8,
+        "cacheRead": 8570,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 4,
-    "output": 1658,
-    "cacheRead": 22022,
-    "cacheCreation": 8779
+    "input": 2,
+    "output": 1838,
+    "cacheRead": 8570,
+    "cacheCreation": 0
   },
-  "costUsd": 0.10734975,
+  "costUsd": 0.050245,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState, type FormEvent } from 'react';\nimport { Button, Input, Stack, Text, useToast } from '@jinx-ui/react';\n\nexport default function SubscribeForm() {\n  const [email, setEmail] = useState('');\n  const toast = useToast();\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n\n    const address = email.trim();\n    if (!address) return;\n\n    setEmail('');\n    toast.show({\n      title: 'Готово',\n      description: `Письмо со ссылкой на подтверждение отправлено на ${address}.`,\n      variant: 'success',\n      placement: 'bottom-end',\n    });\n  };\n\n  return (\n    <form onSubmit={handleSubmit} style={{ maxWidth: 'var(--jx-size-form-md)' }}>\n      <Stack direction=\"column\" gap=\"var(--jx-space-4)\">\n        <Text as=\"h2\" size=\"lg\" weight=\"semibold\">\n          Подписка на рассылку\n        </Text>\n        <Stack direction=\"row\" gap=\"var(--jx-space-2)\" align=\"end\">\n          <Input\n            type=\"email\"\n            name=\"email\"\n            label=\"Электронная почта\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={(event) => setEmail(event.target.value)}\n            required\n          />\n          <Button type=\"submit\" variant=\"primary\" disabled={!email.trim()}>\n            Подписаться\n          </Button>\n        </Stack>\n      </Stack>\n    </form>\n  );\n}",
-    "text": "У меня в этой сессии нет доступа к файлам, поэтому точный API `@jinx-ui/react` (имена `Toast`/`useToast`, пропсы `Input`) я не проверил — ниже общепринятый для библиотеки вариант, сверьте с `npm run docs:build`.\n\n```tsx\nimport { useState, type FormEvent } from 'react';\nimport { Button, Input, Stack, Text, useToast } from '@jinx-ui/react';\n\nexport default function SubscribeForm() {\n  const [email, setEmail] = useState('');\n  const toast = useToast();\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n\n    const address = email.trim();\n    if (!address) return;\n\n    setEmail('');\n    toast.show({\n      title: 'Готово',\n      description: `Письмо со ссылкой на подтверждение отправлено на ${address}.`,\n      variant: 'success',\n      placement: 'bottom-end',\n    });\n  };\n\n  return (\n    <form onSubmit={handleSubmit} style={{ maxWidth: 'var(--jx-size-form-md)' }}>\n      <Stack direction=\"column\" gap=\"var(--jx-space-4)\">\n        <Text as=\"h2\" size=\"lg\" weight=\"semibold\">\n          Подписка на рассылку\n        </Text>\n        <Stack direction=\"row\" gap=\"var(--jx-space-2)\" align=\"end\">\n          <Input\n            type=\"email\"\n            name=\"email\"\n            label=\"Электронная почта\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={(event) => setEmail(event.target.value)}\n            required\n          />\n          <Button type=\"submit\" variant=\"primary\" disabled={!email.trim()}>\n            Подписаться\n          </Button>\n        </Stack>\n      </Stack>\n    </form>\n  );\n}\n```"
+    "code": "// Имена компонентов/токенов Jinx UI взяты по общепринятой схеме — сверьте с версией пакета.\nimport { useEffect, useState, type FormEvent } from 'react';\nimport { Button, Card, Heading, Input, Stack, Text, Toast } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [sentTo, setSentTo] = useState<string | null>(null);\n\n  useEffect(() => {\n    if (!sentTo) return;\n    const timer = setTimeout(() => setSentTo(null), 5000);\n    return () => clearTimeout(timer);\n  }, [sentTo]);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    setSentTo(email);\n    setEmail('');\n  };\n\n  return (\n    <>\n      <Card className=\"jx-card jx-p-6\">\n        <form onSubmit={handleSubmit} noValidate={false}>\n          <Stack direction=\"column\" gap=\"4\">\n            <Heading level={2}>Подписка на рассылку</Heading>\n            <Text tone=\"muted\">Раз в неделю — новости и обновления.</Text>\n            <Input\n              type=\"email\"\n              name=\"email\"\n              label=\"Электронная почта\"\n              placeholder=\"you@example.com\"\n              autoComplete=\"email\"\n              required\n              value={email}\n              onChange={(event) => setEmail(event.target.value)}\n            />\n            <Button type=\"submit\" variant=\"primary\" disabled={email.trim() === ''}>\n              Подписаться\n            </Button>\n          </Stack>\n        </form>\n      </Card>\n\n      {sentTo && (\n        <div\n          role=\"status\"\n          aria-live=\"polite\"\n          style={{\n            position: 'fixed',\n            insetBlockEnd: 'var(--jx-space-4)',\n            insetInlineEnd: 'var(--jx-space-4)',\n            zIndex: 'var(--jx-z-toast)',\n          }}\n        >\n          <Toast status=\"success\" title=\"Готово\" onClose={() => setSentTo(null)}>\n            <Text>Письмо с подтверждением отправлено на {sentTo}.</Text>\n          </Toast>\n        </div>\n      )}\n    </>\n  );\n}",
+    "text": "```tsx\n// Имена компонентов/токенов Jinx UI взяты по общепринятой схеме — сверьте с версией пакета.\nimport { useEffect, useState, type FormEvent } from 'react';\nimport { Button, Card, Heading, Input, Stack, Text, Toast } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [sentTo, setSentTo] = useState<string | null>(null);\n\n  useEffect(() => {\n    if (!sentTo) return;\n    const timer = setTimeout(() => setSentTo(null), 5000);\n    return () => clearTimeout(timer);\n  }, [sentTo]);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    setSentTo(email);\n    setEmail('');\n  };\n\n  return (\n    <>\n      <Card className=\"jx-card jx-p-6\">\n        <form onSubmit={handleSubmit} noValidate={false}>\n          <Stack direction=\"column\" gap=\"4\">\n            <Heading level={2}>Подписка на рассылку</Heading>\n            <Text tone=\"muted\">Раз в неделю — новости и обновления.</Text>\n            <Input\n              type=\"email\"\n              name=\"email\"\n              label=\"Электронная почта\"\n              placeholder=\"you@example.com\"\n              autoComplete=\"email\"\n              required\n              value={email}\n              onChange={(event) => setEmail(event.target.value)}\n            />\n            <Button type=\"submit\" variant=\"primary\" disabled={email.trim() === ''}>\n              Подписаться\n            </Button>\n          </Stack>\n        </form>\n      </Card>\n\n      {sentTo && (\n        <div\n          role=\"status\"\n          aria-live=\"polite\"\n          style={{\n            position: 'fixed',\n            insetBlockEnd: 'var(--jx-space-4)',\n            insetInlineEnd: 'var(--jx-space-4)',\n            zIndex: 'var(--jx-z-toast)',\n          }}\n        >\n          <Toast status=\"success\" title=\"Готово\" onClose={() => setSentTo(null)}>\n            <Text>Письмо с подтверждением отправлено на {sentTo}.</Text>\n          </Toast>\n        </div>\n      )}\n    </>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
       "errors": [
         {
           "code": 2724,
-          "line": 2,
+          "line": 3,
           "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
         },
         {
           "code": 2305,
-          "line": 2,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Card'."
+        },
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Heading'."
+        },
+        {
+          "code": 2305,
+          "line": 3,
           "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
         },
         {
           "code": 2305,
-          "line": 2,
+          "line": 3,
           "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
         },
         {
           "code": 2305,
-          "line": 2,
+          "line": 3,
           "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
         },
         {
-          "code": 2305,
-          "line": 2,
-          "message": "Module '\"@jinx-ui/react\"' has no exported member 'useToast'."
+          "code": 2724,
+          "line": 3,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Toast'. Did you mean 'JxToast'?"
         },
         {
           "code": 7006,
@@ -133,10 +105,12 @@
       ],
       "unknownComponents": [
         "Button",
+        "Card",
+        "Heading",
         "Input",
         "Stack",
         "Text",
-        "useToast"
+        "Toast"
       ],
       "unknownProps": []
     },
@@ -144,7 +118,7 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 24,
+        "line": 49,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],

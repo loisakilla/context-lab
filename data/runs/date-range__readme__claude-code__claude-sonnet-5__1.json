@@ -1,0 +1,110 @@
+{
+  "id": "date-range__readme__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-22T09:46:07.091Z",
+  "repeat": 1,
+  "durationMs": 17700,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "date-range",
+    "title": "Выбор периода",
+    "prompt": "Сделай выбор даты отчёта: календарь на месяц и над ним ряд быстрых вариантов «Сегодня», «Вчера», «Неделя назад», при нажатии на которые дата подставляется в календарь. Выбранная дата отдаётся наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxCalendar",
+      "JxChip"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8235,
+        "cacheCreation": 1336
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8235,
+        "cacheCreation": 1336
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2102,
+    "cacheRead": 8235,
+    "cacheCreation": 1336
+  },
+  "costUsd": 0.0650275,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { Calendar, Button } from '@jinx-ui/react';\n\ninterface QuickOption {\n  label: string;\n  getDate: () => Date;\n}\n\ninterface ReportDatePickerProps {\n  onChange: (date: Date) => void;\n  defaultValue?: Date;\n}\n\nfunction startOfDay(date: Date): Date {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n}\n\nfunction addDays(date: Date, days: number): Date {\n  const result = new Date(date);\n  result.setDate(result.getDate() + days);\n  return result;\n}\n\nconst quickOptions: QuickOption[] = [\n  { label: 'Сегодня', getDate: () => startOfDay(new Date()) },\n  { label: 'Вчера', getDate: () => addDays(startOfDay(new Date()), -1) },\n  { label: 'Неделя назад', getDate: () => addDays(startOfDay(new Date()), -7) },\n];\n\nexport default function ReportDatePicker({ onChange, defaultValue }: ReportDatePickerProps) {\n  const [selectedDate, setSelectedDate] = useState<Date>(\n    defaultValue ? startOfDay(defaultValue) : startOfDay(new Date())\n  );\n\n  const applyDate = (date: Date) => {\n    const normalized = startOfDay(date);\n    setSelectedDate(normalized);\n    onChange(normalized);\n  };\n\n  return (\n    <div\n      className=\"jx-stack jx-panel\"\n      style={{ gap: 'var(--jx-space-md)', padding: 'var(--jx-space-md)' }}\n    >\n      <div\n        className=\"jx-group\"\n        role=\"group\"\n        aria-label=\"Быстрый выбор даты\"\n        style={{ gap: 'var(--jx-space-sm)' }}\n      >\n        {quickOptions.map((option) => {\n          const optionDate = option.getDate();\n          const isActive = optionDate.getTime() === selectedDate.getTime();\n          return (\n            <Button\n              key={option.label}\n              type=\"button\"\n              variant={isActive ? 'primary' : 'secondary'}\n              size=\"sm\"\n              aria-pressed={isActive}\n              onClick={() => applyDate(optionDate)}\n            >\n              {option.label}\n            </Button>\n          );\n        })}\n      </div>\n      <Calendar\n        mode=\"single\"\n        value={selectedDate}\n        onChange={(date: Date) => applyDate(date)}\n        className=\"jx-calendar\"\n        aria-label=\"Календарь выбора даты отчёта\"\n      />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { Calendar, Button } from '@jinx-ui/react';\n\ninterface QuickOption {\n  label: string;\n  getDate: () => Date;\n}\n\ninterface ReportDatePickerProps {\n  onChange: (date: Date) => void;\n  defaultValue?: Date;\n}\n\nfunction startOfDay(date: Date): Date {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n}\n\nfunction addDays(date: Date, days: number): Date {\n  const result = new Date(date);\n  result.setDate(result.getDate() + days);\n  return result;\n}\n\nconst quickOptions: QuickOption[] = [\n  { label: 'Сегодня', getDate: () => startOfDay(new Date()) },\n  { label: 'Вчера', getDate: () => addDays(startOfDay(new Date()), -1) },\n  { label: 'Неделя назад', getDate: () => addDays(startOfDay(new Date()), -7) },\n];\n\nexport default function ReportDatePicker({ onChange, defaultValue }: ReportDatePickerProps) {\n  const [selectedDate, setSelectedDate] = useState<Date>(\n    defaultValue ? startOfDay(defaultValue) : startOfDay(new Date())\n  );\n\n  const applyDate = (date: Date) => {\n    const normalized = startOfDay(date);\n    setSelectedDate(normalized);\n    onChange(normalized);\n  };\n\n  return (\n    <div\n      className=\"jx-stack jx-panel\"\n      style={{ gap: 'var(--jx-space-md)', padding: 'var(--jx-space-md)' }}\n    >\n      <div\n        className=\"jx-group\"\n        role=\"group\"\n        aria-label=\"Быстрый выбор даты\"\n        style={{ gap: 'var(--jx-space-sm)' }}\n      >\n        {quickOptions.map((option) => {\n          const optionDate = option.getDate();\n          const isActive = optionDate.getTime() === selectedDate.getTime();\n          return (\n            <Button\n              key={option.label}\n              type=\"button\"\n              variant={isActive ? 'primary' : 'secondary'}\n              size=\"sm\"\n              aria-pressed={isActive}\n              onClick={() => applyDate(optionDate)}\n            >\n              {option.label}\n            </Button>\n          );\n        })}\n      </div>\n      <Calendar\n        mode=\"single\"\n        value={selectedDate}\n        onChange={(date: Date) => applyDate(date)}\n        className=\"jx-calendar\"\n        aria-label=\"Календарь выбора даты отчёта\"\n      />\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Calendar'. Did you mean 'JxCalendar'?"
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Calendar"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 46,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 52,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.42
+  }
+}

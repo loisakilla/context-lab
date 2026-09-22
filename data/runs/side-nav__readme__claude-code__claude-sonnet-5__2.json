@@ -1,0 +1,117 @@
+{
+  "id": "side-nav__readme__claude-code__claude-sonnet-5__2",
+  "createdAt": "2026-09-22T09:45:25.008Z",
+  "repeat": 2,
+  "durationMs": 11708,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "side-nav",
+    "title": "Боковая панель навигации",
+    "prompt": "Сделай кнопку «Меню», по которой слева выезжает панель с навигацией: пункты «Проекты», «Команда», «Настройки», разделитель и пункт «Выйти», выделенный как опасный. Выбор пункта вызывает переданный колбэк onNavigate с ключом пункта и закрывает панель.",
+    "taskType": "ui",
+    "expects": [
+      "JxDrawer",
+      "JxMenu",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 6,
+        "cacheRead": 9582,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 6,
+        "cacheRead": 9582,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1176,
+    "cacheRead": 9582,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.034200999999999995,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { Button, Drawer, Divider } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface NavigationDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nconst navItems: { key: NavKey; label: string }[] = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function NavigationDrawer({ onNavigate }: NavigationDrawerProps) {\n  const [open, setOpen] = useState(false);\n\n  const handleSelect = (key: NavKey) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <Button onClick={() => setOpen(true)}>Меню</Button>\n\n      <Drawer\n        open={open}\n        onOpenChange={setOpen}\n        side=\"left\"\n        aria-label=\"Навигация\"\n      >\n        <nav\n          className=\"jx-stack\"\n          style={{ gap: 'var(--jx-space-2)', padding: 'var(--jx-space-4)' }}\n        >\n          {navItems.map((item) => (\n            <button\n              key={item.key}\n              type=\"button\"\n              className=\"jx-menu-item\"\n              onClick={() => handleSelect(item.key)}\n            >\n              {item.label}\n            </button>\n          ))}\n\n          <Divider style={{ margin: 'var(--jx-space-2) 0' }} />\n\n          <button\n            type=\"button\"\n            className=\"jx-menu-item jx-menu-item--danger\"\n            onClick={() => handleSelect('logout')}\n          >\n            Выйти\n          </button>\n        </nav>\n      </Drawer>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { Button, Drawer, Divider } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface NavigationDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nconst navItems: { key: NavKey; label: string }[] = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function NavigationDrawer({ onNavigate }: NavigationDrawerProps) {\n  const [open, setOpen] = useState(false);\n\n  const handleSelect = (key: NavKey) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <Button onClick={() => setOpen(true)}>Меню</Button>\n\n      <Drawer\n        open={open}\n        onOpenChange={setOpen}\n        side=\"left\"\n        aria-label=\"Навигация\"\n      >\n        <nav\n          className=\"jx-stack\"\n          style={{ gap: 'var(--jx-space-2)', padding: 'var(--jx-space-4)' }}\n        >\n          {navItems.map((item) => (\n            <button\n              key={item.key}\n              type=\"button\"\n              className=\"jx-menu-item\"\n              onClick={() => handleSelect(item.key)}\n            >\n              {item.label}\n            </button>\n          ))}\n\n          <Divider style={{ margin: 'var(--jx-space-2) 0' }} />\n\n          <button\n            type=\"button\"\n            className=\"jx-menu-item jx-menu-item--danger\"\n            onClick={() => handleSelect('logout')}\n          >\n            Выйти\n          </button>\n        </nav>\n      </Drawer>\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Drawer'. Did you mean 'JxDrawer'?"
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Divider'. Did you mean 'JxDivider'?"
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Divider",
+        "Drawer"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 36,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 49,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.28
+  }
+}

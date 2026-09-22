@@ -1,8 +1,8 @@
 {
   "id": "tag-picker__mcp__claude-code__claude-opus-5__2",
-  "createdAt": "2026-09-21T13:31:13.239Z",
+  "createdAt": "2026-09-22T09:45:56.485Z",
   "repeat": 2,
-  "durationMs": 25059,
+  "durationMs": 44245,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -36,8 +36,8 @@
     {
       "usage": {
         "input": 2,
-        "output": 10,
-        "cacheRead": 13934,
+        "output": 4,
+        "cacheRead": 11027,
         "cacheCreation": 0
       },
       "toolCalls": []
@@ -45,107 +45,27 @@
     {
       "usage": {
         "input": 2,
-        "output": 10,
-        "cacheRead": 13934,
+        "output": 4,
+        "cacheRead": 11027,
         "cacheCreation": 0
       },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
           "input": {
-            "query": "теги, метки, chip, удаляемая метка",
+            "query": "теги метки chip tag input",
             "limit": 8
           },
-          "resultTokens": 309
+          "resultTokens": 640
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 10,
-        "cacheRead": 13934,
+        "output": 4,
+        "cacheRead": 11027,
         "cacheCreation": 0
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "поле ввода текста input",
-            "limit": 8
-          },
-          "resultTokens": 635
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 13934,
-        "cacheCreation": 1724
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 13934,
-        "cacheCreation": 1724
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__get_component_api",
-          "input": {
-            "name": "JxTagInput",
-            "detail": "full"
-          },
-          "resultTokens": 275
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 13934,
-        "cacheCreation": 1724
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__get_component_api",
-          "input": {
-            "name": "JxChip",
-            "detail": "full"
-          },
-          "resultTokens": 279
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 13934,
-        "cacheCreation": 1724
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__get_component_examples",
-          "input": {
-            "name": "JxTagInput"
-          },
-          "resultTokens": 57
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 13934,
-        "cacheCreation": 1724
       },
       "toolCalls": [
         {
@@ -161,8 +81,8 @@
       "usage": {
         "input": 2,
         "output": 8,
-        "cacheRead": 15658,
-        "cacheCreation": 2894
+        "cacheRead": 13736,
+        "cacheCreation": 0
       },
       "toolCalls": []
     },
@@ -170,15 +90,94 @@
       "usage": {
         "input": 2,
         "output": 8,
-        "cacheRead": 15658,
-        "cacheCreation": 2894
+        "cacheRead": 13736,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13736,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxTagInput",
+            "detail": "full"
+          },
+          "resultTokens": 275
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13736,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxChip",
+            "detail": "full"
+          },
+          "resultTokens": 279
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13736,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_examples",
+          "input": {
+            "name": "JxTagInput"
+          },
+          "resultTokens": 57
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13736,
+        "cacheCreation": 1345
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13736,
+        "cacheCreation": 1345
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 13736,
+        "cacheCreation": 1345
       },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_docs",
           "input": {
-            "component": "JxTagInput",
-            "maxTokens": 900
+            "component": "JxTagInput"
           },
           "resultTokens": 389
         }
@@ -188,8 +187,8 @@
       "usage": {
         "input": 2,
         "output": 8,
-        "cacheRead": 15658,
-        "cacheCreation": 2894
+        "cacheRead": 13736,
+        "cacheCreation": 1345
       },
       "toolCalls": [
         {
@@ -204,33 +203,86 @@
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 18552,
-        "cacheCreation": 2422
+        "output": 8,
+        "cacheRead": 15081,
+        "cacheCreation": 2370
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 18552,
-        "cacheCreation": 2422
+        "output": 8,
+        "cacheRead": 15081,
+        "cacheCreation": 2370
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 15081,
+        "cacheCreation": 2370
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxInputField",
+            "detail": "full"
+          },
+          "resultTokens": 393
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 15081,
+        "cacheCreation": 2370
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__list_design_tokens",
+          "input": {
+            "group": "radius"
+          },
+          "resultTokens": 90
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 17451,
+        "cacheCreation": 1616
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 17451,
+        "cacheCreation": 1616
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 8,
-    "output": 1868,
-    "cacheRead": 62078,
-    "cacheCreation": 7040
+    "input": 10,
+    "output": 3665,
+    "cacheRead": 71031,
+    "cacheCreation": 5331
   },
-  "costUsd": 0.12177899999999998,
+  "costUsd": 0.16050925,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useCallback, useState } from 'react';\nimport { JxChip, JxTagInput } from '@jinx-ui/react';\n\nexport interface ArticleTagPickerProps {\n  value?: string[];\n  defaultValue?: string[];\n  label?: string;\n  placeholder?: string;\n  emptyText?: string;\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagPicker({\n  value,\n  defaultValue = [],\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  emptyText = 'Пока нет ни одного тега',\n  onChange,\n}: ArticleTagPickerProps) {\n  const [innerTags, setInnerTags] = useState<string[]>(defaultValue);\n  const tags = value ?? innerTags;\n\n  const commit = useCallback(\n    (next: string[]) => {\n      if (value === undefined) {\n        setInnerTags(next);\n      }\n      onChange?.(next);\n    },\n    [onChange, value],\n  );\n\n  const removeTag = useCallback(\n    (tag: string) => {\n      commit(tags.filter((item) => item !== tag));\n    },\n    [commit, tags],\n  );\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>\n      <span style={{ color: 'var(--jx-text-2)' }}>{label}</span>\n\n      <JxTagInput\n        ariaLabel={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={commit}\n      />\n\n      {tags.length === 0 ? (\n        <span style={{ color: 'var(--jx-text-3)' }}>{emptyText}</span>\n      ) : (\n        <div\n          role=\"list\"\n          aria-label=\"Выбранные теги\"\n          style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}\n        >\n          {tags.map((tag) => (\n            <JxChip key={tag} role=\"listitem\" removable onRemove={() => removeTag(tag)}>\n              {tag}\n            </JxChip>\n          ))}\n        </div>\n      )}\n    </div>\n  );\n}",
-    "text": "```tsx\nimport { useCallback, useState } from 'react';\nimport { JxChip, JxTagInput } from '@jinx-ui/react';\n\nexport interface ArticleTagPickerProps {\n  value?: string[];\n  defaultValue?: string[];\n  label?: string;\n  placeholder?: string;\n  emptyText?: string;\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagPicker({\n  value,\n  defaultValue = [],\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  emptyText = 'Пока нет ни одного тега',\n  onChange,\n}: ArticleTagPickerProps) {\n  const [innerTags, setInnerTags] = useState<string[]>(defaultValue);\n  const tags = value ?? innerTags;\n\n  const commit = useCallback(\n    (next: string[]) => {\n      if (value === undefined) {\n        setInnerTags(next);\n      }\n      onChange?.(next);\n    },\n    [onChange, value],\n  );\n\n  const removeTag = useCallback(\n    (tag: string) => {\n      commit(tags.filter((item) => item !== tag));\n    },\n    [commit, tags],\n  );\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>\n      <span style={{ color: 'var(--jx-text-2)' }}>{label}</span>\n\n      <JxTagInput\n        ariaLabel={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={commit}\n      />\n\n      {tags.length === 0 ? (\n        <span style={{ color: 'var(--jx-text-3)' }}>{emptyText}</span>\n      ) : (\n        <div\n          role=\"list\"\n          aria-label=\"Выбранные теги\"\n          style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}\n        >\n          {tags.map((tag) => (\n            <JxChip key={tag} role=\"listitem\" removable onRemove={() => removeTag(tag)}>\n              {tag}\n            </JxChip>\n          ))}\n        </div>\n      )}\n    </div>\n  );\n}\n```"
+    "code": "import { useState, type KeyboardEvent } from 'react';\nimport { JxChip, JxInputField } from '@jinx-ui/react';\n\nexport interface ArticleTagPickerProps {\n  value?: string[];\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n  label?: string;\n  placeholder?: string;\n  helperText?: string;\n}\n\nfunction ArticleTagPicker({\n  value,\n  defaultValue,\n  onChange,\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  helperText = 'Enter или запятая добавляет тег, Backspace удаляет последний',\n}: ArticleTagPickerProps) {\n  const [uncontrolled, setUncontrolled] = useState<string[]>(defaultValue ?? []);\n  const [draft, setDraft] = useState('');\n\n  const tags = value ?? uncontrolled;\n\n  const commit = (next: string[]) => {\n    if (value === undefined) {\n      setUncontrolled(next);\n    }\n    onChange?.(next);\n  };\n\n  const addTag = (raw: string) => {\n    const tag = raw.trim();\n    setDraft('');\n    if (tag === '' || tags.includes(tag)) {\n      return;\n    }\n    commit([...tags, tag]);\n  };\n\n  const removeTag = (tag: string) => {\n    commit(tags.filter((item) => item !== tag));\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag(draft);\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      event.preventDefault();\n      commit(tags.slice(0, -1));\n    }\n  };\n\n  return (\n    <div style={{ display: 'grid', gap: '8px' }}>\n      <JxInputField\n        label={label}\n        placeholder={placeholder}\n        helperText={helperText}\n        value={draft}\n        onChange={(event) => setDraft(event.target.value)}\n        onKeyDown={handleKeyDown}\n        onBlur={() => addTag(draft)}\n      />\n      {tags.length > 0 && (\n        <div\n          aria-label=\"Выбранные теги\"\n          style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}\n        >\n          {tags.map((tag) => (\n            <JxChip key={tag} removable onRemove={() => removeTag(tag)}>\n              {tag}\n            </JxChip>\n          ))}\n        </div>\n      )}\n    </div>\n  );\n}\n\nexport default ArticleTagPicker;",
+    "text": "Confirmed: `JxInputField` extends `InputHTMLAttributes`, so `onKeyDown`/`value`/`onChange` work natively, and `JxChip` has `removable` + `onRemove`. That combination puts the chips below the field as required.\n\n```tsx\nimport { useState, type KeyboardEvent } from 'react';\nimport { JxChip, JxInputField } from '@jinx-ui/react';\n\nexport interface ArticleTagPickerProps {\n  value?: string[];\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n  label?: string;\n  placeholder?: string;\n  helperText?: string;\n}\n\nfunction ArticleTagPicker({\n  value,\n  defaultValue,\n  onChange,\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  helperText = 'Enter или запятая добавляет тег, Backspace удаляет последний',\n}: ArticleTagPickerProps) {\n  const [uncontrolled, setUncontrolled] = useState<string[]>(defaultValue ?? []);\n  const [draft, setDraft] = useState('');\n\n  const tags = value ?? uncontrolled;\n\n  const commit = (next: string[]) => {\n    if (value === undefined) {\n      setUncontrolled(next);\n    }\n    onChange?.(next);\n  };\n\n  const addTag = (raw: string) => {\n    const tag = raw.trim();\n    setDraft('');\n    if (tag === '' || tags.includes(tag)) {\n      return;\n    }\n    commit([...tags, tag]);\n  };\n\n  const removeTag = (tag: string) => {\n    commit(tags.filter((item) => item !== tag));\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag(draft);\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      event.preventDefault();\n      commit(tags.slice(0, -1));\n    }\n  };\n\n  return (\n    <div style={{ display: 'grid', gap: '8px' }}>\n      <JxInputField\n        label={label}\n        placeholder={placeholder}\n        helperText={helperText}\n        value={draft}\n        onChange={(event) => setDraft(event.target.value)}\n        onKeyDown={handleKeyDown}\n        onBlur={() => addTag(draft)}\n      />\n      {tags.length > 0 && (\n        <div\n          aria-label=\"Выбранные теги\"\n          style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}\n        >\n          {tags.map((tag) => (\n            <JxChip key={tag} removable onRemove={() => removeTag(tag)}>\n              {tag}\n            </JxChip>\n          ))}\n        </div>\n      )}\n    </div>\n  );\n}\n\nexport default ArticleTagPicker;\n```"
   },
   "checks": {
     "tsc": {
@@ -242,37 +294,25 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 42,
+        "line": 59,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 43,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 53,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 58,
+        "line": 72,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],
     "usedComponents": [
       "JxChip",
-      "JxTagInput"
+      "JxInputField"
     ],
-    "expectedCoverage": 1,
+    "expectedCoverage": 0,
     "passed": true
   },
   "verdict": {
     "passed": true,
-    "score": 1
+    "score": 0.7
   }
 }

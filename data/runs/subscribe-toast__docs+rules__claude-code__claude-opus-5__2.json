@@ -1,8 +1,8 @@
 {
   "id": "subscribe-toast__docs+rules__claude-code__claude-opus-5__2",
-  "createdAt": "2026-09-21T13:22:16.351Z",
+  "createdAt": "2026-09-22T09:37:18.421Z",
   "repeat": 2,
-  "durationMs": 9123,
+  "durationMs": 6063,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -24,7 +24,7 @@
     ]
   },
   "context": {
-    "tokens": 17366,
+    "tokens": 17409,
     "sources": [
       {
         "kind": "docs",
@@ -44,24 +44,33 @@
     {
       "usage": {
         "input": 2,
-        "output": 8,
-        "cacheRead": 5579,
-        "cacheCreation": 39148
+        "output": 3,
+        "cacheRead": 38593,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 38593,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
     "input": 2,
-    "output": 504,
-    "cacheRead": 5579,
-    "cacheCreation": 39148
+    "output": 481,
+    "cacheRead": 38593,
+    "cacheCreation": 0
   },
-  "costUsd": 0.2600745,
+  "costUsd": 0.0313315,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState, type FormEvent } from 'react';\nimport {\n  JxButton,\n  JxInputField,\n  JxToastViewport,\n  useJxToastQueue,\n} from '@jinx-ui/react';\n\nexport default function SubscribeForm() {\n  const toasts = useJxToastQueue();\n  const [email, setEmail] = useState('');\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    toasts.push({\n      title: 'Готово',\n      message: `Письмо с подтверждением отправлено на ${email}`,\n      variant: 'success',\n    });\n    setEmail('');\n  };\n\n  return (\n    <form onSubmit={submit}>\n      <div\n        style={{\n          display: 'flex',\n          flexDirection: 'column',\n          gap: '16px',\n          maxWidth: '360px',\n        }}\n      >\n        <JxInputField\n          label=\"Электронная почта\"\n          type=\"email\"\n          name=\"email\"\n          required\n          placeholder=\"you@example.com\"\n          value={email}\n          onChange={(event) => setEmail(event.target.value)}\n          helperText=\"Пришлём письмо с подтверждением подписки\"\n        />\n        <JxButton type=\"submit\" variant=\"primary\">\n          Подписаться\n        </JxButton>\n      </div>\n      <JxToastViewport\n        items={toasts.items}\n        onDismiss={toasts.dismiss}\n        position=\"bottom-right\"\n      />\n    </form>\n  );\n}",
-    "text": "```tsx\nimport { useState, type FormEvent } from 'react';\nimport {\n  JxButton,\n  JxInputField,\n  JxToastViewport,\n  useJxToastQueue,\n} from '@jinx-ui/react';\n\nexport default function SubscribeForm() {\n  const toasts = useJxToastQueue();\n  const [email, setEmail] = useState('');\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    toasts.push({\n      title: 'Готово',\n      message: `Письмо с подтверждением отправлено на ${email}`,\n      variant: 'success',\n    });\n    setEmail('');\n  };\n\n  return (\n    <form onSubmit={submit}>\n      <div\n        style={{\n          display: 'flex',\n          flexDirection: 'column',\n          gap: '16px',\n          maxWidth: '360px',\n        }}\n      >\n        <JxInputField\n          label=\"Электронная почта\"\n          type=\"email\"\n          name=\"email\"\n          required\n          placeholder=\"you@example.com\"\n          value={email}\n          onChange={(event) => setEmail(event.target.value)}\n          helperText=\"Пришлём письмо с подтверждением подписки\"\n        />\n        <JxButton type=\"submit\" variant=\"primary\">\n          Подписаться\n        </JxButton>\n      </div>\n      <JxToastViewport\n        items={toasts.items}\n        onDismiss={toasts.dismiss}\n        position=\"bottom-right\"\n      />\n    </form>\n  );\n}\n```"
+    "code": "import { useState, type FormEvent } from 'react';\nimport { JxButton, JxInputField, JxToastViewport, useJxToastQueue } from '@jinx-ui/react';\n\nexport default function SubscribeForm() {\n  const toasts = useJxToastQueue();\n  const [email, setEmail] = useState('');\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    toasts.push({\n      title: 'Готово',\n      message: `Письмо с подтверждением отправлено на ${email}`,\n      variant: 'success',\n    });\n    setEmail('');\n  };\n\n  return (\n    <form onSubmit={submit} style={{ display: 'grid', gap: '12px', maxWidth: '360px' }}>\n      <JxInputField\n        label=\"Электронная почта\"\n        type=\"email\"\n        required\n        placeholder=\"you@example.com\"\n        value={email}\n        onChange={(event) => setEmail(event.target.value)}\n        helperText=\"Присылаем письма не чаще раза в неделю\"\n      />\n      <JxButton type=\"submit\" variant=\"primary\">\n        Подписаться\n      </JxButton>\n      <JxToastViewport items={toasts.items} onDismiss={toasts.dismiss} position=\"top-right\" />\n    </form>\n  );\n}",
+    "text": "```tsx\nimport { useState, type FormEvent } from 'react';\nimport { JxButton, JxInputField, JxToastViewport, useJxToastQueue } from '@jinx-ui/react';\n\nexport default function SubscribeForm() {\n  const toasts = useJxToastQueue();\n  const [email, setEmail] = useState('');\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    toasts.push({\n      title: 'Готово',\n      message: `Письмо с подтверждением отправлено на ${email}`,\n      variant: 'success',\n    });\n    setEmail('');\n  };\n\n  return (\n    <form onSubmit={submit} style={{ display: 'grid', gap: '12px', maxWidth: '360px' }}>\n      <JxInputField\n        label=\"Электронная почта\"\n        type=\"email\"\n        required\n        placeholder=\"you@example.com\"\n        value={email}\n        onChange={(event) => setEmail(event.target.value)}\n        helperText=\"Присылаем письма не чаще раза в неделю\"\n      />\n      <JxButton type=\"submit\" variant=\"primary\">\n        Подписаться\n      </JxButton>\n      <JxToastViewport items={toasts.items} onDismiss={toasts.dismiss} position=\"top-right\" />\n    </form>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
@@ -73,7 +82,7 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 26,
+        "line": 19,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],

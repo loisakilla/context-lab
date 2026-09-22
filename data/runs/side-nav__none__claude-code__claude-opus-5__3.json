@@ -1,8 +1,8 @@
 {
   "id": "side-nav__none__claude-code__claude-opus-5__3",
-  "createdAt": "2026-09-21T13:01:10.000Z",
+  "createdAt": "2026-09-22T09:41:07.600Z",
   "repeat": 3,
-  "durationMs": 24402,
+  "durationMs": 16916,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -24,7 +24,7 @@
     ]
   },
   "context": {
-    "tokens": 111,
+    "tokens": 154,
     "sources": []
   },
   "turns": [
@@ -32,8 +32,8 @@
       "usage": {
         "input": 2,
         "output": 2,
-        "cacheRead": 6778,
-        "cacheCreation": 8842
+        "cacheRead": 8605,
+        "cacheCreation": 0
       },
       "toolCalls": []
     },
@@ -41,79 +41,23 @@
       "usage": {
         "input": 2,
         "output": 2,
-        "cacheRead": 6778,
-        "cacheCreation": 8842
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 6778,
-        "cacheCreation": 8842
-      },
-      "toolCalls": [
-        {
-          "name": "Glob",
-          "input": {
-            "pattern": "**/*.md",
-            "path": "C:\\Users\\kgn20\\WebstormProjects\\context-lab\\data"
-          },
-          "resultTokens": 44,
-          "isError": true
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 6778,
-        "cacheCreation": 8842
-      },
-      "toolCalls": [
-        {
-          "name": "Bash",
-          "input": {
-            "command": "ls C:/Users/kgn20/WebstormProjects/context-lab",
-            "description": "List repo root"
-          },
-          "resultTokens": 44,
-          "isError": true
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 7,
-        "cacheRead": 15620,
-        "cacheCreation": 548
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 7,
-        "cacheRead": 15620,
-        "cacheCreation": 548
+        "cacheRead": 8605,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 4,
-    "output": 2015,
-    "cacheRead": 22398,
-    "cacheCreation": 9390
+    "input": 2,
+    "output": 1471,
+    "cacheRead": 8605,
+    "cacheCreation": 0
   },
-  "costUsd": 0.12028149999999999,
+  "costUsd": 0.041087500000000006,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useCallback, useState } from 'react';\nimport { Button, Divider, Drawer, Menu, MenuItem } from '@jinx-ui/react';\n\nexport type SideNavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface SideNavProps {\n  onNavigate: (key: SideNavKey) => void;\n}\n\nconst navItems: ReadonlyArray<{ key: SideNavKey; label: string }> = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function SideNav({ onNavigate }: SideNavProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = useCallback(\n    (key: SideNavKey) => {\n      onNavigate(key);\n      setOpen(false);\n    },\n    [onNavigate],\n  );\n\n  return (\n    <>\n      <Button\n        variant=\"secondary\"\n        aria-haspopup=\"dialog\"\n        aria-expanded={open}\n        onClick={() => setOpen(true)}\n      >\n        Меню\n      </Button>\n\n      <Drawer\n        open={open}\n        placement=\"left\"\n        title=\"Навигация\"\n        onClose={() => setOpen(false)}\n      >\n        <Menu\n          aria-label=\"Основная навигация\"\n          style={{ paddingBlock: 'var(--jx-space-2)' }}\n        >\n          {navItems.map((item) => (\n            <MenuItem key={item.key} onSelect={() => select(item.key)}>\n              {item.label}\n            </MenuItem>\n          ))}\n\n          <Divider style={{ marginBlock: 'var(--jx-space-2)' }} />\n\n          <MenuItem tone=\"danger\" onSelect={() => select('logout')}>\n            Выйти\n          </MenuItem>\n        </Menu>\n      </Drawer>\n    </>\n  );\n}",
-    "text": "```tsx\nimport { useCallback, useState } from 'react';\nimport { Button, Divider, Drawer, Menu, MenuItem } from '@jinx-ui/react';\n\nexport type SideNavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface SideNavProps {\n  onNavigate: (key: SideNavKey) => void;\n}\n\nconst navItems: ReadonlyArray<{ key: SideNavKey; label: string }> = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function SideNav({ onNavigate }: SideNavProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = useCallback(\n    (key: SideNavKey) => {\n      onNavigate(key);\n      setOpen(false);\n    },\n    [onNavigate],\n  );\n\n  return (\n    <>\n      <Button\n        variant=\"secondary\"\n        aria-haspopup=\"dialog\"\n        aria-expanded={open}\n        onClick={() => setOpen(true)}\n      >\n        Меню\n      </Button>\n\n      <Drawer\n        open={open}\n        placement=\"left\"\n        title=\"Навигация\"\n        onClose={() => setOpen(false)}\n      >\n        <Menu\n          aria-label=\"Основная навигация\"\n          style={{ paddingBlock: 'var(--jx-space-2)' }}\n        >\n          {navItems.map((item) => (\n            <MenuItem key={item.key} onSelect={() => select(item.key)}>\n              {item.label}\n            </MenuItem>\n          ))}\n\n          <Divider style={{ marginBlock: 'var(--jx-space-2)' }} />\n\n          <MenuItem tone=\"danger\" onSelect={() => select('logout')}>\n            Выйти\n          </MenuItem>\n        </Menu>\n      </Drawer>\n    </>\n  );\n}\n```"
+    "code": "import { useState, useCallback } from 'react';\nimport { Button, Drawer, Divider, Stack } from '@jinx-ui/react';\n\nexport type NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface MenuDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nconst ITEMS: ReadonlyArray<{ key: NavKey; label: string }> = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function MenuDrawer({ onNavigate }: MenuDrawerProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = useCallback(\n    (key: NavKey) => {\n      setOpen(false);\n      onNavigate(key);\n    },\n    [onNavigate],\n  );\n\n  return (\n    <>\n      <Button onClick={() => setOpen(true)} aria-haspopup=\"menu\" aria-expanded={open}>\n        Меню\n      </Button>\n\n      <Drawer\n        open={open}\n        placement=\"left\"\n        onClose={() => setOpen(false)}\n        aria-label=\"Навигация\"\n      >\n        <Stack direction=\"column\" gap=\"var(--jx-space-1)\" role=\"menu\">\n          {ITEMS.map((item) => (\n            <Button\n              key={item.key}\n              role=\"menuitem\"\n              variant=\"ghost\"\n              fullWidth\n              onClick={() => select(item.key)}\n            >\n              {item.label}\n            </Button>\n          ))}\n\n          <Divider />\n\n          <Button\n            role=\"menuitem\"\n            variant=\"ghost\"\n            tone=\"danger\"\n            fullWidth\n            onClick={() => select('logout')}\n          >\n            Выйти\n          </Button>\n        </Stack>\n      </Drawer>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState, useCallback } from 'react';\nimport { Button, Drawer, Divider, Stack } from '@jinx-ui/react';\n\nexport type NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface MenuDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nconst ITEMS: ReadonlyArray<{ key: NavKey; label: string }> = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function MenuDrawer({ onNavigate }: MenuDrawerProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = useCallback(\n    (key: NavKey) => {\n      setOpen(false);\n      onNavigate(key);\n    },\n    [onNavigate],\n  );\n\n  return (\n    <>\n      <Button onClick={() => setOpen(true)} aria-haspopup=\"menu\" aria-expanded={open}>\n        Меню\n      </Button>\n\n      <Drawer\n        open={open}\n        placement=\"left\"\n        onClose={() => setOpen(false)}\n        aria-label=\"Навигация\"\n      >\n        <Stack direction=\"column\" gap=\"var(--jx-space-1)\" role=\"menu\">\n          {ITEMS.map((item) => (\n            <Button\n              key={item.key}\n              role=\"menuitem\"\n              variant=\"ghost\"\n              fullWidth\n              onClick={() => select(item.key)}\n            >\n              {item.label}\n            </Button>\n          ))}\n\n          <Divider />\n\n          <Button\n            role=\"menuitem\"\n            variant=\"ghost\"\n            tone=\"danger\"\n            fullWidth\n            onClick={() => select('logout')}\n          >\n            Выйти\n          </Button>\n        </Stack>\n      </Drawer>\n    </>\n  );\n}\n```\n\nЗамечание: у меня нет доступа к документации `@jinx-ui/react`, поэтому имена компонентов и пропсов (`Drawer.placement`, `Button.tone=\"danger\"`, `Stack.gap`) — предположение по типовым конвенциям; сверьте их с реальным API библиотеки."
   },
   "checks": {
     "tsc": {
@@ -126,53 +70,34 @@
         {
           "code": 2724,
           "line": 2,
-          "message": "'\"@jinx-ui/react\"' has no exported member named 'Divider'. Did you mean 'JxDivider'?"
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Drawer'. Did you mean 'JxDrawer'?"
         },
         {
           "code": 2724,
           "line": 2,
-          "message": "'\"@jinx-ui/react\"' has no exported member named 'Drawer'. Did you mean 'JxDrawer'?"
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Divider'. Did you mean 'JxDivider'?"
         },
         {
           "code": 2305,
           "line": 2,
-          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Menu'."
-        },
-        {
-          "code": 2724,
-          "line": 2,
-          "message": "'\"@jinx-ui/react\"' has no exported member named 'MenuItem'. Did you mean 'JxMenuItem'?"
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
         }
       ],
       "unknownComponents": [
         "Button",
         "Divider",
         "Drawer",
-        "Menu",
-        "MenuItem"
+        "Stack"
       ],
       "unknownProps": []
     },
-    "lint": [
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 46,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 54,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      }
-    ],
+    "lint": [],
     "usedComponents": [],
     "expectedCoverage": 0,
     "passed": false
   },
   "verdict": {
     "passed": false,
-    "score": 0
+    "score": 0.14
   }
 }

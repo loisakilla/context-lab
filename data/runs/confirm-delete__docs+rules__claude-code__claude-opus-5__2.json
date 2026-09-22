@@ -1,8 +1,8 @@
 {
   "id": "confirm-delete__docs+rules__claude-code__claude-opus-5__2",
-  "createdAt": "2026-09-21T13:21:14.970Z",
+  "createdAt": "2026-09-22T09:36:32.439Z",
   "repeat": 2,
-  "durationMs": 10591,
+  "durationMs": 6265,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -23,7 +23,7 @@
     ]
   },
   "context": {
-    "tokens": 17366,
+    "tokens": 17409,
     "sources": [
       {
         "kind": "docs",
@@ -43,24 +43,24 @@
     {
       "usage": {
         "input": 2,
-        "output": 8,
-        "cacheRead": 6778,
-        "cacheCreation": 39218
+        "output": 1,
+        "cacheRead": 38624,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
     "input": 2,
-    "output": 493,
-    "cacheRead": 6778,
-    "cacheCreation": 39218
+    "output": 461,
+    "cacheRead": 38624,
+    "cacheCreation": 0
   },
-  "costUsd": 0.2608365,
+  "costUsd": 0.030847,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState } from 'react';\nimport { JxButton, JxModal } from '@jinx-ui/react';\n\ntype DeleteProjectButtonProps = {\n  projectName?: string;\n  onConfirm: () => void;\n};\n\nexport default function DeleteProjectButton({ projectName, onConfirm }: DeleteProjectButtonProps) {\n  const [confirmOpen, setConfirmOpen] = useState(false);\n\n  const confirm = () => {\n    setConfirmOpen(false);\n    onConfirm();\n  };\n\n  return (\n    <>\n      <JxButton variant=\"danger\" onClick={() => setConfirmOpen(true)}>\n        Удалить проект\n      </JxButton>\n      <JxModal\n        open={confirmOpen}\n        onOpenChange={setConfirmOpen}\n        intent=\"danger\"\n        title=\"Удалить проект?\"\n        message={\n          projectName\n            ? `Проект «${projectName}» и все его данные будут удалены безвозвратно. Это действие нельзя отменить.`\n            : 'Проект и все его данные будут удалены безвозвратно. Это действие нельзя отменить.'\n        }\n      >\n        <JxButton variant=\"ghost\" onClick={() => setConfirmOpen(false)}>\n          Отмена\n        </JxButton>\n        <JxButton variant=\"danger\" onClick={confirm}>\n          Удалить\n        </JxButton>\n      </JxModal>\n    </>\n  );\n}",
-    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxModal } from '@jinx-ui/react';\n\ntype DeleteProjectButtonProps = {\n  projectName?: string;\n  onConfirm: () => void;\n};\n\nexport default function DeleteProjectButton({ projectName, onConfirm }: DeleteProjectButtonProps) {\n  const [confirmOpen, setConfirmOpen] = useState(false);\n\n  const confirm = () => {\n    setConfirmOpen(false);\n    onConfirm();\n  };\n\n  return (\n    <>\n      <JxButton variant=\"danger\" onClick={() => setConfirmOpen(true)}>\n        Удалить проект\n      </JxButton>\n      <JxModal\n        open={confirmOpen}\n        onOpenChange={setConfirmOpen}\n        intent=\"danger\"\n        title=\"Удалить проект?\"\n        message={\n          projectName\n            ? `Проект «${projectName}» и все его данные будут удалены безвозвратно. Это действие нельзя отменить.`\n            : 'Проект и все его данные будут удалены безвозвратно. Это действие нельзя отменить.'\n        }\n      >\n        <JxButton variant=\"ghost\" onClick={() => setConfirmOpen(false)}>\n          Отмена\n        </JxButton>\n        <JxButton variant=\"danger\" onClick={confirm}>\n          Удалить\n        </JxButton>\n      </JxModal>\n    </>\n  );\n}\n```"
+    "code": "import { useState } from 'react';\nimport { JxButton, JxModal } from '@jinx-ui/react';\n\ninterface DeleteProjectButtonProps {\n  projectName?: string;\n  onConfirm: () => void;\n}\n\nexport default function DeleteProjectButton({ projectName, onConfirm }: DeleteProjectButtonProps) {\n  const [open, setOpen] = useState(false);\n\n  const confirm = () => {\n    setOpen(false);\n    onConfirm();\n  };\n\n  return (\n    <>\n      <JxButton variant=\"danger\" onClick={() => setOpen(true)}>\n        Удалить проект\n      </JxButton>\n      <JxModal\n        open={open}\n        onOpenChange={setOpen}\n        intent=\"danger\"\n        title=\"Удалить проект?\"\n        message={\n          projectName\n            ? `Проект «${projectName}» и все его данные будут удалены безвозвратно. Действие нельзя отменить.`\n            : 'Проект и все его данные будут удалены безвозвратно. Действие нельзя отменить.'\n        }\n      >\n        <JxButton variant=\"ghost\" onClick={() => setOpen(false)}>\n          Отмена\n        </JxButton>\n        <JxButton variant=\"danger\" onClick={confirm}>\n          Удалить\n        </JxButton>\n      </JxModal>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxModal } from '@jinx-ui/react';\n\ninterface DeleteProjectButtonProps {\n  projectName?: string;\n  onConfirm: () => void;\n}\n\nexport default function DeleteProjectButton({ projectName, onConfirm }: DeleteProjectButtonProps) {\n  const [open, setOpen] = useState(false);\n\n  const confirm = () => {\n    setOpen(false);\n    onConfirm();\n  };\n\n  return (\n    <>\n      <JxButton variant=\"danger\" onClick={() => setOpen(true)}>\n        Удалить проект\n      </JxButton>\n      <JxModal\n        open={open}\n        onOpenChange={setOpen}\n        intent=\"danger\"\n        title=\"Удалить проект?\"\n        message={\n          projectName\n            ? `Проект «${projectName}» и все его данные будут удалены безвозвратно. Действие нельзя отменить.`\n            : 'Проект и все его данные будут удалены безвозвратно. Действие нельзя отменить.'\n        }\n      >\n        <JxButton variant=\"ghost\" onClick={() => setOpen(false)}>\n          Отмена\n        </JxButton>\n        <JxButton variant=\"danger\" onClick={confirm}>\n          Удалить\n        </JxButton>\n      </JxModal>\n    </>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {

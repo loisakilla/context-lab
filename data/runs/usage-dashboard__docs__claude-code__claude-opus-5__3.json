@@ -1,0 +1,137 @@
+{
+  "id": "usage-dashboard__docs__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-22T10:07:46.074Z",
+  "repeat": 3,
+  "durationMs": 26888,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "docs",
+  "task": {
+    "id": "usage-dashboard",
+    "title": "Панель расхода с фильтрами",
+    "prompt": "Сделай панель расхода по проектам. Сверху чипы-фильтры по статусу, которые можно снимать. Под ними на каждый проект строка с названием, круговым индикатором заполненности квоты в процентах и меткой статуса. Список постраничный, по пять строк. Если после фильтрации ничего не осталось, вместо списка показывается пустое состояние с кнопкой сброса фильтров.",
+    "taskType": "ui",
+    "expects": [
+      "JxChip",
+      "JxProgressCircle",
+      "JxBadge",
+      "JxPagination",
+      "JxEmptyState"
+    ]
+  },
+  "context": {
+    "tokens": 18704,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.0",
+        "tokens": 18550
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 40671,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 40671,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2730,
+    "cacheRead": 40671,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0885955,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\nimport {\n  JxBadge,\n  JxButton,\n  JxChip,\n  JxDivider,\n  JxEmptyState,\n  JxPagination,\n  JxProgressCircle,\n} from '@jinx-ui/react';\n\ntype SpendStatus = 'active' | 'risk' | 'paused' | 'archived';\n\ntype SpendProject = {\n  id: string;\n  name: string;\n  quotaUsed: number;\n  status: SpendStatus;\n};\n\nconst PAGE_SIZE = 5;\n\nconst STATUS_META: Record<SpendStatus, { label: string; tone: 'success' | 'danger' | 'warning' | 'default' }> = {\n  active: { label: 'Активен', tone: 'success' },\n  risk: { label: 'Превышение', tone: 'danger' },\n  paused: { label: 'На паузе', tone: 'warning' },\n  archived: { label: 'В архиве', tone: 'default' },\n};\n\nconst ALL_STATUSES: SpendStatus[] = ['active', 'risk', 'paused', 'archived'];\n\nconst PROJECTS: SpendProject[] = [\n  { id: 'p1', name: 'Контекст-лаборатория', quotaUsed: 72, status: 'active' },\n  { id: 'p2', name: 'Поисковый индекс', quotaUsed: 96, status: 'risk' },\n  { id: 'p3', name: 'Витрина отчётов', quotaUsed: 34, status: 'active' },\n  { id: 'p4', name: 'Миграция биллинга', quotaUsed: 58, status: 'paused' },\n  { id: 'p5', name: 'Мобильный клиент', quotaUsed: 81, status: 'active' },\n  { id: 'p6', name: 'Импорт логов', quotaUsed: 100, status: 'risk' },\n  { id: 'p7', name: 'Справочник тарифов', quotaUsed: 12, status: 'archived' },\n  { id: 'p8', name: 'Очередь уведомлений', quotaUsed: 65, status: 'active' },\n  { id: 'p9', name: 'Экспорт в хранилище', quotaUsed: 47, status: 'paused' },\n  { id: 'p10', name: 'Панель администратора', quotaUsed: 23, status: 'archived' },\n  { id: 'p11', name: 'Шлюз вебхуков', quotaUsed: 88, status: 'risk' },\n  { id: 'p12', name: 'Аналитика запросов', quotaUsed: 55, status: 'active' },\n];\n\nexport default function ProjectSpendPanel() {\n  const [statuses, setStatuses] = useState<SpendStatus[]>(ALL_STATUSES);\n  const [page, setPage] = useState(1);\n\n  const filtered = useMemo(\n    () => PROJECTS.filter((project) => statuses.includes(project.status)),\n    [statuses],\n  );\n\n  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n  const visible = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);\n\n  const removeStatus = (status: SpendStatus) => {\n    setStatuses((prev) => prev.filter((item) => item !== status));\n    setPage(1);\n  };\n\n  const resetFilters = () => {\n    setStatuses(ALL_STATUSES);\n    setPage(1);\n  };\n\n  return (\n    <section\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: '16px',\n        padding: '20px',\n        background: 'var(--jx-surface)',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n        color: 'var(--jx-text)',\n        fontFamily: 'var(--jx-font-sans)',\n      }}\n    >\n      <div>\n        <h2 style={{ margin: 0, fontFamily: 'var(--jx-font-display)', fontSize: '20px' }}>\n          Расход по проектам\n        </h2>\n        <p style={{ margin: '4px 0 0', color: 'var(--jx-text-2)', fontSize: '14px' }}>\n          Заполненность квоты за текущий период\n        </p>\n      </div>\n\n      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>\n        {statuses.map((status) => (\n          <JxChip key={status} active removable onRemove={() => removeStatus(status)}>\n            {STATUS_META[status].label}\n          </JxChip>\n        ))}\n        {statuses.length < ALL_STATUSES.length && (\n          <JxButton variant=\"ghost\" size=\"sm\" onClick={resetFilters}>\n            Сбросить фильтры\n          </JxButton>\n        )}\n      </div>\n\n      <JxDivider />\n\n      {visible.length === 0 ? (\n        <JxEmptyState\n          title=\"Ничего не найдено\"\n          message=\"Под выбранные фильтры не подходит ни один проект.\"\n          action={\n            <JxButton variant=\"primary\" onClick={resetFilters}>\n              Сбросить фильтры\n            </JxButton>\n          }\n        />\n      ) : (\n        <>\n          <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>\n            {visible.map((project) => (\n              <li\n                key={project.id}\n                style={{\n                  display: 'flex',\n                  alignItems: 'center',\n                  gap: '16px',\n                  padding: '12px 14px',\n                  background: 'var(--jx-surface-2)',\n                  border: '1px solid var(--jx-border)',\n                  borderRadius: 'var(--jx-r)',\n                }}\n              >\n                <JxProgressCircle value={project.quotaUsed} showValue />\n                <span style={{ flex: 1, minWidth: 0, fontSize: '15px' }}>{project.name}</span>\n                <JxBadge tone={STATUS_META[project.status].tone} dot>\n                  {STATUS_META[project.status].label}\n                </JxBadge>\n              </li>\n            ))}\n          </ul>\n\n          <JxPagination total={pageCount} page={currentPage} onPageChange={setPage} />\n        </>\n      )}\n    </section>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport {\n  JxBadge,\n  JxButton,\n  JxChip,\n  JxDivider,\n  JxEmptyState,\n  JxPagination,\n  JxProgressCircle,\n} from '@jinx-ui/react';\n\ntype SpendStatus = 'active' | 'risk' | 'paused' | 'archived';\n\ntype SpendProject = {\n  id: string;\n  name: string;\n  quotaUsed: number;\n  status: SpendStatus;\n};\n\nconst PAGE_SIZE = 5;\n\nconst STATUS_META: Record<SpendStatus, { label: string; tone: 'success' | 'danger' | 'warning' | 'default' }> = {\n  active: { label: 'Активен', tone: 'success' },\n  risk: { label: 'Превышение', tone: 'danger' },\n  paused: { label: 'На паузе', tone: 'warning' },\n  archived: { label: 'В архиве', tone: 'default' },\n};\n\nconst ALL_STATUSES: SpendStatus[] = ['active', 'risk', 'paused', 'archived'];\n\nconst PROJECTS: SpendProject[] = [\n  { id: 'p1', name: 'Контекст-лаборатория', quotaUsed: 72, status: 'active' },\n  { id: 'p2', name: 'Поисковый индекс', quotaUsed: 96, status: 'risk' },\n  { id: 'p3', name: 'Витрина отчётов', quotaUsed: 34, status: 'active' },\n  { id: 'p4', name: 'Миграция биллинга', quotaUsed: 58, status: 'paused' },\n  { id: 'p5', name: 'Мобильный клиент', quotaUsed: 81, status: 'active' },\n  { id: 'p6', name: 'Импорт логов', quotaUsed: 100, status: 'risk' },\n  { id: 'p7', name: 'Справочник тарифов', quotaUsed: 12, status: 'archived' },\n  { id: 'p8', name: 'Очередь уведомлений', quotaUsed: 65, status: 'active' },\n  { id: 'p9', name: 'Экспорт в хранилище', quotaUsed: 47, status: 'paused' },\n  { id: 'p10', name: 'Панель администратора', quotaUsed: 23, status: 'archived' },\n  { id: 'p11', name: 'Шлюз вебхуков', quotaUsed: 88, status: 'risk' },\n  { id: 'p12', name: 'Аналитика запросов', quotaUsed: 55, status: 'active' },\n];\n\nexport default function ProjectSpendPanel() {\n  const [statuses, setStatuses] = useState<SpendStatus[]>(ALL_STATUSES);\n  const [page, setPage] = useState(1);\n\n  const filtered = useMemo(\n    () => PROJECTS.filter((project) => statuses.includes(project.status)),\n    [statuses],\n  );\n\n  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n  const visible = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);\n\n  const removeStatus = (status: SpendStatus) => {\n    setStatuses((prev) => prev.filter((item) => item !== status));\n    setPage(1);\n  };\n\n  const resetFilters = () => {\n    setStatuses(ALL_STATUSES);\n    setPage(1);\n  };\n\n  return (\n    <section\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: '16px',\n        padding: '20px',\n        background: 'var(--jx-surface)',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n        color: 'var(--jx-text)',\n        fontFamily: 'var(--jx-font-sans)',\n      }}\n    >\n      <div>\n        <h2 style={{ margin: 0, fontFamily: 'var(--jx-font-display)', fontSize: '20px' }}>\n          Расход по проектам\n        </h2>\n        <p style={{ margin: '4px 0 0', color: 'var(--jx-text-2)', fontSize: '14px' }}>\n          Заполненность квоты за текущий период\n        </p>\n      </div>\n\n      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>\n        {statuses.map((status) => (\n          <JxChip key={status} active removable onRemove={() => removeStatus(status)}>\n            {STATUS_META[status].label}\n          </JxChip>\n        ))}\n        {statuses.length < ALL_STATUSES.length && (\n          <JxButton variant=\"ghost\" size=\"sm\" onClick={resetFilters}>\n            Сбросить фильтры\n          </JxButton>\n        )}\n      </div>\n\n      <JxDivider />\n\n      {visible.length === 0 ? (\n        <JxEmptyState\n          title=\"Ничего не найдено\"\n          message=\"Под выбранные фильтры не подходит ни один проект.\"\n          action={\n            <JxButton variant=\"primary\" onClick={resetFilters}>\n              Сбросить фильтры\n            </JxButton>\n          }\n        />\n      ) : (\n        <>\n          <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>\n            {visible.map((project) => (\n              <li\n                key={project.id}\n                style={{\n                  display: 'flex',\n                  alignItems: 'center',\n                  gap: '16px',\n                  padding: '12px 14px',\n                  background: 'var(--jx-surface-2)',\n                  border: '1px solid var(--jx-border)',\n                  borderRadius: 'var(--jx-r)',\n                }}\n              >\n                <JxProgressCircle value={project.quotaUsed} showValue />\n                <span style={{ flex: 1, minWidth: 0, fontSize: '15px' }}>{project.name}</span>\n                <JxBadge tone={STATUS_META[project.status].tone} dot>\n                  {STATUS_META[project.status].label}\n                </JxBadge>\n              </li>\n            ))}\n          </ul>\n\n          <JxPagination total={pageCount} page={currentPage} onPageChange={setPage} />\n        </>\n      )}\n    </section>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 72,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 85,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 88,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 93,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 120,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 124,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 135,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxBadge",
+      "JxButton",
+      "JxChip",
+      "JxDivider",
+      "JxEmptyState",
+      "JxPagination",
+      "JxProgressCircle"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

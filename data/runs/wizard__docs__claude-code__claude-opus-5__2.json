@@ -1,8 +1,8 @@
 {
   "id": "wizard__docs__claude-code__claude-opus-5__2",
-  "createdAt": "2026-09-21T13:18:53.331Z",
+  "createdAt": "2026-09-22T09:34:57.347Z",
   "repeat": 2,
-  "durationMs": 25750,
+  "durationMs": 12758,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -24,7 +24,7 @@
     ]
   },
   "context": {
-    "tokens": 16625,
+    "tokens": 16668,
     "sources": [
       {
         "kind": "docs",
@@ -39,7 +39,16 @@
       "usage": {
         "input": 2,
         "output": 8,
-        "cacheRead": 44828,
+        "cacheRead": 37454,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 37454,
         "cacheCreation": 0
       },
       "toolCalls": []
@@ -47,15 +56,15 @@
   ],
   "usage": {
     "input": 2,
-    "output": 2695,
-    "cacheRead": 44828,
+    "output": 1313,
+    "cacheRead": 37454,
     "cacheCreation": 0
   },
-  "costUsd": 0.089799,
+  "costUsd": 0.051562000000000004,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState } from 'react';\nimport type { FormEvent } from 'react';\nimport {\n  JxStepper,\n  JxInputField,\n  JxSelect,\n  JxButton,\n  JxDivider,\n  JxTable,\n} from '@jinx-ui/react';\n\ntype SignupValues = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype SignupWizardProps = {\n  onSubmit: (values: SignupValues) => void;\n};\n\nconst steps = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nconst countries = [\n  { value: 'ru', label: 'Россия' },\n  { value: 'kz', label: 'Казахстан' },\n  { value: 'by', label: 'Беларусь' },\n  { value: 'am', label: 'Армения' },\n];\n\nconst emptyValues: SignupValues = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nfunction SignupWizard({ onSubmit }: SignupWizardProps) {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<SignupValues>(emptyValues);\n  const [errors, setErrors] = useState<Partial<Record<keyof SignupValues, string>>>({});\n\n  const setField = (field: keyof SignupValues) => (value: string) => {\n    setValues((prev) => ({ ...prev, [field]: value }));\n    setErrors((prev) => ({ ...prev, [field]: undefined }));\n  };\n\n  const validate = (index: number) => {\n    const next: Partial<Record<keyof SignupValues, string>> = {};\n\n    if (index === 0) {\n      if (!values.name.trim()) next.name = 'Укажите имя';\n      if (!values.email.trim()) next.email = 'Укажите почту';\n      else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(values.email)) next.email = 'Проверьте формат почты';\n    }\n\n    if (index === 1) {\n      if (!values.country) next.country = 'Выберите страну';\n      if (!values.city.trim()) next.city = 'Укажите город';\n      if (!values.street.trim()) next.street = 'Укажите улицу и дом';\n    }\n\n    setErrors(next);\n    return Object.keys(next).length === 0;\n  };\n\n  const goBack = () => {\n    setErrors({});\n    setStep((prev) => Math.max(prev - 1, 0));\n  };\n\n  const goNext = () => {\n    if (!validate(step)) return;\n    setStep((prev) => Math.min(prev + 1, steps.length - 1));\n  };\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n\n    if (step < steps.length - 1) {\n      goNext();\n      return;\n    }\n\n    if (!validate(0) ) {\n      setStep(0);\n      return;\n    }\n\n    if (!validate(1)) {\n      setStep(1);\n      return;\n    }\n\n    onSubmit(values);\n  };\n\n  const countryLabel = countries.find((item) => item.value === values.country)?.label ?? '—';\n\n  return (\n    <form\n      onSubmit={submit}\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: '20px',\n        padding: '24px',\n        maxWidth: '520px',\n        background: 'var(--jx-surface)',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n        boxShadow: 'var(--jx-shadow-sm)',\n        fontFamily: 'var(--jx-font-sans)',\n        color: 'var(--jx-text)',\n      }}\n    >\n      <JxStepper steps={steps} current={step} />\n\n      <JxDivider />\n\n      {step === 0 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n          <JxInputField\n            label=\"Имя\"\n            required\n            value={values.name}\n            onChange={(event) => setField('name')(event.target.value)}\n            errorText={errors.name}\n          />\n          <JxInputField\n            label=\"Электронная почта\"\n            type=\"email\"\n            required\n            value={values.email}\n            onChange={(event) => setField('email')(event.target.value)}\n            errorText={errors.email}\n          />\n          <JxInputField\n            label=\"Телефон\"\n            type=\"tel\"\n            prefix=\"+7\"\n            placeholder=\"900 000-00-00\"\n            helperText=\"Не обязательно\"\n            value={values.phone}\n            onChange={(event) => setField('phone')(event.target.value)}\n          />\n        </div>\n      )}\n\n      {step === 1 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n          <JxSelect\n            label=\"Страна\"\n            placeholder=\"Выберите страну\"\n            options={countries}\n            value={values.country}\n            onValueChange={setField('country')}\n          />\n          {errors.country && (\n            <span className=\"jx-input-error\" style={{ color: 'var(--jx-danger)' }}>\n              {errors.country}\n            </span>\n          )}\n          <JxInputField\n            label=\"Город\"\n            required\n            value={values.city}\n            onChange={(event) => setField('city')(event.target.value)}\n            errorText={errors.city}\n          />\n          <JxInputField\n            label=\"Улица и дом\"\n            required\n            value={values.street}\n            onChange={(event) => setField('street')(event.target.value)}\n            errorText={errors.street}\n          />\n          <JxInputField\n            label=\"Индекс\"\n            inputMode=\"numeric\"\n            value={values.zip}\n            onChange={(event) => setField('zip')(event.target.value)}\n          />\n        </div>\n      )}\n\n      {step === 2 && (\n        <JxTable>\n          <tbody>\n            <tr>\n              <td style={{ color: 'var(--jx-text-2)' }}>Имя</td>\n              <td>{values.name || '—'}</td>\n            </tr>\n            <tr>\n              <td style={{ color: 'var(--jx-text-2)' }}>Почта</td>\n              <td>{values.email || '—'}</td>\n            </tr>\n            <tr>\n              <td style={{ color: 'var(--jx-text-2)' }}>Телефон</td>\n              <td>{values.phone ? `+7 ${values.phone}` : '—'}</td>\n            </tr>\n            <tr>\n              <td style={{ color: 'var(--jx-text-2)' }}>Страна</td>\n              <td>{countryLabel}</td>\n            </tr>\n            <tr>\n              <td style={{ color: 'var(--jx-text-2)' }}>Город</td>\n              <td>{values.city || '—'}</td>\n            </tr>\n            <tr>\n              <td style={{ color: 'var(--jx-text-2)' }}>Адрес</td>\n              <td>{values.street || '—'}</td>\n            </tr>\n            <tr>\n              <td style={{ color: 'var(--jx-text-2)' }}>Индекс</td>\n              <td>{values.zip || '—'}</td>\n            </tr>\n          </tbody>\n        </JxTable>\n      )}\n\n      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>\n        <JxButton variant=\"ghost\" type=\"button\" disabled={step === 0} onClick={goBack}>\n          Назад\n        </JxButton>\n        {step < steps.length - 1 ? (\n          <JxButton variant=\"primary\" type=\"button\" onClick={goNext}>\n            Дальше\n          </JxButton>\n        ) : (\n          <JxButton variant=\"primary\" type=\"submit\">\n            Отправить\n          </JxButton>\n        )}\n      </div>\n    </form>\n  );\n}\n\nexport default SignupWizard;",
-    "text": "```tsx\nimport { useState } from 'react';\nimport type { FormEvent } from 'react';\nimport {\n  JxStepper,\n  JxInputField,\n  JxSelect,\n  JxButton,\n  JxDivider,\n  JxTable,\n} from '@jinx-ui/react';\n\ntype SignupValues = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype SignupWizardProps = {\n  onSubmit: (values: SignupValues) => void;\n};\n\nconst steps = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nconst countries = [\n  { value: 'ru', label: 'Россия' },\n  { value: 'kz', label: 'Казахстан' },\n  { value: 'by', label: 'Беларусь' },\n  { value: 'am', label: 'Армения' },\n];\n\nconst emptyValues: SignupValues = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nfunction SignupWizard({ onSubmit }: SignupWizardProps) {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<SignupValues>(emptyValues);\n  const [errors, setErrors] = useState<Partial<Record<keyof SignupValues, string>>>({});\n\n  const setField = (field: keyof SignupValues) => (value: string) => {\n    setValues((prev) => ({ ...prev, [field]: value }));\n    setErrors((prev) => ({ ...prev, [field]: undefined }));\n  };\n\n  const validate = (index: number) => {\n    const next: Partial<Record<keyof SignupValues, string>> = {};\n\n    if (index === 0) {\n      if (!values.name.trim()) next.name = 'Укажите имя';\n      if (!values.email.trim()) next.email = 'Укажите почту';\n      else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(values.email)) next.email = 'Проверьте формат почты';\n    }\n\n    if (index === 1) {\n      if (!values.country) next.country = 'Выберите страну';\n      if (!values.city.trim()) next.city = 'Укажите город';\n      if (!values.street.trim()) next.street = 'Укажите улицу и дом';\n    }\n\n    setErrors(next);\n    return Object.keys(next).length === 0;\n  };\n\n  const goBack = () => {\n    setErrors({});\n    setStep((prev) => Math.max(prev - 1, 0));\n  };\n\n  const goNext = () => {\n    if (!validate(step)) return;\n    setStep((prev) => Math.min(prev + 1, steps.length - 1));\n  };\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n\n    if (step < steps.length - 1) {\n      goNext();\n      return;\n    }\n\n    if (!validate(0) ) {\n      setStep(0);\n      return;\n    }\n\n    if (!validate(1)) {\n      setStep(1);\n      return;\n    }\n\n    onSubmit(values);\n  };\n\n  const countryLabel = countries.find((item) => item.value === values.country)?.label ?? '—';\n\n  return (\n    <form\n      onSubmit={submit}\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: '20px',\n        padding: '24px',\n        maxWidth: '520px',\n        background: 'var(--jx-surface)',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n        boxShadow: 'var(--jx-shadow-sm)',\n        fontFamily: 'var(--jx-font-sans)',\n        color: 'var(--jx-text)',\n      }}\n    >\n      <JxStepper steps={steps} current={step} />\n\n      <JxDivider />\n\n      {step === 0 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n          <JxInputField\n            label=\"Имя\"\n            required\n            value={values.name}\n            onChange={(event) => setField('name')(event.target.value)}\n            errorText={errors.name}\n          />\n          <JxInputField\n            label=\"Электронная почта\"\n            type=\"email\"\n            required\n            value={values.email}\n            onChange={(event) => setField('email')(event.target.value)}\n            errorText={errors.email}\n          />\n          <JxInputField\n            label=\"Телефон\"\n            type=\"tel\"\n            prefix=\"+7\"\n            placeholder=\"900 000-00-00\"\n            helperText=\"Не обязательно\"\n            value={values.phone}\n            onChange={(event) => setField('phone')(event.target.value)}\n          />\n        </div>\n      )}\n\n      {step === 1 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n          <JxSelect\n            label=\"Страна\"\n            placeholder=\"Выберите страну\"\n            options={countries}\n            value={values.country}\n            onValueChange={setField('country')}\n          />\n          {errors.country && (\n            <span className=\"jx-input-error\" style={{ color: 'var(--jx-danger)' }}>\n              {errors.country}\n            </span>\n          )}\n          <JxInputField\n            label=\"Город\"\n            required\n            value={values.city}\n            onChange={(event) => setField('city')(event.target.value)}\n            errorText={errors.city}\n          />\n          <JxInputField\n            label=\"Улица и дом\"\n            required\n            value={values.street}\n            onChange={(event) => setField('street')(event.target.value)}\n            errorText={errors.street}\n          />\n          <JxInputField\n            label=\"Индекс\"\n            inputMode=\"numeric\"\n            value={values.zip}\n            onChange={(event) => setField('zip')(event.target.value)}\n          />\n        </div>\n      )}\n\n      {step === 2 && (\n        <JxTable>\n          <tbody>\n            <tr>\n              <td style={{ color: 'var(--jx-text-2)' }}>Имя</td>\n              <td>{values.name || '—'}</td>\n            </tr>\n            <tr>\n              <td style={{ color: 'var(--jx-text-2)' }}>Почта</td>\n              <td>{values.email || '—'}</td>\n            </tr>\n            <tr>\n              <td style={{ color: 'var(--jx-text-2)' }}>Телефон</td>\n              <td>{values.phone ? `+7 ${values.phone}` : '—'}</td>\n            </tr>\n            <tr>\n              <td style={{ color: 'var(--jx-text-2)' }}>Страна</td>\n              <td>{countryLabel}</td>\n            </tr>\n            <tr>\n              <td style={{ color: 'var(--jx-text-2)' }}>Город</td>\n              <td>{values.city || '—'}</td>\n            </tr>\n            <tr>\n              <td style={{ color: 'var(--jx-text-2)' }}>Адрес</td>\n              <td>{values.street || '—'}</td>\n            </tr>\n            <tr>\n              <td style={{ color: 'var(--jx-text-2)' }}>Индекс</td>\n              <td>{values.zip || '—'}</td>\n            </tr>\n          </tbody>\n        </JxTable>\n      )}\n\n      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>\n        <JxButton variant=\"ghost\" type=\"button\" disabled={step === 0} onClick={goBack}>\n          Назад\n        </JxButton>\n        {step < steps.length - 1 ? (\n          <JxButton variant=\"primary\" type=\"button\" onClick={goNext}>\n            Дальше\n          </JxButton>\n        ) : (\n          <JxButton variant=\"primary\" type=\"submit\">\n            Отправить\n          </JxButton>\n        )}\n      </div>\n    </form>\n  );\n}\n\nexport default SignupWizard;\n```"
+    "code": "import { useState } from 'react';\nimport { JxButton, JxInputField, JxStepper } from '@jinx-ui/react';\n\nexport interface RegistrationData {\n  name: string;\n  email: string;\n  city: string;\n  street: string;\n}\n\nexport interface RegistrationFormProps {\n  onSubmit: (data: RegistrationData) => void;\n}\n\nconst STEPS = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nexport default function RegistrationForm({ onSubmit }: RegistrationFormProps) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<RegistrationData>({ name: '', email: '', city: '', street: '' });\n\n  const update = (key: keyof RegistrationData) => (event: React.ChangeEvent<HTMLInputElement>) =>\n    setData((prev) => ({ ...prev, [key]: event.target.value }));\n\n  const isLast = step === STEPS.length - 1;\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>\n      <JxStepper steps={STEPS} current={step} />\n\n      {step === 0 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n          <JxInputField label=\"Имя\" required value={data.name} onChange={update('name')} />\n          <JxInputField label=\"Электронная почта\" type=\"email\" required value={data.email} onChange={update('email')} />\n        </div>\n      )}\n\n      {step === 1 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n          <JxInputField label=\"Город\" required value={data.city} onChange={update('city')} />\n          <JxInputField label=\"Улица и дом\" required value={data.street} onChange={update('street')} />\n        </div>\n      )}\n\n      {step === 2 && (\n        <dl\n          style={{\n            display: 'grid',\n            gridTemplateColumns: 'auto 1fr',\n            gap: '8px 16px',\n            margin: 0,\n            padding: '16px',\n            borderRadius: 'var(--jx-r)',\n            background: 'var(--jx-surface-2)',\n            color: 'var(--jx-text)',\n            fontFamily: 'var(--jx-font-sans)',\n          }}\n        >\n          <dt style={{ color: 'var(--jx-text-2)' }}>Имя</dt>\n          <dd style={{ margin: 0 }}>{data.name}</dd>\n          <dt style={{ color: 'var(--jx-text-2)' }}>Почта</dt>\n          <dd style={{ margin: 0 }}>{data.email}</dd>\n          <dt style={{ color: 'var(--jx-text-2)' }}>Город</dt>\n          <dd style={{ margin: 0 }}>{data.city}</dd>\n          <dt style={{ color: 'var(--jx-text-2)' }}>Адрес</dt>\n          <dd style={{ margin: 0 }}>{data.street}</dd>\n        </dl>\n      )}\n\n      <div style={{ display: 'flex', gap: '8px' }}>\n        <JxButton variant=\"ghost\" disabled={step === 0} onClick={() => setStep(step - 1)}>\n          Назад\n        </JxButton>\n        {isLast ? (\n          <JxButton variant=\"primary\" onClick={() => onSubmit(data)}>\n            Отправить\n          </JxButton>\n        ) : (\n          <JxButton variant=\"primary\" onClick={() => setStep(step + 1)}>\n            Дальше\n          </JxButton>\n        )}\n      </div>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxInputField, JxStepper } from '@jinx-ui/react';\n\nexport interface RegistrationData {\n  name: string;\n  email: string;\n  city: string;\n  street: string;\n}\n\nexport interface RegistrationFormProps {\n  onSubmit: (data: RegistrationData) => void;\n}\n\nconst STEPS = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nexport default function RegistrationForm({ onSubmit }: RegistrationFormProps) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<RegistrationData>({ name: '', email: '', city: '', street: '' });\n\n  const update = (key: keyof RegistrationData) => (event: React.ChangeEvent<HTMLInputElement>) =>\n    setData((prev) => ({ ...prev, [key]: event.target.value }));\n\n  const isLast = step === STEPS.length - 1;\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>\n      <JxStepper steps={STEPS} current={step} />\n\n      {step === 0 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n          <JxInputField label=\"Имя\" required value={data.name} onChange={update('name')} />\n          <JxInputField label=\"Электронная почта\" type=\"email\" required value={data.email} onChange={update('email')} />\n        </div>\n      )}\n\n      {step === 1 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n          <JxInputField label=\"Город\" required value={data.city} onChange={update('city')} />\n          <JxInputField label=\"Улица и дом\" required value={data.street} onChange={update('street')} />\n        </div>\n      )}\n\n      {step === 2 && (\n        <dl\n          style={{\n            display: 'grid',\n            gridTemplateColumns: 'auto 1fr',\n            gap: '8px 16px',\n            margin: 0,\n            padding: '16px',\n            borderRadius: 'var(--jx-r)',\n            background: 'var(--jx-surface-2)',\n            color: 'var(--jx-text)',\n            fontFamily: 'var(--jx-font-sans)',\n          }}\n        >\n          <dt style={{ color: 'var(--jx-text-2)' }}>Имя</dt>\n          <dd style={{ margin: 0 }}>{data.name}</dd>\n          <dt style={{ color: 'var(--jx-text-2)' }}>Почта</dt>\n          <dd style={{ margin: 0 }}>{data.email}</dd>\n          <dt style={{ color: 'var(--jx-text-2)' }}>Город</dt>\n          <dd style={{ margin: 0 }}>{data.city}</dd>\n          <dt style={{ color: 'var(--jx-text-2)' }}>Адрес</dt>\n          <dd style={{ margin: 0 }}>{data.street}</dd>\n        </dl>\n      )}\n\n      <div style={{ display: 'flex', gap: '8px' }}>\n        <JxButton variant=\"ghost\" disabled={step === 0} onClick={() => setStep(step - 1)}>\n          Назад\n        </JxButton>\n        {isLast ? (\n          <JxButton variant=\"primary\" onClick={() => onSubmit(data)}>\n            Отправить\n          </JxButton>\n        ) : (\n          <JxButton variant=\"primary\" onClick={() => setStep(step + 1)}>\n            Дальше\n          </JxButton>\n        )}\n      </div>\n    </div>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
@@ -67,83 +76,86 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 110,
+        "line": 27,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 129,
+        "line": 31,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 158,
+        "line": 38,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 167,
+        "line": 46,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 198,
+        "line": 58,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 202,
+        "line": 59,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 206,
+        "line": 60,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 210,
+        "line": 61,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 214,
+        "line": 62,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 218,
+        "line": 63,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 222,
+        "line": 64,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 229,
+        "line": 65,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 69,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],
     "usedComponents": [
       "JxButton",
-      "JxDivider",
       "JxInputField",
-      "JxSelect",
-      "JxStepper",
-      "JxTable"
+      "JxStepper"
     ],
     "expectedCoverage": 1,
     "passed": true

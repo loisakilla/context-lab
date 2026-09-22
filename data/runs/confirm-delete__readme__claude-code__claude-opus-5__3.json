@@ -1,8 +1,8 @@
 {
   "id": "confirm-delete__readme__claude-code__claude-opus-5__3",
-  "createdAt": "2026-09-21T13:03:43.958Z",
+  "createdAt": "2026-09-22T09:48:51.997Z",
   "repeat": 3,
-  "durationMs": 23969,
+  "durationMs": 18351,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -23,7 +23,7 @@
     ]
   },
   "context": {
-    "tokens": 753,
+    "tokens": 796,
     "sources": [
       {
         "kind": "readme",
@@ -37,51 +37,51 @@
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 5579,
-        "cacheCreation": 9933
+        "output": 7,
+        "cacheRead": 9576,
+        "cacheCreation": 0
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 5579,
-        "cacheCreation": 9933
+        "output": 7,
+        "cacheRead": 9576,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
     "input": 2,
-    "output": 1927,
-    "cacheRead": 5579,
-    "cacheCreation": 9933
+    "output": 1563,
+    "cacheRead": 9576,
+    "cacheCreation": 0
   },
-  "costUsd": 0.11305575000000001,
+  "costUsd": 0.043873,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useCallback, useId, useState } from 'react';\nimport { Button, Modal } from '@jinx-ui/react';\n\ntype DeleteProjectButtonProps = {\n  projectName?: string;\n  onConfirm: () => void;\n};\n\nexport default function DeleteProjectButton({ projectName, onConfirm }: DeleteProjectButtonProps) {\n  const [isOpen, setIsOpen] = useState(false);\n  const descriptionId = useId();\n\n  const open = useCallback(() => setIsOpen(true), []);\n  const close = useCallback(() => setIsOpen(false), []);\n  const confirm = useCallback(() => {\n    setIsOpen(false);\n    onConfirm();\n  }, [onConfirm]);\n\n  return (\n    <>\n      <Button tone=\"danger\" onClick={open}>\n        Удалить проект\n      </Button>\n\n      <Modal\n        open={isOpen}\n        onClose={close}\n        title=\"Удалить проект?\"\n        aria-describedby={descriptionId}\n      >\n        <p\n          id={descriptionId}\n          className=\"jx-text\"\n          style={{ margin: 0, color: 'var(--jx-color-text-muted)' }}\n        >\n          {projectName\n            ? `Проект «${projectName}» будет удалён навсегда. Действие необратимо.`\n            : 'Проект будет удалён навсегда. Действие необратимо.'}\n        </p>\n\n        <div\n          className=\"jx-cluster\"\n          style={{\n            display: 'flex',\n            justifyContent: 'flex-end',\n            gap: 'var(--jx-space-2)',\n            marginTop: 'var(--jx-space-4)',\n          }}\n        >\n          <Button variant=\"ghost\" onClick={close}>\n            Отмена\n          </Button>\n          <Button tone=\"danger\" onClick={confirm}>\n            Удалить\n          </Button>\n        </div>\n      </Modal>\n    </>\n  );\n}",
-    "text": "```tsx\nimport { useCallback, useId, useState } from 'react';\nimport { Button, Modal } from '@jinx-ui/react';\n\ntype DeleteProjectButtonProps = {\n  projectName?: string;\n  onConfirm: () => void;\n};\n\nexport default function DeleteProjectButton({ projectName, onConfirm }: DeleteProjectButtonProps) {\n  const [isOpen, setIsOpen] = useState(false);\n  const descriptionId = useId();\n\n  const open = useCallback(() => setIsOpen(true), []);\n  const close = useCallback(() => setIsOpen(false), []);\n  const confirm = useCallback(() => {\n    setIsOpen(false);\n    onConfirm();\n  }, [onConfirm]);\n\n  return (\n    <>\n      <Button tone=\"danger\" onClick={open}>\n        Удалить проект\n      </Button>\n\n      <Modal\n        open={isOpen}\n        onClose={close}\n        title=\"Удалить проект?\"\n        aria-describedby={descriptionId}\n      >\n        <p\n          id={descriptionId}\n          className=\"jx-text\"\n          style={{ margin: 0, color: 'var(--jx-color-text-muted)' }}\n        >\n          {projectName\n            ? `Проект «${projectName}» будет удалён навсегда. Действие необратимо.`\n            : 'Проект будет удалён навсегда. Действие необратимо.'}\n        </p>\n\n        <div\n          className=\"jx-cluster\"\n          style={{\n            display: 'flex',\n            justifyContent: 'flex-end',\n            gap: 'var(--jx-space-2)',\n            marginTop: 'var(--jx-space-4)',\n          }}\n        >\n          <Button variant=\"ghost\" onClick={close}>\n            Отмена\n          </Button>\n          <Button tone=\"danger\" onClick={confirm}>\n            Удалить\n          </Button>\n        </div>\n      </Modal>\n    </>\n  );\n}\n```"
+    "code": "// Assumed exports from '@jinx-ui/react': Button, Dialog (open / onOpenChange / labelledBy).\n// Adjust the names if the package's docs/components.md defines a different runtime API.\nimport { useCallback, useId, useState } from 'react';\nimport { Button, Dialog } from '@jinx-ui/react';\n\ntype DeleteProjectProps = {\n  onConfirm: () => void;\n};\n\nexport default function DeleteProject({ onConfirm }: DeleteProjectProps) {\n  const [open, setOpen] = useState(false);\n  const titleId = useId();\n  const descriptionId = useId();\n\n  const handleConfirm = useCallback(() => {\n    setOpen(false);\n    onConfirm();\n  }, [onConfirm]);\n\n  return (\n    <>\n      <Button variant=\"danger\" onClick={() => setOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Dialog\n        open={open}\n        onOpenChange={setOpen}\n        labelledBy={titleId}\n        describedBy={descriptionId}\n        aria-modal=\"true\"\n      >\n        <div\n          className=\"jx-stack\"\n          style={{ display: 'grid', gap: 'var(--jx-space-4)' }}\n        >\n          <h2 id={titleId} className=\"jx-heading\">\n            Удалить проект?\n          </h2>\n\n          <p\n            id={descriptionId}\n            className=\"jx-text jx-text-muted\"\n            style={{ color: 'var(--jx-fg-muted)' }}\n          >\n            Проект и все связанные с ним данные будут удалены безвозвратно. Это\n            действие нельзя отменить.\n          </p>\n\n          <div\n            className=\"jx-cluster\"\n            style={{\n              display: 'flex',\n              gap: 'var(--jx-space-2)',\n              justifyContent: 'flex-end',\n            }}\n          >\n            <Button variant=\"ghost\" onClick={() => setOpen(false)}>\n              Отмена\n            </Button>\n            <Button variant=\"danger\" onClick={handleConfirm}>\n              Удалить\n            </Button>\n          </div>\n        </div>\n      </Dialog>\n    </>\n  );\n}",
+    "text": "```tsx\n// Assumed exports from '@jinx-ui/react': Button, Dialog (open / onOpenChange / labelledBy).\n// Adjust the names if the package's docs/components.md defines a different runtime API.\nimport { useCallback, useId, useState } from 'react';\nimport { Button, Dialog } from '@jinx-ui/react';\n\ntype DeleteProjectProps = {\n  onConfirm: () => void;\n};\n\nexport default function DeleteProject({ onConfirm }: DeleteProjectProps) {\n  const [open, setOpen] = useState(false);\n  const titleId = useId();\n  const descriptionId = useId();\n\n  const handleConfirm = useCallback(() => {\n    setOpen(false);\n    onConfirm();\n  }, [onConfirm]);\n\n  return (\n    <>\n      <Button variant=\"danger\" onClick={() => setOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Dialog\n        open={open}\n        onOpenChange={setOpen}\n        labelledBy={titleId}\n        describedBy={descriptionId}\n        aria-modal=\"true\"\n      >\n        <div\n          className=\"jx-stack\"\n          style={{ display: 'grid', gap: 'var(--jx-space-4)' }}\n        >\n          <h2 id={titleId} className=\"jx-heading\">\n            Удалить проект?\n          </h2>\n\n          <p\n            id={descriptionId}\n            className=\"jx-text jx-text-muted\"\n            style={{ color: 'var(--jx-fg-muted)' }}\n          >\n            Проект и все связанные с ним данные будут удалены безвозвратно. Это\n            действие нельзя отменить.\n          </p>\n\n          <div\n            className=\"jx-cluster\"\n            style={{\n              display: 'flex',\n              gap: 'var(--jx-space-2)',\n              justifyContent: 'flex-end',\n            }}\n          >\n            <Button variant=\"ghost\" onClick={() => setOpen(false)}>\n              Отмена\n            </Button>\n            <Button variant=\"danger\" onClick={handleConfirm}>\n              Удалить\n            </Button>\n          </div>\n        </div>\n      </Dialog>\n    </>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
       "errors": [
         {
           "code": 2724,
-          "line": 2,
+          "line": 4,
           "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
         },
         {
-          "code": 2724,
-          "line": 2,
-          "message": "'\"@jinx-ui/react\"' has no exported member named 'Modal'. Did you mean 'JxModal'?"
+          "code": 2305,
+          "line": 4,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Dialog'."
         }
       ],
       "unknownComponents": [
         "Button",
-        "Modal"
+        "Dialog"
       ],
       "unknownProps": []
     },
@@ -96,6 +96,12 @@
         "rule": "inline-style",
         "severity": "warning",
         "line": 44,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 52,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],

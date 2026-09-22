@@ -1,0 +1,94 @@
+{
+  "id": "usage-dashboard__readme__claude-code__claude-sonnet-5__2",
+  "createdAt": "2026-09-22T09:48:17.040Z",
+  "repeat": 2,
+  "durationMs": 37313,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "usage-dashboard",
+    "title": "Панель расхода с фильтрами",
+    "prompt": "Сделай панель расхода по проектам. Сверху чипы-фильтры по статусу, которые можно снимать. Под ними на каждый проект строка с названием, круговым индикатором заполненности квоты в процентах и меткой статуса. Список постраничный, по пять строк. Если после фильтрации ничего не осталось, вместо списка показывается пустое состояние с кнопкой сброса фильтров.",
+    "taskType": "ui",
+    "expects": [
+      "JxChip",
+      "JxProgressCircle",
+      "JxBadge",
+      "JxPagination",
+      "JxEmptyState"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 9609,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 9609,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 4112,
+    "cacheRead": 9609,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.1076145,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import React, { useMemo, useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\ntype ProjectStatus = 'active' | 'warning' | 'over';\n\ninterface Project {\n  id: string;\n  name: string;\n  status: ProjectStatus;\n  quotaPercent: number;\n}\n\nconst STATUS_META: Record<ProjectStatus, { label: string; tone: string }> = {\n  active: { label: 'Активен', tone: 'success' },\n  warning: { label: 'Внимание', tone: 'warning' },\n  over: { label: 'Превышен', tone: 'danger' },\n};\n\nconst PROJECTS: Project[] = [\n  { id: 'p1', name: 'Alpha Redesign', status: 'active', quotaPercent: 42 },\n  { id: 'p2', name: 'Beta Migration', status: 'warning', quotaPercent: 78 },\n  { id: 'p3', name: 'Gamma Analytics', status: 'over', quotaPercent: 112 },\n  { id: 'p4', name: 'Delta Onboarding', status: 'active', quotaPercent: 15 },\n  { id: 'p5', name: 'Epsilon Billing', status: 'over', quotaPercent: 101 },\n  { id: 'p6', name: 'Zeta Search', status: 'active', quotaPercent: 33 },\n  { id: 'p7', name: 'Eta Notifications', status: 'warning', quotaPercent: 85 },\n  { id: 'p8', name: 'Theta Reports', status: 'active', quotaPercent: 60 },\n  { id: 'p9', name: 'Iota Security', status: 'warning', quotaPercent: 90 },\n  { id: 'p10', name: 'Kappa Mobile', status: 'over', quotaPercent: 130 },\n  { id: 'p11', name: 'Lambda Infra', status: 'active', quotaPercent: 5 },\n  { id: 'p12', name: 'Mu Support', status: 'warning', quotaPercent: 70 },\n];\n\nconst ALL_STATUSES = Object.keys(STATUS_META) as ProjectStatus[];\nconst PAGE_SIZE = 5;\n\nfunction QuotaCircle({ percent, tone }: { percent: number; tone: string }) {\n  const size = 40;\n  const stroke = 4;\n  const radius = (size - stroke) / 2;\n  const circumference = 2 * Math.PI * radius;\n  const clamped = Math.max(0, Math.min(100, percent));\n  const dash = (clamped / 100) * circumference;\n\n  return (\n    <div className=\"jx-quota-circle\" role=\"img\" aria-label={`Квота заполнена на ${percent}%`}>\n      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>\n        <circle\n          cx={size / 2}\n          cy={size / 2}\n          r={radius}\n          fill=\"none\"\n          stroke=\"var(--jx-color-border-muted)\"\n          strokeWidth={stroke}\n        />\n        <circle\n          cx={size / 2}\n          cy={size / 2}\n          r={radius}\n          fill=\"none\"\n          stroke={`var(--jx-color-${tone})`}\n          strokeWidth={stroke}\n          strokeDasharray={`${dash} ${circumference}`}\n          strokeLinecap=\"round\"\n          transform={`rotate(-90 ${size / 2} ${size / 2})`}\n        />\n      </svg>\n      <span className=\"jx-quota-circle-label\">{percent}%</span>\n    </div>\n  );\n}\n\nexport default function ProjectSpendPanel() {\n  const [activeStatuses, setActiveStatuses] = useState<ProjectStatus[]>(ALL_STATUSES);\n  const [page, setPage] = useState(0);\n\n  const removeStatus = (status: ProjectStatus) => {\n    setActiveStatuses((prev) => prev.filter((s) => s !== status));\n    setPage(0);\n  };\n\n  const resetFilters = () => {\n    setActiveStatuses(ALL_STATUSES);\n    setPage(0);\n  };\n\n  const filteredProjects = useMemo(\n    () => PROJECTS.filter((p) => activeStatuses.includes(p.status)),\n    [activeStatuses]\n  );\n\n  const pageCount = Math.max(1, Math.ceil(filteredProjects.length / PAGE_SIZE));\n  const safePage = Math.min(page, pageCount - 1);\n  const pageItems = filteredProjects.slice(\n    safePage * PAGE_SIZE,\n    safePage * PAGE_SIZE + PAGE_SIZE\n  );\n\n  return (\n    <div className=\"jx-panel jx-panel-spend\">\n      <div className=\"jx-panel-header\">\n        <h2 className=\"jx-heading\">Расход по проектам</h2>\n      </div>\n\n      <div className=\"jx-chip-row\" role=\"group\" aria-label=\"Фильтры по статусу\">\n        {activeStatuses.length === 0 && (\n          <span className=\"jx-empty-hint\">Нет активных фильтров</span>\n        )}\n        {activeStatuses.map((status) => (\n          <span\n            key={status}\n            className={`jx-chip jx-chip--${STATUS_META[status].tone}`}\n          >\n            {STATUS_META[status].label}\n            <button\n              type=\"button\"\n              className=\"jx-chip-remove\"\n              aria-label={`Убрать фильтр ${STATUS_META[status].label}`}\n              onClick={() => removeStatus(status)}\n            >\n              ×\n            </button>\n          </span>\n        ))}\n      </div>\n\n      {filteredProjects.length === 0 ? (\n        <div className=\"jx-empty-state\">\n          <p className=\"jx-empty-state-title\">Нет проектов по выбранным фильтрам</p>\n          <p className=\"jx-empty-state-description\">\n            Попробуйте сбросить фильтры, чтобы увидеть все проекты.\n          </p>\n          <Button variant=\"secondary\" onClick={resetFilters}>\n            Сбросить фильтры\n          </Button>\n        </div>\n      ) : (\n        <>\n          <ul className=\"jx-list jx-list--spend\">\n            {pageItems.map((project) => {\n              const meta = STATUS_META[project.status];\n              return (\n                <li key={project.id} className=\"jx-list-row jx-spend-row\">\n                  <span className=\"jx-spend-row-name\">{project.name}</span>\n                  <QuotaCircle percent={project.quotaPercent} tone={meta.tone} />\n                  <span className={`jx-badge jx-badge--${meta.tone}`}>{meta.label}</span>\n                </li>\n              );\n            })}\n          </ul>\n\n          <div className=\"jx-pagination\" role=\"navigation\" aria-label=\"Постраничная навигация\">\n            <Button\n              variant=\"ghost\"\n              disabled={safePage === 0}\n              onClick={() => setPage((p) => Math.max(0, p - 1))}\n            >\n              Назад\n            </Button>\n            <span className=\"jx-pagination-status\">\n              Страница {safePage + 1} из {pageCount}\n            </span>\n            <Button\n              variant=\"ghost\"\n              disabled={safePage >= pageCount - 1}\n              onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}\n            >\n              Далее\n            </Button>\n          </div>\n        </>\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport React, { useMemo, useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\ntype ProjectStatus = 'active' | 'warning' | 'over';\n\ninterface Project {\n  id: string;\n  name: string;\n  status: ProjectStatus;\n  quotaPercent: number;\n}\n\nconst STATUS_META: Record<ProjectStatus, { label: string; tone: string }> = {\n  active: { label: 'Активен', tone: 'success' },\n  warning: { label: 'Внимание', tone: 'warning' },\n  over: { label: 'Превышен', tone: 'danger' },\n};\n\nconst PROJECTS: Project[] = [\n  { id: 'p1', name: 'Alpha Redesign', status: 'active', quotaPercent: 42 },\n  { id: 'p2', name: 'Beta Migration', status: 'warning', quotaPercent: 78 },\n  { id: 'p3', name: 'Gamma Analytics', status: 'over', quotaPercent: 112 },\n  { id: 'p4', name: 'Delta Onboarding', status: 'active', quotaPercent: 15 },\n  { id: 'p5', name: 'Epsilon Billing', status: 'over', quotaPercent: 101 },\n  { id: 'p6', name: 'Zeta Search', status: 'active', quotaPercent: 33 },\n  { id: 'p7', name: 'Eta Notifications', status: 'warning', quotaPercent: 85 },\n  { id: 'p8', name: 'Theta Reports', status: 'active', quotaPercent: 60 },\n  { id: 'p9', name: 'Iota Security', status: 'warning', quotaPercent: 90 },\n  { id: 'p10', name: 'Kappa Mobile', status: 'over', quotaPercent: 130 },\n  { id: 'p11', name: 'Lambda Infra', status: 'active', quotaPercent: 5 },\n  { id: 'p12', name: 'Mu Support', status: 'warning', quotaPercent: 70 },\n];\n\nconst ALL_STATUSES = Object.keys(STATUS_META) as ProjectStatus[];\nconst PAGE_SIZE = 5;\n\nfunction QuotaCircle({ percent, tone }: { percent: number; tone: string }) {\n  const size = 40;\n  const stroke = 4;\n  const radius = (size - stroke) / 2;\n  const circumference = 2 * Math.PI * radius;\n  const clamped = Math.max(0, Math.min(100, percent));\n  const dash = (clamped / 100) * circumference;\n\n  return (\n    <div className=\"jx-quota-circle\" role=\"img\" aria-label={`Квота заполнена на ${percent}%`}>\n      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>\n        <circle\n          cx={size / 2}\n          cy={size / 2}\n          r={radius}\n          fill=\"none\"\n          stroke=\"var(--jx-color-border-muted)\"\n          strokeWidth={stroke}\n        />\n        <circle\n          cx={size / 2}\n          cy={size / 2}\n          r={radius}\n          fill=\"none\"\n          stroke={`var(--jx-color-${tone})`}\n          strokeWidth={stroke}\n          strokeDasharray={`${dash} ${circumference}`}\n          strokeLinecap=\"round\"\n          transform={`rotate(-90 ${size / 2} ${size / 2})`}\n        />\n      </svg>\n      <span className=\"jx-quota-circle-label\">{percent}%</span>\n    </div>\n  );\n}\n\nexport default function ProjectSpendPanel() {\n  const [activeStatuses, setActiveStatuses] = useState<ProjectStatus[]>(ALL_STATUSES);\n  const [page, setPage] = useState(0);\n\n  const removeStatus = (status: ProjectStatus) => {\n    setActiveStatuses((prev) => prev.filter((s) => s !== status));\n    setPage(0);\n  };\n\n  const resetFilters = () => {\n    setActiveStatuses(ALL_STATUSES);\n    setPage(0);\n  };\n\n  const filteredProjects = useMemo(\n    () => PROJECTS.filter((p) => activeStatuses.includes(p.status)),\n    [activeStatuses]\n  );\n\n  const pageCount = Math.max(1, Math.ceil(filteredProjects.length / PAGE_SIZE));\n  const safePage = Math.min(page, pageCount - 1);\n  const pageItems = filteredProjects.slice(\n    safePage * PAGE_SIZE,\n    safePage * PAGE_SIZE + PAGE_SIZE\n  );\n\n  return (\n    <div className=\"jx-panel jx-panel-spend\">\n      <div className=\"jx-panel-header\">\n        <h2 className=\"jx-heading\">Расход по проектам</h2>\n      </div>\n\n      <div className=\"jx-chip-row\" role=\"group\" aria-label=\"Фильтры по статусу\">\n        {activeStatuses.length === 0 && (\n          <span className=\"jx-empty-hint\">Нет активных фильтров</span>\n        )}\n        {activeStatuses.map((status) => (\n          <span\n            key={status}\n            className={`jx-chip jx-chip--${STATUS_META[status].tone}`}\n          >\n            {STATUS_META[status].label}\n            <button\n              type=\"button\"\n              className=\"jx-chip-remove\"\n              aria-label={`Убрать фильтр ${STATUS_META[status].label}`}\n              onClick={() => removeStatus(status)}\n            >\n              ×\n            </button>\n          </span>\n        ))}\n      </div>\n\n      {filteredProjects.length === 0 ? (\n        <div className=\"jx-empty-state\">\n          <p className=\"jx-empty-state-title\">Нет проектов по выбранным фильтрам</p>\n          <p className=\"jx-empty-state-description\">\n            Попробуйте сбросить фильтры, чтобы увидеть все проекты.\n          </p>\n          <Button variant=\"secondary\" onClick={resetFilters}>\n            Сбросить фильтры\n          </Button>\n        </div>\n      ) : (\n        <>\n          <ul className=\"jx-list jx-list--spend\">\n            {pageItems.map((project) => {\n              const meta = STATUS_META[project.status];\n              return (\n                <li key={project.id} className=\"jx-list-row jx-spend-row\">\n                  <span className=\"jx-spend-row-name\">{project.name}</span>\n                  <QuotaCircle percent={project.quotaPercent} tone={meta.tone} />\n                  <span className={`jx-badge jx-badge--${meta.tone}`}>{meta.label}</span>\n                </li>\n              );\n            })}\n          </ul>\n\n          <div className=\"jx-pagination\" role=\"navigation\" aria-label=\"Постраничная навигация\">\n            <Button\n              variant=\"ghost\"\n              disabled={safePage === 0}\n              onClick={() => setPage((p) => Math.max(0, p - 1))}\n            >\n              Назад\n            </Button>\n            <span className=\"jx-pagination-status\">\n              Страница {safePage + 1} из {pageCount}\n            </span>\n            <Button\n              variant=\"ghost\"\n              disabled={safePage >= pageCount - 1}\n              onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}\n            >\n              Далее\n            </Button>\n          </div>\n        </>\n      )}\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        }
+      ],
+      "unknownComponents": [
+        "Button"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.56
+  }
+}

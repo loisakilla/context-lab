@@ -1,0 +1,115 @@
+{
+  "id": "tag-picker__readme__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-22T09:44:56.123Z",
+  "repeat": 3,
+  "durationMs": 9310,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 9554,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 776,
+    "cacheRead": 9554,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.024187,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, KeyboardEvent } from 'react';\nimport { JxInput, JxTag, JxStack } from '@jinx-ui/react';\n\ninterface TagInputProps {\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function TagInput({ onChange }: TagInputProps) {\n  const [tags, setTags] = useState<string[]>([]);\n  const [draft, setDraft] = useState('');\n\n  const commitDraft = () => {\n    const value = draft.trim();\n    if (value.length === 0) return;\n    if (tags.includes(value)) {\n      setDraft('');\n      return;\n    }\n    const next = [...tags, value];\n    setTags(next);\n    setDraft('');\n    onChange?.(next);\n  };\n\n  const removeTag = (tag: string) => {\n    const next = tags.filter((item) => item !== tag);\n    setTags(next);\n    onChange?.(next);\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      commitDraft();\n      return;\n    }\n    if (event.key === 'Backspace' && draft.length === 0 && tags.length > 0) {\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  return (\n    <div className=\"jx-field\" style={{ gap: 'var(--jx-space-2)' }}>\n      <JxInput\n        value={draft}\n        placeholder=\"Введите тег и нажмите Enter\"\n        aria-label=\"Добавить тег\"\n        onChange={(event) => setDraft(event.target.value)}\n        onKeyDown={handleKeyDown}\n        onBlur={commitDraft}\n      />\n      {tags.length > 0 && (\n        <JxStack\n          direction=\"row\"\n          wrap\n          gap=\"sm\"\n          style={{ marginTop: 'var(--jx-space-2)' }}\n        >\n          {tags.map((tag) => (\n            <JxTag\n              key={tag}\n              onRemove={() => removeTag(tag)}\n              aria-label={`Удалить тег ${tag}`}\n            >\n              {tag}\n            </JxTag>\n          ))}\n        </JxStack>\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState, KeyboardEvent } from 'react';\nimport { JxInput, JxTag, JxStack } from '@jinx-ui/react';\n\ninterface TagInputProps {\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function TagInput({ onChange }: TagInputProps) {\n  const [tags, setTags] = useState<string[]>([]);\n  const [draft, setDraft] = useState('');\n\n  const commitDraft = () => {\n    const value = draft.trim();\n    if (value.length === 0) return;\n    if (tags.includes(value)) {\n      setDraft('');\n      return;\n    }\n    const next = [...tags, value];\n    setTags(next);\n    setDraft('');\n    onChange?.(next);\n  };\n\n  const removeTag = (tag: string) => {\n    const next = tags.filter((item) => item !== tag);\n    setTags(next);\n    onChange?.(next);\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      commitDraft();\n      return;\n    }\n    if (event.key === 'Backspace' && draft.length === 0 && tags.length > 0) {\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  return (\n    <div className=\"jx-field\" style={{ gap: 'var(--jx-space-2)' }}>\n      <JxInput\n        value={draft}\n        placeholder=\"Введите тег и нажмите Enter\"\n        aria-label=\"Добавить тег\"\n        onChange={(event) => setDraft(event.target.value)}\n        onKeyDown={handleKeyDown}\n        onBlur={commitDraft}\n      />\n      {tags.length > 0 && (\n        <JxStack\n          direction=\"row\"\n          wrap\n          gap=\"sm\"\n          style={{ marginTop: 'var(--jx-space-2)' }}\n        >\n          {tags.map((tag) => (\n            <JxTag\n              key={tag}\n              onRemove={() => removeTag(tag)}\n              aria-label={`Удалить тег ${tag}`}\n            >\n              {tag}\n            </JxTag>\n          ))}\n        </JxStack>\n      )}\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxInput'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxTag'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxStack'."
+        },
+        {
+          "code": 7006,
+          "line": 48,
+          "message": "Parameter 'event' implicitly has an 'any' type."
+        }
+      ],
+      "unknownComponents": [
+        "JxInput",
+        "JxStack",
+        "JxTag"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 43,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 57,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxInput",
+      "JxStack",
+      "JxTag"
+    ],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.14
+  }
+}

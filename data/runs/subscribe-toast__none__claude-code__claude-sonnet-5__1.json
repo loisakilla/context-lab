@@ -1,0 +1,116 @@
+{
+  "id": "subscribe-toast__none__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-22T09:35:23.244Z",
+  "repeat": 1,
+  "durationMs": 5769,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "none",
+  "task": {
+    "id": "subscribe-toast",
+    "title": "Подписка с уведомлением",
+    "prompt": "Сделай форму подписки на рассылку с полем для почты и кнопкой «Подписаться». После отправки поле очищается, а в углу экрана появляется уведомление «Готово» с текстом, что письмо отправлено.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxButton",
+      "JxToastViewport"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 8235,
+        "cacheCreation": 337
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 470,
+    "cacheRead": 8235,
+    "cacheCreation": 337
+  },
+  "costUsd": 0.01798375,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxInput, JxButton, JxToast, JxForm, JxFormField } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [showToast, setShowToast] = useState(false);\n\n  const handleSubmit = (e: React.FormEvent) => {\n    e.preventDefault();\n    if (!email) return;\n\n    setEmail('');\n    setShowToast(true);\n  };\n\n  return (\n    <div className=\"jx-stack jx-stack-md\" style={{ position: 'relative' }}>\n      <JxForm onSubmit={handleSubmit} className=\"jx-stack jx-stack-sm\">\n        <JxFormField label=\"Email\">\n          <JxInput\n            type=\"email\"\n            name=\"email\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={(e) => setEmail(e.target.value)}\n            required\n          />\n        </JxFormField>\n        <JxButton type=\"submit\" variant=\"primary\">\n          Подписаться\n        </JxButton>\n      </JxForm>\n\n      {showToast && (\n        <JxToast\n          variant=\"success\"\n          title=\"Готово\"\n          description=\"Письмо отправлено на вашу почту.\"\n          position=\"top-right\"\n          onClose={() => setShowToast(false)}\n        />\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxInput, JxButton, JxToast, JxForm, JxFormField } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [showToast, setShowToast] = useState(false);\n\n  const handleSubmit = (e: React.FormEvent) => {\n    e.preventDefault();\n    if (!email) return;\n\n    setEmail('');\n    setShowToast(true);\n  };\n\n  return (\n    <div className=\"jx-stack jx-stack-md\" style={{ position: 'relative' }}>\n      <JxForm onSubmit={handleSubmit} className=\"jx-stack jx-stack-sm\">\n        <JxFormField label=\"Email\">\n          <JxInput\n            type=\"email\"\n            name=\"email\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={(e) => setEmail(e.target.value)}\n            required\n          />\n        </JxFormField>\n        <JxButton type=\"submit\" variant=\"primary\">\n          Подписаться\n        </JxButton>\n      </JxForm>\n\n      {showToast && (\n        <JxToast\n          variant=\"success\"\n          title=\"Готово\"\n          description=\"Письмо отправлено на вашу почту.\"\n          position=\"top-right\"\n          onClose={() => setShowToast(false)}\n        />\n      )}\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxInput'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxForm'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxFormField'."
+        },
+        {
+          "code": 7006,
+          "line": 25,
+          "message": "Parameter 'e' implicitly has an 'any' type."
+        },
+        {
+          "code": 2322,
+          "line": 38,
+          "message": "Type '{ variant: \"success\"; title: string; description: string; position: string; onClose: () => void; }' is not assignable to type 'IntrinsicAttributes & JxToastProps'.\n  Property 'description' does not exist on type 'IntrinsicAttributes & JxToastProps'."
+        }
+      ],
+      "unknownComponents": [
+        "JxForm",
+        "JxFormField",
+        "JxInput"
+      ],
+      "unknownProps": [
+        {
+          "component": "JxToast",
+          "prop": "description"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 17,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxForm",
+      "JxFormField",
+      "JxInput",
+      "JxToast"
+    ],
+    "expectedCoverage": 0.33,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.1
+  }
+}

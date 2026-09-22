@@ -1,0 +1,129 @@
+{
+  "id": "usage-dashboard__none__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-22T09:45:29.061Z",
+  "repeat": 3,
+  "durationMs": 42500,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "usage-dashboard",
+    "title": "Панель расхода с фильтрами",
+    "prompt": "Сделай панель расхода по проектам. Сверху чипы-фильтры по статусу, которые можно снимать. Под ними на каждый проект строка с названием, круговым индикатором заполненности квоты в процентах и меткой статуса. Список постраничный, по пять строк. Если после фильтрации ничего не осталось, вместо списка показывается пустое состояние с кнопкой сброса фильтров.",
+    "taskType": "ui",
+    "expects": [
+      "JxChip",
+      "JxProgressCircle",
+      "JxBadge",
+      "JxPagination",
+      "JxEmptyState"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 8632,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 8632,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 4049,
+    "cacheRead": 8632,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.10555099999999999,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\nimport {\n  Badge,\n  Button,\n  Card,\n  Chip,\n  EmptyState,\n  Pagination,\n  Stack,\n  Text,\n} from '@jinx-ui/react';\n\ntype Status = 'active' | 'paused' | 'over' | 'archived';\n\ntype Project = {\n  id: string;\n  name: string;\n  used: number;\n  quota: number;\n  status: Status;\n};\n\nconst STATUS_LABEL: Record<Status, string> = {\n  active: 'Активен',\n  paused: 'На паузе',\n  over: 'Превышение',\n  archived: 'В архиве',\n};\n\nconst STATUS_TONE: Record<Status, 'success' | 'warning' | 'danger' | 'neutral'> = {\n  active: 'success',\n  paused: 'warning',\n  over: 'danger',\n  archived: 'neutral',\n};\n\nconst ALL_STATUSES: Status[] = ['active', 'paused', 'over', 'archived'];\n\nconst PROJECTS: Project[] = [\n  { id: 'p-1', name: 'Атлас. Витрина данных', used: 412, quota: 500, status: 'active' },\n  { id: 'p-2', name: 'Биллинг: миграция на v3', used: 780, quota: 600, status: 'over' },\n  { id: 'p-3', name: 'Мобильный клиент', used: 145, quota: 400, status: 'active' },\n  { id: 'p-4', name: 'Поисковый индекс', used: 260, quota: 300, status: 'paused' },\n  { id: 'p-5', name: 'Отчётность для финотдела', used: 90, quota: 250, status: 'archived' },\n  { id: 'p-6', name: 'Антифрод-скоринг', used: 340, quota: 350, status: 'active' },\n  { id: 'p-7', name: 'Складская интеграция', used: 55, quota: 200, status: 'paused' },\n  { id: 'p-8', name: 'Рекомендации на главной', used: 520, quota: 450, status: 'over' },\n  { id: 'p-9', name: 'Внутренний портал', used: 30, quota: 150, status: 'archived' },\n  { id: 'p-10', name: 'Пайплайн видеотранскода', used: 180, quota: 500, status: 'active' },\n  { id: 'p-11', name: 'Сервис уведомлений', used: 210, quota: 220, status: 'active' },\n  { id: 'p-12', name: 'Архив логов', used: 70, quota: 400, status: 'archived' },\n];\n\nconst PAGE_SIZE = 5;\nconst RING_RADIUS = 18;\nconst RING_LENGTH = 2 * Math.PI * RING_RADIUS;\n\nexport default function ProjectQuotaPanel() {\n  const [activeStatuses, setActiveStatuses] = useState<Status[]>(ALL_STATUSES);\n  const [page, setPage] = useState(1);\n\n  const visible = useMemo(\n    () => PROJECTS.filter((project) => activeStatuses.includes(project.status)),\n    [activeStatuses],\n  );\n\n  const pageCount = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));\n  const safePage = Math.min(page, pageCount);\n  const rows = visible.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);\n\n  const removeStatus = (status: Status) => {\n    setActiveStatuses((current) => current.filter((item) => item !== status));\n    setPage(1);\n  };\n\n  const resetFilters = () => {\n    setActiveStatuses(ALL_STATUSES);\n    setPage(1);\n  };\n\n  return (\n    <Card className=\"jx-p-4\">\n      <Stack direction=\"vertical\" gap=\"lg\">\n        <Stack direction=\"vertical\" gap=\"xs\">\n          <Text as=\"h2\" variant=\"heading-sm\">\n            Расход по проектам\n          </Text>\n          <Text variant=\"body-sm\" tone=\"muted\">\n            Показано {visible.length} из {PROJECTS.length}\n          </Text>\n        </Stack>\n\n        <Stack direction=\"horizontal\" gap=\"sm\" wrap>\n          {activeStatuses.map((status) => (\n            <Chip\n              key={status}\n              tone={STATUS_TONE[status]}\n              onRemove={() => removeStatus(status)}\n              removeLabel={`Убрать фильтр «${STATUS_LABEL[status]}»`}\n            >\n              {STATUS_LABEL[status]}\n            </Chip>\n          ))}\n        </Stack>\n\n        {rows.length === 0 ? (\n          <EmptyState\n            title=\"Нет проектов под выбранные фильтры\"\n            description=\"Снятые статусы скрыли все строки. Верните фильтры, чтобы увидеть список.\"\n            action={\n              <Button variant=\"primary\" onClick={resetFilters}>\n                Сбросить фильтры\n              </Button>\n            }\n          />\n        ) : (\n          <Stack direction=\"vertical\" gap=\"sm\">\n            {rows.map((project) => {\n              const percent = Math.round((project.used / project.quota) * 100);\n              const arc = Math.min(percent, 100);\n              const ringColor =\n                project.status === 'over'\n                  ? 'var(--jx-color-danger)'\n                  : project.status === 'paused'\n                    ? 'var(--jx-color-warning)'\n                    : 'var(--jx-color-accent)';\n\n              return (\n                <Card key={project.id} variant=\"outlined\" className=\"jx-p-3\">\n                  <Stack direction=\"horizontal\" gap=\"md\" align=\"center\" justify=\"between\">\n                    <Stack direction=\"horizontal\" gap=\"md\" align=\"center\">\n                      <svg\n                        width={44}\n                        height={44}\n                        viewBox=\"0 0 44 44\"\n                        role=\"img\"\n                        aria-label={`Квота заполнена на ${percent} процентов`}\n                      >\n                        <circle\n                          cx={22}\n                          cy={22}\n                          r={RING_RADIUS}\n                          fill=\"none\"\n                          stroke=\"var(--jx-color-border-subtle)\"\n                          strokeWidth={4}\n                        />\n                        <circle\n                          cx={22}\n                          cy={22}\n                          r={RING_RADIUS}\n                          fill=\"none\"\n                          stroke={ringColor}\n                          strokeWidth={4}\n                          strokeLinecap=\"round\"\n                          strokeDasharray={RING_LENGTH}\n                          strokeDashoffset={RING_LENGTH * (1 - arc / 100)}\n                          transform=\"rotate(-90 22 22)\"\n                        />\n                      </svg>\n\n                      <Stack direction=\"vertical\" gap=\"xs\">\n                        <Text variant=\"body-md\">{project.name}</Text>\n                        <Text variant=\"body-sm\" tone=\"muted\">\n                          {percent}% · {project.used} из {project.quota} ч\n                        </Text>\n                      </Stack>\n                    </Stack>\n\n                    <Badge tone={STATUS_TONE[project.status]}>\n                      {STATUS_LABEL[project.status]}\n                    </Badge>\n                  </Stack>\n                </Card>\n              );\n            })}\n\n            <Pagination page={safePage} pageCount={pageCount} onPageChange={setPage} />\n          </Stack>\n        )}\n      </Stack>\n    </Card>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport {\n  Badge,\n  Button,\n  Card,\n  Chip,\n  EmptyState,\n  Pagination,\n  Stack,\n  Text,\n} from '@jinx-ui/react';\n\ntype Status = 'active' | 'paused' | 'over' | 'archived';\n\ntype Project = {\n  id: string;\n  name: string;\n  used: number;\n  quota: number;\n  status: Status;\n};\n\nconst STATUS_LABEL: Record<Status, string> = {\n  active: 'Активен',\n  paused: 'На паузе',\n  over: 'Превышение',\n  archived: 'В архиве',\n};\n\nconst STATUS_TONE: Record<Status, 'success' | 'warning' | 'danger' | 'neutral'> = {\n  active: 'success',\n  paused: 'warning',\n  over: 'danger',\n  archived: 'neutral',\n};\n\nconst ALL_STATUSES: Status[] = ['active', 'paused', 'over', 'archived'];\n\nconst PROJECTS: Project[] = [\n  { id: 'p-1', name: 'Атлас. Витрина данных', used: 412, quota: 500, status: 'active' },\n  { id: 'p-2', name: 'Биллинг: миграция на v3', used: 780, quota: 600, status: 'over' },\n  { id: 'p-3', name: 'Мобильный клиент', used: 145, quota: 400, status: 'active' },\n  { id: 'p-4', name: 'Поисковый индекс', used: 260, quota: 300, status: 'paused' },\n  { id: 'p-5', name: 'Отчётность для финотдела', used: 90, quota: 250, status: 'archived' },\n  { id: 'p-6', name: 'Антифрод-скоринг', used: 340, quota: 350, status: 'active' },\n  { id: 'p-7', name: 'Складская интеграция', used: 55, quota: 200, status: 'paused' },\n  { id: 'p-8', name: 'Рекомендации на главной', used: 520, quota: 450, status: 'over' },\n  { id: 'p-9', name: 'Внутренний портал', used: 30, quota: 150, status: 'archived' },\n  { id: 'p-10', name: 'Пайплайн видеотранскода', used: 180, quota: 500, status: 'active' },\n  { id: 'p-11', name: 'Сервис уведомлений', used: 210, quota: 220, status: 'active' },\n  { id: 'p-12', name: 'Архив логов', used: 70, quota: 400, status: 'archived' },\n];\n\nconst PAGE_SIZE = 5;\nconst RING_RADIUS = 18;\nconst RING_LENGTH = 2 * Math.PI * RING_RADIUS;\n\nexport default function ProjectQuotaPanel() {\n  const [activeStatuses, setActiveStatuses] = useState<Status[]>(ALL_STATUSES);\n  const [page, setPage] = useState(1);\n\n  const visible = useMemo(\n    () => PROJECTS.filter((project) => activeStatuses.includes(project.status)),\n    [activeStatuses],\n  );\n\n  const pageCount = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));\n  const safePage = Math.min(page, pageCount);\n  const rows = visible.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);\n\n  const removeStatus = (status: Status) => {\n    setActiveStatuses((current) => current.filter((item) => item !== status));\n    setPage(1);\n  };\n\n  const resetFilters = () => {\n    setActiveStatuses(ALL_STATUSES);\n    setPage(1);\n  };\n\n  return (\n    <Card className=\"jx-p-4\">\n      <Stack direction=\"vertical\" gap=\"lg\">\n        <Stack direction=\"vertical\" gap=\"xs\">\n          <Text as=\"h2\" variant=\"heading-sm\">\n            Расход по проектам\n          </Text>\n          <Text variant=\"body-sm\" tone=\"muted\">\n            Показано {visible.length} из {PROJECTS.length}\n          </Text>\n        </Stack>\n\n        <Stack direction=\"horizontal\" gap=\"sm\" wrap>\n          {activeStatuses.map((status) => (\n            <Chip\n              key={status}\n              tone={STATUS_TONE[status]}\n              onRemove={() => removeStatus(status)}\n              removeLabel={`Убрать фильтр «${STATUS_LABEL[status]}»`}\n            >\n              {STATUS_LABEL[status]}\n            </Chip>\n          ))}\n        </Stack>\n\n        {rows.length === 0 ? (\n          <EmptyState\n            title=\"Нет проектов под выбранные фильтры\"\n            description=\"Снятые статусы скрыли все строки. Верните фильтры, чтобы увидеть список.\"\n            action={\n              <Button variant=\"primary\" onClick={resetFilters}>\n                Сбросить фильтры\n              </Button>\n            }\n          />\n        ) : (\n          <Stack direction=\"vertical\" gap=\"sm\">\n            {rows.map((project) => {\n              const percent = Math.round((project.used / project.quota) * 100);\n              const arc = Math.min(percent, 100);\n              const ringColor =\n                project.status === 'over'\n                  ? 'var(--jx-color-danger)'\n                  : project.status === 'paused'\n                    ? 'var(--jx-color-warning)'\n                    : 'var(--jx-color-accent)';\n\n              return (\n                <Card key={project.id} variant=\"outlined\" className=\"jx-p-3\">\n                  <Stack direction=\"horizontal\" gap=\"md\" align=\"center\" justify=\"between\">\n                    <Stack direction=\"horizontal\" gap=\"md\" align=\"center\">\n                      <svg\n                        width={44}\n                        height={44}\n                        viewBox=\"0 0 44 44\"\n                        role=\"img\"\n                        aria-label={`Квота заполнена на ${percent} процентов`}\n                      >\n                        <circle\n                          cx={22}\n                          cy={22}\n                          r={RING_RADIUS}\n                          fill=\"none\"\n                          stroke=\"var(--jx-color-border-subtle)\"\n                          strokeWidth={4}\n                        />\n                        <circle\n                          cx={22}\n                          cy={22}\n                          r={RING_RADIUS}\n                          fill=\"none\"\n                          stroke={ringColor}\n                          strokeWidth={4}\n                          strokeLinecap=\"round\"\n                          strokeDasharray={RING_LENGTH}\n                          strokeDashoffset={RING_LENGTH * (1 - arc / 100)}\n                          transform=\"rotate(-90 22 22)\"\n                        />\n                      </svg>\n\n                      <Stack direction=\"vertical\" gap=\"xs\">\n                        <Text variant=\"body-md\">{project.name}</Text>\n                        <Text variant=\"body-sm\" tone=\"muted\">\n                          {percent}% · {project.used} из {project.quota} ч\n                        </Text>\n                      </Stack>\n                    </Stack>\n\n                    <Badge tone={STATUS_TONE[project.status]}>\n                      {STATUS_LABEL[project.status]}\n                    </Badge>\n                  </Stack>\n                </Card>\n              );\n            })}\n\n            <Pagination page={safePage} pageCount={pageCount} onPageChange={setPage} />\n          </Stack>\n        )}\n      </Stack>\n    </Card>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 3,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Badge'. Did you mean 'JxBadge'?"
+        },
+        {
+          "code": 2724,
+          "line": 4,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 5,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Card'."
+        },
+        {
+          "code": 2305,
+          "line": 6,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Chip'."
+        },
+        {
+          "code": 2724,
+          "line": 7,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'EmptyState'. Did you mean 'JxEmptyState'?"
+        },
+        {
+          "code": 2724,
+          "line": 8,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Pagination'. Did you mean 'JxPagination'?"
+        },
+        {
+          "code": 2305,
+          "line": 9,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 10,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        }
+      ],
+      "unknownComponents": [
+        "Badge",
+        "Button",
+        "Card",
+        "Chip",
+        "EmptyState",
+        "Pagination",
+        "Stack",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

@@ -1,8 +1,8 @@
 {
   "id": "tag-picker__docs+rules__claude-code__claude-opus-5__2",
-  "createdAt": "2026-09-21T13:24:14.873Z",
+  "createdAt": "2026-09-22T09:38:52.989Z",
   "repeat": 2,
-  "durationMs": 10212,
+  "durationMs": 10984,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -22,7 +22,7 @@
     ]
   },
   "context": {
-    "tokens": 17366,
+    "tokens": 17409,
     "sources": [
       {
         "kind": "docs",
@@ -42,24 +42,33 @@
     {
       "usage": {
         "input": 2,
-        "output": 1,
-        "cacheRead": 11847,
-        "cacheCreation": 32887
+        "output": 8,
+        "cacheRead": 38600,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 38600,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
     "input": 2,
-    "output": 623,
-    "cacheRead": 11847,
-    "cacheCreation": 32887
+    "output": 880,
+    "cacheRead": 38600,
+    "cacheCreation": 0
   },
-  "costUsd": 0.22705225,
+  "costUsd": 0.04131,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState } from 'react';\nimport { JxTagInput, JxChip, JxEmptyState } from '@jinx-ui/react';\n\nexport interface ArticleTagPickerProps {\n  label?: string;\n  placeholder?: string;\n  defaultTags?: string[];\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  defaultTags = [],\n  onChange,\n}: ArticleTagPickerProps) {\n  const [tags, setTags] = useState<string[]>(defaultTags);\n\n  const applyTags = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  const removeTag = (tag: string) => {\n    applyTags(tags.filter((item) => item !== tag));\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n      <JxTagInput\n        ariaLabel={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={applyTags}\n      />\n      {tags.length === 0 ? (\n        <JxEmptyState\n          title=\"Тегов пока нет\"\n          message=\"Добавьте первый тег, чтобы статью было проще найти.\"\n        />\n      ) : (\n        <div\n          role=\"list\"\n          aria-label=\"Выбранные теги\"\n          style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}\n        >\n          {tags.map((tag) => (\n            <JxChip key={tag} role=\"listitem\" active removable onRemove={() => removeTag(tag)}>\n              {tag}\n            </JxChip>\n          ))}\n        </div>\n      )}\n    </div>\n  );\n}",
-    "text": "```tsx\nimport { useState } from 'react';\nimport { JxTagInput, JxChip, JxEmptyState } from '@jinx-ui/react';\n\nexport interface ArticleTagPickerProps {\n  label?: string;\n  placeholder?: string;\n  defaultTags?: string[];\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  defaultTags = [],\n  onChange,\n}: ArticleTagPickerProps) {\n  const [tags, setTags] = useState<string[]>(defaultTags);\n\n  const applyTags = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  const removeTag = (tag: string) => {\n    applyTags(tags.filter((item) => item !== tag));\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n      <JxTagInput\n        ariaLabel={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={applyTags}\n      />\n      {tags.length === 0 ? (\n        <JxEmptyState\n          title=\"Тегов пока нет\"\n          message=\"Добавьте первый тег, чтобы статью было проще найти.\"\n        />\n      ) : (\n        <div\n          role=\"list\"\n          aria-label=\"Выбранные теги\"\n          style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}\n        >\n          {tags.map((tag) => (\n            <JxChip key={tag} role=\"listitem\" active removable onRemove={() => removeTag(tag)}>\n              {tag}\n            </JxChip>\n          ))}\n        </div>\n      )}\n    </div>\n  );\n}\n```"
+    "code": "import { useCallback } from 'react';\nimport { JxChip, JxTagInput, useControllableState } from '@jinx-ui/react';\n\nexport interface ArticleTagPickerProps {\n  value?: string[];\n  defaultValue?: string[];\n  label?: string;\n  placeholder?: string;\n  emptyText?: string;\n  onChange?: (value: string[]) => void;\n}\n\nfunction ArticleTagPicker({\n  value,\n  defaultValue = [],\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  emptyText = 'Пока не выбрано ни одного тега',\n  onChange,\n}: ArticleTagPickerProps) {\n  const [tags, setTags] = useControllableState<string[]>(value, defaultValue, onChange);\n\n  const removeTag = useCallback(\n    (tag: string) => {\n      setTags(tags.filter((item) => item !== tag));\n    },\n    [setTags, tags],\n  );\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>\n      <JxTagInput\n        ariaLabel={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={setTags}\n      />\n      {tags.length > 0 ? (\n        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>\n          {tags.map((tag) => (\n            <JxChip key={tag} removable onRemove={() => removeTag(tag)}>\n              {tag}\n            </JxChip>\n          ))}\n        </div>\n      ) : (\n        <span style={{ color: 'var(--jx-text-3)', fontFamily: 'var(--jx-font-sans)' }}>\n          {emptyText}\n        </span>\n      )}\n    </div>\n  );\n}\n\nexport default ArticleTagPicker;",
+    "text": "```tsx\nimport { useCallback } from 'react';\nimport { JxChip, JxTagInput, useControllableState } from '@jinx-ui/react';\n\nexport interface ArticleTagPickerProps {\n  value?: string[];\n  defaultValue?: string[];\n  label?: string;\n  placeholder?: string;\n  emptyText?: string;\n  onChange?: (value: string[]) => void;\n}\n\nfunction ArticleTagPicker({\n  value,\n  defaultValue = [],\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  emptyText = 'Пока не выбрано ни одного тега',\n  onChange,\n}: ArticleTagPickerProps) {\n  const [tags, setTags] = useControllableState<string[]>(value, defaultValue, onChange);\n\n  const removeTag = useCallback(\n    (tag: string) => {\n      setTags(tags.filter((item) => item !== tag));\n    },\n    [setTags, tags],\n  );\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>\n      <JxTagInput\n        ariaLabel={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={setTags}\n      />\n      {tags.length > 0 ? (\n        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>\n          {tags.map((tag) => (\n            <JxChip key={tag} removable onRemove={() => removeTag(tag)}>\n              {tag}\n            </JxChip>\n          ))}\n        </div>\n      ) : (\n        <span style={{ color: 'var(--jx-text-3)', fontFamily: 'var(--jx-font-sans)' }}>\n          {emptyText}\n        </span>\n      )}\n    </div>\n  );\n}\n\nexport default ArticleTagPicker;\n```"
   },
   "checks": {
     "tsc": {
@@ -71,19 +80,24 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 29,
+        "line": 31,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 45,
+        "line": 39,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 47,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],
     "usedComponents": [
       "JxChip",
-      "JxEmptyState",
       "JxTagInput"
     ],
     "expectedCoverage": 1,

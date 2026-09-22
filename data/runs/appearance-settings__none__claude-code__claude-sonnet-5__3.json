@@ -1,0 +1,200 @@
+{
+  "id": "appearance-settings__none__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-22T09:39:46.567Z",
+  "repeat": 3,
+  "durationMs": 12771,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "none",
+  "task": {
+    "id": "appearance-settings",
+    "title": "Настройки внешнего вида",
+    "prompt": "Сделай экран настроек внешнего вида: сегментированный переключатель темы на три варианта, ползунок масштаба интерфейса от 80 до 140 процентов с показом текущего значения, переключатель плотной вёрстки и раздел «Ещё» под разделителем с выбором шрифта. Справа от заголовка экрана метка с текущей темой. Состояние храни в компоненте и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxToggle",
+      "JxSlider",
+      "JxSwitch",
+      "JxDivider",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 8646,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1502,
+    "cacheRead": 8646,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.041883000000000004,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport {\n  JxPage,\n  JxHeader,\n  JxBadge,\n  JxSection,\n  JxDivider,\n  JxSegmentedControl,\n  JxSegmentedItem,\n  JxSlider,\n  JxSwitch,\n  JxSelect,\n  JxSelectOption,\n  JxLabel,\n  JxStack,\n} from '@jinx-ui/react';\n\ntype Theme = 'light' | 'dark' | 'system';\ntype FontFamily = 'system' | 'serif' | 'mono';\n\nexport interface AppearanceSettingsValue {\n  theme: Theme;\n  scale: number;\n  compact: boolean;\n  font: FontFamily;\n}\n\ninterface AppearanceSettingsProps {\n  onChange?: (value: AppearanceSettingsValue) => void;\n}\n\nconst themeLabels: Record<Theme, string> = {\n  light: 'Светлая',\n  dark: 'Тёмная',\n  system: 'Системная',\n};\n\nfunction AppearanceSettings({ onChange }: AppearanceSettingsProps) {\n  const [theme, setTheme] = useState<Theme>('system');\n  const [scale, setScale] = useState<number>(100);\n  const [compact, setCompact] = useState<boolean>(false);\n  const [font, setFont] = useState<FontFamily>('system');\n\n  const emit = (next: Partial<AppearanceSettingsValue>) => {\n    onChange?.({\n      theme,\n      scale,\n      compact,\n      font,\n      ...next,\n    });\n  };\n\n  const handleThemeChange = (value: Theme) => {\n    setTheme(value);\n    emit({ theme: value });\n  };\n\n  const handleScaleChange = (value: number) => {\n    setScale(value);\n    emit({ scale: value });\n  };\n\n  const handleCompactChange = (value: boolean) => {\n    setCompact(value);\n    emit({ compact: value });\n  };\n\n  const handleFontChange = (value: FontFamily) => {\n    setFont(value);\n    emit({ font: value });\n  };\n\n  return (\n    <JxPage>\n      <JxHeader\n        title=\"Внешний вид\"\n        actions={<JxBadge tone=\"neutral\">{themeLabels[theme]}</JxBadge>}\n      />\n\n      <JxSection title=\"Тема\">\n        <JxSegmentedControl\n          value={theme}\n          onValueChange={(value) => handleThemeChange(value as Theme)}\n        >\n          <JxSegmentedItem value=\"light\">Светлая</JxSegmentedItem>\n          <JxSegmentedItem value=\"dark\">Тёмная</JxSegmentedItem>\n          <JxSegmentedItem value=\"system\">Системная</JxSegmentedItem>\n        </JxSegmentedControl>\n      </JxSection>\n\n      <JxSection title=\"Масштаб интерфейса\">\n        <JxStack direction=\"row\" align=\"center\" gap=\"md\">\n          <JxSlider\n            min={80}\n            max={140}\n            step={5}\n            value={scale}\n            onValueChange={handleScaleChange}\n            style={{ flex: 1 }}\n          />\n          <JxLabel style={{ color: 'var(--jx-color-text-secondary)', minWidth: '3.5em', textAlign: 'right' }}>\n            {scale}%\n          </JxLabel>\n        </JxStack>\n      </JxSection>\n\n      <JxSection title=\"Плотная вёрстка\">\n        <JxStack direction=\"row\" align=\"center\" justify=\"space-between\">\n          <JxLabel>Уменьшить отступы элементов</JxLabel>\n          <JxSwitch checked={compact} onCheckedChange={handleCompactChange} />\n        </JxStack>\n      </JxSection>\n\n      <JxDivider />\n\n      <JxSection title=\"Ещё\">\n        <JxStack direction=\"row\" align=\"center\" justify=\"space-between\">\n          <JxLabel>Шрифт</JxLabel>\n          <JxSelect\n            value={font}\n            onValueChange={(value) => handleFontChange(value as FontFamily)}\n          >\n            <JxSelectOption value=\"system\">Системный</JxSelectOption>\n            <JxSelectOption value=\"serif\">С засечками</JxSelectOption>\n            <JxSelectOption value=\"mono\">Моноширинный</JxSelectOption>\n          </JxSelect>\n        </JxStack>\n      </JxSection>\n    </JxPage>\n  );\n}\n\nexport default AppearanceSettings;",
+    "text": "```tsx\nimport { useState } from 'react';\nimport {\n  JxPage,\n  JxHeader,\n  JxBadge,\n  JxSection,\n  JxDivider,\n  JxSegmentedControl,\n  JxSegmentedItem,\n  JxSlider,\n  JxSwitch,\n  JxSelect,\n  JxSelectOption,\n  JxLabel,\n  JxStack,\n} from '@jinx-ui/react';\n\ntype Theme = 'light' | 'dark' | 'system';\ntype FontFamily = 'system' | 'serif' | 'mono';\n\nexport interface AppearanceSettingsValue {\n  theme: Theme;\n  scale: number;\n  compact: boolean;\n  font: FontFamily;\n}\n\ninterface AppearanceSettingsProps {\n  onChange?: (value: AppearanceSettingsValue) => void;\n}\n\nconst themeLabels: Record<Theme, string> = {\n  light: 'Светлая',\n  dark: 'Тёмная',\n  system: 'Системная',\n};\n\nfunction AppearanceSettings({ onChange }: AppearanceSettingsProps) {\n  const [theme, setTheme] = useState<Theme>('system');\n  const [scale, setScale] = useState<number>(100);\n  const [compact, setCompact] = useState<boolean>(false);\n  const [font, setFont] = useState<FontFamily>('system');\n\n  const emit = (next: Partial<AppearanceSettingsValue>) => {\n    onChange?.({\n      theme,\n      scale,\n      compact,\n      font,\n      ...next,\n    });\n  };\n\n  const handleThemeChange = (value: Theme) => {\n    setTheme(value);\n    emit({ theme: value });\n  };\n\n  const handleScaleChange = (value: number) => {\n    setScale(value);\n    emit({ scale: value });\n  };\n\n  const handleCompactChange = (value: boolean) => {\n    setCompact(value);\n    emit({ compact: value });\n  };\n\n  const handleFontChange = (value: FontFamily) => {\n    setFont(value);\n    emit({ font: value });\n  };\n\n  return (\n    <JxPage>\n      <JxHeader\n        title=\"Внешний вид\"\n        actions={<JxBadge tone=\"neutral\">{themeLabels[theme]}</JxBadge>}\n      />\n\n      <JxSection title=\"Тема\">\n        <JxSegmentedControl\n          value={theme}\n          onValueChange={(value) => handleThemeChange(value as Theme)}\n        >\n          <JxSegmentedItem value=\"light\">Светлая</JxSegmentedItem>\n          <JxSegmentedItem value=\"dark\">Тёмная</JxSegmentedItem>\n          <JxSegmentedItem value=\"system\">Системная</JxSegmentedItem>\n        </JxSegmentedControl>\n      </JxSection>\n\n      <JxSection title=\"Масштаб интерфейса\">\n        <JxStack direction=\"row\" align=\"center\" gap=\"md\">\n          <JxSlider\n            min={80}\n            max={140}\n            step={5}\n            value={scale}\n            onValueChange={handleScaleChange}\n            style={{ flex: 1 }}\n          />\n          <JxLabel style={{ color: 'var(--jx-color-text-secondary)', minWidth: '3.5em', textAlign: 'right' }}>\n            {scale}%\n          </JxLabel>\n        </JxStack>\n      </JxSection>\n\n      <JxSection title=\"Плотная вёрстка\">\n        <JxStack direction=\"row\" align=\"center\" justify=\"space-between\">\n          <JxLabel>Уменьшить отступы элементов</JxLabel>\n          <JxSwitch checked={compact} onCheckedChange={handleCompactChange} />\n        </JxStack>\n      </JxSection>\n\n      <JxDivider />\n\n      <JxSection title=\"Ещё\">\n        <JxStack direction=\"row\" align=\"center\" justify=\"space-between\">\n          <JxLabel>Шрифт</JxLabel>\n          <JxSelect\n            value={font}\n            onValueChange={(value) => handleFontChange(value as FontFamily)}\n          >\n            <JxSelectOption value=\"system\">Системный</JxSelectOption>\n            <JxSelectOption value=\"serif\">С засечками</JxSelectOption>\n            <JxSelectOption value=\"mono\">Моноширинный</JxSelectOption>\n          </JxSelect>\n        </JxStack>\n      </JxSection>\n    </JxPage>\n  );\n}\n\nexport default AppearanceSettings;\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxPage'."
+        },
+        {
+          "code": 2305,
+          "line": 4,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxHeader'."
+        },
+        {
+          "code": 2305,
+          "line": 6,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxSection'."
+        },
+        {
+          "code": 2305,
+          "line": 8,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxSegmentedControl'."
+        },
+        {
+          "code": 2305,
+          "line": 9,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxSegmentedItem'."
+        },
+        {
+          "code": 2305,
+          "line": 14,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxLabel'."
+        },
+        {
+          "code": 2305,
+          "line": 15,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxStack'."
+        },
+        {
+          "code": 2322,
+          "line": 78,
+          "message": "Type '\"neutral\"' is not assignable to type 'JxBadgeTone | undefined'."
+        },
+        {
+          "code": 7006,
+          "line": 84,
+          "message": "Parameter 'value' implicitly has an 'any' type."
+        },
+        {
+          "code": 2322,
+          "line": 111,
+          "message": "Type '{ checked: boolean; onCheckedChange: (value: boolean) => void; }' is not assignable to type 'IntrinsicAttributes & Omit<InputHTMLAttributes<HTMLInputElement>, \"type\" | \"size\"> & { label?: ReactNode; wrapClassName?: string | undefined; }'.\n  Property 'onCheckedChange' does not exist on type 'IntrinsicAttributes & Omit<InputHTMLAttributes<HTMLInputElement>, \"type\" | \"size\"> & { label?: ReactNode; wrapClassName?: string | undefined; }'."
+        },
+        {
+          "code": 2322,
+          "line": 120,
+          "message": "Type '{ children: Element[]; value: FontFamily; onValueChange: (value: string) => void; }' is not assignable to type 'IntrinsicAttributes & JxSelectProps'.\n  Property 'children' does not exist on type 'IntrinsicAttributes & JxSelectProps'."
+        },
+        {
+          "code": 2693,
+          "line": 124,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 124,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 125,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 125,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 126,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 126,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        }
+      ],
+      "unknownComponents": [
+        "JxHeader",
+        "JxLabel",
+        "JxPage",
+        "JxSection",
+        "JxSegmentedControl",
+        "JxSegmentedItem",
+        "JxStack"
+      ],
+      "unknownProps": [
+        {
+          "component": "JxSwitch",
+          "prop": "onCheckedChange"
+        },
+        {
+          "component": "JxSelect",
+          "prop": "children"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 100,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 102,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxBadge",
+      "JxDivider",
+      "JxHeader",
+      "JxLabel",
+      "JxPage",
+      "JxSection",
+      "JxSegmentedControl",
+      "JxSegmentedItem",
+      "JxSelect",
+      "JxSelectOption",
+      "JxSlider",
+      "JxStack",
+      "JxSwitch"
+    ],
+    "expectedCoverage": 0.8,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.24
+  }
+}

@@ -1,8 +1,8 @@
 {
   "id": "date-range__mcp__claude-code__claude-opus-5__3",
-  "createdAt": "2026-09-21T13:33:42.440Z",
+  "createdAt": "2026-09-22T09:48:05.791Z",
   "repeat": 3,
-  "durationMs": 17479,
+  "durationMs": 18365,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -37,116 +37,54 @@
     {
       "usage": {
         "input": 2,
-        "output": 9,
-        "cacheRead": 4980,
-        "cacheCreation": 8930
+        "output": 10,
+        "cacheRead": 11044,
+        "cacheCreation": 0
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 9,
-        "cacheRead": 4980,
-        "cacheCreation": 8930
+        "output": 10,
+        "cacheRead": 11044,
+        "cacheCreation": 0
       },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "календарь выбор даты",
-            "limit": 6
+            "limit": 8
           },
-          "resultTokens": 537
+          "resultTokens": 715
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 9,
-        "cacheRead": 4980,
-        "cacheCreation": 8930
+        "output": 10,
+        "cacheRead": 11044,
+        "cacheCreation": 0
       },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
           "input": {
-            "query": "быстрые варианты чипы кнопки выбора",
-            "limit": 6
+            "query": "кнопка chip быстрый выбор",
+            "limit": 8
           },
-          "resultTokens": 532
+          "resultTokens": 633
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 2,
-        "cacheRead": 13910,
-        "cacheCreation": 1927
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 13910,
-        "cacheCreation": 1927
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__get_component_api",
-          "input": {
-            "name": "JxCalendar",
-            "detail": "full"
-          },
-          "resultTokens": 377
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 13910,
-        "cacheCreation": 1927
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__get_component_api",
-          "input": {
-            "name": "JxChip",
-            "detail": "full"
-          },
-          "resultTokens": 279
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 13910,
-        "cacheCreation": 1927
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__get_component_examples",
-          "input": {
-            "name": "JxCalendar"
-          },
-          "resultTokens": 44
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 13910,
-        "cacheCreation": 1927
+        "output": 10,
+        "cacheRead": 11044,
+        "cacheCreation": 0
       },
       "toolCalls": [
         {
@@ -162,8 +100,8 @@
       "usage": {
         "input": 2,
         "output": 3,
-        "cacheRead": 15837,
-        "cacheCreation": 3044
+        "cacheRead": 14965,
+        "cacheCreation": 0
       },
       "toolCalls": []
     },
@@ -171,40 +109,77 @@
       "usage": {
         "input": 2,
         "output": 3,
-        "cacheRead": 15837,
-        "cacheCreation": 3044
+        "cacheRead": 14965,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 14965,
+        "cacheCreation": 0
       },
       "toolCalls": [
         {
-          "name": "mcp__context-lab__list_design_tokens",
+          "name": "mcp__context-lab__get_component_api",
           "input": {
-            "group": "font"
+            "name": "JxCalendar",
+            "detail": "full"
           },
-          "resultTokens": 55
+          "resultTokens": 377
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 8,
-        "cacheRead": 18881,
-        "cacheCreation": 187
+        "output": 3,
+        "cacheRead": 14965,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxChip",
+            "detail": "full"
+          },
+          "resultTokens": 279
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 14965,
+        "cacheCreation": 1352
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 14965,
+        "cacheCreation": 1352
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 8,
-    "output": 1344,
-    "cacheRead": 53608,
-    "cacheCreation": 14088
+    "input": 6,
+    "output": 1473,
+    "cacheRead": 40974,
+    "cacheCreation": 1352
   },
-  "costUsd": 0.148494,
+  "costUsd": 0.06579199999999999,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date | null;\n  defaultValue?: Date | null;\n  onChange?: (value: Date | null) => void;\n};\n\nconst startOfDay = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst shiftDays = (days: number) => {\n  const base = startOfDay(new Date());\n  base.setDate(base.getDate() - days);\n  return base;\n};\n\nconst presets = [\n  { id: 'today', label: 'Сегодня', days: 0 },\n  { id: 'yesterday', label: 'Вчера', days: 1 },\n  { id: 'week', label: 'Неделя назад', days: 7 },\n];\n\nconst isSameDay = (a: Date | null | undefined, b: Date) =>\n  a != null && startOfDay(a).getTime() === b.getTime();\n\nexport default function ReportDatePicker({ value, defaultValue = null, onChange }: ReportDatePickerProps) {\n  const [internalDate, setInternalDate] = useState<Date | null>(defaultValue);\n  const selectedDate = value !== undefined ? value : internalDate;\n\n  const selectDate = (next: Date | null) => {\n    if (value === undefined) {\n      setInternalDate(next);\n    }\n    onChange?.(next);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontFamily: 'var(--jx-font-sans)' }}>\n      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>\n        {presets.map((preset) => {\n          const presetDate = shiftDays(preset.days);\n          return (\n            <JxChip\n              key={preset.id}\n              active={isSameDay(selectedDate, presetDate)}\n              onClick={() => selectDate(presetDate)}\n            >\n              {preset.label}\n            </JxChip>\n          );\n        })}\n      </div>\n      <JxCalendar locale=\"ru-RU\" value={selectedDate} onValueChange={selectDate} />\n    </div>\n  );\n}",
-    "text": "```tsx\nimport { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date | null;\n  defaultValue?: Date | null;\n  onChange?: (value: Date | null) => void;\n};\n\nconst startOfDay = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst shiftDays = (days: number) => {\n  const base = startOfDay(new Date());\n  base.setDate(base.getDate() - days);\n  return base;\n};\n\nconst presets = [\n  { id: 'today', label: 'Сегодня', days: 0 },\n  { id: 'yesterday', label: 'Вчера', days: 1 },\n  { id: 'week', label: 'Неделя назад', days: 7 },\n];\n\nconst isSameDay = (a: Date | null | undefined, b: Date) =>\n  a != null && startOfDay(a).getTime() === b.getTime();\n\nexport default function ReportDatePicker({ value, defaultValue = null, onChange }: ReportDatePickerProps) {\n  const [internalDate, setInternalDate] = useState<Date | null>(defaultValue);\n  const selectedDate = value !== undefined ? value : internalDate;\n\n  const selectDate = (next: Date | null) => {\n    if (value === undefined) {\n      setInternalDate(next);\n    }\n    onChange?.(next);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontFamily: 'var(--jx-font-sans)' }}>\n      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>\n        {presets.map((preset) => {\n          const presetDate = shiftDays(preset.days);\n          return (\n            <JxChip\n              key={preset.id}\n              active={isSameDay(selectedDate, presetDate)}\n              onClick={() => selectDate(presetDate)}\n            >\n              {preset.label}\n            </JxChip>\n          );\n        })}\n      </div>\n      <JxCalendar locale=\"ru-RU\" value={selectedDate} onValueChange={selectDate} />\n    </div>\n  );\n}\n```"
+    "code": "import { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  defaultValue?: Date | null;\n  onChange?: (value: Date | null) => void;\n};\n\nconst startOfDay = (date: Date) =>\n  new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst shiftDays = (days: number) => {\n  const base = startOfDay(new Date());\n  base.setDate(base.getDate() + days);\n  return base;\n};\n\nconst isSameDay = (a: Date | null, b: Date) =>\n  a != null && startOfDay(a).getTime() === b.getTime();\n\nconst quickOptions = [\n  { label: 'Сегодня', getDate: () => shiftDays(0) },\n  { label: 'Вчера', getDate: () => shiftDays(-1) },\n  { label: 'Неделя назад', getDate: () => shiftDays(-7) },\n];\n\nexport default function ReportDatePicker({\n  defaultValue = null,\n  onChange,\n}: ReportDatePickerProps) {\n  const [date, setDate] = useState<Date | null>(defaultValue);\n\n  const selectDate = (next: Date | null) => {\n    setDate(next);\n    onChange?.(next);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>\n        {quickOptions.map((option) => {\n          const optionDate = option.getDate();\n          return (\n            <JxChip\n              key={option.label}\n              active={isSameDay(date, optionDate)}\n              onClick={() => selectDate(optionDate)}\n            >\n              {option.label}\n            </JxChip>\n          );\n        })}\n      </div>\n      <JxCalendar locale=\"ru-RU\" value={date} onValueChange={selectDate} />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  defaultValue?: Date | null;\n  onChange?: (value: Date | null) => void;\n};\n\nconst startOfDay = (date: Date) =>\n  new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst shiftDays = (days: number) => {\n  const base = startOfDay(new Date());\n  base.setDate(base.getDate() + days);\n  return base;\n};\n\nconst isSameDay = (a: Date | null, b: Date) =>\n  a != null && startOfDay(a).getTime() === b.getTime();\n\nconst quickOptions = [\n  { label: 'Сегодня', getDate: () => shiftDays(0) },\n  { label: 'Вчера', getDate: () => shiftDays(-1) },\n  { label: 'Неделя назад', getDate: () => shiftDays(-7) },\n];\n\nexport default function ReportDatePicker({\n  defaultValue = null,\n  onChange,\n}: ReportDatePickerProps) {\n  const [date, setDate] = useState<Date | null>(defaultValue);\n\n  const selectDate = (next: Date | null) => {\n    setDate(next);\n    onChange?.(next);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>\n        {quickOptions.map((option) => {\n          const optionDate = option.getDate();\n          return (\n            <JxChip\n              key={option.label}\n              active={isSameDay(date, optionDate)}\n              onClick={() => selectDate(optionDate)}\n            >\n              {option.label}\n            </JxChip>\n          );\n        })}\n      </div>\n      <JxCalendar locale=\"ru-RU\" value={date} onValueChange={selectDate} />\n    </div>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {

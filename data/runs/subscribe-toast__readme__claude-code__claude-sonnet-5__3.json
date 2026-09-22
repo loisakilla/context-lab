@@ -1,0 +1,91 @@
+{
+  "id": "subscribe-toast__readme__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-22T09:41:46.532Z",
+  "repeat": 3,
+  "durationMs": 18754,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "subscribe-toast",
+    "title": "Подписка с уведомлением",
+    "prompt": "Сделай форму подписки на рассылку с полем для почты и кнопкой «Подписаться». После отправки поле очищается, а в углу экрана появляется уведомление «Готово» с текстом, что письмо отправлено.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxButton",
+      "JxToastViewport"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 6,
+        "cacheRead": 9547,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 6,
+        "cacheRead": 9547,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1876,
+    "cacheRead": 9547,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.05168350000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, useCallback, type FormEvent } from 'react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [showToast, setShowToast] = useState(false);\n\n  const handleSubmit = useCallback((event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!email.trim()) {\n      return;\n    }\n    setEmail('');\n    setShowToast(true);\n  }, [email]);\n\n  const handleToastClose = useCallback(() => {\n    setShowToast(false);\n  }, []);\n\n  return (\n    <div className=\"jx-stack\">\n      <form className=\"jx-form jx-card jx-p-4\" onSubmit={handleSubmit}>\n        <div className=\"jx-field\">\n          <label className=\"jx-label\" htmlFor=\"newsletter-email\">\n            Email\n          </label>\n          <input\n            id=\"newsletter-email\"\n            className=\"jx-input\"\n            type=\"email\"\n            name=\"email\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={(event) => setEmail(event.target.value)}\n            required\n            autoComplete=\"email\"\n          />\n        </div>\n        <button className=\"jx-button jx-button--primary\" type=\"submit\">\n          Подписаться\n        </button>\n      </form>\n\n      {showToast && (\n        <div\n          className=\"jx-toast jx-toast--success\"\n          role=\"status\"\n          aria-live=\"polite\"\n          style={{\n            position: 'fixed',\n            top: 'var(--jx-space-4)',\n            right: 'var(--jx-space-4)',\n            zIndex: 'var(--jx-z-toast, 1000)' as unknown as number,\n          }}\n        >\n          <div className=\"jx-toast__body\">\n            <span className=\"jx-toast__title\">Готово</span>\n            <span className=\"jx-toast__message\">Письмо с подтверждением подписки отправлено на ваш email.</span>\n          </div>\n          <button\n            className=\"jx-toast__close jx-button jx-button--ghost jx-button--icon\"\n            type=\"button\"\n            aria-label=\"Закрыть уведомление\"\n            onClick={handleToastClose}\n          >\n            ×\n          </button>\n        </div>\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState, useCallback, type FormEvent } from 'react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [showToast, setShowToast] = useState(false);\n\n  const handleSubmit = useCallback((event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!email.trim()) {\n      return;\n    }\n    setEmail('');\n    setShowToast(true);\n  }, [email]);\n\n  const handleToastClose = useCallback(() => {\n    setShowToast(false);\n  }, []);\n\n  return (\n    <div className=\"jx-stack\">\n      <form className=\"jx-form jx-card jx-p-4\" onSubmit={handleSubmit}>\n        <div className=\"jx-field\">\n          <label className=\"jx-label\" htmlFor=\"newsletter-email\">\n            Email\n          </label>\n          <input\n            id=\"newsletter-email\"\n            className=\"jx-input\"\n            type=\"email\"\n            name=\"email\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={(event) => setEmail(event.target.value)}\n            required\n            autoComplete=\"email\"\n          />\n        </div>\n        <button className=\"jx-button jx-button--primary\" type=\"submit\">\n          Подписаться\n        </button>\n      </form>\n\n      {showToast && (\n        <div\n          className=\"jx-toast jx-toast--success\"\n          role=\"status\"\n          aria-live=\"polite\"\n          style={{\n            position: 'fixed',\n            top: 'var(--jx-space-4)',\n            right: 'var(--jx-space-4)',\n            zIndex: 'var(--jx-z-toast, 1000)' as unknown as number,\n          }}\n        >\n          <div className=\"jx-toast__body\">\n            <span className=\"jx-toast__title\">Готово</span>\n            <span className=\"jx-toast__message\">Письмо с подтверждением подписки отправлено на ваш email.</span>\n          </div>\n          <button\n            className=\"jx-toast__close jx-button jx-button--ghost jx-button--icon\"\n            type=\"button\"\n            aria-label=\"Закрыть уведомление\"\n            onClick={handleToastClose}\n          >\n            ×\n          </button>\n        </div>\n      )}\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 49,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.7
+  }
+}

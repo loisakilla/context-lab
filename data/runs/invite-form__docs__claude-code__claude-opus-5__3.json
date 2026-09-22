@@ -1,0 +1,106 @@
+{
+  "id": "invite-form__docs__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-22T10:08:27.794Z",
+  "repeat": 3,
+  "durationMs": 15343,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "docs",
+  "task": {
+    "id": "invite-form",
+    "title": "Приглашение в команду с валидацией",
+    "prompt": "Сделай форму приглашения в команду: поле почты с подсказкой под ним, выбор роли из списка, переключатель «отправить уведомление» и кнопка отправки. Пока почта не похожа на адрес, поле показывает ошибку и кнопка заблокирована. После отправки над формой появляется сообщение об успехе, которое можно закрыть.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxAlert",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 18704,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.0",
+        "tokens": 18550
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 40654,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 40654,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1260,
+    "cacheRead": 40654,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.05183700000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport {\n  JxAlert,\n  JxButton,\n  JxInputField,\n  JxSelect,\n  JxSwitch,\n  JxToast,\n} from '@jinx-ui/react';\n\nconst EMAIL_RE = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nconst ROLES = [\n  { value: 'viewer', label: 'Наблюдатель', meta: 'только чтение' },\n  { value: 'editor', label: 'Редактор' },\n  { value: 'admin', label: 'Администратор' },\n];\n\nexport default function TeamInviteForm() {\n  const [email, setEmail] = useState('');\n  const [touched, setTouched] = useState(false);\n  const [role, setRole] = useState('editor');\n  const [notify, setNotify] = useState(true);\n  const [sent, setSent] = useState<{ email: string; role: string } | null>(null);\n\n  const valid = EMAIL_RE.test(email.trim());\n\n  const submit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!valid) {\n      setTouched(true);\n      return;\n    }\n    const roleLabel = ROLES.find((item) => item.value === role)?.label ?? role;\n    setSent({ email: email.trim(), role: roleLabel });\n    setEmail('');\n    setTouched(false);\n  };\n\n  return (\n    <div style={{ display: 'grid', gap: '16px', maxWidth: '420px' }}>\n      {sent ? (\n        <JxToast\n          variant=\"success\"\n          title=\"Приглашение отправлено\"\n          message={`${sent.email} — роль «${sent.role}»${notify ? ', уведомление ушло на почту' : ''}`}\n          onClose={() => setSent(null)}\n        />\n      ) : null}\n\n      <form onSubmit={submit} style={{ display: 'grid', gap: '16px' }}>\n        <JxInputField\n          label=\"Электронная почта\"\n          type=\"email\"\n          required\n          placeholder=\"name@company.com\"\n          value={email}\n          onChange={(event) => setEmail(event.target.value)}\n          onBlur={() => setTouched(true)}\n          helperText=\"Приглашение придёт на этот адрес\"\n          errorText={touched && !valid ? 'Похоже, это не адрес почты' : undefined}\n        />\n\n        <JxSelect\n          label=\"Роль в команде\"\n          options={ROLES}\n          value={role}\n          onValueChange={setRole}\n        />\n\n        <JxSwitch\n          label=\"Отправить уведомление\"\n          checked={notify}\n          onChange={(event) => setNotify(event.target.checked)}\n        />\n\n        <JxButton type=\"submit\" variant=\"primary\" disabled={!valid}>\n          Отправить приглашение\n        </JxButton>\n\n        {!valid && touched ? (\n          <JxAlert intent=\"info\" title=\"Проверьте адрес\">\n            Кнопка станет активной, когда почта будет введена целиком.\n          </JxAlert>\n        ) : null}\n      </form>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport {\n  JxAlert,\n  JxButton,\n  JxInputField,\n  JxSelect,\n  JxSwitch,\n  JxToast,\n} from '@jinx-ui/react';\n\nconst EMAIL_RE = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nconst ROLES = [\n  { value: 'viewer', label: 'Наблюдатель', meta: 'только чтение' },\n  { value: 'editor', label: 'Редактор' },\n  { value: 'admin', label: 'Администратор' },\n];\n\nexport default function TeamInviteForm() {\n  const [email, setEmail] = useState('');\n  const [touched, setTouched] = useState(false);\n  const [role, setRole] = useState('editor');\n  const [notify, setNotify] = useState(true);\n  const [sent, setSent] = useState<{ email: string; role: string } | null>(null);\n\n  const valid = EMAIL_RE.test(email.trim());\n\n  const submit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!valid) {\n      setTouched(true);\n      return;\n    }\n    const roleLabel = ROLES.find((item) => item.value === role)?.label ?? role;\n    setSent({ email: email.trim(), role: roleLabel });\n    setEmail('');\n    setTouched(false);\n  };\n\n  return (\n    <div style={{ display: 'grid', gap: '16px', maxWidth: '420px' }}>\n      {sent ? (\n        <JxToast\n          variant=\"success\"\n          title=\"Приглашение отправлено\"\n          message={`${sent.email} — роль «${sent.role}»${notify ? ', уведомление ушло на почту' : ''}`}\n          onClose={() => setSent(null)}\n        />\n      ) : null}\n\n      <form onSubmit={submit} style={{ display: 'grid', gap: '16px' }}>\n        <JxInputField\n          label=\"Электронная почта\"\n          type=\"email\"\n          required\n          placeholder=\"name@company.com\"\n          value={email}\n          onChange={(event) => setEmail(event.target.value)}\n          onBlur={() => setTouched(true)}\n          helperText=\"Приглашение придёт на этот адрес\"\n          errorText={touched && !valid ? 'Похоже, это не адрес почты' : undefined}\n        />\n\n        <JxSelect\n          label=\"Роль в команде\"\n          options={ROLES}\n          value={role}\n          onValueChange={setRole}\n        />\n\n        <JxSwitch\n          label=\"Отправить уведомление\"\n          checked={notify}\n          onChange={(event) => setNotify(event.target.checked)}\n        />\n\n        <JxButton type=\"submit\" variant=\"primary\" disabled={!valid}>\n          Отправить приглашение\n        </JxButton>\n\n        {!valid && touched ? (\n          <JxAlert intent=\"info\" title=\"Проверьте адрес\">\n            Кнопка станет активной, когда почта будет введена целиком.\n          </JxAlert>\n        ) : null}\n      </form>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 41,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 51,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxAlert",
+      "JxButton",
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxToast"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

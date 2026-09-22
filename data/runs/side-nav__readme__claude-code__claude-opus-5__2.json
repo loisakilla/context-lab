@@ -1,8 +1,8 @@
 {
   "id": "side-nav__readme__claude-code__claude-opus-5__2",
-  "createdAt": "2026-09-21T13:13:34.750Z",
+  "createdAt": "2026-09-22T09:56:51.824Z",
   "repeat": 2,
-  "durationMs": 23784,
+  "durationMs": 34638,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -24,7 +24,7 @@
     ]
   },
   "context": {
-    "tokens": 753,
+    "tokens": 796,
     "sources": [
       {
         "kind": "readme",
@@ -39,8 +39,8 @@
       "usage": {
         "input": 2,
         "output": 7,
-        "cacheRead": 6778,
-        "cacheCreation": 10180
+        "cacheRead": 9580,
+        "cacheCreation": 0
       },
       "toolCalls": []
     },
@@ -48,82 +48,44 @@
       "usage": {
         "input": 2,
         "output": 7,
-        "cacheRead": 6778,
-        "cacheCreation": 10180
+        "cacheRead": 9580,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
     "input": 2,
-    "output": 1768,
-    "cacheRead": 6778,
-    "cacheCreation": 10180
+    "output": 3089,
+    "cacheRead": 9580,
+    "cacheCreation": 0
   },
-  "costUsd": 0.11122400000000002,
+  "costUsd": 0.082025,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useCallback, useState } from 'react';\nimport { Button, Drawer, Menu, MenuItem, MenuSeparator } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ntype SideNavProps = {\n  onNavigate: (key: NavKey) => void;\n};\n\nconst items: { key: NavKey; label: string }[] = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function SideNav({ onNavigate }: SideNavProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = useCallback(\n    (key: NavKey) => {\n      onNavigate(key);\n      setOpen(false);\n    },\n    [onNavigate],\n  );\n\n  return (\n    <>\n      <Button\n        className=\"jx-button\"\n        aria-haspopup=\"dialog\"\n        aria-expanded={open}\n        onClick={() => setOpen(true)}\n      >\n        Меню\n      </Button>\n\n      <Drawer\n        open={open}\n        side=\"left\"\n        onClose={() => setOpen(false)}\n        aria-label=\"Навигация\"\n        className=\"jx-drawer\"\n      >\n        <Menu\n          className=\"jx-menu\"\n          aria-label=\"Разделы\"\n          style={{ display: 'grid', gap: 'var(--jx-space-1)', padding: 'var(--jx-space-2)' }}\n        >\n          {items.map((item) => (\n            <MenuItem key={item.key} className=\"jx-menu-item\" onSelect={() => select(item.key)}>\n              {item.label}\n            </MenuItem>\n          ))}\n          <MenuSeparator className=\"jx-menu-separator\" />\n          <MenuItem\n            className=\"jx-menu-item\"\n            tone=\"danger\"\n            onSelect={() => select('logout')}\n            style={{ color: 'var(--jx-color-danger)' }}\n          >\n            Выйти\n          </MenuItem>\n        </Menu>\n      </Drawer>\n    </>\n  );\n}",
-    "text": "```tsx\nimport { useCallback, useState } from 'react';\nimport { Button, Drawer, Menu, MenuItem, MenuSeparator } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ntype SideNavProps = {\n  onNavigate: (key: NavKey) => void;\n};\n\nconst items: { key: NavKey; label: string }[] = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function SideNav({ onNavigate }: SideNavProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = useCallback(\n    (key: NavKey) => {\n      onNavigate(key);\n      setOpen(false);\n    },\n    [onNavigate],\n  );\n\n  return (\n    <>\n      <Button\n        className=\"jx-button\"\n        aria-haspopup=\"dialog\"\n        aria-expanded={open}\n        onClick={() => setOpen(true)}\n      >\n        Меню\n      </Button>\n\n      <Drawer\n        open={open}\n        side=\"left\"\n        onClose={() => setOpen(false)}\n        aria-label=\"Навигация\"\n        className=\"jx-drawer\"\n      >\n        <Menu\n          className=\"jx-menu\"\n          aria-label=\"Разделы\"\n          style={{ display: 'grid', gap: 'var(--jx-space-1)', padding: 'var(--jx-space-2)' }}\n        >\n          {items.map((item) => (\n            <MenuItem key={item.key} className=\"jx-menu-item\" onSelect={() => select(item.key)}>\n              {item.label}\n            </MenuItem>\n          ))}\n          <MenuSeparator className=\"jx-menu-separator\" />\n          <MenuItem\n            className=\"jx-menu-item\"\n            tone=\"danger\"\n            onSelect={() => select('logout')}\n            style={{ color: 'var(--jx-color-danger)' }}\n          >\n            Выйти\n          </MenuItem>\n        </Menu>\n      </Drawer>\n    </>\n  );\n}\n```"
+    "code": "import { useCallback, useEffect, useId, useRef, useState } from 'react';\n\nexport type NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\nexport interface MenuDrawerProps {\n  onNavigate: (key: NavKey) => void;\n  label?: string;\n}\n\ntype NavItem = { key: NavKey; label: string; danger?: boolean };\n\nconst PRIMARY_ITEMS: NavItem[] = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nconst LOGOUT_ITEM: NavItem = { key: 'logout', label: 'Выйти', danger: true };\n\nexport default function MenuDrawer({ onNavigate, label = 'Меню' }: MenuDrawerProps) {\n  const [open, setOpen] = useState(false);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const panelRef = useRef<HTMLDivElement>(null);\n  const panelId = useId();\n\n  const close = useCallback(() => {\n    setOpen(false);\n    triggerRef.current?.focus();\n  }, []);\n\n  useEffect(() => {\n    if (!open) return;\n    panelRef.current?.querySelector<HTMLButtonElement>('button')?.focus();\n    const onKeyDown = (event: KeyboardEvent) => {\n      if (event.key === 'Escape') close();\n    };\n    document.addEventListener('keydown', onKeyDown);\n    return () => document.removeEventListener('keydown', onKeyDown);\n  }, [open, close]);\n\n  const select = (key: NavKey) => {\n    onNavigate(key);\n    close();\n  };\n\n  const renderItem = ({ key, label: itemLabel, danger }: NavItem) => (\n    <button\n      key={key}\n      type=\"button\"\n      className={danger ? 'jx-menu-item jx-menu-item--danger' : 'jx-menu-item'}\n      onClick={() => select(key)}\n    >\n      {itemLabel}\n    </button>\n  );\n\n  return (\n    <>\n      <button\n        ref={triggerRef}\n        type=\"button\"\n        className=\"jx-btn\"\n        aria-expanded={open}\n        aria-controls={panelId}\n        onClick={() => setOpen(true)}\n      >\n        {label}\n      </button>\n\n      {open && (\n        <div className=\"jx-overlay\">\n          <div className=\"jx-overlay__backdrop\" onClick={close} aria-hidden=\"true\" />\n          <div\n            id={panelId}\n            ref={panelRef}\n            role=\"dialog\"\n            aria-modal=\"true\"\n            aria-label={label}\n            className=\"jx-drawer jx-drawer--left jx-panel\"\n            style={{ padding: 'var(--jx-space-4)', gap: 'var(--jx-space-2)' }}\n          >\n            <nav className=\"jx-menu\" aria-label={label}>\n              {PRIMARY_ITEMS.map(renderItem)}\n              <hr className=\"jx-menu-separator\" />\n              {renderItem(LOGOUT_ITEM)}\n            </nav>\n          </div>\n        </div>\n      )}\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useEffect, useId, useRef, useState } from 'react';\n\nexport type NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\nexport interface MenuDrawerProps {\n  onNavigate: (key: NavKey) => void;\n  label?: string;\n}\n\ntype NavItem = { key: NavKey; label: string; danger?: boolean };\n\nconst PRIMARY_ITEMS: NavItem[] = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nconst LOGOUT_ITEM: NavItem = { key: 'logout', label: 'Выйти', danger: true };\n\nexport default function MenuDrawer({ onNavigate, label = 'Меню' }: MenuDrawerProps) {\n  const [open, setOpen] = useState(false);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const panelRef = useRef<HTMLDivElement>(null);\n  const panelId = useId();\n\n  const close = useCallback(() => {\n    setOpen(false);\n    triggerRef.current?.focus();\n  }, []);\n\n  useEffect(() => {\n    if (!open) return;\n    panelRef.current?.querySelector<HTMLButtonElement>('button')?.focus();\n    const onKeyDown = (event: KeyboardEvent) => {\n      if (event.key === 'Escape') close();\n    };\n    document.addEventListener('keydown', onKeyDown);\n    return () => document.removeEventListener('keydown', onKeyDown);\n  }, [open, close]);\n\n  const select = (key: NavKey) => {\n    onNavigate(key);\n    close();\n  };\n\n  const renderItem = ({ key, label: itemLabel, danger }: NavItem) => (\n    <button\n      key={key}\n      type=\"button\"\n      className={danger ? 'jx-menu-item jx-menu-item--danger' : 'jx-menu-item'}\n      onClick={() => select(key)}\n    >\n      {itemLabel}\n    </button>\n  );\n\n  return (\n    <>\n      <button\n        ref={triggerRef}\n        type=\"button\"\n        className=\"jx-btn\"\n        aria-expanded={open}\n        aria-controls={panelId}\n        onClick={() => setOpen(true)}\n      >\n        {label}\n      </button>\n\n      {open && (\n        <div className=\"jx-overlay\">\n          <div className=\"jx-overlay__backdrop\" onClick={close} aria-hidden=\"true\" />\n          <div\n            id={panelId}\n            ref={panelRef}\n            role=\"dialog\"\n            aria-modal=\"true\"\n            aria-label={label}\n            className=\"jx-drawer jx-drawer--left jx-panel\"\n            style={{ padding: 'var(--jx-space-4)', gap: 'var(--jx-space-2)' }}\n          >\n            <nav className=\"jx-menu\" aria-label={label}>\n              {PRIMARY_ITEMS.map(renderItem)}\n              <hr className=\"jx-menu-separator\" />\n              {renderItem(LOGOUT_ITEM)}\n            </nav>\n          </div>\n        </div>\n      )}\n    </>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
-      "errors": [
-        {
-          "code": 2724,
-          "line": 2,
-          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
-        },
-        {
-          "code": 2724,
-          "line": 2,
-          "message": "'\"@jinx-ui/react\"' has no exported member named 'Drawer'. Did you mean 'JxDrawer'?"
-        },
-        {
-          "code": 2305,
-          "line": 2,
-          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Menu'."
-        },
-        {
-          "code": 2724,
-          "line": 2,
-          "message": "'\"@jinx-ui/react\"' has no exported member named 'MenuItem'. Did you mean 'JxMenuItem'?"
-        },
-        {
-          "code": 2305,
-          "line": 2,
-          "message": "Module '\"@jinx-ui/react\"' has no exported member 'MenuSeparator'."
-        }
-      ],
-      "unknownComponents": [
-        "Button",
-        "Drawer",
-        "Menu",
-        "MenuItem",
-        "MenuSeparator"
-      ],
+      "errors": [],
+      "unknownComponents": [],
       "unknownProps": []
     },
     "lint": [
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 48,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 60,
+        "line": 80,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],
     "usedComponents": [],
     "expectedCoverage": 0,
-    "passed": false
+    "passed": true
   },
   "verdict": {
-    "passed": false,
-    "score": 0
+    "passed": true,
+    "score": 0.7
   }
 }

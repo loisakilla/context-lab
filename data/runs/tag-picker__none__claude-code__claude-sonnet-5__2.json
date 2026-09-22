@@ -1,0 +1,99 @@
+{
+  "id": "tag-picker__none__claude-code__claude-sonnet-5__2",
+  "createdAt": "2026-09-22T09:37:00.186Z",
+  "repeat": 2,
+  "durationMs": 7969,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "none",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 8579,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 879,
+    "cacheRead": 8579,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0262745,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, KeyboardEvent, ChangeEvent } from 'react';\nimport { TextField, Tag, Stack } from '@jinx-ui/react';\n\ninterface TagInputProps {\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function TagInput({ onChange }: TagInputProps) {\n  const [tags, setTags] = useState<string[]>([]);\n  const [inputValue, setInputValue] = useState('');\n\n  const updateTags = (newTags: string[]) => {\n    setTags(newTags);\n    onChange?.(newTags);\n  };\n\n  const addTag = (rawValue: string) => {\n    const value = rawValue.trim();\n    if (!value) return;\n    if (tags.includes(value)) {\n      setInputValue('');\n      return;\n    }\n    updateTags([...tags, value]);\n    setInputValue('');\n  };\n\n  const removeTag = (tagToRemove: string) => {\n    updateTags(tags.filter((tag) => tag !== tagToRemove));\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag(inputValue);\n      return;\n    }\n    if (event.key === 'Backspace' && inputValue === '' && tags.length > 0) {\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const handleBlur = () => {\n    if (inputValue.trim()) {\n      addTag(inputValue);\n    }\n  };\n\n  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {\n    setInputValue(event.target.value);\n  };\n\n  return (\n    <Stack className=\"jx-flex-col\" style={{ gap: 'var(--jx-space-2)' }}>\n      <TextField\n        value={inputValue}\n        onChange={handleChange}\n        onKeyDown={handleKeyDown}\n        onBlur={handleBlur}\n        placeholder=\"Введите тег и нажмите Enter\"\n        aria-label=\"Добавить тег\"\n      />\n      {tags.length > 0 && (\n        <Stack\n          className=\"jx-flex-row jx-flex-wrap\"\n          style={{ gap: 'var(--jx-space-1)' }}\n        >\n          {tags.map((tag) => (\n            <Tag\n              key={tag}\n              onRemove={() => removeTag(tag)}\n              removable\n            >\n              {tag}\n            </Tag>\n          ))}\n        </Stack>\n      )}\n    </Stack>\n  );\n}",
+    "text": "```tsx\nimport { useState, KeyboardEvent, ChangeEvent } from 'react';\nimport { TextField, Tag, Stack } from '@jinx-ui/react';\n\ninterface TagInputProps {\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function TagInput({ onChange }: TagInputProps) {\n  const [tags, setTags] = useState<string[]>([]);\n  const [inputValue, setInputValue] = useState('');\n\n  const updateTags = (newTags: string[]) => {\n    setTags(newTags);\n    onChange?.(newTags);\n  };\n\n  const addTag = (rawValue: string) => {\n    const value = rawValue.trim();\n    if (!value) return;\n    if (tags.includes(value)) {\n      setInputValue('');\n      return;\n    }\n    updateTags([...tags, value]);\n    setInputValue('');\n  };\n\n  const removeTag = (tagToRemove: string) => {\n    updateTags(tags.filter((tag) => tag !== tagToRemove));\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag(inputValue);\n      return;\n    }\n    if (event.key === 'Backspace' && inputValue === '' && tags.length > 0) {\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const handleBlur = () => {\n    if (inputValue.trim()) {\n      addTag(inputValue);\n    }\n  };\n\n  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {\n    setInputValue(event.target.value);\n  };\n\n  return (\n    <Stack className=\"jx-flex-col\" style={{ gap: 'var(--jx-space-2)' }}>\n      <TextField\n        value={inputValue}\n        onChange={handleChange}\n        onKeyDown={handleKeyDown}\n        onBlur={handleBlur}\n        placeholder=\"Введите тег и нажмите Enter\"\n        aria-label=\"Добавить тег\"\n      />\n      {tags.length > 0 && (\n        <Stack\n          className=\"jx-flex-row jx-flex-wrap\"\n          style={{ gap: 'var(--jx-space-1)' }}\n        >\n          {tags.map((tag) => (\n            <Tag\n              key={tag}\n              onRemove={() => removeTag(tag)}\n              removable\n            >\n              {tag}\n            </Tag>\n          ))}\n        </Stack>\n      )}\n    </Stack>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TextField'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Tag'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        }
+      ],
+      "unknownComponents": [
+        "Stack",
+        "Tag",
+        "TextField"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 54,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 66,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.28
+  }
+}

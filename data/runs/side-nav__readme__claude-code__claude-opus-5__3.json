@@ -1,8 +1,8 @@
 {
   "id": "side-nav__readme__claude-code__claude-opus-5__3",
-  "createdAt": "2026-09-21T13:13:56.453Z",
+  "createdAt": "2026-09-22T09:57:17.536Z",
   "repeat": 3,
-  "durationMs": 21702,
+  "durationMs": 25711,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -24,7 +24,7 @@
     ]
   },
   "context": {
-    "tokens": 753,
+    "tokens": 796,
     "sources": [
       {
         "kind": "readme",
@@ -38,62 +38,33 @@
     {
       "usage": {
         "input": 2,
-        "output": 8,
-        "cacheRead": 5579,
-        "cacheCreation": 10144
+        "output": 7,
+        "cacheRead": 9580,
+        "cacheCreation": 0
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 8,
-        "cacheRead": 5579,
-        "cacheCreation": 10144
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__claude_ai_Claude_Docs__guide",
-          "input": {
-            "items": [
-              "topic.index"
-            ]
-          },
-          "resultTokens": 29,
-          "isError": true
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 6778,
-        "cacheCreation": 10585
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 6778,
-        "cacheCreation": 10585
+        "output": 7,
+        "cacheRead": 9580,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 4,
-    "output": 1479,
-    "cacheRead": 12357,
-    "cacheCreation": 20729
+    "input": 2,
+    "output": 2314,
+    "cacheRead": 9580,
+    "cacheCreation": 0
   },
-  "costUsd": 0.17272975000000002,
+  "costUsd": 0.06265,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useCallback, useState } from 'react';\nimport { Button, Drawer, Menu, MenuItem, MenuSeparator } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ntype SideNavProps = {\n  onNavigate: (key: NavKey) => void;\n};\n\nconst ITEMS: Array<{ key: NavKey; label: string }> = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function SideNav({ onNavigate }: SideNavProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = useCallback(\n    (key: NavKey) => {\n      onNavigate(key);\n      setOpen(false);\n    },\n    [onNavigate],\n  );\n\n  return (\n    <div className=\"jx-stack\">\n      <Button type=\"button\" aria-expanded={open} onClick={() => setOpen(true)}>\n        Меню\n      </Button>\n\n      <Drawer\n        open={open}\n        side=\"left\"\n        title=\"Навигация\"\n        onClose={() => setOpen(false)}\n      >\n        <Menu\n          className=\"jx-stack\"\n          style={{ gap: 'var(--jx-space-1)', padding: 'var(--jx-space-2)' }}\n        >\n          {ITEMS.map((item) => (\n            <MenuItem key={item.key} onSelect={() => select(item.key)}>\n              {item.label}\n            </MenuItem>\n          ))}\n          <MenuSeparator />\n          <MenuItem tone=\"danger\" onSelect={() => select('logout')}>\n            Выйти\n          </MenuItem>\n        </Menu>\n      </Drawer>\n    </div>\n  );\n}",
-    "text": "```tsx\nimport { useCallback, useState } from 'react';\nimport { Button, Drawer, Menu, MenuItem, MenuSeparator } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ntype SideNavProps = {\n  onNavigate: (key: NavKey) => void;\n};\n\nconst ITEMS: Array<{ key: NavKey; label: string }> = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function SideNav({ onNavigate }: SideNavProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = useCallback(\n    (key: NavKey) => {\n      onNavigate(key);\n      setOpen(false);\n    },\n    [onNavigate],\n  );\n\n  return (\n    <div className=\"jx-stack\">\n      <Button type=\"button\" aria-expanded={open} onClick={() => setOpen(true)}>\n        Меню\n      </Button>\n\n      <Drawer\n        open={open}\n        side=\"left\"\n        title=\"Навигация\"\n        onClose={() => setOpen(false)}\n      >\n        <Menu\n          className=\"jx-stack\"\n          style={{ gap: 'var(--jx-space-1)', padding: 'var(--jx-space-2)' }}\n        >\n          {ITEMS.map((item) => (\n            <MenuItem key={item.key} onSelect={() => select(item.key)}>\n              {item.label}\n            </MenuItem>\n          ))}\n          <MenuSeparator />\n          <MenuItem tone=\"danger\" onSelect={() => select('logout')}>\n            Выйти\n          </MenuItem>\n        </Menu>\n      </Drawer>\n    </div>\n  );\n}\n```"
+    "code": "import { useCallback, useEffect, useId, useRef, useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ntype MenuDrawerProps = {\n  onNavigate: (key: NavKey) => void;\n  triggerLabel?: string;\n};\n\nconst MAIN_ITEMS: ReadonlyArray<{ key: NavKey; label: string }> = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function MenuDrawer({ onNavigate, triggerLabel = 'Меню' }: MenuDrawerProps) {\n  const [open, setOpen] = useState(false);\n  const panelId = useId();\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const firstItemRef = useRef<HTMLButtonElement>(null);\n\n  const close = useCallback(() => {\n    setOpen(false);\n    triggerRef.current?.focus();\n  }, []);\n\n  useEffect(() => {\n    if (!open) return;\n    firstItemRef.current?.focus();\n    const onKeyDown = (event: KeyboardEvent) => {\n      if (event.key === 'Escape') {\n        event.stopPropagation();\n        close();\n      }\n    };\n    document.addEventListener('keydown', onKeyDown);\n    return () => document.removeEventListener('keydown', onKeyDown);\n  }, [open, close]);\n\n  const select = (key: NavKey) => {\n    onNavigate(key);\n    close();\n  };\n\n  return (\n    <div className=\"jx-drawer-root\">\n      <Button\n        ref={triggerRef}\n        type=\"button\"\n        aria-expanded={open}\n        aria-controls={panelId}\n        onClick={() => setOpen((value) => !value)}\n      >\n        {triggerLabel}\n      </Button>\n\n      {open && (\n        <div\n          className=\"jx-overlay\"\n          onClick={close}\n          style={{ position: 'fixed', inset: 0, zIndex: 'var(--jx-z-overlay, 40)' as never }}\n        />\n      )}\n\n      <aside\n        id={panelId}\n        className=\"jx-panel jx-drawer jx-drawer--start\"\n        role=\"dialog\"\n        aria-modal=\"false\"\n        aria-label={triggerLabel}\n        aria-hidden={!open}\n        hidden={!open}\n        style={{\n          position: 'fixed',\n          insetBlock: 0,\n          insetInlineStart: 0,\n          zIndex: 'var(--jx-z-drawer, 50)' as never,\n          width: 'var(--jx-drawer-width, 280px)',\n          padding: 'var(--jx-space-4, 16px)',\n          borderRadius: 0,\n          transform: open ? 'translateX(0)' : 'translateX(-100%)',\n          transition: 'transform var(--jx-duration-md, 180ms) var(--jx-ease, ease)',\n        }}\n      >\n        <nav className=\"jx-menu\" aria-label={triggerLabel}>\n          {MAIN_ITEMS.map((item, index) => (\n            <button\n              key={item.key}\n              ref={index === 0 ? firstItemRef : undefined}\n              type=\"button\"\n              className=\"jx-menu-item\"\n              onClick={() => select(item.key)}\n            >\n              {item.label}\n            </button>\n          ))}\n\n          <hr className=\"jx-divider\" aria-hidden=\"true\" />\n\n          <button\n            type=\"button\"\n            className=\"jx-menu-item jx-menu-item--danger\"\n            data-variant=\"danger\"\n            onClick={() => select('logout')}\n          >\n            Выйти\n          </button>\n        </nav>\n      </aside>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useEffect, useId, useRef, useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ntype MenuDrawerProps = {\n  onNavigate: (key: NavKey) => void;\n  triggerLabel?: string;\n};\n\nconst MAIN_ITEMS: ReadonlyArray<{ key: NavKey; label: string }> = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function MenuDrawer({ onNavigate, triggerLabel = 'Меню' }: MenuDrawerProps) {\n  const [open, setOpen] = useState(false);\n  const panelId = useId();\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const firstItemRef = useRef<HTMLButtonElement>(null);\n\n  const close = useCallback(() => {\n    setOpen(false);\n    triggerRef.current?.focus();\n  }, []);\n\n  useEffect(() => {\n    if (!open) return;\n    firstItemRef.current?.focus();\n    const onKeyDown = (event: KeyboardEvent) => {\n      if (event.key === 'Escape') {\n        event.stopPropagation();\n        close();\n      }\n    };\n    document.addEventListener('keydown', onKeyDown);\n    return () => document.removeEventListener('keydown', onKeyDown);\n  }, [open, close]);\n\n  const select = (key: NavKey) => {\n    onNavigate(key);\n    close();\n  };\n\n  return (\n    <div className=\"jx-drawer-root\">\n      <Button\n        ref={triggerRef}\n        type=\"button\"\n        aria-expanded={open}\n        aria-controls={panelId}\n        onClick={() => setOpen((value) => !value)}\n      >\n        {triggerLabel}\n      </Button>\n\n      {open && (\n        <div\n          className=\"jx-overlay\"\n          onClick={close}\n          style={{ position: 'fixed', inset: 0, zIndex: 'var(--jx-z-overlay, 40)' as never }}\n        />\n      )}\n\n      <aside\n        id={panelId}\n        className=\"jx-panel jx-drawer jx-drawer--start\"\n        role=\"dialog\"\n        aria-modal=\"false\"\n        aria-label={triggerLabel}\n        aria-hidden={!open}\n        hidden={!open}\n        style={{\n          position: 'fixed',\n          insetBlock: 0,\n          insetInlineStart: 0,\n          zIndex: 'var(--jx-z-drawer, 50)' as never,\n          width: 'var(--jx-drawer-width, 280px)',\n          padding: 'var(--jx-space-4, 16px)',\n          borderRadius: 0,\n          transform: open ? 'translateX(0)' : 'translateX(-100%)',\n          transition: 'transform var(--jx-duration-md, 180ms) var(--jx-ease, ease)',\n        }}\n      >\n        <nav className=\"jx-menu\" aria-label={triggerLabel}>\n          {MAIN_ITEMS.map((item, index) => (\n            <button\n              key={item.key}\n              ref={index === 0 ? firstItemRef : undefined}\n              type=\"button\"\n              className=\"jx-menu-item\"\n              onClick={() => select(item.key)}\n            >\n              {item.label}\n            </button>\n          ))}\n\n          <hr className=\"jx-divider\" aria-hidden=\"true\" />\n\n          <button\n            type=\"button\"\n            className=\"jx-menu-item jx-menu-item--danger\"\n            data-variant=\"danger\"\n            onClick={() => select('logout')}\n          >\n            Выйти\n          </button>\n        </nav>\n      </aside>\n    </div>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
@@ -102,34 +73,10 @@
           "code": 2724,
           "line": 2,
           "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
-        },
-        {
-          "code": 2724,
-          "line": 2,
-          "message": "'\"@jinx-ui/react\"' has no exported member named 'Drawer'. Did you mean 'JxDrawer'?"
-        },
-        {
-          "code": 2305,
-          "line": 2,
-          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Menu'."
-        },
-        {
-          "code": 2724,
-          "line": 2,
-          "message": "'\"@jinx-ui/react\"' has no exported member named 'MenuItem'. Did you mean 'JxMenuItem'?"
-        },
-        {
-          "code": 2305,
-          "line": 2,
-          "message": "Module '\"@jinx-ui/react\"' has no exported member 'MenuSeparator'."
         }
       ],
       "unknownComponents": [
-        "Button",
-        "Drawer",
-        "Menu",
-        "MenuItem",
-        "MenuSeparator"
+        "Button"
       ],
       "unknownProps": []
     },
@@ -137,7 +84,13 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 41,
+        "line": 62,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 74,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],
@@ -147,6 +100,6 @@
   },
   "verdict": {
     "passed": false,
-    "score": 0
+    "score": 0.56
   }
 }

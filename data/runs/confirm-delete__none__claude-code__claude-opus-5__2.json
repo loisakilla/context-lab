@@ -1,8 +1,8 @@
 {
   "id": "confirm-delete__none__claude-code__claude-opus-5__2",
-  "createdAt": "2026-09-21T12:52:26.205Z",
+  "createdAt": "2026-09-22T09:34:20.576Z",
   "repeat": 2,
-  "durationMs": 28954,
+  "durationMs": 12304,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -23,78 +23,40 @@
     ]
   },
   "context": {
-    "tokens": 111,
+    "tokens": 154,
     "sources": []
   },
   "turns": [
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 5595,
-        "cacheCreation": 8295
+        "output": 7,
+        "cacheRead": 8601,
+        "cacheCreation": 0
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 5595,
-        "cacheCreation": 8295
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 5595,
-        "cacheCreation": 8295
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__claude_ai_Claude_Docs__guide",
-          "input": {
-            "items": [
-              "topic.index"
-            ]
-          },
-          "resultTokens": 29,
-          "isError": true
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 0,
-        "cacheCreation": 15562
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 0,
-        "cacheCreation": 15562
+        "output": 7,
+        "cacheRead": 8601,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 4,
-    "output": 2033,
-    "cacheRead": 5595,
-    "cacheCreation": 23857
+    "input": 2,
+    "output": 911,
+    "cacheRead": 8601,
+    "cacheCreation": 0
   },
-  "costUsd": 0.20274875,
+  "costUsd": 0.0270855,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState, useCallback } from 'react';\nimport { Button, Modal, Stack, Text } from '@jinx-ui/react';\n\nexport type DeleteProjectDialogProps = {\n  onConfirm: () => void;\n  projectName?: string;\n  disabled?: boolean;\n};\n\nexport default function DeleteProjectDialog({\n  onConfirm,\n  projectName,\n  disabled = false,\n}: DeleteProjectDialogProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const open = useCallback(() => setIsOpen(true), []);\n  const close = useCallback(() => setIsOpen(false), []);\n\n  const confirm = useCallback(() => {\n    setIsOpen(false);\n    onConfirm();\n  }, [onConfirm]);\n\n  return (\n    <>\n      <Button variant=\"danger\" disabled={disabled} onClick={open}>\n        Удалить проект\n      </Button>\n\n      <Modal\n        open={isOpen}\n        onClose={close}\n        title=\"Удалить проект?\"\n        aria-labelledby=\"delete-project-title\"\n      >\n        <Stack direction=\"column\" gap=\"var(--jx-space-4)\">\n          <Text tone=\"muted\">\n            {projectName\n              ? `Проект «${projectName}» и все его данные будут удалены безвозвратно. Действие необратимо.`\n              : 'Проект и все его данные будут удалены безвозвратно. Действие необратимо.'}\n          </Text>\n\n          <Stack direction=\"row\" gap=\"var(--jx-space-2)\" justify=\"end\">\n            <Button variant=\"secondary\" onClick={close}>\n              Отмена\n            </Button>\n            <Button variant=\"danger\" onClick={confirm} autoFocus>\n              Удалить\n            </Button>\n          </Stack>\n        </Stack>\n      </Modal>\n    </>\n  );\n}",
-    "text": "Файловых инструментов в этой сессии нет, поэтому API `@jinx-ui/react` я по репозиторию не проверил — код ниже опирается на стандартные имена библиотеки (`Button`, `Modal`, `Stack`, `Text`).\n\n```tsx\nimport { useState, useCallback } from 'react';\nimport { Button, Modal, Stack, Text } from '@jinx-ui/react';\n\nexport type DeleteProjectDialogProps = {\n  onConfirm: () => void;\n  projectName?: string;\n  disabled?: boolean;\n};\n\nexport default function DeleteProjectDialog({\n  onConfirm,\n  projectName,\n  disabled = false,\n}: DeleteProjectDialogProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const open = useCallback(() => setIsOpen(true), []);\n  const close = useCallback(() => setIsOpen(false), []);\n\n  const confirm = useCallback(() => {\n    setIsOpen(false);\n    onConfirm();\n  }, [onConfirm]);\n\n  return (\n    <>\n      <Button variant=\"danger\" disabled={disabled} onClick={open}>\n        Удалить проект\n      </Button>\n\n      <Modal\n        open={isOpen}\n        onClose={close}\n        title=\"Удалить проект?\"\n        aria-labelledby=\"delete-project-title\"\n      >\n        <Stack direction=\"column\" gap=\"var(--jx-space-4)\">\n          <Text tone=\"muted\">\n            {projectName\n              ? `Проект «${projectName}» и все его данные будут удалены безвозвратно. Действие необратимо.`\n              : 'Проект и все его данные будут удалены безвозвратно. Действие необратимо.'}\n          </Text>\n\n          <Stack direction=\"row\" gap=\"var(--jx-space-2)\" justify=\"end\">\n            <Button variant=\"secondary\" onClick={close}>\n              Отмена\n            </Button>\n            <Button variant=\"danger\" onClick={confirm} autoFocus>\n              Удалить\n            </Button>\n          </Stack>\n        </Stack>\n      </Modal>\n    </>\n  );\n}\n```"
+    "code": "import { useState } from 'react';\nimport { Button, Dialog, Stack, Text } from '@jinx-ui/react';\n\ntype DeleteProjectButtonProps = {\n  onConfirm: () => void;\n  projectName?: string;\n};\n\nexport default function DeleteProjectButton({ onConfirm, projectName }: DeleteProjectButtonProps) {\n  const [open, setOpen] = useState(false);\n\n  const close = () => setOpen(false);\n\n  const confirm = () => {\n    setOpen(false);\n    onConfirm();\n  };\n\n  return (\n    <>\n      <Button variant=\"danger\" onClick={() => setOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Dialog open={open} onClose={close} title=\"Удалить проект?\" size=\"sm\">\n        <Stack gap=\"var(--jx-space-4)\">\n          <Text color=\"var(--jx-color-text-muted)\">\n            {projectName\n              ? `Проект «${projectName}» и все его данные будут удалены безвозвратно. Это действие необратимо.`\n              : 'Проект и все его данные будут удалены безвозвратно. Это действие необратимо.'}\n          </Text>\n\n          <Stack direction=\"row\" gap=\"var(--jx-space-2)\" justify=\"end\">\n            <Button variant=\"ghost\" onClick={close}>\n              Отмена\n            </Button>\n            <Button variant=\"danger\" onClick={confirm} autoFocus>\n              Удалить\n            </Button>\n          </Stack>\n        </Stack>\n      </Dialog>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { Button, Dialog, Stack, Text } from '@jinx-ui/react';\n\ntype DeleteProjectButtonProps = {\n  onConfirm: () => void;\n  projectName?: string;\n};\n\nexport default function DeleteProjectButton({ onConfirm, projectName }: DeleteProjectButtonProps) {\n  const [open, setOpen] = useState(false);\n\n  const close = () => setOpen(false);\n\n  const confirm = () => {\n    setOpen(false);\n    onConfirm();\n  };\n\n  return (\n    <>\n      <Button variant=\"danger\" onClick={() => setOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Dialog open={open} onClose={close} title=\"Удалить проект?\" size=\"sm\">\n        <Stack gap=\"var(--jx-space-4)\">\n          <Text color=\"var(--jx-color-text-muted)\">\n            {projectName\n              ? `Проект «${projectName}» и все его данные будут удалены безвозвратно. Это действие необратимо.`\n              : 'Проект и все его данные будут удалены безвозвратно. Это действие необратимо.'}\n          </Text>\n\n          <Stack direction=\"row\" gap=\"var(--jx-space-2)\" justify=\"end\">\n            <Button variant=\"ghost\" onClick={close}>\n              Отмена\n            </Button>\n            <Button variant=\"danger\" onClick={confirm} autoFocus>\n              Удалить\n            </Button>\n          </Stack>\n        </Stack>\n      </Dialog>\n    </>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
@@ -105,9 +67,9 @@
           "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
         },
         {
-          "code": 2724,
+          "code": 2305,
           "line": 2,
-          "message": "'\"@jinx-ui/react\"' has no exported member named 'Modal'. Did you mean 'JxModal'?"
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Dialog'."
         },
         {
           "code": 2305,
@@ -122,7 +84,7 @@
       ],
       "unknownComponents": [
         "Button",
-        "Modal",
+        "Dialog",
         "Stack",
         "Text"
       ],

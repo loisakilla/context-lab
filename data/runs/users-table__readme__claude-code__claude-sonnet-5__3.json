@@ -1,0 +1,103 @@
+{
+  "id": "users-table__readme__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-22T09:42:41.313Z",
+  "repeat": 3,
+  "durationMs": 19943,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "users-table",
+    "title": "Таблица пользователей с пагинацией",
+    "prompt": "Сделай таблицу пользователей с колонками «Имя», «Роль» и «Статус». Список users передаётся пропсом, показывать по десять строк на страницу с постраничной навигацией под таблицей. Статус показывай цветной меткой: активен или отключён.",
+    "taskType": "ui",
+    "expects": [
+      "JxTable",
+      "JxPagination",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 9562,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 9562,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2301,
+    "cacheRead": 9562,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.062316,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\n\nexport type UserStatus = 'active' | 'disabled';\n\nexport interface UserRow {\n  id: string;\n  name: string;\n  role: string;\n  status: UserStatus;\n}\n\ninterface UsersTableProps {\n  users: UserRow[];\n  pageSize?: number;\n}\n\nconst STATUS_LABEL: Record<UserStatus, string> = {\n  active: 'Активен',\n  disabled: 'Отключён',\n};\n\nconst STATUS_BADGE_CLASS: Record<UserStatus, string> = {\n  active: 'jx-badge jx-badge--success',\n  disabled: 'jx-badge jx-badge--muted',\n};\n\nfunction UsersTable({ users, pageSize = 10 }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const totalPages = Math.max(1, Math.ceil(users.length / pageSize));\n  const currentPage = Math.min(page, totalPages);\n\n  const pageUsers = useMemo(() => {\n    const start = (currentPage - 1) * pageSize;\n    return users.slice(start, start + pageSize);\n  }, [users, currentPage, pageSize]);\n\n  const goToPage = (nextPage: number) => {\n    const clamped = Math.min(Math.max(nextPage, 1), totalPages);\n    setPage(clamped);\n  };\n\n  const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);\n\n  return (\n    <div className=\"jx-card jx-stack jx-stack--md\">\n      <table className=\"jx-table\" style={{ width: '100%' }}>\n        <thead>\n          <tr>\n            <th scope=\"col\">Имя</th>\n            <th scope=\"col\">Роль</th>\n            <th scope=\"col\">Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {pageUsers.length === 0 ? (\n            <tr>\n              <td colSpan={3} className=\"jx-text jx-text--muted\" style={{ textAlign: 'center' }}>\n                Нет пользователей\n              </td>\n            </tr>\n          ) : (\n            pageUsers.map((user) => (\n              <tr key={user.id}>\n                <td>{user.name}</td>\n                <td>{user.role}</td>\n                <td>\n                  <span className={STATUS_BADGE_CLASS[user.status]}>\n                    {STATUS_LABEL[user.status]}\n                  </span>\n                </td>\n              </tr>\n            ))\n          )}\n        </tbody>\n      </table>\n\n      {totalPages > 1 && (\n        <nav\n          className=\"jx-pagination\"\n          aria-label=\"Постраничная навигация по пользователям\"\n          style={{\n            display: 'flex',\n            alignItems: 'center',\n            justifyContent: 'center',\n            gap: 'var(--jx-space-sm)',\n          }}\n        >\n          <button\n            type=\"button\"\n            className=\"jx-button jx-button--ghost\"\n            onClick={() => goToPage(currentPage - 1)}\n            disabled={currentPage === 1}\n            aria-label=\"Предыдущая страница\"\n          >\n            ←\n          </button>\n\n          {pageNumbers.map((num) => (\n            <button\n              key={num}\n              type=\"button\"\n              className={\n                num === currentPage\n                  ? 'jx-button jx-button--primary'\n                  : 'jx-button jx-button--ghost'\n              }\n              aria-current={num === currentPage ? 'page' : undefined}\n              onClick={() => goToPage(num)}\n            >\n              {num}\n            </button>\n          ))}\n\n          <button\n            type=\"button\"\n            className=\"jx-button jx-button--ghost\"\n            onClick={() => goToPage(currentPage + 1)}\n            disabled={currentPage === totalPages}\n            aria-label=\"Следующая страница\"\n          >\n            →\n          </button>\n        </nav>\n      )}\n    </div>\n  );\n}\n\nexport default UsersTable;",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\n\nexport type UserStatus = 'active' | 'disabled';\n\nexport interface UserRow {\n  id: string;\n  name: string;\n  role: string;\n  status: UserStatus;\n}\n\ninterface UsersTableProps {\n  users: UserRow[];\n  pageSize?: number;\n}\n\nconst STATUS_LABEL: Record<UserStatus, string> = {\n  active: 'Активен',\n  disabled: 'Отключён',\n};\n\nconst STATUS_BADGE_CLASS: Record<UserStatus, string> = {\n  active: 'jx-badge jx-badge--success',\n  disabled: 'jx-badge jx-badge--muted',\n};\n\nfunction UsersTable({ users, pageSize = 10 }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const totalPages = Math.max(1, Math.ceil(users.length / pageSize));\n  const currentPage = Math.min(page, totalPages);\n\n  const pageUsers = useMemo(() => {\n    const start = (currentPage - 1) * pageSize;\n    return users.slice(start, start + pageSize);\n  }, [users, currentPage, pageSize]);\n\n  const goToPage = (nextPage: number) => {\n    const clamped = Math.min(Math.max(nextPage, 1), totalPages);\n    setPage(clamped);\n  };\n\n  const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);\n\n  return (\n    <div className=\"jx-card jx-stack jx-stack--md\">\n      <table className=\"jx-table\" style={{ width: '100%' }}>\n        <thead>\n          <tr>\n            <th scope=\"col\">Имя</th>\n            <th scope=\"col\">Роль</th>\n            <th scope=\"col\">Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {pageUsers.length === 0 ? (\n            <tr>\n              <td colSpan={3} className=\"jx-text jx-text--muted\" style={{ textAlign: 'center' }}>\n                Нет пользователей\n              </td>\n            </tr>\n          ) : (\n            pageUsers.map((user) => (\n              <tr key={user.id}>\n                <td>{user.name}</td>\n                <td>{user.role}</td>\n                <td>\n                  <span className={STATUS_BADGE_CLASS[user.status]}>\n                    {STATUS_LABEL[user.status]}\n                  </span>\n                </td>\n              </tr>\n            ))\n          )}\n        </tbody>\n      </table>\n\n      {totalPages > 1 && (\n        <nav\n          className=\"jx-pagination\"\n          aria-label=\"Постраничная навигация по пользователям\"\n          style={{\n            display: 'flex',\n            alignItems: 'center',\n            justifyContent: 'center',\n            gap: 'var(--jx-space-sm)',\n          }}\n        >\n          <button\n            type=\"button\"\n            className=\"jx-button jx-button--ghost\"\n            onClick={() => goToPage(currentPage - 1)}\n            disabled={currentPage === 1}\n            aria-label=\"Предыдущая страница\"\n          >\n            ←\n          </button>\n\n          {pageNumbers.map((num) => (\n            <button\n              key={num}\n              type=\"button\"\n              className={\n                num === currentPage\n                  ? 'jx-button jx-button--primary'\n                  : 'jx-button jx-button--ghost'\n              }\n              aria-current={num === currentPage ? 'page' : undefined}\n              onClick={() => goToPage(num)}\n            >\n              {num}\n            </button>\n          ))}\n\n          <button\n            type=\"button\"\n            className=\"jx-button jx-button--ghost\"\n            onClick={() => goToPage(currentPage + 1)}\n            disabled={currentPage === totalPages}\n            aria-label=\"Следующая страница\"\n          >\n            →\n          </button>\n        </nav>\n      )}\n    </div>\n  );\n}\n\nexport default UsersTable;\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 47,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 58,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 82,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.7
+  }
+}

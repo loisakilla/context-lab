@@ -1,8 +1,8 @@
 {
   "id": "tag-picker__mcp__claude-code__claude-opus-5__3",
-  "createdAt": "2026-09-21T13:32:03.162Z",
+  "createdAt": "2026-09-22T09:46:18.255Z",
   "repeat": 3,
-  "durationMs": 49922,
+  "durationMs": 21769,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -36,8 +36,8 @@
     {
       "usage": {
         "input": 2,
-        "output": 4,
-        "cacheRead": 13934,
+        "output": 10,
+        "cacheRead": 11027,
         "cacheCreation": 0
       },
       "toolCalls": []
@@ -45,26 +45,44 @@
     {
       "usage": {
         "input": 2,
-        "output": 4,
-        "cacheRead": 13934,
+        "output": 10,
+        "cacheRead": 11027,
         "cacheCreation": 0
       },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
           "input": {
-            "query": "теги, удаляемые метки, chip tag input",
+            "query": "тег метка chip удаляемая",
             "limit": 8
           },
-          "resultTokens": 619
+          "resultTokens": 566
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 4,
-        "cacheRead": 13934,
+        "output": 10,
+        "cacheRead": 11027,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "поле ввода текста input",
+            "limit": 8
+          },
+          "resultTokens": 638
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 10,
+        "cacheRead": 11027,
         "cacheCreation": 0
       },
       "toolCalls": [
@@ -80,27 +98,27 @@
     {
       "usage": {
         "input": 2,
-        "output": 8,
-        "cacheRead": 13934,
-        "cacheCreation": 2684
+        "output": 2,
+        "cacheRead": 11027,
+        "cacheCreation": 3675
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 8,
-        "cacheRead": 13934,
-        "cacheCreation": 2684
+        "output": 2,
+        "cacheRead": 11027,
+        "cacheCreation": 3675
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 8,
-        "cacheRead": 13934,
-        "cacheCreation": 2684
+        "output": 2,
+        "cacheRead": 11027,
+        "cacheCreation": 3675
       },
       "toolCalls": [
         {
@@ -116,9 +134,9 @@
     {
       "usage": {
         "input": 2,
-        "output": 8,
-        "cacheRead": 13934,
-        "cacheCreation": 2684
+        "output": 2,
+        "cacheRead": 11027,
+        "cacheCreation": 3675
       },
       "toolCalls": [
         {
@@ -133,9 +151,9 @@
     {
       "usage": {
         "input": 2,
-        "output": 8,
-        "cacheRead": 13934,
-        "cacheCreation": 2684
+        "output": 2,
+        "cacheRead": 11027,
+        "cacheCreation": 3675
       },
       "toolCalls": [
         {
@@ -152,26 +170,8 @@
       "usage": {
         "input": 2,
         "output": 8,
-        "cacheRead": 13934,
-        "cacheCreation": 2684
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__get_component_api",
-          "input": {
-            "name": "JxInputField",
-            "detail": "full"
-          },
-          "resultTokens": 393
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 16618,
-        "cacheCreation": 2040
+        "cacheRead": 14702,
+        "cacheCreation": 1403
       },
       "toolCalls": []
     },
@@ -179,79 +179,8 @@
       "usage": {
         "input": 2,
         "output": 8,
-        "cacheRead": 16618,
-        "cacheCreation": 2040
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 16618,
-        "cacheCreation": 2040
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__get_docs",
-          "input": {
-            "component": "JxTagInput",
-            "maxTokens": 900
-          },
-          "resultTokens": 389
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 16618,
-        "cacheCreation": 2040
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "подпись к полю, label, обёртка формы, группа полей",
-            "limit": 6
-          },
-          "resultTokens": 484
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 4,
-        "cacheRead": 18658,
-        "cacheCreation": 1949
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 4,
-        "cacheRead": 18658,
-        "cacheCreation": 1949
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__list_design_tokens",
-          "input": {
-            "group": "font"
-          },
-          "resultTokens": 55
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 4,
-        "cacheRead": 18658,
-        "cacheCreation": 1949
+        "cacheRead": 14702,
+        "cacheCreation": 1403
       },
       "toolCalls": [
         {
@@ -266,9 +195,27 @@
     {
       "usage": {
         "input": 2,
+        "output": 8,
+        "cacheRead": 14702,
+        "cacheCreation": 1403
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "подпись поля label обёртка формы",
+            "limit": 5
+          },
+          "resultTokens": 375
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
         "output": 3,
-        "cacheRead": 20607,
-        "cacheCreation": 2722
+        "cacheRead": 16105,
+        "cacheCreation": 2238
       },
       "toolCalls": []
     },
@@ -276,23 +223,40 @@
       "usage": {
         "input": 2,
         "output": 3,
-        "cacheRead": 20607,
-        "cacheCreation": 2722
+        "cacheRead": 16105,
+        "cacheCreation": 2238
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__list_design_tokens",
+          "input": {
+            "group": "font"
+          },
+          "resultTokens": 55
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 18343,
+        "cacheCreation": 276
       },
       "toolCalls": []
     }
   ],
   "usage": {
     "input": 10,
-    "output": 3818,
-    "cacheRead": 83751,
-    "cacheCreation": 9395
+    "output": 1765,
+    "cacheRead": 71204,
+    "cacheCreation": 7592
   },
-  "costUsd": 0.19609425,
+  "costUsd": 0.127227,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState } from 'react';\nimport { JxTagInput } from '@jinx-ui/react';\n\ntype ArticleTagPickerProps = {\n  label?: string;\n  placeholder?: string;\n  value?: string[];\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n};\n\nexport default function ArticleTagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  value,\n  defaultValue = [],\n  onChange,\n}: ArticleTagPickerProps) {\n  const [uncontrolledTags, setUncontrolledTags] = useState<string[]>(defaultValue);\n  const tags = value ?? uncontrolledTags;\n\n  const handleValueChange = (next: string[]) => {\n    const unique = next.filter((tag, index) => next.indexOf(tag) === index);\n    if (value === undefined) {\n      setUncontrolledTags(unique);\n    }\n    onChange?.(unique);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontFamily: 'var(--jx-font-sans)' }}>\n      <span>{label}</span>\n      <JxTagInput\n        ariaLabel={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={handleValueChange}\n      />\n    </div>\n  );\n}",
-    "text": "```tsx\nimport { useState } from 'react';\nimport { JxTagInput } from '@jinx-ui/react';\n\ntype ArticleTagPickerProps = {\n  label?: string;\n  placeholder?: string;\n  value?: string[];\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n};\n\nexport default function ArticleTagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  value,\n  defaultValue = [],\n  onChange,\n}: ArticleTagPickerProps) {\n  const [uncontrolledTags, setUncontrolledTags] = useState<string[]>(defaultValue);\n  const tags = value ?? uncontrolledTags;\n\n  const handleValueChange = (next: string[]) => {\n    const unique = next.filter((tag, index) => next.indexOf(tag) === index);\n    if (value === undefined) {\n      setUncontrolledTags(unique);\n    }\n    onChange?.(unique);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontFamily: 'var(--jx-font-sans)' }}>\n      <span>{label}</span>\n      <JxTagInput\n        ariaLabel={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={handleValueChange}\n      />\n    </div>\n  );\n}\n```"
+    "code": "import { useCallback, useState } from 'react';\nimport { JxChip, JxTagInput } from '@jinx-ui/react';\n\nexport interface ArticleTagPickerProps {\n  label?: string;\n  placeholder?: string;\n  defaultTags?: string[];\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  defaultTags = [],\n  onChange,\n}: ArticleTagPickerProps) {\n  const [tags, setTags] = useState<string[]>(defaultTags);\n\n  const commit = useCallback(\n    (next: string[]) => {\n      setTags(next);\n      onChange?.(next);\n    },\n    [onChange],\n  );\n\n  const handleRemove = useCallback(\n    (tag: string) => {\n      commit(tags.filter((item) => item !== tag));\n    },\n    [commit, tags],\n  );\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>\n      <span\n        style={{\n          fontFamily: 'var(--jx-font-sans)',\n          fontSize: '13px',\n          color: 'var(--jx-text-2)',\n        }}\n      >\n        {label}\n      </span>\n\n      <JxTagInput\n        ariaLabel={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={commit}\n      />\n\n      {tags.length > 0 ? (\n        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>\n          {tags.map((tag) => (\n            <JxChip key={tag} removable onRemove={() => handleRemove(tag)}>\n              {tag}\n            </JxChip>\n          ))}\n        </div>\n      ) : (\n        <span\n          style={{\n            fontFamily: 'var(--jx-font-sans)',\n            fontSize: '13px',\n            color: 'var(--jx-text-3)',\n          }}\n        >\n          Теги пока не выбраны\n        </span>\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useState } from 'react';\nimport { JxChip, JxTagInput } from '@jinx-ui/react';\n\nexport interface ArticleTagPickerProps {\n  label?: string;\n  placeholder?: string;\n  defaultTags?: string[];\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  defaultTags = [],\n  onChange,\n}: ArticleTagPickerProps) {\n  const [tags, setTags] = useState<string[]>(defaultTags);\n\n  const commit = useCallback(\n    (next: string[]) => {\n      setTags(next);\n      onChange?.(next);\n    },\n    [onChange],\n  );\n\n  const handleRemove = useCallback(\n    (tag: string) => {\n      commit(tags.filter((item) => item !== tag));\n    },\n    [commit, tags],\n  );\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>\n      <span\n        style={{\n          fontFamily: 'var(--jx-font-sans)',\n          fontSize: '13px',\n          color: 'var(--jx-text-2)',\n        }}\n      >\n        {label}\n      </span>\n\n      <JxTagInput\n        ariaLabel={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={commit}\n      />\n\n      {tags.length > 0 ? (\n        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>\n          {tags.map((tag) => (\n            <JxChip key={tag} removable onRemove={() => handleRemove(tag)}>\n              {tag}\n            </JxChip>\n          ))}\n        </div>\n      ) : (\n        <span\n          style={{\n            fontFamily: 'var(--jx-font-sans)',\n            fontSize: '13px',\n            color: 'var(--jx-text-3)',\n          }}\n        >\n          Теги пока не выбраны\n        </span>\n      )}\n    </div>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
@@ -304,11 +268,30 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 31,
+        "line": 35,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 37,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 54,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 63,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],
     "usedComponents": [
+      "JxChip",
       "JxTagInput"
     ],
     "expectedCoverage": 1,

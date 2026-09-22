@@ -1,8 +1,8 @@
 {
   "id": "users-table__none__claude-code__claude-opus-5__3",
-  "createdAt": "2026-09-21T12:56:37.746Z",
+  "createdAt": "2026-09-22T09:37:29.290Z",
   "repeat": 3,
-  "durationMs": 27232,
+  "durationMs": 17356,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -24,40 +24,40 @@
     ]
   },
   "context": {
-    "tokens": 111,
+    "tokens": 154,
     "sources": []
   },
   "turns": [
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 6778,
-        "cacheCreation": 8589
+        "output": 7,
+        "cacheRead": 8585,
+        "cacheCreation": 0
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 6778,
-        "cacheCreation": 8589
+        "output": 7,
+        "cacheRead": 8585,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
     "input": 2,
-    "output": 2408,
-    "cacheRead": 6778,
-    "cacheCreation": 8589
+    "output": 1568,
+    "cacheRead": 8585,
+    "cacheCreation": 0
   },
-  "costUsd": 0.11728025,
+  "costUsd": 0.0435025,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useMemo, useState } from 'react';\nimport {\n  Badge,\n  Pagination,\n  Stack,\n  Table,\n  TableBody,\n  TableCell,\n  TableHead,\n  TableHeaderCell,\n  TableRow,\n} from '@jinx-ui/react';\n\nconst PAGE_SIZE = 10;\n\ntype UserStatus = 'active' | 'disabled';\n\ntype User = {\n  id: string;\n  name: string;\n  role: string;\n  status: UserStatus;\n};\n\ntype UsersTableProps = {\n  users: User[];\n};\n\nfunction UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n\n  const rows = useMemo(\n    () => users.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),\n    [users, currentPage],\n  );\n\n  return (\n    <Stack direction=\"column\" gap=\"md\">\n      <Table>\n        <TableHead>\n          <TableRow>\n            <TableHeaderCell>Имя</TableHeaderCell>\n            <TableHeaderCell>Роль</TableHeaderCell>\n            <TableHeaderCell>Статус</TableHeaderCell>\n          </TableRow>\n        </TableHead>\n        <TableBody>\n          {rows.map((user) => (\n            <TableRow key={user.id}>\n              <TableCell>{user.name}</TableCell>\n              <TableCell>{user.role}</TableCell>\n              <TableCell>\n                <Badge tone={user.status === 'active' ? 'success' : 'neutral'}>\n                  {user.status === 'active' ? 'Активен' : 'Отключён'}\n                </Badge>\n              </TableCell>\n            </TableRow>\n          ))}\n          {rows.length === 0 && (\n            <TableRow>\n              <TableCell colSpan={3} style={{ color: 'var(--jx-color-text-muted)' }}>\n                Пользователей нет\n              </TableCell>\n            </TableRow>\n          )}\n        </TableBody>\n      </Table>\n      {pageCount > 1 && (\n        <Pagination\n          page={currentPage}\n          pageCount={pageCount}\n          onPageChange={setPage}\n        />\n      )}\n    </Stack>\n  );\n}\n\nexport default UsersTable;",
-    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport {\n  Badge,\n  Pagination,\n  Stack,\n  Table,\n  TableBody,\n  TableCell,\n  TableHead,\n  TableHeaderCell,\n  TableRow,\n} from '@jinx-ui/react';\n\nconst PAGE_SIZE = 10;\n\ntype UserStatus = 'active' | 'disabled';\n\ntype User = {\n  id: string;\n  name: string;\n  role: string;\n  status: UserStatus;\n};\n\ntype UsersTableProps = {\n  users: User[];\n};\n\nfunction UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n\n  const rows = useMemo(\n    () => users.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),\n    [users, currentPage],\n  );\n\n  return (\n    <Stack direction=\"column\" gap=\"md\">\n      <Table>\n        <TableHead>\n          <TableRow>\n            <TableHeaderCell>Имя</TableHeaderCell>\n            <TableHeaderCell>Роль</TableHeaderCell>\n            <TableHeaderCell>Статус</TableHeaderCell>\n          </TableRow>\n        </TableHead>\n        <TableBody>\n          {rows.map((user) => (\n            <TableRow key={user.id}>\n              <TableCell>{user.name}</TableCell>\n              <TableCell>{user.role}</TableCell>\n              <TableCell>\n                <Badge tone={user.status === 'active' ? 'success' : 'neutral'}>\n                  {user.status === 'active' ? 'Активен' : 'Отключён'}\n                </Badge>\n              </TableCell>\n            </TableRow>\n          ))}\n          {rows.length === 0 && (\n            <TableRow>\n              <TableCell colSpan={3} style={{ color: 'var(--jx-color-text-muted)' }}>\n                Пользователей нет\n              </TableCell>\n            </TableRow>\n          )}\n        </TableBody>\n      </Table>\n      {pageCount > 1 && (\n        <Pagination\n          page={currentPage}\n          pageCount={pageCount}\n          onPageChange={setPage}\n        />\n      )}\n    </Stack>\n  );\n}\n\nexport default UsersTable;\n```"
+    "code": "// API @jinx-ui/react взят по предполагаемым именам (Table.*, Badge, Pagination) — сверьте с версией пакета.\nimport { useMemo, useState } from 'react';\nimport { Table, Badge, Pagination } from '@jinx-ui/react';\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\nexport interface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n\n  const rows = useMemo(\n    () => users.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),\n    [users, currentPage]\n  );\n\n  return (\n    <div>\n      <Table>\n        <Table.Head>\n          <Table.Row>\n            <Table.HeaderCell>Имя</Table.HeaderCell>\n            <Table.HeaderCell>Роль</Table.HeaderCell>\n            <Table.HeaderCell>Статус</Table.HeaderCell>\n          </Table.Row>\n        </Table.Head>\n        <Table.Body>\n          {rows.map((user) => (\n            <Table.Row key={user.id}>\n              <Table.Cell>{user.name}</Table.Cell>\n              <Table.Cell>{user.role}</Table.Cell>\n              <Table.Cell>\n                <Badge color={user.active ? 'success' : 'neutral'}>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </Badge>\n              </Table.Cell>\n            </Table.Row>\n          ))}\n        </Table.Body>\n      </Table>\n\n      <div style={{ marginTop: 'var(--jx-space-4)' }}>\n        <Pagination page={currentPage} pageCount={pageCount} onPageChange={setPage} />\n      </div>\n    </div>\n  );\n}",
+    "text": "```tsx\n// API @jinx-ui/react взят по предполагаемым именам (Table.*, Badge, Pagination) — сверьте с версией пакета.\nimport { useMemo, useState } from 'react';\nimport { Table, Badge, Pagination } from '@jinx-ui/react';\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\nexport interface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n\n  const rows = useMemo(\n    () => users.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),\n    [users, currentPage]\n  );\n\n  return (\n    <div>\n      <Table>\n        <Table.Head>\n          <Table.Row>\n            <Table.HeaderCell>Имя</Table.HeaderCell>\n            <Table.HeaderCell>Роль</Table.HeaderCell>\n            <Table.HeaderCell>Статус</Table.HeaderCell>\n          </Table.Row>\n        </Table.Head>\n        <Table.Body>\n          {rows.map((user) => (\n            <Table.Row key={user.id}>\n              <Table.Cell>{user.name}</Table.Cell>\n              <Table.Cell>{user.role}</Table.Cell>\n              <Table.Cell>\n                <Badge color={user.active ? 'success' : 'neutral'}>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </Badge>\n              </Table.Cell>\n            </Table.Row>\n          ))}\n        </Table.Body>\n      </Table>\n\n      <div style={{ marginTop: 'var(--jx-space-4)' }}>\n        <Pagination page={currentPage} pageCount={pageCount} onPageChange={setPage} />\n      </div>\n    </div>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
@@ -65,59 +65,23 @@
         {
           "code": 2724,
           "line": 3,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Table'. Did you mean 'JxTable'?"
+        },
+        {
+          "code": 2724,
+          "line": 3,
           "message": "'\"@jinx-ui/react\"' has no exported member named 'Badge'. Did you mean 'JxBadge'?"
         },
         {
           "code": 2724,
-          "line": 4,
+          "line": 3,
           "message": "'\"@jinx-ui/react\"' has no exported member named 'Pagination'. Did you mean 'JxPagination'?"
-        },
-        {
-          "code": 2305,
-          "line": 5,
-          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
-        },
-        {
-          "code": 2724,
-          "line": 6,
-          "message": "'\"@jinx-ui/react\"' has no exported member named 'Table'. Did you mean 'JxTable'?"
-        },
-        {
-          "code": 2305,
-          "line": 7,
-          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TableBody'."
-        },
-        {
-          "code": 2305,
-          "line": 8,
-          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TableCell'."
-        },
-        {
-          "code": 2305,
-          "line": 9,
-          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TableHead'."
-        },
-        {
-          "code": 2305,
-          "line": 10,
-          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TableHeaderCell'."
-        },
-        {
-          "code": 2305,
-          "line": 11,
-          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TableRow'."
         }
       ],
       "unknownComponents": [
         "Badge",
         "Pagination",
-        "Stack",
-        "Table",
-        "TableBody",
-        "TableCell",
-        "TableHead",
-        "TableHeaderCell",
-        "TableRow"
+        "Table"
       ],
       "unknownProps": []
     },
@@ -125,7 +89,7 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 64,
+        "line": 54,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],
@@ -135,6 +99,6 @@
   },
   "verdict": {
     "passed": false,
-    "score": 0
+    "score": 0.28
   }
 }

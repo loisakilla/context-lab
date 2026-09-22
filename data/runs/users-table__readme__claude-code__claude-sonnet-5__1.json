@@ -1,0 +1,84 @@
+{
+  "id": "users-table__readme__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-22T09:42:04.582Z",
+  "repeat": 1,
+  "durationMs": 18048,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "users-table",
+    "title": "Таблица пользователей с пагинацией",
+    "prompt": "Сделай таблицу пользователей с колонками «Имя», «Роль» и «Статус». Список users передаётся пропсом, показывать по десять строк на страницу с постраничной навигацией под таблицей. Статус показывай цветной меткой: активен или отключён.",
+    "taskType": "ui",
+    "expects": [
+      "JxTable",
+      "JxPagination",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8235,
+        "cacheCreation": 1327
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8235,
+        "cacheCreation": 1327
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1858,
+    "cacheRead": 8235,
+    "cacheCreation": 1327
+  },
+  "costUsd": 0.05887125,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\n\nexport type UserStatus = 'active' | 'disabled';\n\nexport interface JinxUser {\n  id: string;\n  name: string;\n  role: string;\n  status: UserStatus;\n}\n\ninterface UsersTableProps {\n  users: JinxUser[];\n}\n\nconst PAGE_SIZE = 10;\n\nfunction StatusBadge({ status }: { status: UserStatus }) {\n  const isActive = status === 'active';\n  return (\n    <span\n      className={`jx-badge ${isActive ? 'jx-badge--success' : 'jx-badge--danger'}`}\n    >\n      {isActive ? 'Активен' : 'Отключён'}\n    </span>\n  );\n}\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const safePage = Math.min(page, pageCount);\n\n  const pageUsers = useMemo(() => {\n    const start = (safePage - 1) * PAGE_SIZE;\n    return users.slice(start, start + PAGE_SIZE);\n  }, [users, safePage]);\n\n  const goTo = (target: number) => {\n    setPage(Math.min(Math.max(target, 1), pageCount));\n  };\n\n  return (\n    <div className=\"jx-panel jx-stack\">\n      <table className=\"jx-table\">\n        <thead>\n          <tr>\n            <th scope=\"col\">Имя</th>\n            <th scope=\"col\">Роль</th>\n            <th scope=\"col\">Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {pageUsers.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <StatusBadge status={user.status} />\n              </td>\n            </tr>\n          ))}\n          {pageUsers.length === 0 && (\n            <tr>\n              <td colSpan={3} className=\"jx-text-muted\">\n                Нет пользователей\n              </td>\n            </tr>\n          )}\n        </tbody>\n      </table>\n\n      <nav className=\"jx-pagination\" aria-label=\"Постраничная навигация\">\n        <button\n          type=\"button\"\n          className=\"jx-button jx-button--ghost\"\n          onClick={() => goTo(safePage - 1)}\n          disabled={safePage === 1}\n        >\n          Назад\n        </button>\n\n        <span className=\"jx-pagination__status\">\n          Страница {safePage} из {pageCount}\n        </span>\n\n        <button\n          type=\"button\"\n          className=\"jx-button jx-button--ghost\"\n          onClick={() => goTo(safePage + 1)}\n          disabled={safePage === pageCount}\n        >\n          Вперёд\n        </button>\n      </nav>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\n\nexport type UserStatus = 'active' | 'disabled';\n\nexport interface JinxUser {\n  id: string;\n  name: string;\n  role: string;\n  status: UserStatus;\n}\n\ninterface UsersTableProps {\n  users: JinxUser[];\n}\n\nconst PAGE_SIZE = 10;\n\nfunction StatusBadge({ status }: { status: UserStatus }) {\n  const isActive = status === 'active';\n  return (\n    <span\n      className={`jx-badge ${isActive ? 'jx-badge--success' : 'jx-badge--danger'}`}\n    >\n      {isActive ? 'Активен' : 'Отключён'}\n    </span>\n  );\n}\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const safePage = Math.min(page, pageCount);\n\n  const pageUsers = useMemo(() => {\n    const start = (safePage - 1) * PAGE_SIZE;\n    return users.slice(start, start + PAGE_SIZE);\n  }, [users, safePage]);\n\n  const goTo = (target: number) => {\n    setPage(Math.min(Math.max(target, 1), pageCount));\n  };\n\n  return (\n    <div className=\"jx-panel jx-stack\">\n      <table className=\"jx-table\">\n        <thead>\n          <tr>\n            <th scope=\"col\">Имя</th>\n            <th scope=\"col\">Роль</th>\n            <th scope=\"col\">Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {pageUsers.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <StatusBadge status={user.status} />\n              </td>\n            </tr>\n          ))}\n          {pageUsers.length === 0 && (\n            <tr>\n              <td colSpan={3} className=\"jx-text-muted\">\n                Нет пользователей\n              </td>\n            </tr>\n          )}\n        </tbody>\n      </table>\n\n      <nav className=\"jx-pagination\" aria-label=\"Постраничная навигация\">\n        <button\n          type=\"button\"\n          className=\"jx-button jx-button--ghost\"\n          onClick={() => goTo(safePage - 1)}\n          disabled={safePage === 1}\n        >\n          Назад\n        </button>\n\n        <span className=\"jx-pagination__status\">\n          Страница {safePage} из {pageCount}\n        </span>\n\n        <button\n          type=\"button\"\n          className=\"jx-button jx-button--ghost\"\n          onClick={() => goTo(safePage + 1)}\n          disabled={safePage === pageCount}\n        >\n          Вперёд\n        </button>\n      </nav>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.7
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "id": "date-range__mcp__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-22T10:08:08.544Z",
+  "repeat": 3,
+  "durationMs": 15213,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "mcp",
+  "task": {
+    "id": "date-range",
+    "title": "Выбор периода",
+    "prompt": "Сделай выбор даты отчёта: календарь на месяц и над ним ряд быстрых вариантов «Сегодня», «Вчера», «Неделя назад», при нажатии на которые дата подставляется в календарь. Выбранная дата отдаётся наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxCalendar",
+      "JxChip"
+    ]
+  },
+  "context": {
+    "tokens": 1000,
+    "sources": [
+      {
+        "kind": "tools",
+        "id": "search_components,get_component_api,get_component_examples,list_design_tokens",
+        "version": "0.1.0",
+        "tokens": 688
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 11114,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 11114,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "календарь выбор даты"
+          },
+          "resultTokens": 447
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 11114,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "кнопка"
+          },
+          "resultTokens": 412
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 11114,
+        "cacheCreation": 1542
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 11114,
+        "cacheCreation": 1542
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxCalendar",
+            "detail": "full"
+          },
+          "resultTokens": 377
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 11114,
+        "cacheCreation": 1542
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxChip",
+            "detail": "full"
+          },
+          "resultTokens": 279
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 6,
+        "cacheRead": 12656,
+        "cacheCreation": 1313
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 6,
+        "cacheRead": 12656,
+        "cacheCreation": 1313
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__list_design_tokens",
+          "input": {
+            "group": "spacing"
+          },
+          "resultTokens": 22
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 6,
+        "cacheRead": 13969,
+        "cacheCreation": 175
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 6,
+        "cacheRead": 13969,
+        "cacheCreation": 175
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 8,
+    "output": 1306,
+    "cacheRead": 48853,
+    "cacheCreation": 3030
+  },
+  "costUsd": 0.07605400000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ntype QuickOption = {\n  label: string;\n  getValue: () => Date;\n};\n\nfunction startOfDay(date: Date): Date {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n}\n\nconst quickOptions: QuickOption[] = [\n  { label: 'Сегодня', getValue: () => startOfDay(new Date()) },\n  {\n    label: 'Вчера',\n    getValue: () => {\n      const d = startOfDay(new Date());\n      d.setDate(d.getDate() - 1);\n      return d;\n    },\n  },\n  {\n    label: 'Неделя назад',\n    getValue: () => {\n      const d = startOfDay(new Date());\n      d.setDate(d.getDate() - 7);\n      return d;\n    },\n  },\n];\n\ninterface ReportDatePickerProps {\n  onChange?: (value: Date | null) => void;\n}\n\nexport default function ReportDatePicker({ onChange }: ReportDatePickerProps) {\n  const [selectedDate, setSelectedDate] = useState<Date | null>(startOfDay(new Date()));\n\n  const handleChange = (value: Date | null) => {\n    setSelectedDate(value);\n    onChange?.(value);\n  };\n\n  const isActiveOption = (option: QuickOption) => {\n    if (!selectedDate) return false;\n    return startOfDay(option.getValue()).getTime() === startOfDay(selectedDate).getTime();\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-radius-md)' }}>\n      <div style={{ display: 'flex', gap: 'var(--jx-radius-sm)' }}>\n        {quickOptions.map((option) => (\n          <JxChip\n            key={option.label}\n            active={isActiveOption(option)}\n            onClick={() => handleChange(option.getValue())}\n          >\n            {option.label}\n          </JxChip>\n        ))}\n      </div>\n      <JxCalendar locale=\"ru-RU\" value={selectedDate} onValueChange={handleChange} />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ntype QuickOption = {\n  label: string;\n  getValue: () => Date;\n};\n\nfunction startOfDay(date: Date): Date {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n}\n\nconst quickOptions: QuickOption[] = [\n  { label: 'Сегодня', getValue: () => startOfDay(new Date()) },\n  {\n    label: 'Вчера',\n    getValue: () => {\n      const d = startOfDay(new Date());\n      d.setDate(d.getDate() - 1);\n      return d;\n    },\n  },\n  {\n    label: 'Неделя назад',\n    getValue: () => {\n      const d = startOfDay(new Date());\n      d.setDate(d.getDate() - 7);\n      return d;\n    },\n  },\n];\n\ninterface ReportDatePickerProps {\n  onChange?: (value: Date | null) => void;\n}\n\nexport default function ReportDatePicker({ onChange }: ReportDatePickerProps) {\n  const [selectedDate, setSelectedDate] = useState<Date | null>(startOfDay(new Date()));\n\n  const handleChange = (value: Date | null) => {\n    setSelectedDate(value);\n    onChange?.(value);\n  };\n\n  const isActiveOption = (option: QuickOption) => {\n    if (!selectedDate) return false;\n    return startOfDay(option.getValue()).getTime() === startOfDay(selectedDate).getTime();\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-radius-md)' }}>\n      <div style={{ display: 'flex', gap: 'var(--jx-radius-sm)' }}>\n        {quickOptions.map((option) => (\n          <JxChip\n            key={option.label}\n            active={isActiveOption(option)}\n            onClick={() => handleChange(option.getValue())}\n          >\n            {option.label}\n          </JxChip>\n        ))}\n      </div>\n      <JxCalendar locale=\"ru-RU\" value={selectedDate} onValueChange={handleChange} />\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 53,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 54,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxCalendar",
+      "JxChip"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

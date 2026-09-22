@@ -1,8 +1,8 @@
 {
   "id": "side-nav__mcp__claude-code__claude-opus-5__2",
-  "createdAt": "2026-09-21T13:32:30.061Z",
+  "createdAt": "2026-09-22T09:46:45.858Z",
   "repeat": 2,
-  "durationMs": 13840,
+  "durationMs": 13933,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -38,8 +38,8 @@
     {
       "usage": {
         "input": 2,
-        "output": 5,
-        "cacheRead": 13962,
+        "output": 4,
+        "cacheRead": 11055,
         "cacheCreation": 0
       },
       "toolCalls": []
@@ -47,15 +47,15 @@
     {
       "usage": {
         "input": 2,
-        "output": 5,
-        "cacheRead": 13962,
+        "output": 4,
+        "cacheRead": 11055,
         "cacheCreation": 0
       },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
           "input": {
-            "query": "выезжающая панель слева drawer"
+            "query": "выезжающая панель drawer боковая"
           },
           "resultTokens": 135
         }
@@ -64,25 +64,25 @@
     {
       "usage": {
         "input": 2,
-        "output": 5,
-        "cacheRead": 13962,
+        "output": 4,
+        "cacheRead": 11055,
         "cacheCreation": 0
       },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
           "input": {
-            "query": "меню навигации пункт списка"
+            "query": "меню навигации пункт меню разделитель"
           },
-          "resultTokens": 248
+          "resultTokens": 313
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 5,
-        "cacheRead": 13962,
+        "output": 4,
+        "cacheRead": 11055,
         "cacheCreation": 0
       },
       "toolCalls": [
@@ -98,50 +98,34 @@
     {
       "usage": {
         "input": 2,
-        "output": 5,
-        "cacheRead": 13962,
-        "cacheCreation": 2445
+        "output": 3,
+        "cacheRead": 11055,
+        "cacheCreation": 2529
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 5,
-        "cacheRead": 13962,
-        "cacheCreation": 2445
+        "output": 3,
+        "cacheRead": 11055,
+        "cacheCreation": 2529
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 5,
-        "cacheRead": 13962,
-        "cacheCreation": 2445
+        "output": 3,
+        "cacheRead": 11055,
+        "cacheCreation": 2529
       },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
-            "name": "JxDrawer"
-          },
-          "resultTokens": 386
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 5,
-        "cacheRead": 13962,
-        "cacheCreation": 2445
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__get_component_api",
-          "input": {
-            "name": "JxMenu"
+            "name": "JxMenu",
+            "detail": "full"
           },
           "resultTokens": 302
         }
@@ -150,18 +134,36 @@
     {
       "usage": {
         "input": 2,
-        "output": 5,
-        "cacheRead": 13962,
-        "cacheCreation": 2445
+        "output": 3,
+        "cacheRead": 11055,
+        "cacheCreation": 2529
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxDrawer",
+            "detail": "full"
+          },
+          "resultTokens": 386
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 11055,
+        "cacheCreation": 2529
       },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
             "name": "JxButton",
-            "detail": "signature"
+            "detail": "full"
           },
-          "resultTokens": 37
+          "resultTokens": 427
         }
       ]
     },
@@ -169,23 +171,23 @@
       "usage": {
         "input": 2,
         "output": 1,
-        "cacheRead": 16407,
-        "cacheCreation": 1519
+        "cacheRead": 13584,
+        "cacheCreation": 2277
       },
       "toolCalls": []
     }
   ],
   "usage": {
     "input": 6,
-    "output": 925,
-    "cacheRead": 44331,
-    "cacheCreation": 3964
+    "output": 1024,
+    "cacheRead": 35694,
+    "cacheCreation": 4806
   },
-  "costUsd": 0.0700955,
+  "costUsd": 0.0735145,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useCallback, useState } from 'react';\nimport { JxButton, JxDrawer, JxMenu } from '@jinx-ui/react';\n\nexport type NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\nexport interface NavigationMenuProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function NavigationMenu({ onNavigate }: NavigationMenuProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = useCallback(\n    (key: NavKey) => () => {\n      onNavigate(key);\n      setOpen(false);\n    },\n    [onNavigate],\n  );\n\n  return (\n    <div style={{ display: 'flex' }}>\n      <JxButton variant=\"secondary\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n      <JxDrawer open={open} onOpenChange={setOpen} title=\"Навигация\" side=\"left\">\n        <JxMenu\n          items={[\n            { label: 'Проекты', onSelect: select('projects') },\n            { label: 'Команда', onSelect: select('team') },\n            { label: 'Настройки', onSelect: select('settings') },\n            { type: 'divider' },\n            { label: 'Выйти', danger: true, onSelect: select('logout') },\n          ]}\n        />\n      </JxDrawer>\n    </div>\n  );\n}",
-    "text": "```tsx\nimport { useCallback, useState } from 'react';\nimport { JxButton, JxDrawer, JxMenu } from '@jinx-ui/react';\n\nexport type NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\nexport interface NavigationMenuProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function NavigationMenu({ onNavigate }: NavigationMenuProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = useCallback(\n    (key: NavKey) => () => {\n      onNavigate(key);\n      setOpen(false);\n    },\n    [onNavigate],\n  );\n\n  return (\n    <div style={{ display: 'flex' }}>\n      <JxButton variant=\"secondary\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n      <JxDrawer open={open} onOpenChange={setOpen} title=\"Навигация\" side=\"left\">\n        <JxMenu\n          items={[\n            { label: 'Проекты', onSelect: select('projects') },\n            { label: 'Команда', onSelect: select('team') },\n            { label: 'Настройки', onSelect: select('settings') },\n            { type: 'divider' },\n            { label: 'Выйти', danger: true, onSelect: select('logout') },\n          ]}\n        />\n      </JxDrawer>\n    </div>\n  );\n}\n```"
+    "code": "import { useCallback, useState } from 'react';\nimport { JxButton, JxDrawer, JxMenu } from '@jinx-ui/react';\n\nexport type NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\nexport interface NavMenuProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function NavMenu({ onNavigate }: NavMenuProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = useCallback(\n    (key: NavKey) => () => {\n      onNavigate(key);\n      setOpen(false);\n    },\n    [onNavigate],\n  );\n\n  return (\n    <>\n      <JxButton variant=\"outline\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n      <JxDrawer open={open} onOpenChange={setOpen} title=\"Разделы\" side=\"left\">\n        <JxMenu\n          items={[\n            { label: 'Проекты', onSelect: select('projects') },\n            { label: 'Команда', onSelect: select('team') },\n            { label: 'Настройки', onSelect: select('settings') },\n            { type: 'divider' },\n            { label: 'Выйти', danger: true, onSelect: select('logout') },\n          ]}\n        />\n      </JxDrawer>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useState } from 'react';\nimport { JxButton, JxDrawer, JxMenu } from '@jinx-ui/react';\n\nexport type NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\nexport interface NavMenuProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function NavMenu({ onNavigate }: NavMenuProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = useCallback(\n    (key: NavKey) => () => {\n      onNavigate(key);\n      setOpen(false);\n    },\n    [onNavigate],\n  );\n\n  return (\n    <>\n      <JxButton variant=\"outline\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n      <JxDrawer open={open} onOpenChange={setOpen} title=\"Разделы\" side=\"left\">\n        <JxMenu\n          items={[\n            { label: 'Проекты', onSelect: select('projects') },\n            { label: 'Команда', onSelect: select('team') },\n            { label: 'Настройки', onSelect: select('settings') },\n            { type: 'divider' },\n            { label: 'Выйти', danger: true, onSelect: select('logout') },\n          ]}\n        />\n      </JxDrawer>\n    </>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
@@ -193,14 +195,7 @@
       "unknownComponents": [],
       "unknownProps": []
     },
-    "lint": [
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 22,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      }
-    ],
+    "lint": [],
     "usedComponents": [
       "JxButton",
       "JxDrawer",

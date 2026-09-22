@@ -1,0 +1,95 @@
+{
+  "id": "tag-picker__readme__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-22T09:44:27.189Z",
+  "repeat": 1,
+  "durationMs": 18950,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8235,
+        "cacheCreation": 1319
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8235,
+        "cacheCreation": 1319
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1966,
+    "cacheRead": 8235,
+    "cacheCreation": 1319
+  },
+  "costUsd": 0.061521250000000006,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, useCallback, KeyboardEvent, ChangeEvent } from 'react';\n\ninterface ArticleTagInputProps {\n  label?: string;\n  placeholder?: string;\n  initialTags?: string[];\n  maxTags?: number;\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagInput({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  initialTags = [],\n  maxTags,\n  onChange,\n}: ArticleTagInputProps) {\n  const [tags, setTags] = useState<string[]>(initialTags);\n  const [inputValue, setInputValue] = useState('');\n\n  const commitTags = useCallback(\n    (next: string[]) => {\n      setTags(next);\n      onChange?.(next);\n    },\n    [onChange]\n  );\n\n  const addTag = useCallback(\n    (rawTag: string) => {\n      const cleanTag = rawTag.trim();\n      if (!cleanTag) return;\n      if (tags.includes(cleanTag)) return;\n      if (maxTags !== undefined && tags.length >= maxTags) return;\n      commitTags([...tags, cleanTag]);\n      setInputValue('');\n    },\n    [tags, maxTags, commitTags]\n  );\n\n  const removeTag = useCallback(\n    (tagToRemove: string) => {\n      commitTags(tags.filter((tag) => tag !== tagToRemove));\n    },\n    [tags, commitTags]\n  );\n\n  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {\n    const value = event.target.value;\n    if (value.endsWith(',')) {\n      addTag(value.slice(0, -1));\n      return;\n    }\n    setInputValue(value);\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter') {\n      event.preventDefault();\n      addTag(inputValue);\n      return;\n    }\n    if (event.key === 'Backspace' && inputValue === '' && tags.length > 0) {\n      event.preventDefault();\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const atLimit = maxTags !== undefined && tags.length >= maxTags;\n\n  return (\n    <div className=\"jx-field\">\n      <label className=\"jx-label\" htmlFor=\"article-tag-input\">\n        {label}\n      </label>\n\n      <input\n        id=\"article-tag-input\"\n        className=\"jx-input\"\n        type=\"text\"\n        value={inputValue}\n        placeholder={atLimit ? 'Достигнут лимит тегов' : placeholder}\n        onChange={handleInputChange}\n        onKeyDown={handleKeyDown}\n        disabled={atLimit}\n        style={{ borderRadius: 'var(--jx-radius)' }}\n      />\n\n      {tags.length > 0 && (\n        <ul\n          className=\"jx-chip-list\"\n          style={{\n            display: 'flex',\n            flexWrap: 'wrap',\n            gap: 'var(--jx-space-xs, 6px)',\n            marginTop: 'var(--jx-space-sm, 8px)',\n            listStyle: 'none',\n            padding: 0,\n          }}\n        >\n          {tags.map((tag) => (\n            <li key={tag} className=\"jx-chip\">\n              <span className=\"jx-chip__label\">{tag}</span>\n              <button\n                type=\"button\"\n                className=\"jx-chip__remove\"\n                aria-label={`Удалить тег ${tag}`}\n                onClick={() => removeTag(tag)}\n              >\n                ×\n              </button>\n            </li>\n          ))}\n        </ul>\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState, useCallback, KeyboardEvent, ChangeEvent } from 'react';\n\ninterface ArticleTagInputProps {\n  label?: string;\n  placeholder?: string;\n  initialTags?: string[];\n  maxTags?: number;\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagInput({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  initialTags = [],\n  maxTags,\n  onChange,\n}: ArticleTagInputProps) {\n  const [tags, setTags] = useState<string[]>(initialTags);\n  const [inputValue, setInputValue] = useState('');\n\n  const commitTags = useCallback(\n    (next: string[]) => {\n      setTags(next);\n      onChange?.(next);\n    },\n    [onChange]\n  );\n\n  const addTag = useCallback(\n    (rawTag: string) => {\n      const cleanTag = rawTag.trim();\n      if (!cleanTag) return;\n      if (tags.includes(cleanTag)) return;\n      if (maxTags !== undefined && tags.length >= maxTags) return;\n      commitTags([...tags, cleanTag]);\n      setInputValue('');\n    },\n    [tags, maxTags, commitTags]\n  );\n\n  const removeTag = useCallback(\n    (tagToRemove: string) => {\n      commitTags(tags.filter((tag) => tag !== tagToRemove));\n    },\n    [tags, commitTags]\n  );\n\n  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {\n    const value = event.target.value;\n    if (value.endsWith(',')) {\n      addTag(value.slice(0, -1));\n      return;\n    }\n    setInputValue(value);\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter') {\n      event.preventDefault();\n      addTag(inputValue);\n      return;\n    }\n    if (event.key === 'Backspace' && inputValue === '' && tags.length > 0) {\n      event.preventDefault();\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const atLimit = maxTags !== undefined && tags.length >= maxTags;\n\n  return (\n    <div className=\"jx-field\">\n      <label className=\"jx-label\" htmlFor=\"article-tag-input\">\n        {label}\n      </label>\n\n      <input\n        id=\"article-tag-input\"\n        className=\"jx-input\"\n        type=\"text\"\n        value={inputValue}\n        placeholder={atLimit ? 'Достигнут лимит тегов' : placeholder}\n        onChange={handleInputChange}\n        onKeyDown={handleKeyDown}\n        disabled={atLimit}\n        style={{ borderRadius: 'var(--jx-radius)' }}\n      />\n\n      {tags.length > 0 && (\n        <ul\n          className=\"jx-chip-list\"\n          style={{\n            display: 'flex',\n            flexWrap: 'wrap',\n            gap: 'var(--jx-space-xs, 6px)',\n            marginTop: 'var(--jx-space-sm, 8px)',\n            listStyle: 'none',\n            padding: 0,\n          }}\n        >\n          {tags.map((tag) => (\n            <li key={tag} className=\"jx-chip\">\n              <span className=\"jx-chip__label\">{tag}</span>\n              <button\n                type=\"button\"\n                className=\"jx-chip__remove\"\n                aria-label={`Удалить тег ${tag}`}\n                onClick={() => removeTag(tag)}\n              >\n                ×\n              </button>\n            </li>\n          ))}\n        </ul>\n      )}\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 86,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 92,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.7
+  }
+}

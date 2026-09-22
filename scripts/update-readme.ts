@@ -1,8 +1,8 @@
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadConfig, resolveFrom } from '@context-lab/docgen';
-import type { Matrix } from '@context-lab/runner';
+import type { Matrix, MatrixCell } from '@context-lab/runner';
 
 const MODE_LABELS: Record<string, string> = {
   none: 'без контекста',
@@ -30,31 +30,41 @@ if (!existsSync(matrixFile)) {
 }
 
 const matrix = JSON.parse(readFileSync(matrixFile, 'utf8')) as Matrix;
+const matrixDir = path.dirname(matrixFile);
+const others = readdirSync(matrixDir)
+  .filter((file) => /^matrix-.+\.json$/.test(file))
+  .map((file) => JSON.parse(readFileSync(path.join(matrixDir, file), 'utf8')) as Matrix)
+  .filter((other) => other.model !== matrix.model);
+
 const modes = matrix.modes;
 const withUsage = matrix.cells.some((cell) => cell.medianTokens > 0);
 const withCost = matrix.cells.some((cell) => cell.medianCostUsd !== null);
 const withTurns = matrix.cells.some((cell) => cell.medianTurns > 0);
 
-function cellsOf(mode: string) {
-  return matrix.cells.filter((cell) => cell.mode === mode);
+function cellsOf(source: Matrix, mode: string): MatrixCell[] {
+  return source.cells.filter((cell) => cell.mode === mode);
 }
 
-function share(mode: string, predicate: (value: number) => boolean, pick: (cell: Matrix['cells'][number]) => number): string {
-  const cells = cellsOf(mode);
+function share(source: Matrix, mode: string): string {
+  const cells = cellsOf(source, mode);
   if (cells.length === 0) return '—';
-  return `${Math.round((cells.filter((cell) => predicate(pick(cell))).length / cells.length) * 100)}%`;
+  return `${cells.filter((cell) => cell.passRate === 1).length} из ${cells.length}`;
 }
 
-function mean(mode: string, pick: (cell: Matrix['cells'][number]) => number): number {
-  const cells = cellsOf(mode);
+function mean(source: Matrix, mode: string, pick: (cell: MatrixCell) => number): number {
+  const cells = cellsOf(source, mode);
   if (cells.length === 0) return 0;
   return cells.reduce((sum, cell) => sum + pick(cell), 0) / cells.length;
 }
 
-function meanCost(mode: string): string {
-  const cells = cellsOf(mode).filter((cell) => cell.medianCostUsd !== null);
+function meanCost(source: Matrix, mode: string): string {
+  const cells = cellsOf(source, mode).filter((cell) => cell.medianCostUsd !== null);
   if (cells.length === 0) return '—';
   return `$${(cells.reduce((sum, cell) => sum + (cell.medianCostUsd ?? 0), 0) / cells.length).toFixed(3)}`;
+}
+
+function tokens(value: number): string {
+  return `${Math.round(value).toLocaleString('ru-RU')} ток.`;
 }
 
 const headers = [
@@ -73,19 +83,25 @@ const summary: string[] = [`| ${headers.join(' | ')} |`, `|${headers.map(() => '
 for (const mode of modes) {
   const columns = [
     MODE_LABELS[mode] ?? mode,
-    `~${Math.round(mean(mode, (cell) => cell.medianContextTokens)).toLocaleString('ru-RU')} ток.`,
-    ...(withUsage ? [`${Math.round(mean(mode, (cell) => cell.medianTokens)).toLocaleString('ru-RU')} ток.`] : []),
-    ...(withCost ? [meanCost(mode)] : []),
-    ...(withTurns ? [mean(mode, (cell) => cell.medianTurns).toFixed(1), mean(mode, (cell) => cell.medianSeconds).toFixed(0)] : []),
-    share(mode, (value) => value === 1, (cell) => cell.passRate),
-    mean(mode, (cell) => cell.medianTscErrors).toFixed(1),
-    mean(mode, (cell) => cell.medianLintErrors).toFixed(1),
-    `${Math.round(mean(mode, (cell) => cell.meanCoverage) * 100)}%`,
+    `~${tokens(mean(matrix, mode, (cell) => cell.medianContextTokens))}`,
+    ...(withUsage ? [tokens(mean(matrix, mode, (cell) => cell.medianTokens))] : []),
+    ...(withCost ? [meanCost(matrix, mode)] : []),
+    ...(withTurns ? [mean(matrix, mode, (cell) => cell.medianTurns).toFixed(1), mean(matrix, mode, (cell) => cell.medianSeconds).toFixed(0)] : []),
+    share(matrix, mode),
+    mean(matrix, mode, (cell) => cell.medianTscErrors).toFixed(1),
+    mean(matrix, mode, (cell) => cell.medianLintErrors).toFixed(1),
+    `${Math.round(mean(matrix, mode, (cell) => cell.meanCoverage) * 100)}%`,
   ];
   summary.push(`| ${columns.join(' | ')} |`);
 }
 
-const perTask: string[] = ['', '<details><summary>По задачам: сколько прогонов прошли проверки и медиана ошибок компилятора</summary>', '', `| Задача | ${modes.map((mode) => MODE_LABELS[mode] ?? mode).join(' | ')} |`, `|---|${modes.map(() => '---').join('|')}|`];
+const perTask: string[] = [
+  '',
+  '<details><summary>По задачам: сколько прогонов прошли проверки и медиана ошибок компилятора</summary>',
+  '',
+  `| Задача | ${modes.map((mode) => MODE_LABELS[mode] ?? mode).join(' | ')} |`,
+  `|---|${modes.map(() => '---').join('|')}|`,
+];
 for (const task of matrix.tasks) {
   const cells = modes.map((mode) => {
     const cell = matrix.cells.find((candidate) => candidate.taskId === task.id && candidate.mode === mode);
@@ -99,6 +115,25 @@ for (const task of matrix.tasks) {
 }
 perTask.push('', '</details>');
 
+const byModel: string[] = [];
+if (others.length > 0) {
+  byModel.push(
+    '',
+    '<details><summary>Те же задачи на другой модели</summary>',
+    '',
+    '| Модель | Режим | Задач, где прошли все прогоны | Ошибок компилятора на задачу | Цена задачи |',
+    '|---|---|---|---|---|',
+  );
+  for (const source of [matrix, ...others]) {
+    for (const mode of source.modes) {
+      byModel.push(
+        `| ${source.model} | ${MODE_LABELS[mode] ?? mode} | ${share(source, mode)} | ${mean(source, mode, (cell) => cell.medianTscErrors).toFixed(1)} | ${meanCost(source, mode)} |`,
+      );
+    }
+  }
+  byModel.push('', '</details>');
+}
+
 const runsPerCell = matrix.cells.length > 0 ? matrix.generatedFrom / matrix.cells.length : 0;
 const repeats = Number.isInteger(runsPerCell) && runsPerCell > 1 ? `, по ${runsPerCell} прогона на ячейку` : '';
 const driver = matrix.driver ? `, драйвер ${DRIVER_LABELS[matrix.driver] ?? matrix.driver}` : '';
@@ -110,6 +145,7 @@ const block = [
   '',
   ...summary,
   ...perTask,
+  ...byModel,
   '',
   END,
 ].join('\n');
@@ -124,4 +160,4 @@ if (start === -1 || end === -1) {
 }
 
 writeFileSync(readmeFile, `${readme.slice(0, start)}${block}${readme.slice(end + END.length)}`, 'utf8');
-process.stderr.write(`README обновлён: режимов ${modes.length}, задач ${matrix.tasks.length}, прогонов ${matrix.generatedFrom}.\n`);
+process.stderr.write(`README обновлён: режимов ${modes.length}, задач ${matrix.tasks.length}, прогонов ${matrix.generatedFrom}${others.length > 0 ? `, моделей ${others.length + 1}` : ''}.\n`);

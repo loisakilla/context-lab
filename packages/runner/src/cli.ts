@@ -33,7 +33,8 @@ const USAGE = `context-lab runner
 
 Опции matrix:
   -d, --driver <name>          Учитывать только прогоны этого драйвера
-      --model <model>          Учитывать только прогоны этой модели`;
+      --model <model>          Учитывать только прогоны этой модели
+  -o, --out <file>             Куда записать матрицу, по умолчанию из конфига`;
 
 function fail(message: string): never {
   process.stderr.write(`${message}\n`);
@@ -151,9 +152,10 @@ function commandMatrix(config: LabConfig, values: Record<string, string | boolea
     .filter((run) => (!driver || run.driver === driver) && (!model || run.model === model));
   if (runs.length === 0) fail('Нет ни одной записи прогона под заданные фильтры');
   const matrix = buildMatrix(runs);
-  const target = resolveFrom(config, config.matrix);
+  const out = values.out as string | undefined;
+  const target = out ? path.resolve(config.root, out) : resolveFrom(config, config.matrix);
   writeFileSync(target, `${JSON.stringify(matrix, null, 2)}\n`, 'utf8');
-  process.stderr.write(`Матрица записана в ${config.matrix}: прогонов ${runs.length}, ячеек ${matrix.cells.length}, режимов ${matrix.modes.length}.\n`);
+  process.stderr.write(`Матрица записана в ${path.relative(config.root, target)}: прогонов ${runs.length}, ячеек ${matrix.cells.length}, режимов ${matrix.modes.length}.\n`);
   for (const cell of matrix.cells) {
     process.stderr.write(`  ${cell.taskId.padEnd(18)} ${cell.mode.padEnd(11)} pass ${cell.passRate}  tsc ${cell.medianTscErrors}  tokens ${Math.round(cell.medianTokens)}\n`);
   }
@@ -172,6 +174,7 @@ async function main(): Promise<void> {
       effort: { type: 'string' },
       repeat: { type: 'string', short: 'r' },
       resume: { type: 'boolean' },
+      out: { type: 'string', short: 'o' },
       rules: { type: 'string' },
       'mcp-command': { type: 'string' },
       help: { type: 'boolean', short: 'h' },

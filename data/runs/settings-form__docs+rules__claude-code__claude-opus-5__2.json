@@ -1,8 +1,8 @@
 {
   "id": "settings-form__docs+rules__claude-code__claude-opus-5__2",
-  "createdAt": "2026-09-21T13:21:48.808Z",
+  "createdAt": "2026-09-22T09:36:56.639Z",
   "repeat": 2,
-  "durationMs": 11757,
+  "durationMs": 9354,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -25,7 +25,7 @@
     ]
   },
   "context": {
-    "tokens": 17366,
+    "tokens": 17409,
     "sources": [
       {
         "kind": "docs",
@@ -46,23 +46,23 @@
       "usage": {
         "input": 2,
         "output": 8,
-        "cacheRead": 5579,
-        "cacheCreation": 39177
+        "cacheRead": 38623,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
     "input": 2,
-    "output": 819,
-    "cacheRead": 5579,
-    "cacheCreation": 39177
+    "output": 852,
+    "cacheRead": 38623,
+    "cacheCreation": 0
   },
-  "costUsd": 0.26813075,
+  "costUsd": 0.0406215,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState, type FormEvent } from 'react';\nimport { JxButton, JxInputField, JxSelect, JxSwitch } from '@jinx-ui/react';\n\nexport type ProfileSettings = {\n  name: string;\n  language: string;\n  emailNotifications: boolean;\n};\n\ntype ProfileSettingsFormProps = {\n  initialSettings?: ProfileSettings;\n  onSave: (settings: ProfileSettings) => void;\n};\n\nconst languageOptions = [\n  { value: 'ru', label: 'Русский' },\n  { value: 'en', label: 'English' },\n];\n\nexport default function ProfileSettingsForm({\n  initialSettings,\n  onSave,\n}: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialSettings?.name ?? '');\n  const [language, setLanguage] = useState(initialSettings?.language ?? 'ru');\n  const [emailNotifications, setEmailNotifications] = useState(\n    initialSettings?.emailNotifications ?? false,\n  );\n  const [nameError, setNameError] = useState('');\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    const trimmedName = name.trim();\n\n    if (trimmedName === '') {\n      setNameError('Укажите имя');\n      return;\n    }\n\n    setNameError('');\n    onSave({ name: trimmedName, language, emailNotifications });\n  };\n\n  return (\n    <form\n      onSubmit={submit}\n      style={{ display: 'grid', gap: '16px', maxWidth: '420px' }}\n    >\n      <JxInputField\n        label=\"Имя\"\n        required\n        value={name}\n        onChange={(event) => setName(event.target.value)}\n        errorText={nameError}\n        placeholder=\"Как вас зовут\"\n      />\n\n      <JxSelect\n        label=\"Язык интерфейса\"\n        options={languageOptions}\n        value={language}\n        onValueChange={setLanguage}\n      />\n\n      <JxSwitch\n        label=\"Уведомления на почту\"\n        checked={emailNotifications}\n        onChange={(event) => setEmailNotifications(event.target.checked)}\n      />\n\n      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>\n        <JxButton type=\"submit\" variant=\"primary\">\n          Сохранить\n        </JxButton>\n      </div>\n    </form>\n  );\n}",
-    "text": "```tsx\nimport { useState, type FormEvent } from 'react';\nimport { JxButton, JxInputField, JxSelect, JxSwitch } from '@jinx-ui/react';\n\nexport type ProfileSettings = {\n  name: string;\n  language: string;\n  emailNotifications: boolean;\n};\n\ntype ProfileSettingsFormProps = {\n  initialSettings?: ProfileSettings;\n  onSave: (settings: ProfileSettings) => void;\n};\n\nconst languageOptions = [\n  { value: 'ru', label: 'Русский' },\n  { value: 'en', label: 'English' },\n];\n\nexport default function ProfileSettingsForm({\n  initialSettings,\n  onSave,\n}: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialSettings?.name ?? '');\n  const [language, setLanguage] = useState(initialSettings?.language ?? 'ru');\n  const [emailNotifications, setEmailNotifications] = useState(\n    initialSettings?.emailNotifications ?? false,\n  );\n  const [nameError, setNameError] = useState('');\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    const trimmedName = name.trim();\n\n    if (trimmedName === '') {\n      setNameError('Укажите имя');\n      return;\n    }\n\n    setNameError('');\n    onSave({ name: trimmedName, language, emailNotifications });\n  };\n\n  return (\n    <form\n      onSubmit={submit}\n      style={{ display: 'grid', gap: '16px', maxWidth: '420px' }}\n    >\n      <JxInputField\n        label=\"Имя\"\n        required\n        value={name}\n        onChange={(event) => setName(event.target.value)}\n        errorText={nameError}\n        placeholder=\"Как вас зовут\"\n      />\n\n      <JxSelect\n        label=\"Язык интерфейса\"\n        options={languageOptions}\n        value={language}\n        onValueChange={setLanguage}\n      />\n\n      <JxSwitch\n        label=\"Уведомления на почту\"\n        checked={emailNotifications}\n        onChange={(event) => setEmailNotifications(event.target.checked)}\n      />\n\n      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>\n        <JxButton type=\"submit\" variant=\"primary\">\n          Сохранить\n        </JxButton>\n      </div>\n    </form>\n  );\n}\n```"
+    "code": "import { useState, type FormEvent } from 'react';\nimport { JxButton, JxInputField, JxSelect, JxSwitch } from '@jinx-ui/react';\n\nexport interface ProfileSettings {\n  name: string;\n  language: string;\n  emailNotifications: boolean;\n}\n\nexport interface ProfileSettingsFormProps {\n  initialValue?: ProfileSettings;\n  onSave: (settings: ProfileSettings) => void;\n}\n\nconst LANGUAGE_OPTIONS = [\n  { value: 'ru', label: 'Русский' },\n  { value: 'en', label: 'English' },\n];\n\nfunction ProfileSettingsForm({ initialValue, onSave }: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialValue?.name ?? '');\n  const [language, setLanguage] = useState(initialValue?.language ?? 'ru');\n  const [emailNotifications, setEmailNotifications] = useState(\n    initialValue?.emailNotifications ?? false,\n  );\n  const [nameError, setNameError] = useState('');\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    const trimmed = name.trim();\n    if (!trimmed) {\n      setNameError('Укажите имя');\n      return;\n    }\n    setNameError('');\n    onSave({ name: trimmed, language, emailNotifications });\n  };\n\n  return (\n    <form\n      onSubmit={submit}\n      style={{ display: 'grid', gap: '16px', maxWidth: '420px' }}\n    >\n      <JxInputField\n        label=\"Имя\"\n        required\n        value={name}\n        onChange={(event) => setName(event.target.value)}\n        errorText={nameError}\n        placeholder=\"Как к вам обращаться\"\n      />\n\n      <JxSelect\n        label=\"Язык интерфейса\"\n        options={LANGUAGE_OPTIONS}\n        value={language}\n        onValueChange={setLanguage}\n        placeholder=\"Выберите язык\"\n      />\n\n      <JxSwitch\n        label=\"Уведомления на почту\"\n        checked={emailNotifications}\n        onChange={(event) => setEmailNotifications(event.target.checked)}\n      />\n\n      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>\n        <JxButton type=\"submit\" variant=\"primary\">\n          Сохранить\n        </JxButton>\n      </div>\n    </form>\n  );\n}\n\nexport default ProfileSettingsForm;",
+    "text": "```tsx\nimport { useState, type FormEvent } from 'react';\nimport { JxButton, JxInputField, JxSelect, JxSwitch } from '@jinx-ui/react';\n\nexport interface ProfileSettings {\n  name: string;\n  language: string;\n  emailNotifications: boolean;\n}\n\nexport interface ProfileSettingsFormProps {\n  initialValue?: ProfileSettings;\n  onSave: (settings: ProfileSettings) => void;\n}\n\nconst LANGUAGE_OPTIONS = [\n  { value: 'ru', label: 'Русский' },\n  { value: 'en', label: 'English' },\n];\n\nfunction ProfileSettingsForm({ initialValue, onSave }: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialValue?.name ?? '');\n  const [language, setLanguage] = useState(initialValue?.language ?? 'ru');\n  const [emailNotifications, setEmailNotifications] = useState(\n    initialValue?.emailNotifications ?? false,\n  );\n  const [nameError, setNameError] = useState('');\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    const trimmed = name.trim();\n    if (!trimmed) {\n      setNameError('Укажите имя');\n      return;\n    }\n    setNameError('');\n    onSave({ name: trimmed, language, emailNotifications });\n  };\n\n  return (\n    <form\n      onSubmit={submit}\n      style={{ display: 'grid', gap: '16px', maxWidth: '420px' }}\n    >\n      <JxInputField\n        label=\"Имя\"\n        required\n        value={name}\n        onChange={(event) => setName(event.target.value)}\n        errorText={nameError}\n        placeholder=\"Как к вам обращаться\"\n      />\n\n      <JxSelect\n        label=\"Язык интерфейса\"\n        options={LANGUAGE_OPTIONS}\n        value={language}\n        onValueChange={setLanguage}\n        placeholder=\"Выберите язык\"\n      />\n\n      <JxSwitch\n        label=\"Уведомления на почту\"\n        checked={emailNotifications}\n        onChange={(event) => setEmailNotifications(event.target.checked)}\n      />\n\n      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>\n        <JxButton type=\"submit\" variant=\"primary\">\n          Сохранить\n        </JxButton>\n      </div>\n    </form>\n  );\n}\n\nexport default ProfileSettingsForm;\n```"
   },
   "checks": {
     "tsc": {
@@ -74,13 +74,13 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 47,
+        "line": 42,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 71,
+        "line": 67,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],

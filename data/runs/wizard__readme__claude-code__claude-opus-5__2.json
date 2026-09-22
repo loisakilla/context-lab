@@ -1,8 +1,8 @@
 {
   "id": "wizard__readme__claude-code__claude-opus-5__2",
-  "createdAt": "2026-09-21T13:10:11.301Z",
+  "createdAt": "2026-09-22T09:53:52.222Z",
   "repeat": 2,
-  "durationMs": 65605,
+  "durationMs": 49103,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -24,7 +24,7 @@
     ]
   },
   "context": {
-    "tokens": 753,
+    "tokens": 796,
     "sources": [
       {
         "kind": "readme",
@@ -38,107 +38,45 @@
     {
       "usage": {
         "input": 2,
-        "output": 7,
-        "cacheRead": 13042,
-        "cacheCreation": 3904
+        "output": 3,
+        "cacheRead": 9578,
+        "cacheCreation": 0
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 7,
-        "cacheRead": 13042,
-        "cacheCreation": 3904
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 7,
-        "cacheRead": 13042,
-        "cacheCreation": 3904
-      },
-      "toolCalls": [
-        {
-          "name": "Bash",
-          "input": {
-            "command": "ls C:/Users/kgn20/WebstormProjects/context-lab/data 2>/dev/null; echo \"---\"; ls C:/Users/kgn20/WebstormProjects/context-lab",
-            "description": "List repo root and data dir"
-          },
-          "resultTokens": 44,
-          "isError": true
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 7,
-        "cacheRead": 13042,
-        "cacheCreation": 3904
-      },
-      "toolCalls": [
-        {
-          "name": "Bash",
-          "input": {
-            "command": "ls C:/Users/kgn20/WebstormProjects/context-lab/vendor/jinx-ui/packages/react/src 2>/dev/null",
-            "description": "List react package sources"
-          },
-          "resultTokens": 44,
-          "isError": true
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 16946,
-        "cacheCreation": 745
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 16946,
-        "cacheCreation": 745
+        "output": 3,
+        "cacheRead": 9578,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 4,
-    "output": 5859,
-    "cacheRead": 29988,
-    "cacheCreation": 4649
+    "input": 2,
+    "output": 4792,
+    "cacheRead": 9578,
+    "cacheCreation": 0
   },
-  "costUsd": 0.19054525000000003,
+  "costUsd": 0.124599,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState, type ChangeEvent, type FormEvent } from 'react';\nimport { Button, Input } from '@jinx-ui/react';\n\ntype RegistrationValues = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype RegistrationWizardProps = {\n  onSubmit: (values: RegistrationValues) => void;\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'];\n\nconst EMPTY_VALUES: RegistrationValues = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst SUMMARY: Array<[keyof RegistrationValues, string]> = [\n  ['name', 'Имя'],\n  ['email', 'Email'],\n  ['phone', 'Телефон'],\n  ['country', 'Страна'],\n  ['city', 'Город'],\n  ['street', 'Улица, дом'],\n  ['zip', 'Индекс'],\n];\n\nexport default function RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<RegistrationValues>(EMPTY_VALUES);\n\n  const isLastStep = step === STEPS.length - 1;\n\n  const handleChange =\n    (field: keyof RegistrationValues) => (event: ChangeEvent<HTMLInputElement>) => {\n      setValues((previous) => ({ ...previous, [field]: event.target.value }));\n    };\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!isLastStep) {\n      setStep((previous) => previous + 1);\n      return;\n    }\n    onSubmit(values);\n  };\n\n  const renderField = (\n    field: keyof RegistrationValues,\n    label: string,\n    type: string = 'text',\n    autoComplete?: string,\n  ) => (\n    <div\n      className=\"jx-field\"\n      style={{ display: 'grid', gap: 'var(--jx-space-1)' }}\n    >\n      <label className=\"jx-label\" htmlFor={`registration-${field}`}>\n        {label}\n      </label>\n      <Input\n        id={`registration-${field}`}\n        name={field}\n        type={type}\n        autoComplete={autoComplete}\n        value={values[field]}\n        onChange={handleChange(field)}\n      />\n    </div>\n  );\n\n  return (\n    <form\n      className=\"jx-card jx-stack\"\n      onSubmit={handleSubmit}\n      style={{ display: 'grid', gap: 'var(--jx-space-4)', padding: 'var(--jx-space-4)' }}\n    >\n      <nav aria-label=\"Шаги регистрации\">\n        <ol\n          className=\"jx-steps\"\n          style={{\n            display: 'flex',\n            gap: 'var(--jx-space-2)',\n            listStyle: 'none',\n            margin: 0,\n            padding: 0,\n          }}\n        >\n          {STEPS.map((title, index) => (\n            <li\n              key={title}\n              className=\"jx-step\"\n              data-state={index === step ? 'current' : index < step ? 'done' : 'upcoming'}\n              aria-current={index === step ? 'step' : undefined}\n              style={{\n                flex: 1,\n                display: 'flex',\n                alignItems: 'center',\n                gap: 'var(--jx-space-2)',\n                padding: 'var(--jx-space-2)',\n              }}\n            >\n              <span className=\"jx-step__index\">{index + 1}</span>\n              <span className=\"jx-step__title\">{title}</span>\n            </li>\n          ))}\n        </ol>\n      </nav>\n\n      {step === 0 && (\n        <fieldset\n          className=\"jx-fieldset\"\n          style={{ display: 'grid', gap: 'var(--jx-space-3)', border: 'none', margin: 0, padding: 0 }}\n        >\n          <legend className=\"jx-legend\">Контакты</legend>\n          {renderField('name', 'Имя', 'text', 'name')}\n          {renderField('email', 'Email', 'email', 'email')}\n          {renderField('phone', 'Телефон', 'tel', 'tel')}\n        </fieldset>\n      )}\n\n      {step === 1 && (\n        <fieldset\n          className=\"jx-fieldset\"\n          style={{ display: 'grid', gap: 'var(--jx-space-3)', border: 'none', margin: 0, padding: 0 }}\n        >\n          <legend className=\"jx-legend\">Адрес</legend>\n          {renderField('country', 'Страна', 'text', 'country-name')}\n          {renderField('city', 'Город', 'text', 'address-level2')}\n          {renderField('street', 'Улица, дом', 'text', 'street-address')}\n          {renderField('zip', 'Индекс', 'text', 'postal-code')}\n        </fieldset>\n      )}\n\n      {step === 2 && (\n        <section className=\"jx-stack\" aria-label=\"Проверка данных\">\n          <h2 className=\"jx-heading\">Проверка</h2>\n          <dl\n            className=\"jx-summary\"\n            style={{ display: 'grid', gap: 'var(--jx-space-2)', margin: 0 }}\n          >\n            {SUMMARY.map(([field, label]) => (\n              <div\n                key={field}\n                style={{\n                  display: 'flex',\n                  justifyContent: 'space-between',\n                  gap: 'var(--jx-space-3)',\n                }}\n              >\n                <dt className=\"jx-summary__term\">{label}</dt>\n                <dd className=\"jx-summary__value\" style={{ margin: 0 }}>\n                  {values[field] || '—'}\n                </dd>\n              </div>\n            ))}\n          </dl>\n        </section>\n      )}\n\n      <div\n        className=\"jx-cluster\"\n        style={{\n          display: 'flex',\n          justifyContent: 'space-between',\n          gap: 'var(--jx-space-2)',\n        }}\n      >\n        <Button\n          type=\"button\"\n          disabled={step === 0}\n          onClick={() => setStep((previous) => previous - 1)}\n        >\n          Назад\n        </Button>\n        <Button type=\"submit\">{isLastStep ? 'Отправить' : 'Дальше'}</Button>\n      </div>\n    </form>\n  );\n}",
-    "text": "Файловых инструментов в этой сессии нет, поэтому точный список экспортов `@jinx-ui/react` я проверить не смог — код опирается на `Button` и `Input`.\n\n```tsx\nimport { useState, type ChangeEvent, type FormEvent } from 'react';\nimport { Button, Input } from '@jinx-ui/react';\n\ntype RegistrationValues = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype RegistrationWizardProps = {\n  onSubmit: (values: RegistrationValues) => void;\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'];\n\nconst EMPTY_VALUES: RegistrationValues = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst SUMMARY: Array<[keyof RegistrationValues, string]> = [\n  ['name', 'Имя'],\n  ['email', 'Email'],\n  ['phone', 'Телефон'],\n  ['country', 'Страна'],\n  ['city', 'Город'],\n  ['street', 'Улица, дом'],\n  ['zip', 'Индекс'],\n];\n\nexport default function RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<RegistrationValues>(EMPTY_VALUES);\n\n  const isLastStep = step === STEPS.length - 1;\n\n  const handleChange =\n    (field: keyof RegistrationValues) => (event: ChangeEvent<HTMLInputElement>) => {\n      setValues((previous) => ({ ...previous, [field]: event.target.value }));\n    };\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!isLastStep) {\n      setStep((previous) => previous + 1);\n      return;\n    }\n    onSubmit(values);\n  };\n\n  const renderField = (\n    field: keyof RegistrationValues,\n    label: string,\n    type: string = 'text',\n    autoComplete?: string,\n  ) => (\n    <div\n      className=\"jx-field\"\n      style={{ display: 'grid', gap: 'var(--jx-space-1)' }}\n    >\n      <label className=\"jx-label\" htmlFor={`registration-${field}`}>\n        {label}\n      </label>\n      <Input\n        id={`registration-${field}`}\n        name={field}\n        type={type}\n        autoComplete={autoComplete}\n        value={values[field]}\n        onChange={handleChange(field)}\n      />\n    </div>\n  );\n\n  return (\n    <form\n      className=\"jx-card jx-stack\"\n      onSubmit={handleSubmit}\n      style={{ display: 'grid', gap: 'var(--jx-space-4)', padding: 'var(--jx-space-4)' }}\n    >\n      <nav aria-label=\"Шаги регистрации\">\n        <ol\n          className=\"jx-steps\"\n          style={{\n            display: 'flex',\n            gap: 'var(--jx-space-2)',\n            listStyle: 'none',\n            margin: 0,\n            padding: 0,\n          }}\n        >\n          {STEPS.map((title, index) => (\n            <li\n              key={title}\n              className=\"jx-step\"\n              data-state={index === step ? 'current' : index < step ? 'done' : 'upcoming'}\n              aria-current={index === step ? 'step' : undefined}\n              style={{\n                flex: 1,\n                display: 'flex',\n                alignItems: 'center',\n                gap: 'var(--jx-space-2)',\n                padding: 'var(--jx-space-2)',\n              }}\n            >\n              <span className=\"jx-step__index\">{index + 1}</span>\n              <span className=\"jx-step__title\">{title}</span>\n            </li>\n          ))}\n        </ol>\n      </nav>\n\n      {step === 0 && (\n        <fieldset\n          className=\"jx-fieldset\"\n          style={{ display: 'grid', gap: 'var(--jx-space-3)', border: 'none', margin: 0, padding: 0 }}\n        >\n          <legend className=\"jx-legend\">Контакты</legend>\n          {renderField('name', 'Имя', 'text', 'name')}\n          {renderField('email', 'Email', 'email', 'email')}\n          {renderField('phone', 'Телефон', 'tel', 'tel')}\n        </fieldset>\n      )}\n\n      {step === 1 && (\n        <fieldset\n          className=\"jx-fieldset\"\n          style={{ display: 'grid', gap: 'var(--jx-space-3)', border: 'none', margin: 0, padding: 0 }}\n        >\n          <legend className=\"jx-legend\">Адрес</legend>\n          {renderField('country', 'Страна', 'text', 'country-name')}\n          {renderField('city', 'Город', 'text', 'address-level2')}\n          {renderField('street', 'Улица, дом', 'text', 'street-address')}\n          {renderField('zip', 'Индекс', 'text', 'postal-code')}\n        </fieldset>\n      )}\n\n      {step === 2 && (\n        <section className=\"jx-stack\" aria-label=\"Проверка данных\">\n          <h2 className=\"jx-heading\">Проверка</h2>\n          <dl\n            className=\"jx-summary\"\n            style={{ display: 'grid', gap: 'var(--jx-space-2)', margin: 0 }}\n          >\n            {SUMMARY.map(([field, label]) => (\n              <div\n                key={field}\n                style={{\n                  display: 'flex',\n                  justifyContent: 'space-between',\n                  gap: 'var(--jx-space-3)',\n                }}\n              >\n                <dt className=\"jx-summary__term\">{label}</dt>\n                <dd className=\"jx-summary__value\" style={{ margin: 0 }}>\n                  {values[field] || '—'}\n                </dd>\n              </div>\n            ))}\n          </dl>\n        </section>\n      )}\n\n      <div\n        className=\"jx-cluster\"\n        style={{\n          display: 'flex',\n          justifyContent: 'space-between',\n          gap: 'var(--jx-space-2)',\n        }}\n      >\n        <Button\n          type=\"button\"\n          disabled={step === 0}\n          onClick={() => setStep((previous) => previous - 1)}\n        >\n          Назад\n        </Button>\n        <Button type=\"submit\">{isLastStep ? 'Отправить' : 'Дальше'}</Button>\n      </div>\n    </form>\n  );\n}\n```"
+    "code": "// Assumed public API of @jinx-ui/react: Button ({ variant, type, onClick, disabled }).\n// Everything else uses CSS-first jx-* classes and var(--jx-*) tokens from @jinx-ui/core.\nimport { useState, type ChangeEvent, type FormEvent } from 'react';\nimport { Button } from '@jinx-ui/react';\n\nexport interface RegistrationData {\n  fullName: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n}\n\nexport interface RegistrationWizardProps {\n  onSubmit: (data: RegistrationData) => void;\n}\n\ntype FieldDef = {\n  key: keyof RegistrationData;\n  label: string;\n  type: string;\n  autoComplete: string;\n};\n\nconst STEPS: ReadonlyArray<{ title: string; fields: ReadonlyArray<FieldDef> }> = [\n  {\n    title: 'Контакты',\n    fields: [\n      { key: 'fullName', label: 'Имя и фамилия', type: 'text', autoComplete: 'name' },\n      { key: 'email', label: 'Email', type: 'email', autoComplete: 'email' },\n      { key: 'phone', label: 'Телефон', type: 'tel', autoComplete: 'tel' },\n    ],\n  },\n  {\n    title: 'Адрес',\n    fields: [\n      { key: 'country', label: 'Страна', type: 'text', autoComplete: 'country-name' },\n      { key: 'city', label: 'Город', type: 'text', autoComplete: 'address-level2' },\n      { key: 'street', label: 'Улица, дом, квартира', type: 'text', autoComplete: 'street-address' },\n      { key: 'zip', label: 'Индекс', type: 'text', autoComplete: 'postal-code' },\n    ],\n  },\n  { title: 'Проверка', fields: [] },\n];\n\nconst EMPTY_DATA: RegistrationData = {\n  fullName: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst ALL_FIELDS: ReadonlyArray<FieldDef> = [...STEPS[0].fields, ...STEPS[1].fields];\n\nexport default function RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [stepIndex, setStepIndex] = useState(0);\n  const [data, setData] = useState<RegistrationData>(EMPTY_DATA);\n\n  const step = STEPS[stepIndex];\n  const isFirst = stepIndex === 0;\n  const isLast = stepIndex === STEPS.length - 1;\n\n  const update = (key: keyof RegistrationData) => (event: ChangeEvent<HTMLInputElement>) => {\n    const { value } = event.target;\n    setData((prev) => ({ ...prev, [key]: value }));\n  };\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (isLast) {\n      onSubmit(data);\n      return;\n    }\n    setStepIndex((index) => Math.min(index + 1, STEPS.length - 1));\n  };\n\n  return (\n    <form\n      className=\"jx-card jx-stack\"\n      onSubmit={handleSubmit}\n      aria-label=\"Регистрация\"\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-5, 20px)',\n        padding: 'var(--jx-space-5, 20px)',\n        borderRadius: 'var(--jx-radius, 4px)',\n      }}\n    >\n      <ol\n        className=\"jx-stepper\"\n        style={{\n          display: 'flex',\n          listStyle: 'none',\n          margin: 0,\n          padding: 0,\n          gap: 'var(--jx-space-3, 12px)',\n        }}\n      >\n        {STEPS.map((item, index) => {\n          const state = index === stepIndex ? 'current' : index < stepIndex ? 'done' : 'todo';\n          return (\n            <li\n              key={item.title}\n              className={`jx-stepper__item jx-stepper__item--${state}`}\n              aria-current={index === stepIndex ? 'step' : undefined}\n              style={{\n                flex: 1,\n                display: 'flex',\n                alignItems: 'center',\n                gap: 'var(--jx-space-2, 8px)',\n                padding: 'var(--jx-space-2, 8px)',\n                borderRadius: 'var(--jx-radius, 4px)',\n                borderBottom: '2px solid',\n                borderBottomColor:\n                  index <= stepIndex ? 'var(--jx-accent)' : 'var(--jx-border)',\n                color: index === stepIndex ? 'var(--jx-fg)' : 'var(--jx-fg-muted)',\n              }}\n            >\n              <span className=\"jx-stepper__index\" aria-hidden=\"true\">\n                {index + 1}\n              </span>\n              <span className=\"jx-stepper__label\">{item.title}</span>\n            </li>\n          );\n        })}\n      </ol>\n\n      <section\n        className=\"jx-stack\"\n        aria-labelledby=\"jx-wizard-step-title\"\n        style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-4, 16px)' }}\n      >\n        <h2 id=\"jx-wizard-step-title\" className=\"jx-heading\">\n          {step.title}\n        </h2>\n\n        {isLast ? (\n          <dl\n            className=\"jx-list\"\n            style={{\n              display: 'grid',\n              gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 2fr)',\n              gap: 'var(--jx-space-2, 8px) var(--jx-space-4, 16px)',\n              margin: 0,\n            }}\n          >\n            {ALL_FIELDS.map((field) => (\n              <div key={field.key} style={{ display: 'contents' }}>\n                <dt className=\"jx-label\" style={{ color: 'var(--jx-fg-muted)' }}>\n                  {field.label}\n                </dt>\n                <dd style={{ margin: 0, color: 'var(--jx-fg)' }}>{data[field.key] || '—'}</dd>\n              </div>\n            ))}\n          </dl>\n        ) : (\n          step.fields.map((field) => (\n            <div\n              key={field.key}\n              className=\"jx-field\"\n              style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-1, 4px)' }}\n            >\n              <label className=\"jx-label\" htmlFor={`jx-wizard-${field.key}`}>\n                {field.label}\n              </label>\n              <input\n                id={`jx-wizard-${field.key}`}\n                className=\"jx-input\"\n                type={field.type}\n                name={field.key}\n                autoComplete={field.autoComplete}\n                value={data[field.key]}\n                onChange={update(field.key)}\n              />\n            </div>\n          ))\n        )}\n      </section>\n\n      <div\n        className=\"jx-actions\"\n        style={{\n          display: 'flex',\n          justifyContent: 'space-between',\n          gap: 'var(--jx-space-3, 12px)',\n        }}\n      >\n        <Button\n          type=\"button\"\n          variant=\"ghost\"\n          disabled={isFirst}\n          onClick={() => setStepIndex((index) => Math.max(index - 1, 0))}\n        >\n          Назад\n        </Button>\n        <Button type=\"submit\" variant=\"primary\">\n          {isLast ? 'Отправить' : 'Дальше'}\n        </Button>\n      </div>\n    </form>\n  );\n}",
+    "text": "```tsx\n// Assumed public API of @jinx-ui/react: Button ({ variant, type, onClick, disabled }).\n// Everything else uses CSS-first jx-* classes and var(--jx-*) tokens from @jinx-ui/core.\nimport { useState, type ChangeEvent, type FormEvent } from 'react';\nimport { Button } from '@jinx-ui/react';\n\nexport interface RegistrationData {\n  fullName: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n}\n\nexport interface RegistrationWizardProps {\n  onSubmit: (data: RegistrationData) => void;\n}\n\ntype FieldDef = {\n  key: keyof RegistrationData;\n  label: string;\n  type: string;\n  autoComplete: string;\n};\n\nconst STEPS: ReadonlyArray<{ title: string; fields: ReadonlyArray<FieldDef> }> = [\n  {\n    title: 'Контакты',\n    fields: [\n      { key: 'fullName', label: 'Имя и фамилия', type: 'text', autoComplete: 'name' },\n      { key: 'email', label: 'Email', type: 'email', autoComplete: 'email' },\n      { key: 'phone', label: 'Телефон', type: 'tel', autoComplete: 'tel' },\n    ],\n  },\n  {\n    title: 'Адрес',\n    fields: [\n      { key: 'country', label: 'Страна', type: 'text', autoComplete: 'country-name' },\n      { key: 'city', label: 'Город', type: 'text', autoComplete: 'address-level2' },\n      { key: 'street', label: 'Улица, дом, квартира', type: 'text', autoComplete: 'street-address' },\n      { key: 'zip', label: 'Индекс', type: 'text', autoComplete: 'postal-code' },\n    ],\n  },\n  { title: 'Проверка', fields: [] },\n];\n\nconst EMPTY_DATA: RegistrationData = {\n  fullName: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst ALL_FIELDS: ReadonlyArray<FieldDef> = [...STEPS[0].fields, ...STEPS[1].fields];\n\nexport default function RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [stepIndex, setStepIndex] = useState(0);\n  const [data, setData] = useState<RegistrationData>(EMPTY_DATA);\n\n  const step = STEPS[stepIndex];\n  const isFirst = stepIndex === 0;\n  const isLast = stepIndex === STEPS.length - 1;\n\n  const update = (key: keyof RegistrationData) => (event: ChangeEvent<HTMLInputElement>) => {\n    const { value } = event.target;\n    setData((prev) => ({ ...prev, [key]: value }));\n  };\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (isLast) {\n      onSubmit(data);\n      return;\n    }\n    setStepIndex((index) => Math.min(index + 1, STEPS.length - 1));\n  };\n\n  return (\n    <form\n      className=\"jx-card jx-stack\"\n      onSubmit={handleSubmit}\n      aria-label=\"Регистрация\"\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-5, 20px)',\n        padding: 'var(--jx-space-5, 20px)',\n        borderRadius: 'var(--jx-radius, 4px)',\n      }}\n    >\n      <ol\n        className=\"jx-stepper\"\n        style={{\n          display: 'flex',\n          listStyle: 'none',\n          margin: 0,\n          padding: 0,\n          gap: 'var(--jx-space-3, 12px)',\n        }}\n      >\n        {STEPS.map((item, index) => {\n          const state = index === stepIndex ? 'current' : index < stepIndex ? 'done' : 'todo';\n          return (\n            <li\n              key={item.title}\n              className={`jx-stepper__item jx-stepper__item--${state}`}\n              aria-current={index === stepIndex ? 'step' : undefined}\n              style={{\n                flex: 1,\n                display: 'flex',\n                alignItems: 'center',\n                gap: 'var(--jx-space-2, 8px)',\n                padding: 'var(--jx-space-2, 8px)',\n                borderRadius: 'var(--jx-radius, 4px)',\n                borderBottom: '2px solid',\n                borderBottomColor:\n                  index <= stepIndex ? 'var(--jx-accent)' : 'var(--jx-border)',\n                color: index === stepIndex ? 'var(--jx-fg)' : 'var(--jx-fg-muted)',\n              }}\n            >\n              <span className=\"jx-stepper__index\" aria-hidden=\"true\">\n                {index + 1}\n              </span>\n              <span className=\"jx-stepper__label\">{item.title}</span>\n            </li>\n          );\n        })}\n      </ol>\n\n      <section\n        className=\"jx-stack\"\n        aria-labelledby=\"jx-wizard-step-title\"\n        style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-4, 16px)' }}\n      >\n        <h2 id=\"jx-wizard-step-title\" className=\"jx-heading\">\n          {step.title}\n        </h2>\n\n        {isLast ? (\n          <dl\n            className=\"jx-list\"\n            style={{\n              display: 'grid',\n              gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 2fr)',\n              gap: 'var(--jx-space-2, 8px) var(--jx-space-4, 16px)',\n              margin: 0,\n            }}\n          >\n            {ALL_FIELDS.map((field) => (\n              <div key={field.key} style={{ display: 'contents' }}>\n                <dt className=\"jx-label\" style={{ color: 'var(--jx-fg-muted)' }}>\n                  {field.label}\n                </dt>\n                <dd style={{ margin: 0, color: 'var(--jx-fg)' }}>{data[field.key] || '—'}</dd>\n              </div>\n            ))}\n          </dl>\n        ) : (\n          step.fields.map((field) => (\n            <div\n              key={field.key}\n              className=\"jx-field\"\n              style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-1, 4px)' }}\n            >\n              <label className=\"jx-label\" htmlFor={`jx-wizard-${field.key}`}>\n                {field.label}\n              </label>\n              <input\n                id={`jx-wizard-${field.key}`}\n                className=\"jx-input\"\n                type={field.type}\n                name={field.key}\n                autoComplete={field.autoComplete}\n                value={data[field.key]}\n                onChange={update(field.key)}\n              />\n            </div>\n          ))\n        )}\n      </section>\n\n      <div\n        className=\"jx-actions\"\n        style={{\n          display: 'flex',\n          justifyContent: 'space-between',\n          gap: 'var(--jx-space-3, 12px)',\n        }}\n      >\n        <Button\n          type=\"button\"\n          variant=\"ghost\"\n          disabled={isFirst}\n          onClick={() => setStepIndex((index) => Math.max(index - 1, 0))}\n        >\n          Назад\n        </Button>\n        <Button type=\"submit\" variant=\"primary\">\n          {isLast ? 'Отправить' : 'Дальше'}\n        </Button>\n      </div>\n    </form>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
       "errors": [
         {
           "code": 2724,
-          "line": 2,
+          "line": 4,
           "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
-        },
-        {
-          "code": 2305,
-          "line": 2,
-          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
         }
       ],
       "unknownComponents": [
-        "Button",
-        "Input"
+        "Button"
       ],
       "unknownProps": []
     },
@@ -146,31 +84,19 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 68,
+        "line": 87,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 88,
+        "line": 97,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 93,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 107,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 125,
+        "line": 112,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
@@ -182,25 +108,37 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 152,
+        "line": 146,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 157,
+        "line": 154,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 164,
+        "line": 155,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 175,
+        "line": 158,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 167,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 188,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],
@@ -210,6 +148,6 @@
   },
   "verdict": {
     "passed": false,
-    "score": 0.42
+    "score": 0.56
   }
 }

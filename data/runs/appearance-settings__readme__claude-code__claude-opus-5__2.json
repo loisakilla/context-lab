@@ -1,0 +1,167 @@
+{
+  "id": "appearance-settings__readme__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-22T10:04:56.295Z",
+  "repeat": 2,
+  "durationMs": 45484,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "appearance-settings",
+    "title": "Настройки внешнего вида",
+    "prompt": "Сделай экран настроек внешнего вида: сегментированный переключатель темы на три варианта, ползунок масштаба интерфейса от 80 до 140 процентов с показом текущего значения, переключатель плотной вёрстки и раздел «Ещё» под разделителем с выбором шрифта. Справа от заголовка экрана метка с текущей темой. Состояние храни в компоненте и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxToggle",
+      "JxSlider",
+      "JxSwitch",
+      "JxDivider",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 9619,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 9619,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 4454,
+    "cacheRead": 9619,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.11616949999999998,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "// API @jinx-ui/react здесь принят по соглашению (value/onChange, options);\n// имена пропсов стоит сверить с docs/components.md перед коммитом.\nimport { useCallback, useId, useState } from 'react';\nimport { Button, Select, Slider, Switch } from '@jinx-ui/react';\n\nexport type ThemeMode = 'brutal' | 'glass' | 'minimal';\n\nexport interface AppearanceSettings {\n  theme: ThemeMode;\n  scale: number;\n  dense: boolean;\n  fontFamily: string;\n}\n\nexport interface AppearanceSettingsScreenProps {\n  defaultValue?: Partial<AppearanceSettings>;\n  onChange?: (settings: AppearanceSettings) => void;\n}\n\nconst DEFAULTS: AppearanceSettings = {\n  theme: 'brutal',\n  scale: 100,\n  dense: false,\n  fontFamily: 'system',\n};\n\nconst THEMES: ReadonlyArray<{ value: ThemeMode; label: string }> = [\n  { value: 'brutal', label: 'Brutal' },\n  { value: 'glass', label: 'Glass' },\n  { value: 'minimal', label: 'Minimal' },\n];\n\nconst FONTS: ReadonlyArray<{ value: string; label: string }> = [\n  { value: 'system', label: 'Системный' },\n  { value: 'inter', label: 'Inter' },\n  { value: 'mono', label: 'Моноширинный' },\n];\n\nconst SCALE_MIN = 80;\nconst SCALE_MAX = 140;\n\nexport default function AppearanceSettingsScreen({\n  defaultValue,\n  onChange,\n}: AppearanceSettingsScreenProps) {\n  const [settings, setSettings] = useState<AppearanceSettings>({\n    ...DEFAULTS,\n    ...defaultValue,\n  });\n\n  const update = useCallback(\n    (patch: Partial<AppearanceSettings>) => {\n      setSettings((prev) => {\n        const next = { ...prev, ...patch };\n        onChange?.(next);\n        return next;\n      });\n    },\n    [onChange],\n  );\n\n  const themeGroupId = useId();\n  const scaleId = useId();\n  const denseId = useId();\n  const fontId = useId();\n\n  const activeTheme = THEMES.find((t) => t.value === settings.theme) ?? THEMES[0];\n\n  return (\n    <section\n      className=\"jx-card jx-stack\"\n      style={{ gap: 'var(--jx-space-5)', padding: 'var(--jx-space-5)' }}\n      aria-labelledby={`${themeGroupId}-title`}\n    >\n      <header\n        className=\"jx-row\"\n        style={{ alignItems: 'center', justifyContent: 'space-between', gap: 'var(--jx-space-3)' }}\n      >\n        <h2 id={`${themeGroupId}-title`} className=\"jx-heading\">\n          Внешний вид\n        </h2>\n        <span className=\"jx-badge\" aria-live=\"polite\">\n          Тема: {activeTheme.label}\n        </span>\n      </header>\n\n      <div className=\"jx-field jx-stack\" style={{ gap: 'var(--jx-space-2)' }}>\n        <span className=\"jx-label\" id={`${themeGroupId}-label`}>\n          Тема оформления\n        </span>\n        <div\n          className=\"jx-segmented\"\n          role=\"radiogroup\"\n          aria-labelledby={`${themeGroupId}-label`}\n        >\n          {THEMES.map((theme) => {\n            const selected = theme.value === settings.theme;\n            return (\n              <Button\n                key={theme.value}\n                role=\"radio\"\n                aria-checked={selected}\n                tabIndex={selected ? 0 : -1}\n                variant={selected ? 'primary' : 'ghost'}\n                size=\"sm\"\n                onClick={() => update({ theme: theme.value })}\n              >\n                {theme.label}\n              </Button>\n            );\n          })}\n        </div>\n      </div>\n\n      <div className=\"jx-field jx-stack\" style={{ gap: 'var(--jx-space-2)' }}>\n        <div\n          className=\"jx-row\"\n          style={{ alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--jx-space-3)' }}\n        >\n          <label className=\"jx-label\" htmlFor={scaleId}>\n            Масштаб интерфейса\n          </label>\n          <span className=\"jx-hint\" aria-live=\"polite\">\n            {settings.scale}%\n          </span>\n        </div>\n        <Slider\n          id={scaleId}\n          min={SCALE_MIN}\n          max={SCALE_MAX}\n          step={5}\n          value={settings.scale}\n          aria-valuetext={`${settings.scale} процентов`}\n          onChange={(scale: number) => update({ scale })}\n        />\n      </div>\n\n      <div\n        className=\"jx-field jx-row\"\n        style={{ alignItems: 'center', justifyContent: 'space-between', gap: 'var(--jx-space-3)' }}\n      >\n        <div className=\"jx-stack\" style={{ gap: 'var(--jx-space-1)' }}>\n          <label className=\"jx-label\" htmlFor={denseId}>\n            Плотная вёрстка\n          </label>\n          <span className=\"jx-hint\">Уменьшает отступы и высоту строк</span>\n        </div>\n        <Switch\n          id={denseId}\n          checked={settings.dense}\n          onChange={(dense: boolean) => update({ dense })}\n        />\n      </div>\n\n      <hr className=\"jx-divider\" />\n\n      <div className=\"jx-stack\" style={{ gap: 'var(--jx-space-3)' }}>\n        <h3 className=\"jx-heading\">Ещё</h3>\n        <div className=\"jx-field jx-stack\" style={{ gap: 'var(--jx-space-2)' }}>\n          <label className=\"jx-label\" htmlFor={fontId}>\n            Шрифт\n          </label>\n          <Select\n            id={fontId}\n            value={settings.fontFamily}\n            options={FONTS}\n            onChange={(fontFamily: string) => update({ fontFamily })}\n          />\n        </div>\n      </div>\n    </section>\n  );\n}",
+    "text": "```tsx\n// API @jinx-ui/react здесь принят по соглашению (value/onChange, options);\n// имена пропсов стоит сверить с docs/components.md перед коммитом.\nimport { useCallback, useId, useState } from 'react';\nimport { Button, Select, Slider, Switch } from '@jinx-ui/react';\n\nexport type ThemeMode = 'brutal' | 'glass' | 'minimal';\n\nexport interface AppearanceSettings {\n  theme: ThemeMode;\n  scale: number;\n  dense: boolean;\n  fontFamily: string;\n}\n\nexport interface AppearanceSettingsScreenProps {\n  defaultValue?: Partial<AppearanceSettings>;\n  onChange?: (settings: AppearanceSettings) => void;\n}\n\nconst DEFAULTS: AppearanceSettings = {\n  theme: 'brutal',\n  scale: 100,\n  dense: false,\n  fontFamily: 'system',\n};\n\nconst THEMES: ReadonlyArray<{ value: ThemeMode; label: string }> = [\n  { value: 'brutal', label: 'Brutal' },\n  { value: 'glass', label: 'Glass' },\n  { value: 'minimal', label: 'Minimal' },\n];\n\nconst FONTS: ReadonlyArray<{ value: string; label: string }> = [\n  { value: 'system', label: 'Системный' },\n  { value: 'inter', label: 'Inter' },\n  { value: 'mono', label: 'Моноширинный' },\n];\n\nconst SCALE_MIN = 80;\nconst SCALE_MAX = 140;\n\nexport default function AppearanceSettingsScreen({\n  defaultValue,\n  onChange,\n}: AppearanceSettingsScreenProps) {\n  const [settings, setSettings] = useState<AppearanceSettings>({\n    ...DEFAULTS,\n    ...defaultValue,\n  });\n\n  const update = useCallback(\n    (patch: Partial<AppearanceSettings>) => {\n      setSettings((prev) => {\n        const next = { ...prev, ...patch };\n        onChange?.(next);\n        return next;\n      });\n    },\n    [onChange],\n  );\n\n  const themeGroupId = useId();\n  const scaleId = useId();\n  const denseId = useId();\n  const fontId = useId();\n\n  const activeTheme = THEMES.find((t) => t.value === settings.theme) ?? THEMES[0];\n\n  return (\n    <section\n      className=\"jx-card jx-stack\"\n      style={{ gap: 'var(--jx-space-5)', padding: 'var(--jx-space-5)' }}\n      aria-labelledby={`${themeGroupId}-title`}\n    >\n      <header\n        className=\"jx-row\"\n        style={{ alignItems: 'center', justifyContent: 'space-between', gap: 'var(--jx-space-3)' }}\n      >\n        <h2 id={`${themeGroupId}-title`} className=\"jx-heading\">\n          Внешний вид\n        </h2>\n        <span className=\"jx-badge\" aria-live=\"polite\">\n          Тема: {activeTheme.label}\n        </span>\n      </header>\n\n      <div className=\"jx-field jx-stack\" style={{ gap: 'var(--jx-space-2)' }}>\n        <span className=\"jx-label\" id={`${themeGroupId}-label`}>\n          Тема оформления\n        </span>\n        <div\n          className=\"jx-segmented\"\n          role=\"radiogroup\"\n          aria-labelledby={`${themeGroupId}-label`}\n        >\n          {THEMES.map((theme) => {\n            const selected = theme.value === settings.theme;\n            return (\n              <Button\n                key={theme.value}\n                role=\"radio\"\n                aria-checked={selected}\n                tabIndex={selected ? 0 : -1}\n                variant={selected ? 'primary' : 'ghost'}\n                size=\"sm\"\n                onClick={() => update({ theme: theme.value })}\n              >\n                {theme.label}\n              </Button>\n            );\n          })}\n        </div>\n      </div>\n\n      <div className=\"jx-field jx-stack\" style={{ gap: 'var(--jx-space-2)' }}>\n        <div\n          className=\"jx-row\"\n          style={{ alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--jx-space-3)' }}\n        >\n          <label className=\"jx-label\" htmlFor={scaleId}>\n            Масштаб интерфейса\n          </label>\n          <span className=\"jx-hint\" aria-live=\"polite\">\n            {settings.scale}%\n          </span>\n        </div>\n        <Slider\n          id={scaleId}\n          min={SCALE_MIN}\n          max={SCALE_MAX}\n          step={5}\n          value={settings.scale}\n          aria-valuetext={`${settings.scale} процентов`}\n          onChange={(scale: number) => update({ scale })}\n        />\n      </div>\n\n      <div\n        className=\"jx-field jx-row\"\n        style={{ alignItems: 'center', justifyContent: 'space-between', gap: 'var(--jx-space-3)' }}\n      >\n        <div className=\"jx-stack\" style={{ gap: 'var(--jx-space-1)' }}>\n          <label className=\"jx-label\" htmlFor={denseId}>\n            Плотная вёрстка\n          </label>\n          <span className=\"jx-hint\">Уменьшает отступы и высоту строк</span>\n        </div>\n        <Switch\n          id={denseId}\n          checked={settings.dense}\n          onChange={(dense: boolean) => update({ dense })}\n        />\n      </div>\n\n      <hr className=\"jx-divider\" />\n\n      <div className=\"jx-stack\" style={{ gap: 'var(--jx-space-3)' }}>\n        <h3 className=\"jx-heading\">Ещё</h3>\n        <div className=\"jx-field jx-stack\" style={{ gap: 'var(--jx-space-2)' }}>\n          <label className=\"jx-label\" htmlFor={fontId}>\n            Шрифт\n          </label>\n          <Select\n            id={fontId}\n            value={settings.fontFamily}\n            options={FONTS}\n            onChange={(fontFamily: string) => update({ fontFamily })}\n          />\n        </div>\n      </div>\n    </section>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 4,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2724,
+          "line": 4,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Select'. Did you mean 'JxSelect'?"
+        },
+        {
+          "code": 2724,
+          "line": 4,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Slider'. Did you mean 'JxSlider'?"
+        },
+        {
+          "code": 2724,
+          "line": 4,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Switch'. Did you mean 'JxSwitch'?"
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Select",
+        "Slider",
+        "Switch"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 72,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 77,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 87,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 115,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 118,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 140,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 142,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 157,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 159,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.14
+  }
+}

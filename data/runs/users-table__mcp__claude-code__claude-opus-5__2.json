@@ -1,8 +1,8 @@
 {
   "id": "users-table__mcp__claude-code__claude-opus-5__2",
-  "createdAt": "2026-09-21T13:28:44.001Z",
+  "createdAt": "2026-09-22T09:42:47.800Z",
   "repeat": 2,
-  "durationMs": 18860,
+  "durationMs": 17585,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -38,8 +38,8 @@
     {
       "usage": {
         "input": 2,
-        "output": 10,
-        "cacheRead": 13942,
+        "output": 2,
+        "cacheRead": 11035,
         "cacheCreation": 0
       },
       "toolCalls": []
@@ -47,16 +47,15 @@
     {
       "usage": {
         "input": 2,
-        "output": 10,
-        "cacheRead": 13942,
+        "output": 2,
+        "cacheRead": 11035,
         "cacheCreation": 0
       },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
           "input": {
-            "query": "таблица",
-            "limit": 5
+            "query": "таблица"
           },
           "resultTokens": 150
         }
@@ -65,34 +64,32 @@
     {
       "usage": {
         "input": 2,
-        "output": 10,
-        "cacheRead": 13942,
+        "output": 2,
+        "cacheRead": 11035,
         "cacheCreation": 0
       },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
           "input": {
-            "query": "пагинация постраничная навигация",
-            "limit": 5
+            "query": "пагинация постраничная навигация"
           },
-          "resultTokens": 195
+          "resultTokens": 262
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 10,
-        "cacheRead": 13942,
+        "output": 2,
+        "cacheRead": 11035,
         "cacheCreation": 0
       },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
           "input": {
-            "query": "цветная метка статус badge",
-            "limit": 5
+            "query": "цветная метка статус badge"
           },
           "resultTokens": 308
         }
@@ -102,24 +99,49 @@
       "usage": {
         "input": 2,
         "output": 2,
-        "cacheRead": 13942,
-        "cacheCreation": 1392
+        "cacheRead": 11035,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_rules",
+          "input": {
+            "task": "ui"
+          },
+          "resultTokens": 870
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 6,
+        "cacheRead": 11035,
+        "cacheCreation": 3036
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 2,
-        "cacheRead": 13942,
-        "cacheCreation": 1392
+        "output": 6,
+        "cacheRead": 11035,
+        "cacheCreation": 3036
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 6,
+        "cacheRead": 11035,
+        "cacheCreation": 3036
       },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
-            "name": "JxTable",
-            "detail": "full"
+            "name": "JxTable"
           },
           "resultTokens": 281
         }
@@ -128,45 +150,9 @@
     {
       "usage": {
         "input": 2,
-        "output": 2,
-        "cacheRead": 13942,
-        "cacheCreation": 1392
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__get_component_api",
-          "input": {
-            "name": "JxPagination",
-            "detail": "full"
-          },
-          "resultTokens": 359
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 13942,
-        "cacheCreation": 1392
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__get_component_api",
-          "input": {
-            "name": "JxBadge",
-            "detail": "full"
-          },
-          "resultTokens": 274
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 13942,
-        "cacheCreation": 1392
+        "output": 6,
+        "cacheRead": 11035,
+        "cacheCreation": 3036
       },
       "toolCalls": [
         {
@@ -181,27 +167,34 @@
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 15334,
-        "cacheCreation": 2175
+        "output": 6,
+        "cacheRead": 11035,
+        "cacheCreation": 3036
       },
-      "toolCalls": []
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxPagination"
+          },
+          "resultTokens": 359
+        }
+      ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 15334,
-        "cacheCreation": 2175
+        "output": 6,
+        "cacheRead": 11035,
+        "cacheCreation": 3036
       },
       "toolCalls": [
         {
-          "name": "mcp__context-lab__get_rules",
+          "name": "mcp__context-lab__get_component_api",
           "input": {
-            "task": "ui",
-            "budget": 800
+            "name": "JxBadge"
           },
-          "resultTokens": 870
+          "resultTokens": 274
         }
       ]
     },
@@ -209,16 +202,23 @@
       "usage": {
         "input": 2,
         "output": 3,
-        "cacheRead": 15334,
-        "cacheCreation": 2175
+        "cacheRead": 14071,
+        "cacheCreation": 2147
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 14071,
+        "cacheCreation": 2147
       },
       "toolCalls": [
         {
           "name": "mcp__context-lab__list_design_tokens",
-          "input": {
-            "group": "color"
-          },
-          "resultTokens": 630
+          "input": {},
+          "resultTokens": 924
         }
       ]
     },
@@ -226,23 +226,23 @@
       "usage": {
         "input": 2,
         "output": 1,
-        "cacheRead": 17509,
-        "cacheCreation": 3072
+        "cacheRead": 16218,
+        "cacheCreation": 2182
       },
       "toolCalls": []
     }
   ],
   "usage": {
     "input": 8,
-    "output": 1423,
-    "cacheRead": 60727,
-    "cacheCreation": 6639
+    "output": 1411,
+    "cacheRead": 52359,
+    "cacheCreation": 7365
   },
-  "costUsd": 0.10747224999999999,
+  "costUsd": 0.10752574999999999,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useMemo, useState } from 'react';\nimport { JxBadge, JxPagination, JxTable } from '@jinx-ui/react';\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\nexport interface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n\n  const visible = useMemo(\n    () => users.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),\n    [users, currentPage],\n  );\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>\n      <JxTable>\n        <thead>\n          <tr>\n            <th>Имя</th>\n            <th>Роль</th>\n            <th>Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'danger'} dot>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n      <div style={{ display: 'flex', justifyContent: 'center' }}>\n        <JxPagination total={pageCount} page={currentPage} onPageChange={setPage} />\n      </div>\n    </div>\n  );\n}",
-    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport { JxBadge, JxPagination, JxTable } from '@jinx-ui/react';\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\nexport interface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n\n  const visible = useMemo(\n    () => users.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),\n    [users, currentPage],\n  );\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>\n      <JxTable>\n        <thead>\n          <tr>\n            <th>Имя</th>\n            <th>Роль</th>\n            <th>Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'danger'} dot>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n      <div style={{ display: 'flex', justifyContent: 'center' }}>\n        <JxPagination total={pageCount} page={currentPage} onPageChange={setPage} />\n      </div>\n    </div>\n  );\n}\n```"
+    "code": "import { useMemo, useState } from 'react';\nimport { JxBadge, JxPagination, JxTable } from '@jinx-ui/react';\n\nconst PAGE_SIZE = 10;\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\nexport interface UsersTableProps {\n  users: User[];\n}\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n\n  const visible = useMemo(\n    () => users.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),\n    [users, currentPage],\n  );\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>\n      <JxTable>\n        <thead>\n          <tr>\n            <th>Имя</th>\n            <th>Роль</th>\n            <th>Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'danger'} dot>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n\n      {pageCount > 1 && (\n        <div style={{ display: 'flex', justifyContent: 'center' }}>\n          <JxPagination total={pageCount} page={currentPage} onPageChange={setPage} />\n        </div>\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport { JxBadge, JxPagination, JxTable } from '@jinx-ui/react';\n\nconst PAGE_SIZE = 10;\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\nexport interface UsersTableProps {\n  users: User[];\n}\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n\n  const visible = useMemo(\n    () => users.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),\n    [users, currentPage],\n  );\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>\n      <JxTable>\n        <thead>\n          <tr>\n            <th>Имя</th>\n            <th>Роль</th>\n            <th>Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'danger'} dot>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n\n      {pageCount > 1 && (\n        <div style={{ display: 'flex', justifyContent: 'center' }}>\n          <JxPagination total={pageCount} page={currentPage} onPageChange={setPage} />\n        </div>\n      )}\n    </div>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
@@ -260,7 +260,7 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 52,
+        "line": 54,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],

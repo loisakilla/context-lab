@@ -1,0 +1,178 @@
+{
+  "id": "appearance-settings__none__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-22T09:47:52.235Z",
+  "repeat": 3,
+  "durationMs": 31245,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "appearance-settings",
+    "title": "Настройки внешнего вида",
+    "prompt": "Сделай экран настроек внешнего вида: сегментированный переключатель темы на три варианта, ползунок масштаба интерфейса от 80 до 140 процентов с показом текущего значения, переключатель плотной вёрстки и раздел «Ещё» под разделителем с выбором шрифта. Справа от заголовка экрана метка с текущей темой. Состояние храни в компоненте и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxToggle",
+      "JxSlider",
+      "JxSwitch",
+      "JxDivider",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 8644,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 8644,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 3029,
+    "cacheRead": 8644,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.080057,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "// Предполагаемый API @jinx-ui/react (примитивы и сигнатуры onChange(value)) — сверьте с документацией пакета.\nimport { useCallback, useState } from 'react';\nimport {\n  Badge,\n  Card,\n  Divider,\n  Field,\n  SegmentedControl,\n  Select,\n  Slider,\n  Stack,\n  Switch,\n  Text,\n  Title,\n} from '@jinx-ui/react';\n\nexport type ThemeMode = 'light' | 'dark' | 'system';\nexport type FontFamily = 'system' | 'inter' | 'mono';\n\nexport interface AppearanceSettings {\n  theme: ThemeMode;\n  scale: number;\n  dense: boolean;\n  font: FontFamily;\n}\n\nexport interface AppearanceSettingsScreenProps {\n  initialValue?: Partial<AppearanceSettings>;\n  onChange: (value: AppearanceSettings) => void;\n}\n\nconst DEFAULTS: AppearanceSettings = {\n  theme: 'system',\n  scale: 100,\n  dense: false,\n  font: 'system',\n};\n\nconst THEME_LABELS: Record<ThemeMode, string> = {\n  light: 'Светлая',\n  dark: 'Тёмная',\n  system: 'Системная',\n};\n\nconst THEME_OPTIONS = (Object.keys(THEME_LABELS) as ThemeMode[]).map((value) => ({\n  value,\n  label: THEME_LABELS[value],\n}));\n\nconst FONT_OPTIONS: Array<{ value: FontFamily; label: string }> = [\n  { value: 'system', label: 'Системный' },\n  { value: 'inter', label: 'Inter' },\n  { value: 'mono', label: 'Моноширинный' },\n];\n\nconst SCALE_MIN = 80;\nconst SCALE_MAX = 140;\n\nfunction AppearanceSettingsScreen({ initialValue, onChange }: AppearanceSettingsScreenProps) {\n  const [settings, setSettings] = useState<AppearanceSettings>({ ...DEFAULTS, ...initialValue });\n\n  const update = useCallback(\n    (patch: Partial<AppearanceSettings>) => {\n      setSettings((prev) => {\n        const next = { ...prev, ...patch };\n        onChange(next);\n        return next;\n      });\n    },\n    [onChange],\n  );\n\n  return (\n    <Card style={{ padding: 'var(--jx-space-6)' }}>\n      <Stack direction=\"vertical\" style={{ gap: 'var(--jx-space-6)' }}>\n        <Stack\n          direction=\"horizontal\"\n          align=\"center\"\n          justify=\"space-between\"\n          style={{ gap: 'var(--jx-space-3)' }}\n        >\n          <Title level={2}>Внешний вид</Title>\n          <Badge>{THEME_LABELS[settings.theme]}</Badge>\n        </Stack>\n\n        <Field label=\"Тема\" hint=\"Применяется ко всему интерфейсу\">\n          <SegmentedControl\n            fullWidth\n            value={settings.theme}\n            options={THEME_OPTIONS}\n            onChange={(theme: ThemeMode) => update({ theme })}\n          />\n        </Field>\n\n        <Field label=\"Масштаб интерфейса\">\n          <Stack direction=\"vertical\" style={{ gap: 'var(--jx-space-2)' }}>\n            <Slider\n              min={SCALE_MIN}\n              max={SCALE_MAX}\n              step={5}\n              value={settings.scale}\n              onChange={(scale: number) => update({ scale })}\n            />\n            <Stack direction=\"horizontal\" justify=\"space-between\">\n              <Text tone=\"muted\" size=\"sm\">{SCALE_MIN}%</Text>\n              <Text weight=\"medium\">{settings.scale}%</Text>\n              <Text tone=\"muted\" size=\"sm\">{SCALE_MAX}%</Text>\n            </Stack>\n          </Stack>\n        </Field>\n\n        <Switch\n          label=\"Плотная вёрстка\"\n          description=\"Уменьшает отступы между элементами\"\n          checked={settings.dense}\n          onChange={(dense: boolean) => update({ dense })}\n        />\n\n        <Divider />\n\n        <Stack direction=\"vertical\" style={{ gap: 'var(--jx-space-4)' }}>\n          <Title level={3}>Ещё</Title>\n          <Field label=\"Шрифт\">\n            <Select\n              value={settings.font}\n              options={FONT_OPTIONS}\n              onChange={(font: FontFamily) => update({ font })}\n            />\n          </Field>\n        </Stack>\n      </Stack>\n    </Card>\n  );\n}\n\nexport default AppearanceSettingsScreen;",
+    "text": "```tsx\n// Предполагаемый API @jinx-ui/react (примитивы и сигнатуры onChange(value)) — сверьте с документацией пакета.\nimport { useCallback, useState } from 'react';\nimport {\n  Badge,\n  Card,\n  Divider,\n  Field,\n  SegmentedControl,\n  Select,\n  Slider,\n  Stack,\n  Switch,\n  Text,\n  Title,\n} from '@jinx-ui/react';\n\nexport type ThemeMode = 'light' | 'dark' | 'system';\nexport type FontFamily = 'system' | 'inter' | 'mono';\n\nexport interface AppearanceSettings {\n  theme: ThemeMode;\n  scale: number;\n  dense: boolean;\n  font: FontFamily;\n}\n\nexport interface AppearanceSettingsScreenProps {\n  initialValue?: Partial<AppearanceSettings>;\n  onChange: (value: AppearanceSettings) => void;\n}\n\nconst DEFAULTS: AppearanceSettings = {\n  theme: 'system',\n  scale: 100,\n  dense: false,\n  font: 'system',\n};\n\nconst THEME_LABELS: Record<ThemeMode, string> = {\n  light: 'Светлая',\n  dark: 'Тёмная',\n  system: 'Системная',\n};\n\nconst THEME_OPTIONS = (Object.keys(THEME_LABELS) as ThemeMode[]).map((value) => ({\n  value,\n  label: THEME_LABELS[value],\n}));\n\nconst FONT_OPTIONS: Array<{ value: FontFamily; label: string }> = [\n  { value: 'system', label: 'Системный' },\n  { value: 'inter', label: 'Inter' },\n  { value: 'mono', label: 'Моноширинный' },\n];\n\nconst SCALE_MIN = 80;\nconst SCALE_MAX = 140;\n\nfunction AppearanceSettingsScreen({ initialValue, onChange }: AppearanceSettingsScreenProps) {\n  const [settings, setSettings] = useState<AppearanceSettings>({ ...DEFAULTS, ...initialValue });\n\n  const update = useCallback(\n    (patch: Partial<AppearanceSettings>) => {\n      setSettings((prev) => {\n        const next = { ...prev, ...patch };\n        onChange(next);\n        return next;\n      });\n    },\n    [onChange],\n  );\n\n  return (\n    <Card style={{ padding: 'var(--jx-space-6)' }}>\n      <Stack direction=\"vertical\" style={{ gap: 'var(--jx-space-6)' }}>\n        <Stack\n          direction=\"horizontal\"\n          align=\"center\"\n          justify=\"space-between\"\n          style={{ gap: 'var(--jx-space-3)' }}\n        >\n          <Title level={2}>Внешний вид</Title>\n          <Badge>{THEME_LABELS[settings.theme]}</Badge>\n        </Stack>\n\n        <Field label=\"Тема\" hint=\"Применяется ко всему интерфейсу\">\n          <SegmentedControl\n            fullWidth\n            value={settings.theme}\n            options={THEME_OPTIONS}\n            onChange={(theme: ThemeMode) => update({ theme })}\n          />\n        </Field>\n\n        <Field label=\"Масштаб интерфейса\">\n          <Stack direction=\"vertical\" style={{ gap: 'var(--jx-space-2)' }}>\n            <Slider\n              min={SCALE_MIN}\n              max={SCALE_MAX}\n              step={5}\n              value={settings.scale}\n              onChange={(scale: number) => update({ scale })}\n            />\n            <Stack direction=\"horizontal\" justify=\"space-between\">\n              <Text tone=\"muted\" size=\"sm\">{SCALE_MIN}%</Text>\n              <Text weight=\"medium\">{settings.scale}%</Text>\n              <Text tone=\"muted\" size=\"sm\">{SCALE_MAX}%</Text>\n            </Stack>\n          </Stack>\n        </Field>\n\n        <Switch\n          label=\"Плотная вёрстка\"\n          description=\"Уменьшает отступы между элементами\"\n          checked={settings.dense}\n          onChange={(dense: boolean) => update({ dense })}\n        />\n\n        <Divider />\n\n        <Stack direction=\"vertical\" style={{ gap: 'var(--jx-space-4)' }}>\n          <Title level={3}>Ещё</Title>\n          <Field label=\"Шрифт\">\n            <Select\n              value={settings.font}\n              options={FONT_OPTIONS}\n              onChange={(font: FontFamily) => update({ font })}\n            />\n          </Field>\n        </Stack>\n      </Stack>\n    </Card>\n  );\n}\n\nexport default AppearanceSettingsScreen;\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 4,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Badge'. Did you mean 'JxBadge'?"
+        },
+        {
+          "code": 2305,
+          "line": 5,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Card'."
+        },
+        {
+          "code": 2724,
+          "line": 6,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Divider'. Did you mean 'JxDivider'?"
+        },
+        {
+          "code": 2305,
+          "line": 7,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Field'."
+        },
+        {
+          "code": 2305,
+          "line": 8,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'SegmentedControl'."
+        },
+        {
+          "code": 2724,
+          "line": 9,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Select'. Did you mean 'JxSelect'?"
+        },
+        {
+          "code": 2724,
+          "line": 10,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Slider'. Did you mean 'JxSlider'?"
+        },
+        {
+          "code": 2305,
+          "line": 11,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2724,
+          "line": 12,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Switch'. Did you mean 'JxSwitch'?"
+        },
+        {
+          "code": 2305,
+          "line": 13,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        },
+        {
+          "code": 2305,
+          "line": 14,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Title'."
+        }
+      ],
+      "unknownComponents": [
+        "Badge",
+        "Card",
+        "Divider",
+        "Field",
+        "SegmentedControl",
+        "Select",
+        "Slider",
+        "Stack",
+        "Switch",
+        "Text",
+        "Title"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 74,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 75,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 80,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 96,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 121,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

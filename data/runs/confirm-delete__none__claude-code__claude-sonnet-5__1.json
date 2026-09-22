@@ -1,0 +1,118 @@
+{
+  "id": "confirm-delete__none__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-22T09:34:40.620Z",
+  "repeat": 1,
+  "durationMs": 5473,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "none",
+  "task": {
+    "id": "confirm-delete",
+    "title": "Подтверждение удаления",
+    "prompt": "Сделай компонент с кнопкой «Удалить проект». По клику открывается окно подтверждения с заголовком «Удалить проект?», текстом о том, что действие необратимо, и двумя кнопками: отмена и подтверждение удаления. Подтверждение вызывает переданный колбэк onConfirm.",
+    "taskType": "ui",
+    "expects": [
+      "JxModal",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 3067,
+        "cacheCreation": 5536
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 519,
+    "cacheRead": 3067,
+    "cacheCreation": 5536
+  },
+  "costUsd": 0.049118499999999995,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { Button, Dialog, DialogHeader, DialogTitle, DialogBody, DialogFooter, Text } from '@jinx-ui/react';\n\ninterface DeleteProjectButtonProps {\n  onConfirm: () => void;\n}\n\nexport default function DeleteProjectButton({ onConfirm }: DeleteProjectButtonProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const handleConfirm = () => {\n    onConfirm();\n    setIsOpen(false);\n  };\n\n  return (\n    <>\n      <Button variant=\"danger\" onClick={() => setIsOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Dialog open={isOpen} onOpenChange={setIsOpen}>\n        <DialogHeader>\n          <DialogTitle>Удалить проект?</DialogTitle>\n        </DialogHeader>\n        <DialogBody>\n          <Text style={{ color: 'var(--jx-color-text-secondary)' }}>\n            Это действие необратимо. Все данные проекта будут удалены без возможности восстановления.\n          </Text>\n        </DialogBody>\n        <DialogFooter>\n          <Button variant=\"secondary\" onClick={() => setIsOpen(false)}>\n            Отмена\n          </Button>\n          <Button variant=\"danger\" onClick={handleConfirm}>\n            Удалить\n          </Button>\n        </DialogFooter>\n      </Dialog>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { Button, Dialog, DialogHeader, DialogTitle, DialogBody, DialogFooter, Text } from '@jinx-ui/react';\n\ninterface DeleteProjectButtonProps {\n  onConfirm: () => void;\n}\n\nexport default function DeleteProjectButton({ onConfirm }: DeleteProjectButtonProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const handleConfirm = () => {\n    onConfirm();\n    setIsOpen(false);\n  };\n\n  return (\n    <>\n      <Button variant=\"danger\" onClick={() => setIsOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Dialog open={isOpen} onOpenChange={setIsOpen}>\n        <DialogHeader>\n          <DialogTitle>Удалить проект?</DialogTitle>\n        </DialogHeader>\n        <DialogBody>\n          <Text style={{ color: 'var(--jx-color-text-secondary)' }}>\n            Это действие необратимо. Все данные проекта будут удалены без возможности восстановления.\n          </Text>\n        </DialogBody>\n        <DialogFooter>\n          <Button variant=\"secondary\" onClick={() => setIsOpen(false)}>\n            Отмена\n          </Button>\n          <Button variant=\"danger\" onClick={handleConfirm}>\n            Удалить\n          </Button>\n        </DialogFooter>\n      </Dialog>\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Dialog'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'DialogHeader'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'DialogTitle'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'DialogBody'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'DialogFooter'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Dialog",
+        "DialogBody",
+        "DialogFooter",
+        "DialogHeader",
+        "DialogTitle",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 27,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

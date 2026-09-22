@@ -1,0 +1,85 @@
+{
+  "id": "settings-form__readme__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-22T09:40:36.436Z",
+  "repeat": 1,
+  "durationMs": 16187,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "settings-form",
+    "title": "Форма настроек",
+    "prompt": "Сделай форму настроек профиля: поле «Имя», выбор языка интерфейса из списка (русский, английский), переключатель «Уведомления на почту» и кнопка «Сохранить». Состояние полей храни в компоненте, при отправке вызывай переданный колбэк onSave с объектом настроек.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8235,
+        "cacheCreation": 1342
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8235,
+        "cacheCreation": 1342
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1778,
+    "cacheRead": 8235,
+    "cacheCreation": 1342
+  },
+  "costUsd": 0.05696500000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, FormEvent } from 'react';\n\ntype Language = 'ru' | 'en';\n\ninterface ProfileSettings {\n  name: string;\n  language: Language;\n  emailNotifications: boolean;\n}\n\ninterface ProfileSettingsFormProps {\n  onSave: (settings: ProfileSettings) => void;\n}\n\nexport default function ProfileSettingsForm({ onSave }: ProfileSettingsFormProps) {\n  const [name, setName] = useState('');\n  const [language, setLanguage] = useState<Language>('ru');\n  const [emailNotifications, setEmailNotifications] = useState(false);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    onSave({ name, language, emailNotifications });\n  };\n\n  return (\n    <form className=\"jx-form\" onSubmit={handleSubmit}>\n      <div className=\"jx-field\">\n        <label className=\"jx-label\" htmlFor=\"profile-name\">\n          Имя\n        </label>\n        <input\n          id=\"profile-name\"\n          className=\"jx-input\"\n          type=\"text\"\n          value={name}\n          onChange={(event) => setName(event.target.value)}\n          placeholder=\"Введите имя\"\n          autoComplete=\"name\"\n        />\n      </div>\n\n      <div className=\"jx-field\">\n        <label className=\"jx-label\" htmlFor=\"profile-language\">\n          Язык интерфейса\n        </label>\n        <select\n          id=\"profile-language\"\n          className=\"jx-select\"\n          value={language}\n          onChange={(event) => setLanguage(event.target.value as Language)}\n        >\n          <option value=\"ru\">Русский</option>\n          <option value=\"en\">English</option>\n        </select>\n      </div>\n\n      <div className=\"jx-field jx-field--row\">\n        <label className=\"jx-switch\" htmlFor=\"profile-email-notifications\">\n          <input\n            id=\"profile-email-notifications\"\n            className=\"jx-switch__input\"\n            type=\"checkbox\"\n            checked={emailNotifications}\n            onChange={(event) => setEmailNotifications(event.target.checked)}\n          />\n          <span className=\"jx-switch__track\" aria-hidden=\"true\">\n            <span className=\"jx-switch__thumb\" />\n          </span>\n          <span className=\"jx-switch__label\">Уведомления на почту</span>\n        </label>\n      </div>\n\n      <div className=\"jx-field jx-field--actions\">\n        <button type=\"submit\" className=\"jx-button jx-button--primary\">\n          Сохранить\n        </button>\n      </div>\n    </form>\n  );\n}",
+    "text": "```tsx\nimport { useState, FormEvent } from 'react';\n\ntype Language = 'ru' | 'en';\n\ninterface ProfileSettings {\n  name: string;\n  language: Language;\n  emailNotifications: boolean;\n}\n\ninterface ProfileSettingsFormProps {\n  onSave: (settings: ProfileSettings) => void;\n}\n\nexport default function ProfileSettingsForm({ onSave }: ProfileSettingsFormProps) {\n  const [name, setName] = useState('');\n  const [language, setLanguage] = useState<Language>('ru');\n  const [emailNotifications, setEmailNotifications] = useState(false);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    onSave({ name, language, emailNotifications });\n  };\n\n  return (\n    <form className=\"jx-form\" onSubmit={handleSubmit}>\n      <div className=\"jx-field\">\n        <label className=\"jx-label\" htmlFor=\"profile-name\">\n          Имя\n        </label>\n        <input\n          id=\"profile-name\"\n          className=\"jx-input\"\n          type=\"text\"\n          value={name}\n          onChange={(event) => setName(event.target.value)}\n          placeholder=\"Введите имя\"\n          autoComplete=\"name\"\n        />\n      </div>\n\n      <div className=\"jx-field\">\n        <label className=\"jx-label\" htmlFor=\"profile-language\">\n          Язык интерфейса\n        </label>\n        <select\n          id=\"profile-language\"\n          className=\"jx-select\"\n          value={language}\n          onChange={(event) => setLanguage(event.target.value as Language)}\n        >\n          <option value=\"ru\">Русский</option>\n          <option value=\"en\">English</option>\n        </select>\n      </div>\n\n      <div className=\"jx-field jx-field--row\">\n        <label className=\"jx-switch\" htmlFor=\"profile-email-notifications\">\n          <input\n            id=\"profile-email-notifications\"\n            className=\"jx-switch__input\"\n            type=\"checkbox\"\n            checked={emailNotifications}\n            onChange={(event) => setEmailNotifications(event.target.checked)}\n          />\n          <span className=\"jx-switch__track\" aria-hidden=\"true\">\n            <span className=\"jx-switch__thumb\" />\n          </span>\n          <span className=\"jx-switch__label\">Уведомления на почту</span>\n        </label>\n      </div>\n\n      <div className=\"jx-field jx-field--actions\">\n        <button type=\"submit\" className=\"jx-button jx-button--primary\">\n          Сохранить\n        </button>\n      </div>\n    </form>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.7
+  }
+}

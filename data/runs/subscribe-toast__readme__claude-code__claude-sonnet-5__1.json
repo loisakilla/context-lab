@@ -1,0 +1,111 @@
+{
+  "id": "subscribe-toast__readme__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-22T09:41:16.964Z",
+  "repeat": 1,
+  "durationMs": 10973,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "subscribe-toast",
+    "title": "Подписка с уведомлением",
+    "prompt": "Сделай форму подписки на рассылку с полем для почты и кнопкой «Подписаться». После отправки поле очищается, а в углу экрана появляется уведомление «Готово» с текстом, что письмо отправлено.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxButton",
+      "JxToastViewport"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8235,
+        "cacheCreation": 1312
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8235,
+        "cacheCreation": 1312
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1037,
+    "cacheRead": 8235,
+    "cacheCreation": 1312
+  },
+  "costUsd": 0.0382525,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { Button, TextField } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [showToast, setShowToast] = useState(false);\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!email) return;\n\n    setEmail('');\n    setShowToast(true);\n    window.setTimeout(() => setShowToast(false), 4000);\n  };\n\n  return (\n    <div className=\"jx-stack\" style={{ position: 'relative' }}>\n      <form className=\"jx-form jx-stack\" onSubmit={handleSubmit}>\n        <TextField\n          type=\"email\"\n          name=\"email\"\n          label=\"Email\"\n          placeholder=\"you@example.com\"\n          value={email}\n          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>\n            setEmail(event.target.value)\n          }\n          required\n          className=\"jx-field\"\n        />\n        <Button type=\"submit\" variant=\"primary\" className=\"jx-button\">\n          Подписаться\n        </Button>\n      </form>\n\n      {showToast && (\n        <div\n          role=\"status\"\n          aria-live=\"polite\"\n          className=\"jx-toast jx-toast--success\"\n          style={{\n            position: 'fixed',\n            top: 'var(--jx-space-4)',\n            right: 'var(--jx-space-4)',\n            zIndex: 'var(--jx-z-toast)',\n          }}\n        >\n          <span className=\"jx-toast__title\">Готово</span>\n          <span className=\"jx-toast__description\">\n            Письмо с подтверждением подписки отправлено на вашу почту.\n          </span>\n        </div>\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { Button, TextField } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [showToast, setShowToast] = useState(false);\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!email) return;\n\n    setEmail('');\n    setShowToast(true);\n    window.setTimeout(() => setShowToast(false), 4000);\n  };\n\n  return (\n    <div className=\"jx-stack\" style={{ position: 'relative' }}>\n      <form className=\"jx-form jx-stack\" onSubmit={handleSubmit}>\n        <TextField\n          type=\"email\"\n          name=\"email\"\n          label=\"Email\"\n          placeholder=\"you@example.com\"\n          value={email}\n          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>\n            setEmail(event.target.value)\n          }\n          required\n          className=\"jx-field\"\n        />\n        <Button type=\"submit\" variant=\"primary\" className=\"jx-button\">\n          Подписаться\n        </Button>\n      </form>\n\n      {showToast && (\n        <div\n          role=\"status\"\n          aria-live=\"polite\"\n          className=\"jx-toast jx-toast--success\"\n          style={{\n            position: 'fixed',\n            top: 'var(--jx-space-4)',\n            right: 'var(--jx-space-4)',\n            zIndex: 'var(--jx-z-toast)',\n          }}\n        >\n          <span className=\"jx-toast__title\">Готово</span>\n          <span className=\"jx-toast__description\">\n            Письмо с подтверждением подписки отправлено на вашу почту.\n          </span>\n        </div>\n      )}\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TextField'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "TextField"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 18,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 42,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.42
+  }
+}

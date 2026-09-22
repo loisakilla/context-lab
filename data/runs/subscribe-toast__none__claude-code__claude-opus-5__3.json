@@ -1,8 +1,8 @@
 {
   "id": "subscribe-toast__none__claude-code__claude-opus-5__3",
-  "createdAt": "2026-09-21T12:55:22.949Z",
+  "createdAt": "2026-09-22T09:36:36.251Z",
   "repeat": 3,
-  "durationMs": 33102,
+  "durationMs": 16733,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -24,80 +24,69 @@
     ]
   },
   "context": {
-    "tokens": 111,
+    "tokens": 154,
     "sources": []
   },
   "turns": [
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 6794,
-        "cacheCreation": 8495
+        "output": 7,
+        "cacheRead": 8570,
+        "cacheCreation": 0
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 6794,
-        "cacheCreation": 8495
+        "output": 7,
+        "cacheRead": 8570,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
     "input": 2,
-    "output": 2564,
-    "cacheRead": 6794,
-    "cacheCreation": 8495
+    "output": 1316,
+    "cacheRead": 8570,
+    "cacheCreation": 0
   },
-  "costUsd": 0.12060074999999998,
+  "costUsd": 0.037195,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useEffect, useRef, useState } from 'react';\nimport type { ChangeEvent, FormEvent } from 'react';\nimport { Button, Input, Stack, Text, Toast } from '@jinx-ui/react';\n\nexport default function SubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [isSent, setIsSent] = useState(false);\n  const hideTimer = useRef<number>();\n\n  useEffect(() => () => window.clearTimeout(hideTimer.current), []);\n\n  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {\n    setEmail(event.target.value);\n  };\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    setEmail('');\n    setIsSent(true);\n    window.clearTimeout(hideTimer.current);\n    hideTimer.current = window.setTimeout(() => setIsSent(false), 5000);\n  };\n\n  return (\n    <>\n      <form onSubmit={handleSubmit} noValidate={false}>\n        <Stack direction=\"row\" gap=\"sm\" align=\"end\">\n          <Input\n            type=\"email\"\n            name=\"email\"\n            label=\"Почта\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={handleChange}\n            required\n          />\n          <Button type=\"submit\" variant=\"primary\">\n            Подписаться\n          </Button>\n        </Stack>\n      </form>\n\n      {isSent && (\n        <div\n          style={{\n            position: 'fixed',\n            insetInlineEnd: 'var(--jx-space-4)',\n            insetBlockEnd: 'var(--jx-space-4)',\n            maxInlineSize: 'var(--jx-size-toast, 20rem)',\n          }}\n        >\n          <Toast\n            status=\"success\"\n            title=\"Готово\"\n            onClose={() => setIsSent(false)}\n          >\n            <Text>Письмо отправлено — проверьте почту и подтвердите подписку.</Text>\n          </Toast>\n        </div>\n      )}\n    </>\n  );\n}",
-    "text": "```tsx\nimport { useEffect, useRef, useState } from 'react';\nimport type { ChangeEvent, FormEvent } from 'react';\nimport { Button, Input, Stack, Text, Toast } from '@jinx-ui/react';\n\nexport default function SubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [isSent, setIsSent] = useState(false);\n  const hideTimer = useRef<number>();\n\n  useEffect(() => () => window.clearTimeout(hideTimer.current), []);\n\n  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {\n    setEmail(event.target.value);\n  };\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    setEmail('');\n    setIsSent(true);\n    window.clearTimeout(hideTimer.current);\n    hideTimer.current = window.setTimeout(() => setIsSent(false), 5000);\n  };\n\n  return (\n    <>\n      <form onSubmit={handleSubmit} noValidate={false}>\n        <Stack direction=\"row\" gap=\"sm\" align=\"end\">\n          <Input\n            type=\"email\"\n            name=\"email\"\n            label=\"Почта\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={handleChange}\n            required\n          />\n          <Button type=\"submit\" variant=\"primary\">\n            Подписаться\n          </Button>\n        </Stack>\n      </form>\n\n      {isSent && (\n        <div\n          style={{\n            position: 'fixed',\n            insetInlineEnd: 'var(--jx-space-4)',\n            insetBlockEnd: 'var(--jx-space-4)',\n            maxInlineSize: 'var(--jx-size-toast, 20rem)',\n          }}\n        >\n          <Toast\n            status=\"success\"\n            title=\"Готово\"\n            onClose={() => setIsSent(false)}\n          >\n            <Text>Письмо отправлено — проверьте почту и подтвердите подписку.</Text>\n          </Toast>\n        </div>\n      )}\n    </>\n  );\n}\n```"
+    "code": "import { useEffect, useRef, useState } from 'react';\nimport { Button, Stack, TextField, Toast } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [toastOpen, setToastOpen] = useState(false);\n  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  useEffect(() => {\n    return () => {\n      if (timerRef.current) clearTimeout(timerRef.current);\n    };\n  }, []);\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!email.trim()) return;\n\n    setEmail('');\n    setToastOpen(true);\n\n    if (timerRef.current) clearTimeout(timerRef.current);\n    timerRef.current = setTimeout(() => setToastOpen(false), 5000);\n  };\n\n  return (\n    <form onSubmit={handleSubmit} style={{ maxWidth: 'var(--jx-size-form-width, 360px)' }}>\n      <Stack direction=\"vertical\" gap=\"var(--jx-space-3)\">\n        <TextField\n          type=\"email\"\n          name=\"email\"\n          label=\"Почта\"\n          placeholder=\"you@example.com\"\n          value={email}\n          required\n          onChange={(event: React.ChangeEvent<HTMLInputElement>) => setEmail(event.target.value)}\n        />\n        <Button type=\"submit\" variant=\"primary\" disabled={!email.trim()}>\n          Подписаться\n        </Button>\n      </Stack>\n\n      <Toast\n        open={toastOpen}\n        placement=\"bottom-right\"\n        status=\"success\"\n        title=\"Готово\"\n        onClose={() => setToastOpen(false)}\n      >\n        Письмо с подтверждением отправлено на указанную почту.\n      </Toast>\n    </form>\n  );\n}",
+    "text": "Одна оговорка: я не знаю реального API `@jinx-ui/react`, поэтому имена компонентов и пропсов ниже — предположение, сверьте их с документацией пакета.\n\n```tsx\nimport { useEffect, useRef, useState } from 'react';\nimport { Button, Stack, TextField, Toast } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [toastOpen, setToastOpen] = useState(false);\n  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  useEffect(() => {\n    return () => {\n      if (timerRef.current) clearTimeout(timerRef.current);\n    };\n  }, []);\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!email.trim()) return;\n\n    setEmail('');\n    setToastOpen(true);\n\n    if (timerRef.current) clearTimeout(timerRef.current);\n    timerRef.current = setTimeout(() => setToastOpen(false), 5000);\n  };\n\n  return (\n    <form onSubmit={handleSubmit} style={{ maxWidth: 'var(--jx-size-form-width, 360px)' }}>\n      <Stack direction=\"vertical\" gap=\"var(--jx-space-3)\">\n        <TextField\n          type=\"email\"\n          name=\"email\"\n          label=\"Почта\"\n          placeholder=\"you@example.com\"\n          value={email}\n          required\n          onChange={(event: React.ChangeEvent<HTMLInputElement>) => setEmail(event.target.value)}\n        />\n        <Button type=\"submit\" variant=\"primary\" disabled={!email.trim()}>\n          Подписаться\n        </Button>\n      </Stack>\n\n      <Toast\n        open={toastOpen}\n        placement=\"bottom-right\"\n        status=\"success\"\n        title=\"Готово\"\n        onClose={() => setToastOpen(false)}\n      >\n        Письмо с подтверждением отправлено на указанную почту.\n      </Toast>\n    </form>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
       "errors": [
         {
           "code": 2724,
-          "line": 3,
+          "line": 2,
           "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
         },
         {
           "code": 2305,
-          "line": 3,
-          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
-        },
-        {
-          "code": 2305,
-          "line": 3,
+          "line": 2,
           "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
         },
         {
           "code": 2305,
-          "line": 3,
-          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TextField'."
         },
         {
           "code": 2724,
-          "line": 3,
+          "line": 2,
           "message": "'\"@jinx-ui/react\"' has no exported member named 'Toast'. Did you mean 'JxToast'?"
-        },
-        {
-          "code": 2554,
-          "line": 8,
-          "message": "Expected 1 arguments, but got 0."
         }
       ],
       "unknownComponents": [
         "Button",
-        "Input",
         "Stack",
-        "Text",
+        "TextField",
         "Toast"
       ],
       "unknownProps": []
@@ -106,7 +95,7 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 45,
+        "line": 27,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],
@@ -116,6 +105,6 @@
   },
   "verdict": {
     "passed": false,
-    "score": 0
+    "score": 0.14
   }
 }

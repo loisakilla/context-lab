@@ -1,8 +1,8 @@
 {
   "id": "tag-picker__none__claude-code__claude-opus-5__3",
-  "createdAt": "2026-09-21T12:59:54.041Z",
+  "createdAt": "2026-09-22T09:40:17.271Z",
   "repeat": 3,
-  "durationMs": 33321,
+  "durationMs": 28066,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -22,86 +22,40 @@
     ]
   },
   "context": {
-    "tokens": 111,
+    "tokens": 154,
     "sources": []
   },
   "turns": [
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 6778,
-        "cacheCreation": 8735
+        "output": 8,
+        "cacheRead": 8577,
+        "cacheCreation": 0
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 6778,
-        "cacheCreation": 8735
-      },
-      "toolCalls": [
-        {
-          "name": "Read",
-          "input": {
-            "path": "C:\\Users\\kgn20\\WebstormProjects\\context-lab\\rules\\compiled\\context-lab\\AGENTS.md"
-          },
-          "resultTokens": 44,
-          "isError": true
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 6778,
-        "cacheCreation": 8735
-      },
-      "toolCalls": [
-        {
-          "name": "Bash",
-          "input": {
-            "command": "ls C:/Users/kgn20/WebstormProjects/context-lab/vendor/jinx-ui 2>/dev/null && ls C:/Users/kgn20/WebstormProjects/context-lab/data",
-            "description": "List vendor and data dirs"
-          },
-          "resultTokens": 44,
-          "isError": true
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 4,
-        "cacheRead": 15513,
-        "cacheCreation": 864
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 4,
-        "cacheRead": 15513,
-        "cacheCreation": 864
+        "output": 8,
+        "cacheRead": 8577,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 4,
-    "output": 2735,
-    "cacheRead": 22291,
-    "cacheCreation": 9599
+    "input": 2,
+    "output": 2472,
+    "cacheRead": 8577,
+    "cacheCreation": 0
   },
-  "costUsd": 0.13953425,
+  "costUsd": 0.06609849999999999,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useCallback, useState, type ChangeEvent, type KeyboardEvent } from 'react';\nimport { Input, Stack, Tag, Text } from '@jinx-ui/react';\n\nexport type TagPickerProps = {\n  label?: string;\n  placeholder?: string;\n  initialTags?: string[];\n  maxTags?: number;\n  onChange?: (tags: string[]) => void;\n};\n\nfunction TagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  initialTags = [],\n  maxTags = 10,\n  onChange,\n}: TagPickerProps) {\n  const [tags, setTags] = useState<string[]>(initialTags);\n  const [draft, setDraft] = useState('');\n\n  const commit = useCallback(\n    (next: string[]) => {\n      setTags(next);\n      onChange?.(next);\n    },\n    [onChange],\n  );\n\n  const addTag = useCallback(\n    (raw: string) => {\n      const tag = raw.trim().replace(/\\s+/g, ' ');\n      if (!tag || tags.length >= maxTags) return;\n      if (tags.some((existing) => existing.toLowerCase() === tag.toLowerCase())) return;\n      commit([...tags, tag]);\n    },\n    [commit, maxTags, tags],\n  );\n\n  const removeTag = useCallback(\n    (tag: string) => {\n      commit(tags.filter((existing) => existing !== tag));\n    },\n    [commit, tags],\n  );\n\n  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {\n    const next = event.target.value;\n    if (next.endsWith(',')) {\n      addTag(next.slice(0, -1));\n      setDraft('');\n      return;\n    }\n    setDraft(next);\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter') {\n      event.preventDefault();\n      addTag(draft);\n      setDraft('');\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const isFull = tags.length >= maxTags;\n\n  return (\n    <Stack direction=\"column\" style={{ gap: 'var(--jx-space-2)' }}>\n      <Input\n        label={label}\n        placeholder={isFull ? 'Достигнут лимит тегов' : placeholder}\n        value={draft}\n        disabled={isFull}\n        onChange={handleChange}\n        onKeyDown={handleKeyDown}\n        onBlur={() => {\n          addTag(draft);\n          setDraft('');\n        }}\n      />\n      {tags.length > 0 ? (\n        <Stack\n          direction=\"row\"\n          wrap\n          aria-label=\"Выбранные теги\"\n          style={{ gap: 'var(--jx-space-1)' }}\n        >\n          {tags.map((tag) => (\n            <Tag key={tag} onRemove={() => removeTag(tag)}>\n              {tag}\n            </Tag>\n          ))}\n        </Stack>\n      ) : (\n        <Text size=\"sm\" tone=\"muted\">\n          Теги пока не выбраны\n        </Text>\n      )}\n      <Text size=\"sm\" tone=\"muted\">\n        {tags.length} из {maxTags}\n      </Text>\n    </Stack>\n  );\n}\n\nexport default TagPicker;",
-    "text": "```tsx\nimport { useCallback, useState, type ChangeEvent, type KeyboardEvent } from 'react';\nimport { Input, Stack, Tag, Text } from '@jinx-ui/react';\n\nexport type TagPickerProps = {\n  label?: string;\n  placeholder?: string;\n  initialTags?: string[];\n  maxTags?: number;\n  onChange?: (tags: string[]) => void;\n};\n\nfunction TagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  initialTags = [],\n  maxTags = 10,\n  onChange,\n}: TagPickerProps) {\n  const [tags, setTags] = useState<string[]>(initialTags);\n  const [draft, setDraft] = useState('');\n\n  const commit = useCallback(\n    (next: string[]) => {\n      setTags(next);\n      onChange?.(next);\n    },\n    [onChange],\n  );\n\n  const addTag = useCallback(\n    (raw: string) => {\n      const tag = raw.trim().replace(/\\s+/g, ' ');\n      if (!tag || tags.length >= maxTags) return;\n      if (tags.some((existing) => existing.toLowerCase() === tag.toLowerCase())) return;\n      commit([...tags, tag]);\n    },\n    [commit, maxTags, tags],\n  );\n\n  const removeTag = useCallback(\n    (tag: string) => {\n      commit(tags.filter((existing) => existing !== tag));\n    },\n    [commit, tags],\n  );\n\n  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {\n    const next = event.target.value;\n    if (next.endsWith(',')) {\n      addTag(next.slice(0, -1));\n      setDraft('');\n      return;\n    }\n    setDraft(next);\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter') {\n      event.preventDefault();\n      addTag(draft);\n      setDraft('');\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const isFull = tags.length >= maxTags;\n\n  return (\n    <Stack direction=\"column\" style={{ gap: 'var(--jx-space-2)' }}>\n      <Input\n        label={label}\n        placeholder={isFull ? 'Достигнут лимит тегов' : placeholder}\n        value={draft}\n        disabled={isFull}\n        onChange={handleChange}\n        onKeyDown={handleKeyDown}\n        onBlur={() => {\n          addTag(draft);\n          setDraft('');\n        }}\n      />\n      {tags.length > 0 ? (\n        <Stack\n          direction=\"row\"\n          wrap\n          aria-label=\"Выбранные теги\"\n          style={{ gap: 'var(--jx-space-1)' }}\n        >\n          {tags.map((tag) => (\n            <Tag key={tag} onRemove={() => removeTag(tag)}>\n              {tag}\n            </Tag>\n          ))}\n        </Stack>\n      ) : (\n        <Text size=\"sm\" tone=\"muted\">\n          Теги пока не выбраны\n        </Text>\n      )}\n      <Text size=\"sm\" tone=\"muted\">\n        {tags.length} из {maxTags}\n      </Text>\n    </Stack>\n  );\n}\n\nexport default TagPicker;\n```"
+    "code": "import { useId, useState, type ChangeEvent, type KeyboardEvent } from 'react';\nimport { Stack, TextField, Tag, Text } from '@jinx-ui/react';\n\n// Точный API @jinx-ui/react мне недоступен: предполагаются TextField(label,value,onChange,onKeyDown,helperText),\n// Tag(onRemove), Stack(direction,gap,wrap), Text(size,tone). Имена пропсов могут потребовать правки под реальный пакет.\n\nexport type TagPickerProps = {\n  label?: string;\n  placeholder?: string;\n  initialTags?: string[];\n  maxTags?: number;\n  onChange: (tags: string[]) => void;\n};\n\nconst normalize = (raw: string): string => raw.trim().replace(/\\s+/g, ' ');\n\nfunction TagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  initialTags = [],\n  maxTags = 10,\n  onChange,\n}: TagPickerProps) {\n  const [tags, setTags] = useState<string[]>(initialTags);\n  const [draft, setDraft] = useState('');\n  const listId = useId();\n\n  const commit = (next: string[]) => {\n    setTags(next);\n    onChange(next);\n  };\n\n  const addTag = (raw: string) => {\n    const tag = normalize(raw);\n    if (!tag) return;\n    if (tags.length >= maxTags) return;\n    const exists = tags.some((t) => t.toLowerCase() === tag.toLowerCase());\n    if (exists) return;\n    commit([...tags, tag]);\n  };\n\n  const removeTag = (tag: string) => {\n    commit(tags.filter((t) => t !== tag));\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag(draft);\n      setDraft('');\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      event.preventDefault();\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const isFull = tags.length >= maxTags;\n\n  return (\n    <Stack direction=\"column\" gap=\"var(--jx-space-2)\">\n      <TextField\n        label={label}\n        placeholder={isFull ? 'Достигнут лимит тегов' : placeholder}\n        value={draft}\n        disabled={isFull}\n        aria-describedby={listId}\n        onChange={(event: ChangeEvent<HTMLInputElement>) => setDraft(event.target.value)}\n        onKeyDown={handleKeyDown}\n        onBlur={() => {\n          addTag(draft);\n          setDraft('');\n        }}\n        helperText={`Enter или запятая добавляют тег · ${tags.length} из ${maxTags}`}\n      />\n\n      {tags.length > 0 ? (\n        <Stack id={listId} direction=\"row\" gap=\"var(--jx-space-1)\" wrap aria-live=\"polite\">\n          {tags.map((tag) => (\n            <Tag key={tag} onRemove={() => removeTag(tag)} aria-label={`Удалить тег ${tag}`}>\n              {tag}\n            </Tag>\n          ))}\n        </Stack>\n      ) : (\n        <Text id={listId} size=\"sm\" tone=\"muted\">\n          Теги пока не выбраны\n        </Text>\n      )}\n    </Stack>\n  );\n}\n\nexport default TagPicker;",
+    "text": "```tsx\nimport { useId, useState, type ChangeEvent, type KeyboardEvent } from 'react';\nimport { Stack, TextField, Tag, Text } from '@jinx-ui/react';\n\n// Точный API @jinx-ui/react мне недоступен: предполагаются TextField(label,value,onChange,onKeyDown,helperText),\n// Tag(onRemove), Stack(direction,gap,wrap), Text(size,tone). Имена пропсов могут потребовать правки под реальный пакет.\n\nexport type TagPickerProps = {\n  label?: string;\n  placeholder?: string;\n  initialTags?: string[];\n  maxTags?: number;\n  onChange: (tags: string[]) => void;\n};\n\nconst normalize = (raw: string): string => raw.trim().replace(/\\s+/g, ' ');\n\nfunction TagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  initialTags = [],\n  maxTags = 10,\n  onChange,\n}: TagPickerProps) {\n  const [tags, setTags] = useState<string[]>(initialTags);\n  const [draft, setDraft] = useState('');\n  const listId = useId();\n\n  const commit = (next: string[]) => {\n    setTags(next);\n    onChange(next);\n  };\n\n  const addTag = (raw: string) => {\n    const tag = normalize(raw);\n    if (!tag) return;\n    if (tags.length >= maxTags) return;\n    const exists = tags.some((t) => t.toLowerCase() === tag.toLowerCase());\n    if (exists) return;\n    commit([...tags, tag]);\n  };\n\n  const removeTag = (tag: string) => {\n    commit(tags.filter((t) => t !== tag));\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag(draft);\n      setDraft('');\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      event.preventDefault();\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const isFull = tags.length >= maxTags;\n\n  return (\n    <Stack direction=\"column\" gap=\"var(--jx-space-2)\">\n      <TextField\n        label={label}\n        placeholder={isFull ? 'Достигнут лимит тегов' : placeholder}\n        value={draft}\n        disabled={isFull}\n        aria-describedby={listId}\n        onChange={(event: ChangeEvent<HTMLInputElement>) => setDraft(event.target.value)}\n        onKeyDown={handleKeyDown}\n        onBlur={() => {\n          addTag(draft);\n          setDraft('');\n        }}\n        helperText={`Enter или запятая добавляют тег · ${tags.length} из ${maxTags}`}\n      />\n\n      {tags.length > 0 ? (\n        <Stack id={listId} direction=\"row\" gap=\"var(--jx-space-1)\" wrap aria-live=\"polite\">\n          {tags.map((tag) => (\n            <Tag key={tag} onRemove={() => removeTag(tag)} aria-label={`Удалить тег ${tag}`}>\n              {tag}\n            </Tag>\n          ))}\n        </Stack>\n      ) : (\n        <Text id={listId} size=\"sm\" tone=\"muted\">\n          Теги пока не выбраны\n        </Text>\n      )}\n    </Stack>\n  );\n}\n\nexport default TagPicker;\n```"
   },
   "checks": {
     "tsc": {
@@ -109,12 +63,12 @@
         {
           "code": 2305,
           "line": 2,
-          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
         },
         {
           "code": 2305,
           "line": 2,
-          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TextField'."
         },
         {
           "code": 2305,
@@ -128,27 +82,14 @@
         }
       ],
       "unknownComponents": [
-        "Input",
         "Stack",
         "Tag",
-        "Text"
+        "Text",
+        "TextField"
       ],
       "unknownProps": []
     },
-    "lint": [
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 72,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 90,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      }
-    ],
+    "lint": [],
     "usedComponents": [],
     "expectedCoverage": 0,
     "passed": false

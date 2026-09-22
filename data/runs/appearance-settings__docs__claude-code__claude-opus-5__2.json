@@ -1,0 +1,115 @@
+{
+  "id": "appearance-settings__docs__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-22T10:08:58.928Z",
+  "repeat": 2,
+  "durationMs": 12978,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "docs",
+  "task": {
+    "id": "appearance-settings",
+    "title": "Настройки внешнего вида",
+    "prompt": "Сделай экран настроек внешнего вида: сегментированный переключатель темы на три варианта, ползунок масштаба интерфейса от 80 до 140 процентов с показом текущего значения, переключатель плотной вёрстки и раздел «Ещё» под разделителем с выбором шрифта. Справа от заголовка экрана метка с текущей темой. Состояние храни в компоненте и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxToggle",
+      "JxSlider",
+      "JxSwitch",
+      "JxDivider",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 18704,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.0",
+        "tokens": 18550
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 40683,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1354,
+    "cacheRead": 40683,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0542015,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport {\n  JxBadge,\n  JxDivider,\n  JxSelect,\n  JxSlider,\n  JxSwitch,\n  JxToggle,\n} from '@jinx-ui/react';\n\ntype Theme = 'light' | 'dark' | 'system';\n\nexport interface AppearanceSettings {\n  theme: Theme;\n  scale: number;\n  dense: boolean;\n  fontFamily: string;\n}\n\nexport interface AppearanceSettingsScreenProps {\n  initialValue?: Partial<AppearanceSettings>;\n  onChange?: (value: AppearanceSettings) => void;\n}\n\nconst THEMES: { value: Theme; label: string }[] = [\n  { value: 'light', label: 'Светлая' },\n  { value: 'dark', label: 'Тёмная' },\n  { value: 'system', label: 'Системная' },\n];\n\nconst FONTS = [\n  { value: 'sans', label: 'Inter Tight', meta: 'по умолчанию' },\n  { value: 'display', label: 'Fraunces' },\n  { value: 'mono', label: 'JetBrains Mono' },\n];\n\nexport default function AppearanceSettingsScreen({\n  initialValue,\n  onChange,\n}: AppearanceSettingsScreenProps) {\n  const [settings, setSettings] = useState<AppearanceSettings>({\n    theme: initialValue?.theme ?? 'system',\n    scale: initialValue?.scale ?? 100,\n    dense: initialValue?.dense ?? false,\n    fontFamily: initialValue?.fontFamily ?? 'sans',\n  });\n\n  const update = (patch: Partial<AppearanceSettings>) => {\n    setSettings((prev) => {\n      const next = { ...prev, ...patch };\n      onChange?.(next);\n      return next;\n    });\n  };\n\n  const themeLabel = THEMES.find((item) => item.value === settings.theme)?.label ?? '';\n\n  return (\n    <section\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: '20px',\n        padding: '24px',\n        background: 'var(--jx-surface)',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n        color: 'var(--jx-text)',\n        fontFamily: 'var(--jx-font-sans)',\n      }}\n    >\n      <header style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>\n        <h2\n          style={{\n            margin: 0,\n            fontFamily: 'var(--jx-font-display)',\n            fontSize: '20px',\n            color: 'var(--jx-text)',\n          }}\n        >\n          Внешний вид\n        </h2>\n        <JxBadge tone=\"accent\" dot>\n          {themeLabel}\n        </JxBadge>\n      </header>\n\n      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>\n        <span style={{ fontSize: '13px', color: 'var(--jx-text-2)' }}>Тема</span>\n        <JxToggle\n          items={THEMES}\n          value={settings.theme}\n          onValueChange={(value) => update({ theme: value as Theme })}\n        />\n      </div>\n\n      <JxSlider\n        label=\"Масштаб интерфейса\"\n        min={80}\n        max={140}\n        step={5}\n        unit=\"%\"\n        showOutput\n        value={settings.scale}\n        onValueChange={(value) => update({ scale: value })}\n      />\n\n      <JxSwitch\n        label=\"Плотная вёрстка\"\n        checked={settings.dense}\n        onChange={(event) => update({ dense: event.target.checked })}\n      />\n\n      <JxDivider label=\"Ещё\" />\n\n      <JxSelect\n        label=\"Шрифт\"\n        options={FONTS}\n        value={settings.fontFamily}\n        onValueChange={(value) => update({ fontFamily: value })}\n      />\n    </section>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport {\n  JxBadge,\n  JxDivider,\n  JxSelect,\n  JxSlider,\n  JxSwitch,\n  JxToggle,\n} from '@jinx-ui/react';\n\ntype Theme = 'light' | 'dark' | 'system';\n\nexport interface AppearanceSettings {\n  theme: Theme;\n  scale: number;\n  dense: boolean;\n  fontFamily: string;\n}\n\nexport interface AppearanceSettingsScreenProps {\n  initialValue?: Partial<AppearanceSettings>;\n  onChange?: (value: AppearanceSettings) => void;\n}\n\nconst THEMES: { value: Theme; label: string }[] = [\n  { value: 'light', label: 'Светлая' },\n  { value: 'dark', label: 'Тёмная' },\n  { value: 'system', label: 'Системная' },\n];\n\nconst FONTS = [\n  { value: 'sans', label: 'Inter Tight', meta: 'по умолчанию' },\n  { value: 'display', label: 'Fraunces' },\n  { value: 'mono', label: 'JetBrains Mono' },\n];\n\nexport default function AppearanceSettingsScreen({\n  initialValue,\n  onChange,\n}: AppearanceSettingsScreenProps) {\n  const [settings, setSettings] = useState<AppearanceSettings>({\n    theme: initialValue?.theme ?? 'system',\n    scale: initialValue?.scale ?? 100,\n    dense: initialValue?.dense ?? false,\n    fontFamily: initialValue?.fontFamily ?? 'sans',\n  });\n\n  const update = (patch: Partial<AppearanceSettings>) => {\n    setSettings((prev) => {\n      const next = { ...prev, ...patch };\n      onChange?.(next);\n      return next;\n    });\n  };\n\n  const themeLabel = THEMES.find((item) => item.value === settings.theme)?.label ?? '';\n\n  return (\n    <section\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: '20px',\n        padding: '24px',\n        background: 'var(--jx-surface)',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n        color: 'var(--jx-text)',\n        fontFamily: 'var(--jx-font-sans)',\n      }}\n    >\n      <header style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>\n        <h2\n          style={{\n            margin: 0,\n            fontFamily: 'var(--jx-font-display)',\n            fontSize: '20px',\n            color: 'var(--jx-text)',\n          }}\n        >\n          Внешний вид\n        </h2>\n        <JxBadge tone=\"accent\" dot>\n          {themeLabel}\n        </JxBadge>\n      </header>\n\n      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>\n        <span style={{ fontSize: '13px', color: 'var(--jx-text-2)' }}>Тема</span>\n        <JxToggle\n          items={THEMES}\n          value={settings.theme}\n          onValueChange={(value) => update({ theme: value as Theme })}\n        />\n      </div>\n\n      <JxSlider\n        label=\"Масштаб интерфейса\"\n        min={80}\n        max={140}\n        step={5}\n        unit=\"%\"\n        showOutput\n        value={settings.scale}\n        onValueChange={(value) => update({ scale: value })}\n      />\n\n      <JxSwitch\n        label=\"Плотная вёрстка\"\n        checked={settings.dense}\n        onChange={(event) => update({ dense: event.target.checked })}\n      />\n\n      <JxDivider label=\"Ещё\" />\n\n      <JxSelect\n        label=\"Шрифт\"\n        options={FONTS}\n        value={settings.fontFamily}\n        onValueChange={(value) => update({ fontFamily: value })}\n      />\n    </section>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 60,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 72,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 74,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 88,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 89,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxBadge",
+      "JxDivider",
+      "JxSelect",
+      "JxSlider",
+      "JxSwitch",
+      "JxToggle"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

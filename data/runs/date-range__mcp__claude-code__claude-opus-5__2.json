@@ -1,8 +1,8 @@
 {
   "id": "date-range__mcp__claude-code__claude-opus-5__2",
-  "createdAt": "2026-09-21T13:33:24.960Z",
+  "createdAt": "2026-09-22T09:47:47.425Z",
   "repeat": 2,
-  "durationMs": 19801,
+  "durationMs": 28738,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -37,18 +37,18 @@
     {
       "usage": {
         "input": 2,
-        "output": 2,
-        "cacheRead": 4980,
-        "cacheCreation": 8928
+        "output": 10,
+        "cacheRead": 11044,
+        "cacheCreation": 0
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 2,
-        "cacheRead": 4980,
-        "cacheCreation": 8928
+        "output": 10,
+        "cacheRead": 11044,
+        "cacheCreation": 0
       },
       "toolCalls": [
         {
@@ -57,25 +57,42 @@
             "query": "календарь выбор даты",
             "limit": 8
           },
-          "resultTokens": 537
+          "resultTokens": 715
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 2,
-        "cacheRead": 4980,
-        "cacheCreation": 8928
+        "output": 10,
+        "cacheRead": 11044,
+        "cacheCreation": 0
       },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
           "input": {
-            "query": "быстрый выбор вариантов кнопки в ряд chips",
+            "query": "кнопка быстрого выбора chip",
             "limit": 8
           },
-          "resultTokens": 714
+          "resultTokens": 656
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 10,
+        "cacheRead": 11044,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_rules",
+          "input": {
+            "task": "ui"
+          },
+          "resultTokens": 870
         }
       ]
     },
@@ -83,8 +100,8 @@
       "usage": {
         "input": 2,
         "output": 6,
-        "cacheRead": 13908,
-        "cacheCreation": 2203
+        "cacheRead": 11044,
+        "cacheCreation": 3963
       },
       "toolCalls": []
     },
@@ -92,8 +109,8 @@
       "usage": {
         "input": 2,
         "output": 6,
-        "cacheRead": 13908,
-        "cacheCreation": 2203
+        "cacheRead": 11044,
+        "cacheCreation": 3963
       },
       "toolCalls": []
     },
@@ -101,8 +118,8 @@
       "usage": {
         "input": 2,
         "output": 6,
-        "cacheRead": 13908,
-        "cacheCreation": 2203
+        "cacheRead": 11044,
+        "cacheCreation": 3963
       },
       "toolCalls": [
         {
@@ -119,8 +136,8 @@
       "usage": {
         "input": 2,
         "output": 6,
-        "cacheRead": 13908,
-        "cacheCreation": 2203
+        "cacheRead": 11044,
+        "cacheCreation": 3963
       },
       "toolCalls": [
         {
@@ -137,8 +154,8 @@
       "usage": {
         "input": 2,
         "output": 6,
-        "cacheRead": 13908,
-        "cacheCreation": 2203
+        "cacheRead": 11044,
+        "cacheCreation": 3963
       },
       "toolCalls": [
         {
@@ -153,36 +170,18 @@
     {
       "usage": {
         "input": 2,
-        "output": 6,
-        "cacheRead": 13908,
-        "cacheCreation": 2203
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__get_rules",
-          "input": {
-            "task": "ui",
-            "target": "claude"
-          },
-          "resultTokens": 870
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 16111,
-        "cacheCreation": 3097
+        "output": 8,
+        "cacheRead": 15007,
+        "cacheCreation": 1476
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 16111,
-        "cacheCreation": 3097
+        "output": 8,
+        "cacheRead": 15007,
+        "cacheCreation": 1476
       },
       "toolCalls": [
         {
@@ -197,9 +196,9 @@
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 16111,
-        "cacheCreation": 3097
+        "output": 8,
+        "cacheRead": 15007,
+        "cacheCreation": 1476
       },
       "toolCalls": [
         {
@@ -214,24 +213,33 @@
     {
       "usage": {
         "input": 2,
-        "output": 1,
-        "cacheRead": 19208,
-        "cacheCreation": 1617
+        "output": 6,
+        "cacheRead": 16483,
+        "cacheCreation": 1680
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 6,
+        "cacheRead": 16483,
+        "cacheCreation": 1680
       },
       "toolCalls": []
     }
   ],
   "usage": {
     "input": 8,
-    "output": 1494,
-    "cacheRead": 54207,
-    "cacheCreation": 15845
+    "output": 2363,
+    "cacheRead": 53578,
+    "cacheCreation": 7119
   },
-  "costUsd": 0.16352475,
+  "costUsd": 0.13039775,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date | null;\n  onChange?: (value: Date | null) => void;\n};\n\nconst startOfDay = (date: Date) =>\n  new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst shiftDays = (days: number) => {\n  const base = startOfDay(new Date());\n  base.setDate(base.getDate() - days);\n  return base;\n};\n\nconst presets = [\n  { id: 'today', label: 'Сегодня', days: 0 },\n  { id: 'yesterday', label: 'Вчера', days: 1 },\n  { id: 'week-ago', label: 'Неделя назад', days: 7 },\n];\n\nconst isSameDay = (a: Date | null, b: Date | null) =>\n  a !== null &&\n  b !== null &&\n  a.getFullYear() === b.getFullYear() &&\n  a.getMonth() === b.getMonth() &&\n  a.getDate() === b.getDate();\n\nexport default function ReportDatePicker({ value, onChange }: ReportDatePickerProps) {\n  const [internalDate, setInternalDate] = useState<Date | null>(null);\n  const selected = value !== undefined ? value : internalDate;\n\n  const selectDate = (next: Date | null) => {\n    if (value === undefined) {\n      setInternalDate(next);\n    }\n    onChange?.(next);\n  };\n\n  return (\n    <div\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: '12px',\n        fontFamily: 'var(--jx-font-sans)',\n      }}\n    >\n      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>\n        {presets.map((preset) => (\n          <JxChip\n            key={preset.id}\n            active={isSameDay(selected, shiftDays(preset.days))}\n            onClick={() => selectDate(shiftDays(preset.days))}\n          >\n            {preset.label}\n          </JxChip>\n        ))}\n      </div>\n      <JxCalendar\n        locale=\"ru-RU\"\n        value={selected}\n        onValueChange={(next) => selectDate(next === null ? null : startOfDay(next))}\n      />\n    </div>\n  );\n}",
-    "text": "```tsx\nimport { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date | null;\n  onChange?: (value: Date | null) => void;\n};\n\nconst startOfDay = (date: Date) =>\n  new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst shiftDays = (days: number) => {\n  const base = startOfDay(new Date());\n  base.setDate(base.getDate() - days);\n  return base;\n};\n\nconst presets = [\n  { id: 'today', label: 'Сегодня', days: 0 },\n  { id: 'yesterday', label: 'Вчера', days: 1 },\n  { id: 'week-ago', label: 'Неделя назад', days: 7 },\n];\n\nconst isSameDay = (a: Date | null, b: Date | null) =>\n  a !== null &&\n  b !== null &&\n  a.getFullYear() === b.getFullYear() &&\n  a.getMonth() === b.getMonth() &&\n  a.getDate() === b.getDate();\n\nexport default function ReportDatePicker({ value, onChange }: ReportDatePickerProps) {\n  const [internalDate, setInternalDate] = useState<Date | null>(null);\n  const selected = value !== undefined ? value : internalDate;\n\n  const selectDate = (next: Date | null) => {\n    if (value === undefined) {\n      setInternalDate(next);\n    }\n    onChange?.(next);\n  };\n\n  return (\n    <div\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: '12px',\n        fontFamily: 'var(--jx-font-sans)',\n      }}\n    >\n      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>\n        {presets.map((preset) => (\n          <JxChip\n            key={preset.id}\n            active={isSameDay(selected, shiftDays(preset.days))}\n            onClick={() => selectDate(shiftDays(preset.days))}\n          >\n            {preset.label}\n          </JxChip>\n        ))}\n      </div>\n      <JxCalendar\n        locale=\"ru-RU\"\n        value={selected}\n        onValueChange={(next) => selectDate(next === null ? null : startOfDay(next))}\n      />\n    </div>\n  );\n}\n```"
+    "code": "import { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date | null;\n  defaultValue?: Date | null;\n  onChange?: (value: Date | null) => void;\n};\n\ntype Preset = {\n  id: string;\n  label: string;\n  offsetDays: number;\n};\n\nconst PRESETS: Preset[] = [\n  { id: 'today', label: 'Сегодня', offsetDays: 0 },\n  { id: 'yesterday', label: 'Вчера', offsetDays: -1 },\n  { id: 'week-ago', label: 'Неделя назад', offsetDays: -7 },\n];\n\nfunction shiftDays(offsetDays: number): Date {\n  const date = new Date();\n  date.setHours(0, 0, 0, 0);\n  date.setDate(date.getDate() + offsetDays);\n  return date;\n}\n\nfunction isSameDay(a: Date | null, b: Date | null): boolean {\n  if (!a || !b) return false;\n  return (\n    a.getFullYear() === b.getFullYear() &&\n    a.getMonth() === b.getMonth() &&\n    a.getDate() === b.getDate()\n  );\n}\n\nexport default function ReportDatePicker({\n  value,\n  defaultValue = null,\n  onChange,\n}: ReportDatePickerProps) {\n  const [internalValue, setInternalValue] = useState<Date | null>(defaultValue);\n  const selected = value !== undefined ? value : internalValue;\n\n  const select = (next: Date | null) => {\n    if (value === undefined) {\n      setInternalValue(next);\n    }\n    onChange?.(next);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>\n        {PRESETS.map((preset) => {\n          const presetDate = shiftDays(preset.offsetDays);\n          const active = isSameDay(selected, presetDate);\n          return (\n            <JxChip\n              key={preset.id}\n              active={active}\n              role=\"button\"\n              tabIndex={0}\n              aria-pressed={active}\n              onClick={() => select(presetDate)}\n              onKeyDown={(event) => {\n                if (event.key === 'Enter' || event.key === ' ') {\n                  event.preventDefault();\n                  select(presetDate);\n                }\n              }}\n            >\n              {preset.label}\n            </JxChip>\n          );\n        })}\n      </div>\n\n      <JxCalendar\n        locale=\"ru-RU\"\n        value={selected}\n        onValueChange={select}\n        aria-label=\"Дата отчёта\"\n      />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date | null;\n  defaultValue?: Date | null;\n  onChange?: (value: Date | null) => void;\n};\n\ntype Preset = {\n  id: string;\n  label: string;\n  offsetDays: number;\n};\n\nconst PRESETS: Preset[] = [\n  { id: 'today', label: 'Сегодня', offsetDays: 0 },\n  { id: 'yesterday', label: 'Вчера', offsetDays: -1 },\n  { id: 'week-ago', label: 'Неделя назад', offsetDays: -7 },\n];\n\nfunction shiftDays(offsetDays: number): Date {\n  const date = new Date();\n  date.setHours(0, 0, 0, 0);\n  date.setDate(date.getDate() + offsetDays);\n  return date;\n}\n\nfunction isSameDay(a: Date | null, b: Date | null): boolean {\n  if (!a || !b) return false;\n  return (\n    a.getFullYear() === b.getFullYear() &&\n    a.getMonth() === b.getMonth() &&\n    a.getDate() === b.getDate()\n  );\n}\n\nexport default function ReportDatePicker({\n  value,\n  defaultValue = null,\n  onChange,\n}: ReportDatePickerProps) {\n  const [internalValue, setInternalValue] = useState<Date | null>(defaultValue);\n  const selected = value !== undefined ? value : internalValue;\n\n  const select = (next: Date | null) => {\n    if (value === undefined) {\n      setInternalValue(next);\n    }\n    onChange?.(next);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>\n        {PRESETS.map((preset) => {\n          const presetDate = shiftDays(preset.offsetDays);\n          const active = isSameDay(selected, presetDate);\n          return (\n            <JxChip\n              key={preset.id}\n              active={active}\n              role=\"button\"\n              tabIndex={0}\n              aria-pressed={active}\n              onClick={() => select(presetDate)}\n              onKeyDown={(event) => {\n                if (event.key === 'Enter' || event.key === ' ') {\n                  event.preventDefault();\n                  select(presetDate);\n                }\n              }}\n            >\n              {preset.label}\n            </JxChip>\n          );\n        })}\n      </div>\n\n      <JxCalendar\n        locale=\"ru-RU\"\n        value={selected}\n        onValueChange={select}\n        aria-label=\"Дата отчёта\"\n      />\n    </div>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
@@ -243,13 +251,13 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 44,
+        "line": 54,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 51,
+        "line": 55,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],

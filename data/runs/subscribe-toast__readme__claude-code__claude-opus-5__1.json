@@ -1,8 +1,8 @@
 {
   "id": "subscribe-toast__readme__claude-code__claude-opus-5__1",
-  "createdAt": "2026-09-21T13:05:53.270Z",
+  "createdAt": "2026-09-22T09:50:24.243Z",
   "repeat": 1,
-  "durationMs": 25070,
+  "durationMs": 24111,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -24,7 +24,7 @@
     ]
   },
   "context": {
-    "tokens": 753,
+    "tokens": 796,
     "sources": [
       {
         "kind": "readme",
@@ -38,56 +38,51 @@
     {
       "usage": {
         "input": 2,
-        "output": 8,
-        "cacheRead": 5579,
-        "cacheCreation": 10012
+        "output": 3,
+        "cacheRead": 9545,
+        "cacheCreation": 0
       },
       "toolCalls": []
     },
     {
       "usage": {
         "input": 2,
-        "output": 8,
-        "cacheRead": 5579,
-        "cacheCreation": 10012
+        "output": 3,
+        "cacheRead": 9545,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
     "input": 2,
-    "output": 2031,
-    "cacheRead": 5579,
-    "cacheCreation": 10012
+    "output": 2004,
+    "cacheRead": 9545,
+    "cacheCreation": 0
   },
-  "costUsd": 0.1161495,
+  "costUsd": 0.05488250000000001,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useId, useState, type FormEvent } from 'react';\nimport { Button, Input, Toast } from '@jinx-ui/react';\n\nexport default function SubscribeForm() {\n  const emailId = useId();\n  const [email, setEmail] = useState('');\n  const [sentTo, setSentTo] = useState('');\n  const [toastOpen, setToastOpen] = useState(false);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    const value = email.trim();\n    if (!value) return;\n    setSentTo(value);\n    setEmail('');\n    setToastOpen(true);\n  };\n\n  return (\n    <section\n      className=\"jx-card\"\n      style={{ display: 'grid', gap: 'var(--jx-space-4)', padding: 'var(--jx-space-5)' }}\n    >\n      <header style={{ display: 'grid', gap: 'var(--jx-space-2)' }}>\n        <h2 className=\"jx-heading\" style={{ margin: 0 }}>\n          Подписка на рассылку\n        </h2>\n        <p className=\"jx-text jx-text-muted\" style={{ margin: 0 }}>\n          Раз в неделю присылаем обновления библиотеки.\n        </p>\n      </header>\n\n      <form\n        className=\"jx-form\"\n        onSubmit={handleSubmit}\n        noValidate={false}\n        style={{ display: 'grid', gap: 'var(--jx-space-3)' }}\n      >\n        <div className=\"jx-field\" style={{ display: 'grid', gap: 'var(--jx-space-2)' }}>\n          <label className=\"jx-label\" htmlFor={emailId}>\n            Электронная почта\n          </label>\n          <Input\n            id={emailId}\n            name=\"email\"\n            type=\"email\"\n            required\n            autoComplete=\"email\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={(event) => setEmail(event.target.value)}\n          />\n        </div>\n\n        <Button type=\"submit\" variant=\"primary\" disabled={email.trim().length === 0}>\n          Подписаться\n        </Button>\n      </form>\n\n      <Toast\n        open={toastOpen}\n        onOpenChange={setToastOpen}\n        placement=\"bottom-right\"\n        duration={5000}\n        title=\"Готово\"\n        description={\n          sentTo\n            ? `Письмо с подтверждением отправлено на ${sentTo}.`\n            : 'Письмо с подтверждением отправлено.'\n        }\n      />\n    </section>\n  );\n}",
-    "text": "```tsx\nimport { useId, useState, type FormEvent } from 'react';\nimport { Button, Input, Toast } from '@jinx-ui/react';\n\nexport default function SubscribeForm() {\n  const emailId = useId();\n  const [email, setEmail] = useState('');\n  const [sentTo, setSentTo] = useState('');\n  const [toastOpen, setToastOpen] = useState(false);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    const value = email.trim();\n    if (!value) return;\n    setSentTo(value);\n    setEmail('');\n    setToastOpen(true);\n  };\n\n  return (\n    <section\n      className=\"jx-card\"\n      style={{ display: 'grid', gap: 'var(--jx-space-4)', padding: 'var(--jx-space-5)' }}\n    >\n      <header style={{ display: 'grid', gap: 'var(--jx-space-2)' }}>\n        <h2 className=\"jx-heading\" style={{ margin: 0 }}>\n          Подписка на рассылку\n        </h2>\n        <p className=\"jx-text jx-text-muted\" style={{ margin: 0 }}>\n          Раз в неделю присылаем обновления библиотеки.\n        </p>\n      </header>\n\n      <form\n        className=\"jx-form\"\n        onSubmit={handleSubmit}\n        noValidate={false}\n        style={{ display: 'grid', gap: 'var(--jx-space-3)' }}\n      >\n        <div className=\"jx-field\" style={{ display: 'grid', gap: 'var(--jx-space-2)' }}>\n          <label className=\"jx-label\" htmlFor={emailId}>\n            Электронная почта\n          </label>\n          <Input\n            id={emailId}\n            name=\"email\"\n            type=\"email\"\n            required\n            autoComplete=\"email\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={(event) => setEmail(event.target.value)}\n          />\n        </div>\n\n        <Button type=\"submit\" variant=\"primary\" disabled={email.trim().length === 0}>\n          Подписаться\n        </Button>\n      </form>\n\n      <Toast\n        open={toastOpen}\n        onOpenChange={setToastOpen}\n        placement=\"bottom-right\"\n        duration={5000}\n        title=\"Готово\"\n        description={\n          sentTo\n            ? `Письмо с подтверждением отправлено на ${sentTo}.`\n            : 'Письмо с подтверждением отправлено.'\n        }\n      />\n    </section>\n  );\n}\n```"
+    "code": "// API @jinx-ui/react не проверялся по docs/components.md — имена Input/Button/Toast и их пропсы взяты по соглашению, сверь с пакетом.\nimport { useState, type ChangeEvent, type FormEvent } from 'react';\nimport { Button, Input, Toast } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [sent, setSent] = useState(false);\n\n  function handleSubmit(event: FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n    if (!email.trim()) return;\n    setEmail('');\n    setSent(true);\n  }\n\n  function handleChange(event: ChangeEvent<HTMLInputElement>) {\n    setEmail(event.target.value);\n  }\n\n  return (\n    <div className=\"jx-stack\">\n      <form className=\"jx-form jx-stack\" onSubmit={handleSubmit} noValidate={false}>\n        <label className=\"jx-label\" htmlFor=\"newsletter-email\">\n          Почта\n        </label>\n        <Input\n          id=\"newsletter-email\"\n          className=\"jx-input\"\n          type=\"email\"\n          name=\"email\"\n          required\n          autoComplete=\"email\"\n          placeholder=\"you@example.com\"\n          value={email}\n          onChange={handleChange}\n        />\n        <Button className=\"jx-button\" type=\"submit\" disabled={email.trim().length === 0}>\n          Подписаться\n        </Button>\n      </form>\n\n      <div\n        className=\"jx-toast-region\"\n        style={{\n          position: 'fixed',\n          insetInlineEnd: 'var(--jx-space-4)',\n          insetBlockEnd: 'var(--jx-space-4)',\n          zIndex: 'var(--jx-z-toast)' as string,\n        }}\n      >\n        <Toast\n          className=\"jx-toast\"\n          open={sent}\n          onOpenChange={setSent}\n          title=\"Готово\"\n          description=\"Письмо отправлено на указанный адрес.\"\n        />\n      </div>\n    </div>\n  );\n}",
+    "text": "```tsx\n// API @jinx-ui/react не проверялся по docs/components.md — имена Input/Button/Toast и их пропсы взяты по соглашению, сверь с пакетом.\nimport { useState, type ChangeEvent, type FormEvent } from 'react';\nimport { Button, Input, Toast } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [sent, setSent] = useState(false);\n\n  function handleSubmit(event: FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n    if (!email.trim()) return;\n    setEmail('');\n    setSent(true);\n  }\n\n  function handleChange(event: ChangeEvent<HTMLInputElement>) {\n    setEmail(event.target.value);\n  }\n\n  return (\n    <div className=\"jx-stack\">\n      <form className=\"jx-form jx-stack\" onSubmit={handleSubmit} noValidate={false}>\n        <label className=\"jx-label\" htmlFor=\"newsletter-email\">\n          Почта\n        </label>\n        <Input\n          id=\"newsletter-email\"\n          className=\"jx-input\"\n          type=\"email\"\n          name=\"email\"\n          required\n          autoComplete=\"email\"\n          placeholder=\"you@example.com\"\n          value={email}\n          onChange={handleChange}\n        />\n        <Button className=\"jx-button\" type=\"submit\" disabled={email.trim().length === 0}>\n          Подписаться\n        </Button>\n      </form>\n\n      <div\n        className=\"jx-toast-region\"\n        style={{\n          position: 'fixed',\n          insetInlineEnd: 'var(--jx-space-4)',\n          insetBlockEnd: 'var(--jx-space-4)',\n          zIndex: 'var(--jx-z-toast)' as string,\n        }}\n      >\n        <Toast\n          className=\"jx-toast\"\n          open={sent}\n          onOpenChange={setSent}\n          title=\"Готово\"\n          description=\"Письмо отправлено на указанный адрес.\"\n        />\n      </div>\n    </div>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
       "errors": [
         {
           "code": 2724,
-          "line": 2,
+          "line": 3,
           "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
         },
         {
           "code": 2305,
-          "line": 2,
+          "line": 3,
           "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
         },
         {
           "code": 2724,
-          "line": 2,
+          "line": 3,
           "message": "'\"@jinx-ui/react\"' has no exported member named 'Toast'. Did you mean 'JxToast'?"
-        },
-        {
-          "code": 7006,
-          "line": 51,
-          "message": "Parameter 'event' implicitly has an 'any' type."
         }
       ],
       "unknownComponents": [
@@ -101,37 +96,7 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 22,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 24,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 25,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 28,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 37,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 39,
+        "line": 44,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],
@@ -141,6 +106,6 @@
   },
   "verdict": {
     "passed": false,
-    "score": 0.14
+    "score": 0.28
   }
 }

@@ -1,0 +1,96 @@
+{
+  "id": "date-range__docs__claude-code__claude-sonnet-5__2",
+  "createdAt": "2026-09-22T09:54:23.880Z",
+  "repeat": 2,
+  "durationMs": 7508,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "docs",
+  "task": {
+    "id": "date-range",
+    "title": "Выбор периода",
+    "prompt": "Сделай выбор даты отчёта: календарь на месяц и над ним ряд быстрых вариантов «Сегодня», «Вчера», «Неделя назад», при нажатии на которые дата подставляется в календарь. Выбранная дата отдаётся наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxCalendar",
+      "JxChip"
+    ]
+  },
+  "context": {
+    "tokens": 18704,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.0",
+        "tokens": 18550
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 40635,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 845,
+    "cacheRead": 40635,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0414525,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ninterface ReportDatePickerProps {\n  onChange?: (date: Date | null) => void;\n}\n\nfunction startOfDay(date: Date): Date {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n}\n\nfunction daysAgo(days: number): Date {\n  const date = new Date();\n  date.setDate(date.getDate() - days);\n  return startOfDay(date);\n}\n\nfunction isSameDay(a: Date | null, b: Date): boolean {\n  if (!a) return false;\n  return (\n    a.getFullYear() === b.getFullYear() &&\n    a.getMonth() === b.getMonth() &&\n    a.getDate() === b.getDate()\n  );\n}\n\nexport default function ReportDatePicker({ onChange }: ReportDatePickerProps) {\n  const [selected, setSelected] = useState<Date | null>(startOfDay(new Date()));\n\n  const presets = [\n    { label: 'Сегодня', value: daysAgo(0) },\n    { label: 'Вчера', value: daysAgo(1) },\n    { label: 'Неделя назад', value: daysAgo(7) },\n  ];\n\n  const applyDate = (date: Date | null) => {\n    setSelected(date);\n    onChange?.(date);\n  };\n\n  return (\n    <div\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: '12px',\n        padding: '16px',\n        background: 'var(--jx-surface)',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n      }}\n    >\n      <div\n        style={{\n          fontFamily: 'var(--jx-font-sans)',\n          fontSize: '13px',\n          color: 'var(--jx-text-2)',\n        }}\n      >\n        Дата отчёта\n      </div>\n      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>\n        {presets.map((preset) => (\n          <JxChip\n            key={preset.label}\n            active={isSameDay(selected, preset.value)}\n            onClick={() => applyDate(preset.value)}\n          >\n            {preset.label}\n          </JxChip>\n        ))}\n      </div>\n      <JxCalendar locale=\"ru-RU\" value={selected} onValueChange={applyDate} />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ninterface ReportDatePickerProps {\n  onChange?: (date: Date | null) => void;\n}\n\nfunction startOfDay(date: Date): Date {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n}\n\nfunction daysAgo(days: number): Date {\n  const date = new Date();\n  date.setDate(date.getDate() - days);\n  return startOfDay(date);\n}\n\nfunction isSameDay(a: Date | null, b: Date): boolean {\n  if (!a) return false;\n  return (\n    a.getFullYear() === b.getFullYear() &&\n    a.getMonth() === b.getMonth() &&\n    a.getDate() === b.getDate()\n  );\n}\n\nexport default function ReportDatePicker({ onChange }: ReportDatePickerProps) {\n  const [selected, setSelected] = useState<Date | null>(startOfDay(new Date()));\n\n  const presets = [\n    { label: 'Сегодня', value: daysAgo(0) },\n    { label: 'Вчера', value: daysAgo(1) },\n    { label: 'Неделя назад', value: daysAgo(7) },\n  ];\n\n  const applyDate = (date: Date | null) => {\n    setSelected(date);\n    onChange?.(date);\n  };\n\n  return (\n    <div\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: '12px',\n        padding: '16px',\n        background: 'var(--jx-surface)',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n      }}\n    >\n      <div\n        style={{\n          fontFamily: 'var(--jx-font-sans)',\n          fontSize: '13px',\n          color: 'var(--jx-text-2)',\n        }}\n      >\n        Дата отчёта\n      </div>\n      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>\n        {presets.map((preset) => (\n          <JxChip\n            key={preset.label}\n            active={isSameDay(selected, preset.value)}\n            onClick={() => applyDate(preset.value)}\n          >\n            {preset.label}\n          </JxChip>\n        ))}\n      </div>\n      <JxCalendar locale=\"ru-RU\" value={selected} onValueChange={applyDate} />\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 45,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 56,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 64,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxCalendar",
+      "JxChip"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

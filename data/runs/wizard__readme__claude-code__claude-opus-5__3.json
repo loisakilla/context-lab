@@ -1,8 +1,8 @@
 {
   "id": "wizard__readme__claude-code__claude-opus-5__3",
-  "createdAt": "2026-09-21T13:10:54.876Z",
+  "createdAt": "2026-09-22T09:54:26.852Z",
   "repeat": 3,
-  "durationMs": 43574,
+  "durationMs": 34629,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -24,7 +24,7 @@
     ]
   },
   "context": {
-    "tokens": 753,
+    "tokens": 796,
     "sources": [
       {
         "kind": "readme",
@@ -39,7 +39,7 @@
       "usage": {
         "input": 2,
         "output": 7,
-        "cacheRead": 16946,
+        "cacheRead": 9578,
         "cacheCreation": 0
       },
       "toolCalls": []
@@ -48,61 +48,23 @@
       "usage": {
         "input": 2,
         "output": 7,
-        "cacheRead": 16946,
+        "cacheRead": 9578,
         "cacheCreation": 0
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 7,
-        "cacheRead": 16946,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__claude_ai_Claude_Docs__guide",
-          "input": {
-            "items": [
-              "topic.index"
-            ]
-          },
-          "resultTokens": 29,
-          "isError": true
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 16946,
-        "cacheCreation": 716
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 16946,
-        "cacheCreation": 716
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 4,
-    "output": 3697,
-    "cacheRead": 33892,
-    "cacheCreation": 716
+    "input": 2,
+    "output": 3379,
+    "cacheRead": 9578,
+    "cacheCreation": 0
   },
-  "costUsd": 0.113866,
+  "costUsd": 0.08927399999999999,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useCallback, useId, useMemo, useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\ntype SignupValues = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype SignupWizardProps = {\n  onSubmit: (values: SignupValues) => void;\n  initialValues?: Partial<SignupValues>;\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nconst EMPTY_VALUES: SignupValues = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst CONTACT_FIELDS: Array<{ key: keyof SignupValues; label: string; type: string }> = [\n  { key: 'name', label: 'Имя', type: 'text' },\n  { key: 'email', label: 'Email', type: 'email' },\n  { key: 'phone', label: 'Телефон', type: 'tel' },\n];\n\nconst ADDRESS_FIELDS: Array<{ key: keyof SignupValues; label: string; type: string }> = [\n  { key: 'country', label: 'Страна', type: 'text' },\n  { key: 'city', label: 'Город', type: 'text' },\n  { key: 'street', label: 'Улица, дом', type: 'text' },\n  { key: 'zip', label: 'Почтовый индекс', type: 'text' },\n];\n\nexport default function SignupWizard({ onSubmit, initialValues }: SignupWizardProps) {\n  const fieldId = useId();\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<SignupValues>({ ...EMPTY_VALUES, ...initialValues });\n\n  const isLastStep = step === STEPS.length - 1;\n\n  const setField = useCallback((key: keyof SignupValues, value: string) => {\n    setValues((current) => ({ ...current, [key]: value }));\n  }, []);\n\n  const summary = useMemo(\n    () => [...CONTACT_FIELDS, ...ADDRESS_FIELDS].map((field) => ({\n      label: field.label,\n      value: values[field.key].trim(),\n    })),\n    [values],\n  );\n\n  const goBack = () => setStep((current) => Math.max(0, current - 1));\n\n  const goNext = () => {\n    if (isLastStep) {\n      onSubmit(values);\n      return;\n    }\n    setStep((current) => Math.min(STEPS.length - 1, current + 1));\n  };\n\n  const renderFields = (fields: typeof CONTACT_FIELDS) => (\n    <div className=\"jx-stack\" style={{ gap: 'var(--jx-space-4)' }}>\n      {fields.map((field) => (\n        <div className=\"jx-field\" key={field.key}>\n          <label className=\"jx-label\" htmlFor={`${fieldId}-${field.key}`}>\n            {field.label}\n          </label>\n          <input\n            className=\"jx-input\"\n            id={`${fieldId}-${field.key}`}\n            name={field.key}\n            type={field.type}\n            value={values[field.key]}\n            onChange={(event) => setField(field.key, event.target.value)}\n          />\n        </div>\n      ))}\n    </div>\n  );\n\n  return (\n    <form\n      className=\"jx-card jx-stack\"\n      style={{ gap: 'var(--jx-space-6)', padding: 'var(--jx-space-6)' }}\n      onSubmit={(event) => {\n        event.preventDefault();\n        goNext();\n      }}\n    >\n      <ol\n        className=\"jx-row\"\n        aria-label=\"Шаги регистрации\"\n        style={{ display: 'flex', gap: 'var(--jx-space-2)', listStyle: 'none', margin: 0, padding: 0 }}\n      >\n        {STEPS.map((title, index) => (\n          <li\n            key={title}\n            className=\"jx-step\"\n            aria-current={index === step ? 'step' : undefined}\n            data-state={index === step ? 'active' : index < step ? 'done' : 'idle'}\n            style={{\n              flex: 1,\n              padding: 'var(--jx-space-2) var(--jx-space-3)',\n              borderRadius: 'var(--jx-radius)',\n              border: 'var(--jx-border-width) solid var(--jx-border)',\n              color: index === step ? 'var(--jx-fg)' : 'var(--jx-fg-muted)',\n              background: index === step ? 'var(--jx-surface-raised)' : 'var(--jx-surface)',\n            }}\n          >\n            <span className=\"jx-text-sm\">{`${index + 1}. ${title}`}</span>\n          </li>\n        ))}\n      </ol>\n\n      <section className=\"jx-stack\" style={{ gap: 'var(--jx-space-4)' }} aria-live=\"polite\">\n        <h2 className=\"jx-heading\" style={{ margin: 0 }}>\n          {STEPS[step]}\n        </h2>\n\n        {step === 0 && renderFields(CONTACT_FIELDS)}\n        {step === 1 && renderFields(ADDRESS_FIELDS)}\n        {step === 2 && (\n          <dl className=\"jx-stack\" style={{ gap: 'var(--jx-space-2)', margin: 0 }}>\n            {summary.map((item) => (\n              <div\n                key={item.label}\n                style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--jx-space-4)' }}\n              >\n                <dt className=\"jx-text-sm\" style={{ color: 'var(--jx-fg-muted)' }}>\n                  {item.label}\n                </dt>\n                <dd className=\"jx-text-sm\" style={{ margin: 0, color: 'var(--jx-fg)' }}>\n                  {item.value || '—'}\n                </dd>\n              </div>\n            ))}\n          </dl>\n        )}\n      </section>\n\n      <footer style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--jx-space-3)' }}>\n        <Button type=\"button\" variant=\"ghost\" onClick={goBack} disabled={step === 0}>\n          Назад\n        </Button>\n        <Button type=\"submit\" variant=\"primary\">\n          {isLastStep ? 'Отправить' : 'Дальше'}\n        </Button>\n      </footer>\n    </form>\n  );\n}",
-    "text": "```tsx\nimport { useCallback, useId, useMemo, useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\ntype SignupValues = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype SignupWizardProps = {\n  onSubmit: (values: SignupValues) => void;\n  initialValues?: Partial<SignupValues>;\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nconst EMPTY_VALUES: SignupValues = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst CONTACT_FIELDS: Array<{ key: keyof SignupValues; label: string; type: string }> = [\n  { key: 'name', label: 'Имя', type: 'text' },\n  { key: 'email', label: 'Email', type: 'email' },\n  { key: 'phone', label: 'Телефон', type: 'tel' },\n];\n\nconst ADDRESS_FIELDS: Array<{ key: keyof SignupValues; label: string; type: string }> = [\n  { key: 'country', label: 'Страна', type: 'text' },\n  { key: 'city', label: 'Город', type: 'text' },\n  { key: 'street', label: 'Улица, дом', type: 'text' },\n  { key: 'zip', label: 'Почтовый индекс', type: 'text' },\n];\n\nexport default function SignupWizard({ onSubmit, initialValues }: SignupWizardProps) {\n  const fieldId = useId();\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<SignupValues>({ ...EMPTY_VALUES, ...initialValues });\n\n  const isLastStep = step === STEPS.length - 1;\n\n  const setField = useCallback((key: keyof SignupValues, value: string) => {\n    setValues((current) => ({ ...current, [key]: value }));\n  }, []);\n\n  const summary = useMemo(\n    () => [...CONTACT_FIELDS, ...ADDRESS_FIELDS].map((field) => ({\n      label: field.label,\n      value: values[field.key].trim(),\n    })),\n    [values],\n  );\n\n  const goBack = () => setStep((current) => Math.max(0, current - 1));\n\n  const goNext = () => {\n    if (isLastStep) {\n      onSubmit(values);\n      return;\n    }\n    setStep((current) => Math.min(STEPS.length - 1, current + 1));\n  };\n\n  const renderFields = (fields: typeof CONTACT_FIELDS) => (\n    <div className=\"jx-stack\" style={{ gap: 'var(--jx-space-4)' }}>\n      {fields.map((field) => (\n        <div className=\"jx-field\" key={field.key}>\n          <label className=\"jx-label\" htmlFor={`${fieldId}-${field.key}`}>\n            {field.label}\n          </label>\n          <input\n            className=\"jx-input\"\n            id={`${fieldId}-${field.key}`}\n            name={field.key}\n            type={field.type}\n            value={values[field.key]}\n            onChange={(event) => setField(field.key, event.target.value)}\n          />\n        </div>\n      ))}\n    </div>\n  );\n\n  return (\n    <form\n      className=\"jx-card jx-stack\"\n      style={{ gap: 'var(--jx-space-6)', padding: 'var(--jx-space-6)' }}\n      onSubmit={(event) => {\n        event.preventDefault();\n        goNext();\n      }}\n    >\n      <ol\n        className=\"jx-row\"\n        aria-label=\"Шаги регистрации\"\n        style={{ display: 'flex', gap: 'var(--jx-space-2)', listStyle: 'none', margin: 0, padding: 0 }}\n      >\n        {STEPS.map((title, index) => (\n          <li\n            key={title}\n            className=\"jx-step\"\n            aria-current={index === step ? 'step' : undefined}\n            data-state={index === step ? 'active' : index < step ? 'done' : 'idle'}\n            style={{\n              flex: 1,\n              padding: 'var(--jx-space-2) var(--jx-space-3)',\n              borderRadius: 'var(--jx-radius)',\n              border: 'var(--jx-border-width) solid var(--jx-border)',\n              color: index === step ? 'var(--jx-fg)' : 'var(--jx-fg-muted)',\n              background: index === step ? 'var(--jx-surface-raised)' : 'var(--jx-surface)',\n            }}\n          >\n            <span className=\"jx-text-sm\">{`${index + 1}. ${title}`}</span>\n          </li>\n        ))}\n      </ol>\n\n      <section className=\"jx-stack\" style={{ gap: 'var(--jx-space-4)' }} aria-live=\"polite\">\n        <h2 className=\"jx-heading\" style={{ margin: 0 }}>\n          {STEPS[step]}\n        </h2>\n\n        {step === 0 && renderFields(CONTACT_FIELDS)}\n        {step === 1 && renderFields(ADDRESS_FIELDS)}\n        {step === 2 && (\n          <dl className=\"jx-stack\" style={{ gap: 'var(--jx-space-2)', margin: 0 }}>\n            {summary.map((item) => (\n              <div\n                key={item.label}\n                style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--jx-space-4)' }}\n              >\n                <dt className=\"jx-text-sm\" style={{ color: 'var(--jx-fg-muted)' }}>\n                  {item.label}\n                </dt>\n                <dd className=\"jx-text-sm\" style={{ margin: 0, color: 'var(--jx-fg)' }}>\n                  {item.value || '—'}\n                </dd>\n              </div>\n            ))}\n          </dl>\n        )}\n      </section>\n\n      <footer style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--jx-space-3)' }}>\n        <Button type=\"button\" variant=\"ghost\" onClick={goBack} disabled={step === 0}>\n          Назад\n        </Button>\n        <Button type=\"submit\" variant=\"primary\">\n          {isLastStep ? 'Отправить' : 'Дальше'}\n        </Button>\n      </footer>\n    </form>\n  );\n}\n```"
+    "code": "import { useCallback, useState } from 'react';\nimport { Button, Input } from '@jinx-ui/react';\n\ntype RegistrationData = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype RegistrationWizardProps = {\n  onSubmit: (data: RegistrationData) => void;\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nconst EMPTY_DATA: RegistrationData = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst REVIEW_LABELS: Array<[keyof RegistrationData, string]> = [\n  ['name', 'Имя'],\n  ['email', 'Email'],\n  ['phone', 'Телефон'],\n  ['country', 'Страна'],\n  ['city', 'Город'],\n  ['street', 'Улица, дом'],\n  ['zip', 'Индекс'],\n];\n\nexport default function RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<RegistrationData>(EMPTY_DATA);\n\n  const isLast = step === STEPS.length - 1;\n\n  const update = useCallback(\n    (field: keyof RegistrationData) => (event: React.ChangeEvent<HTMLInputElement>) => {\n      const { value } = event.target;\n      setData((prev) => ({ ...prev, [field]: value }));\n    },\n    [],\n  );\n\n  const goBack = useCallback(() => setStep((prev) => Math.max(0, prev - 1)), []);\n  const goNext = useCallback(\n    () => setStep((prev) => Math.min(STEPS.length - 1, prev + 1)),\n    [],\n  );\n\n  const handleSubmit = useCallback(\n    (event: React.FormEvent<HTMLFormElement>) => {\n      event.preventDefault();\n      if (isLast) {\n        onSubmit(data);\n      } else {\n        goNext();\n      }\n    },\n    [data, goNext, isLast, onSubmit],\n  );\n\n  return (\n    <form className=\"jx-card jx-stack\" onSubmit={handleSubmit} noValidate>\n      <ol\n        className=\"jx-steps\"\n        style={{ display: 'flex', gap: 'var(--jx-space-3)', listStyle: 'none', margin: 0, padding: 0 }}\n      >\n        {STEPS.map((label, index) => (\n          <li\n            key={label}\n            className=\"jx-step\"\n            aria-current={index === step ? 'step' : undefined}\n            data-state={index === step ? 'active' : index < step ? 'done' : 'todo'}\n            style={{ display: 'flex', alignItems: 'center', gap: 'var(--jx-space-2)' }}\n          >\n            <span className=\"jx-badge\">{index + 1}</span>\n            <span className=\"jx-step-label\">{label}</span>\n          </li>\n        ))}\n      </ol>\n\n      <h2 className=\"jx-heading\">{STEPS[step]}</h2>\n\n      {step === 0 && (\n        <div className=\"jx-stack\" style={{ display: 'grid', gap: 'var(--jx-space-3)' }}>\n          <label className=\"jx-field\">\n            <span className=\"jx-label\">Имя</span>\n            <Input name=\"name\" value={data.name} onChange={update('name')} autoComplete=\"name\" />\n          </label>\n          <label className=\"jx-field\">\n            <span className=\"jx-label\">Email</span>\n            <Input\n              name=\"email\"\n              type=\"email\"\n              value={data.email}\n              onChange={update('email')}\n              autoComplete=\"email\"\n            />\n          </label>\n          <label className=\"jx-field\">\n            <span className=\"jx-label\">Телефон</span>\n            <Input\n              name=\"phone\"\n              type=\"tel\"\n              value={data.phone}\n              onChange={update('phone')}\n              autoComplete=\"tel\"\n            />\n          </label>\n        </div>\n      )}\n\n      {step === 1 && (\n        <div className=\"jx-stack\" style={{ display: 'grid', gap: 'var(--jx-space-3)' }}>\n          <label className=\"jx-field\">\n            <span className=\"jx-label\">Страна</span>\n            <Input\n              name=\"country\"\n              value={data.country}\n              onChange={update('country')}\n              autoComplete=\"country-name\"\n            />\n          </label>\n          <label className=\"jx-field\">\n            <span className=\"jx-label\">Город</span>\n            <Input\n              name=\"city\"\n              value={data.city}\n              onChange={update('city')}\n              autoComplete=\"address-level2\"\n            />\n          </label>\n          <label className=\"jx-field\">\n            <span className=\"jx-label\">Улица, дом</span>\n            <Input\n              name=\"street\"\n              value={data.street}\n              onChange={update('street')}\n              autoComplete=\"street-address\"\n            />\n          </label>\n          <label className=\"jx-field\">\n            <span className=\"jx-label\">Индекс</span>\n            <Input\n              name=\"zip\"\n              value={data.zip}\n              onChange={update('zip')}\n              autoComplete=\"postal-code\"\n            />\n          </label>\n        </div>\n      )}\n\n      {step === 2 && (\n        <dl\n          className=\"jx-list\"\n          style={{ display: 'grid', gap: 'var(--jx-space-2)', margin: 0 }}\n        >\n          {REVIEW_LABELS.map(([field, label]) => (\n            <div\n              key={field}\n              className=\"jx-list-row\"\n              style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--jx-space-3)' }}\n            >\n              <dt className=\"jx-label\">{label}</dt>\n              <dd className=\"jx-value\" style={{ margin: 0 }}>\n                {data[field] || '—'}\n              </dd>\n            </div>\n          ))}\n        </dl>\n      )}\n\n      <div\n        className=\"jx-actions\"\n        style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--jx-space-3)' }}\n      >\n        <Button type=\"button\" variant=\"secondary\" onClick={goBack} disabled={step === 0}>\n          Назад\n        </Button>\n        <Button type=\"submit\" variant=\"primary\">\n          {isLast ? 'Отправить' : 'Дальше'}\n        </Button>\n      </div>\n    </form>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useState } from 'react';\nimport { Button, Input } from '@jinx-ui/react';\n\ntype RegistrationData = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype RegistrationWizardProps = {\n  onSubmit: (data: RegistrationData) => void;\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nconst EMPTY_DATA: RegistrationData = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst REVIEW_LABELS: Array<[keyof RegistrationData, string]> = [\n  ['name', 'Имя'],\n  ['email', 'Email'],\n  ['phone', 'Телефон'],\n  ['country', 'Страна'],\n  ['city', 'Город'],\n  ['street', 'Улица, дом'],\n  ['zip', 'Индекс'],\n];\n\nexport default function RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<RegistrationData>(EMPTY_DATA);\n\n  const isLast = step === STEPS.length - 1;\n\n  const update = useCallback(\n    (field: keyof RegistrationData) => (event: React.ChangeEvent<HTMLInputElement>) => {\n      const { value } = event.target;\n      setData((prev) => ({ ...prev, [field]: value }));\n    },\n    [],\n  );\n\n  const goBack = useCallback(() => setStep((prev) => Math.max(0, prev - 1)), []);\n  const goNext = useCallback(\n    () => setStep((prev) => Math.min(STEPS.length - 1, prev + 1)),\n    [],\n  );\n\n  const handleSubmit = useCallback(\n    (event: React.FormEvent<HTMLFormElement>) => {\n      event.preventDefault();\n      if (isLast) {\n        onSubmit(data);\n      } else {\n        goNext();\n      }\n    },\n    [data, goNext, isLast, onSubmit],\n  );\n\n  return (\n    <form className=\"jx-card jx-stack\" onSubmit={handleSubmit} noValidate>\n      <ol\n        className=\"jx-steps\"\n        style={{ display: 'flex', gap: 'var(--jx-space-3)', listStyle: 'none', margin: 0, padding: 0 }}\n      >\n        {STEPS.map((label, index) => (\n          <li\n            key={label}\n            className=\"jx-step\"\n            aria-current={index === step ? 'step' : undefined}\n            data-state={index === step ? 'active' : index < step ? 'done' : 'todo'}\n            style={{ display: 'flex', alignItems: 'center', gap: 'var(--jx-space-2)' }}\n          >\n            <span className=\"jx-badge\">{index + 1}</span>\n            <span className=\"jx-step-label\">{label}</span>\n          </li>\n        ))}\n      </ol>\n\n      <h2 className=\"jx-heading\">{STEPS[step]}</h2>\n\n      {step === 0 && (\n        <div className=\"jx-stack\" style={{ display: 'grid', gap: 'var(--jx-space-3)' }}>\n          <label className=\"jx-field\">\n            <span className=\"jx-label\">Имя</span>\n            <Input name=\"name\" value={data.name} onChange={update('name')} autoComplete=\"name\" />\n          </label>\n          <label className=\"jx-field\">\n            <span className=\"jx-label\">Email</span>\n            <Input\n              name=\"email\"\n              type=\"email\"\n              value={data.email}\n              onChange={update('email')}\n              autoComplete=\"email\"\n            />\n          </label>\n          <label className=\"jx-field\">\n            <span className=\"jx-label\">Телефон</span>\n            <Input\n              name=\"phone\"\n              type=\"tel\"\n              value={data.phone}\n              onChange={update('phone')}\n              autoComplete=\"tel\"\n            />\n          </label>\n        </div>\n      )}\n\n      {step === 1 && (\n        <div className=\"jx-stack\" style={{ display: 'grid', gap: 'var(--jx-space-3)' }}>\n          <label className=\"jx-field\">\n            <span className=\"jx-label\">Страна</span>\n            <Input\n              name=\"country\"\n              value={data.country}\n              onChange={update('country')}\n              autoComplete=\"country-name\"\n            />\n          </label>\n          <label className=\"jx-field\">\n            <span className=\"jx-label\">Город</span>\n            <Input\n              name=\"city\"\n              value={data.city}\n              onChange={update('city')}\n              autoComplete=\"address-level2\"\n            />\n          </label>\n          <label className=\"jx-field\">\n            <span className=\"jx-label\">Улица, дом</span>\n            <Input\n              name=\"street\"\n              value={data.street}\n              onChange={update('street')}\n              autoComplete=\"street-address\"\n            />\n          </label>\n          <label className=\"jx-field\">\n            <span className=\"jx-label\">Индекс</span>\n            <Input\n              name=\"zip\"\n              value={data.zip}\n              onChange={update('zip')}\n              autoComplete=\"postal-code\"\n            />\n          </label>\n        </div>\n      )}\n\n      {step === 2 && (\n        <dl\n          className=\"jx-list\"\n          style={{ display: 'grid', gap: 'var(--jx-space-2)', margin: 0 }}\n        >\n          {REVIEW_LABELS.map(([field, label]) => (\n            <div\n              key={field}\n              className=\"jx-list-row\"\n              style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--jx-space-3)' }}\n            >\n              <dt className=\"jx-label\">{label}</dt>\n              <dd className=\"jx-value\" style={{ margin: 0 }}>\n                {data[field] || '—'}\n              </dd>\n            </div>\n          ))}\n        </dl>\n      )}\n\n      <div\n        className=\"jx-actions\"\n        style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--jx-space-3)' }}\n      >\n        <Button type=\"button\" variant=\"secondary\" onClick={goBack} disabled={step === 0}>\n          Назад\n        </Button>\n        <Button type=\"submit\" variant=\"primary\">\n          {isLast ? 'Отправить' : 'Дальше'}\n        </Button>\n      </div>\n    </form>\n  );\n}\n```\n\nОдно замечание вне формата, потому что оно влияет на работоспособность: я не проверял реальный экспорт `@jinx-ui/react`, поэтому `Button`/`Input` и их пропсы (`variant`) — предположение по описанию «core 8 runtime API»; сверься с `docs/components.md`."
   },
   "checks": {
     "tsc": {
@@ -111,10 +73,16 @@
           "code": 2724,
           "line": 2,
           "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
         }
       ],
       "unknownComponents": [
-        "Button"
+        "Button",
+        "Input"
       ],
       "unknownProps": []
     },
@@ -122,67 +90,49 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 74,
+        "line": 76,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 96,
+        "line": 84,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 105,
+        "line": 95,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 113,
+        "line": 124,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 127,
+        "line": 167,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 128,
+        "line": 173,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 135,
+        "line": 176,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 139,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 141,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 144,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 153,
+        "line": 186,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],
@@ -192,6 +142,6 @@
   },
   "verdict": {
     "passed": false,
-    "score": 0.56
+    "score": 0.42
   }
 }

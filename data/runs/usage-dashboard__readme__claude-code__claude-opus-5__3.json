@@ -1,0 +1,93 @@
+{
+  "id": "usage-dashboard__readme__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-22T10:01:58.009Z",
+  "repeat": 3,
+  "durationMs": 43617,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "usage-dashboard",
+    "title": "Панель расхода с фильтрами",
+    "prompt": "Сделай панель расхода по проектам. Сверху чипы-фильтры по статусу, которые можно снимать. Под ними на каждый проект строка с названием, круговым индикатором заполненности квоты в процентах и меткой статуса. Список постраничный, по пять строк. Если после фильтрации ничего не осталось, вместо списка показывается пустое состояние с кнопкой сброса фильтров.",
+    "taskType": "ui",
+    "expects": [
+      "JxChip",
+      "JxProgressCircle",
+      "JxBadge",
+      "JxPagination",
+      "JxEmptyState"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 9607,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 9607,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 3918,
+    "cacheRead": 9607,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.1027635,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\n\ntype QuotaStatus = 'active' | 'at-risk' | 'over' | 'paused';\n\ntype Project = {\n  id: string;\n  name: string;\n  spent: number;\n  quota: number;\n  status: QuotaStatus;\n};\n\nconst STATUS_LABEL: Record<QuotaStatus, string> = {\n  active: 'В норме',\n  'at-risk': 'Риск',\n  over: 'Превышение',\n  paused: 'Приостановлен',\n};\n\nconst STATUS_ORDER: QuotaStatus[] = ['active', 'at-risk', 'over', 'paused'];\n\nconst PROJECTS: Project[] = [\n  { id: 'p-01', name: 'Атлас поиска', spent: 412, quota: 800, status: 'active' },\n  { id: 'p-02', name: 'Биллинг v2', spent: 740, quota: 800, status: 'at-risk' },\n  { id: 'p-03', name: 'Кеш-слой', spent: 980, quota: 700, status: 'over' },\n  { id: 'p-04', name: 'Медиа-конвейер', spent: 120, quota: 600, status: 'paused' },\n  { id: 'p-05', name: 'Отчёты и BI', spent: 330, quota: 500, status: 'active' },\n  { id: 'p-06', name: 'Платёжный шлюз', spent: 690, quota: 750, status: 'at-risk' },\n  { id: 'p-07', name: 'Рекомендации', spent: 210, quota: 900, status: 'active' },\n  { id: 'p-08', name: 'Складской учёт', spent: 1010, quota: 850, status: 'over' },\n  { id: 'p-09', name: 'Телеметрия', spent: 455, quota: 650, status: 'active' },\n  { id: 'p-10', name: 'Уведомления', spent: 88, quota: 400, status: 'paused' },\n  { id: 'p-11', name: 'Фича-флаги', spent: 305, quota: 350, status: 'at-risk' },\n  { id: 'p-12', name: 'Шина событий', spent: 520, quota: 1000, status: 'active' },\n];\n\nconst PAGE_SIZE = 5;\n\nexport default function ProjectQuotaPanel() {\n  const [excluded, setExcluded] = useState<QuotaStatus[]>([]);\n  const [page, setPage] = useState(0);\n\n  const visible = useMemo(\n    () => PROJECTS.filter((project) => !excluded.includes(project.status)),\n    [excluded],\n  );\n\n  const pageCount = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));\n  const safePage = Math.min(page, pageCount - 1);\n  const rows = visible.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE);\n\n  const toggleStatus = (status: QuotaStatus) => {\n    setExcluded((prev) =>\n      prev.includes(status) ? prev.filter((item) => item !== status) : [...prev, status],\n    );\n    setPage(0);\n  };\n\n  const resetFilters = () => {\n    setExcluded([]);\n    setPage(0);\n  };\n\n  return (\n    <section className=\"jx-card jx-stack\" aria-labelledby=\"quota-panel-title\">\n      <header className=\"jx-stack\">\n        <h2 id=\"quota-panel-title\" className=\"jx-heading\">\n          Расход по проектам\n        </h2>\n        <p className=\"jx-text-muted\">\n          Показано {visible.length} из {PROJECTS.length}\n        </p>\n      </header>\n\n      <div className=\"jx-cluster\" role=\"group\" aria-label=\"Фильтры по статусу\">\n        {STATUS_ORDER.map((status) => {\n          const on = !excluded.includes(status);\n          return (\n            <button\n              key={status}\n              type=\"button\"\n              className=\"jx-chip\"\n              aria-pressed={on}\n              onClick={() => toggleStatus(status)}\n            >\n              <span>{STATUS_LABEL[status]}</span>\n              <span aria-hidden=\"true\">{on ? '×' : '+'}</span>\n            </button>\n          );\n        })}\n      </div>\n\n      {rows.length === 0 ? (\n        <div className=\"jx-empty jx-stack\" role=\"status\">\n          <p className=\"jx-heading\">Ничего не найдено</p>\n          <p className=\"jx-text-muted\">Все статусы сняты с показа.</p>\n          <button type=\"button\" className=\"jx-btn jx-btn-primary\" onClick={resetFilters}>\n            Сбросить фильтры\n          </button>\n        </div>\n      ) : (\n        <>\n          <ul className=\"jx-list jx-stack\">\n            {rows.map((project) => {\n              const percent = Math.round((project.spent / project.quota) * 100);\n              const arc = Math.min(100, percent);\n              return (\n                <li key={project.id} className=\"jx-list-item jx-cluster\">\n                  <span\n                    className=\"jx-ring\"\n                    role=\"progressbar\"\n                    aria-valuemin={0}\n                    aria-valuemax={100}\n                    aria-valuenow={percent}\n                    aria-label={`Квота проекта ${project.name}`}\n                    style={{\n                      backgroundImage: `conic-gradient(var(--jx-accent) ${arc}%, var(--jx-border) ${arc}%)`,\n                    }}\n                  >\n                    <span className=\"jx-ring-label\">{percent}%</span>\n                  </span>\n                  <span className=\"jx-list-item-title\">{project.name}</span>\n                  <span className=\"jx-text-muted\">\n                    {project.spent} / {project.quota}\n                  </span>\n                  <span className=\"jx-badge\" data-status={project.status}>\n                    {STATUS_LABEL[project.status]}\n                  </span>\n                </li>\n              );\n            })}\n          </ul>\n\n          <nav className=\"jx-cluster\" aria-label=\"Страницы списка\">\n            <button\n              type=\"button\"\n              className=\"jx-btn\"\n              onClick={() => setPage(safePage - 1)}\n              disabled={safePage === 0}\n            >\n              Назад\n            </button>\n            <span className=\"jx-text-muted\" aria-live=\"polite\">\n              Страница {safePage + 1} из {pageCount}\n            </span>\n            <button\n              type=\"button\"\n              className=\"jx-btn\"\n              onClick={() => setPage(safePage + 1)}\n              disabled={safePage >= pageCount - 1}\n            >\n              Вперёд\n            </button>\n          </nav>\n        </>\n      )}\n    </section>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\n\ntype QuotaStatus = 'active' | 'at-risk' | 'over' | 'paused';\n\ntype Project = {\n  id: string;\n  name: string;\n  spent: number;\n  quota: number;\n  status: QuotaStatus;\n};\n\nconst STATUS_LABEL: Record<QuotaStatus, string> = {\n  active: 'В норме',\n  'at-risk': 'Риск',\n  over: 'Превышение',\n  paused: 'Приостановлен',\n};\n\nconst STATUS_ORDER: QuotaStatus[] = ['active', 'at-risk', 'over', 'paused'];\n\nconst PROJECTS: Project[] = [\n  { id: 'p-01', name: 'Атлас поиска', spent: 412, quota: 800, status: 'active' },\n  { id: 'p-02', name: 'Биллинг v2', spent: 740, quota: 800, status: 'at-risk' },\n  { id: 'p-03', name: 'Кеш-слой', spent: 980, quota: 700, status: 'over' },\n  { id: 'p-04', name: 'Медиа-конвейер', spent: 120, quota: 600, status: 'paused' },\n  { id: 'p-05', name: 'Отчёты и BI', spent: 330, quota: 500, status: 'active' },\n  { id: 'p-06', name: 'Платёжный шлюз', spent: 690, quota: 750, status: 'at-risk' },\n  { id: 'p-07', name: 'Рекомендации', spent: 210, quota: 900, status: 'active' },\n  { id: 'p-08', name: 'Складской учёт', spent: 1010, quota: 850, status: 'over' },\n  { id: 'p-09', name: 'Телеметрия', spent: 455, quota: 650, status: 'active' },\n  { id: 'p-10', name: 'Уведомления', spent: 88, quota: 400, status: 'paused' },\n  { id: 'p-11', name: 'Фича-флаги', spent: 305, quota: 350, status: 'at-risk' },\n  { id: 'p-12', name: 'Шина событий', spent: 520, quota: 1000, status: 'active' },\n];\n\nconst PAGE_SIZE = 5;\n\nexport default function ProjectQuotaPanel() {\n  const [excluded, setExcluded] = useState<QuotaStatus[]>([]);\n  const [page, setPage] = useState(0);\n\n  const visible = useMemo(\n    () => PROJECTS.filter((project) => !excluded.includes(project.status)),\n    [excluded],\n  );\n\n  const pageCount = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));\n  const safePage = Math.min(page, pageCount - 1);\n  const rows = visible.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE);\n\n  const toggleStatus = (status: QuotaStatus) => {\n    setExcluded((prev) =>\n      prev.includes(status) ? prev.filter((item) => item !== status) : [...prev, status],\n    );\n    setPage(0);\n  };\n\n  const resetFilters = () => {\n    setExcluded([]);\n    setPage(0);\n  };\n\n  return (\n    <section className=\"jx-card jx-stack\" aria-labelledby=\"quota-panel-title\">\n      <header className=\"jx-stack\">\n        <h2 id=\"quota-panel-title\" className=\"jx-heading\">\n          Расход по проектам\n        </h2>\n        <p className=\"jx-text-muted\">\n          Показано {visible.length} из {PROJECTS.length}\n        </p>\n      </header>\n\n      <div className=\"jx-cluster\" role=\"group\" aria-label=\"Фильтры по статусу\">\n        {STATUS_ORDER.map((status) => {\n          const on = !excluded.includes(status);\n          return (\n            <button\n              key={status}\n              type=\"button\"\n              className=\"jx-chip\"\n              aria-pressed={on}\n              onClick={() => toggleStatus(status)}\n            >\n              <span>{STATUS_LABEL[status]}</span>\n              <span aria-hidden=\"true\">{on ? '×' : '+'}</span>\n            </button>\n          );\n        })}\n      </div>\n\n      {rows.length === 0 ? (\n        <div className=\"jx-empty jx-stack\" role=\"status\">\n          <p className=\"jx-heading\">Ничего не найдено</p>\n          <p className=\"jx-text-muted\">Все статусы сняты с показа.</p>\n          <button type=\"button\" className=\"jx-btn jx-btn-primary\" onClick={resetFilters}>\n            Сбросить фильтры\n          </button>\n        </div>\n      ) : (\n        <>\n          <ul className=\"jx-list jx-stack\">\n            {rows.map((project) => {\n              const percent = Math.round((project.spent / project.quota) * 100);\n              const arc = Math.min(100, percent);\n              return (\n                <li key={project.id} className=\"jx-list-item jx-cluster\">\n                  <span\n                    className=\"jx-ring\"\n                    role=\"progressbar\"\n                    aria-valuemin={0}\n                    aria-valuemax={100}\n                    aria-valuenow={percent}\n                    aria-label={`Квота проекта ${project.name}`}\n                    style={{\n                      backgroundImage: `conic-gradient(var(--jx-accent) ${arc}%, var(--jx-border) ${arc}%)`,\n                    }}\n                  >\n                    <span className=\"jx-ring-label\">{percent}%</span>\n                  </span>\n                  <span className=\"jx-list-item-title\">{project.name}</span>\n                  <span className=\"jx-text-muted\">\n                    {project.spent} / {project.quota}\n                  </span>\n                  <span className=\"jx-badge\" data-status={project.status}>\n                    {STATUS_LABEL[project.status]}\n                  </span>\n                </li>\n              );\n            })}\n          </ul>\n\n          <nav className=\"jx-cluster\" aria-label=\"Страницы списка\">\n            <button\n              type=\"button\"\n              className=\"jx-btn\"\n              onClick={() => setPage(safePage - 1)}\n              disabled={safePage === 0}\n            >\n              Назад\n            </button>\n            <span className=\"jx-text-muted\" aria-live=\"polite\">\n              Страница {safePage + 1} из {pageCount}\n            </span>\n            <button\n              type=\"button\"\n              className=\"jx-btn\"\n              onClick={() => setPage(safePage + 1)}\n              disabled={safePage >= pageCount - 1}\n            >\n              Вперёд\n            </button>\n          </nav>\n        </>\n      )}\n    </section>\n  );\n}\n```\n\nOne thing outside the format, because it affects whether this compiles: the context I was given describes `@jinx-ui/react` only as \"React interactive primitives (core 8 runtime API)\" and never lists its exports, so I built the panel CSS-first with `jx-*` classes rather than guess at component names. If you paste the actual export list from `packages/react`, I'll rewrite it on top of the real primitives."
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 116,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.7
+  }
+}

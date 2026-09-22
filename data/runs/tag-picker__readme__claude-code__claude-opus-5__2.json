@@ -1,8 +1,8 @@
 {
   "id": "tag-picker__readme__claude-code__claude-opus-5__2",
-  "createdAt": "2026-09-21T13:12:20.024Z",
+  "createdAt": "2026-09-22T09:55:15.894Z",
   "repeat": 2,
-  "durationMs": 47020,
+  "durationMs": 22678,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -22,7 +22,7 @@
     ]
   },
   "context": {
-    "tokens": 753,
+    "tokens": 796,
     "sources": [
       {
         "kind": "readme",
@@ -37,8 +37,8 @@
       "usage": {
         "input": 2,
         "output": 3,
-        "cacheRead": 6778,
-        "cacheCreation": 10145
+        "cacheRead": 9552,
+        "cacheCreation": 0
       },
       "toolCalls": []
     },
@@ -46,88 +46,36 @@
       "usage": {
         "input": 2,
         "output": 3,
-        "cacheRead": 6778,
-        "cacheCreation": 10145
-      },
-      "toolCalls": [
-        {
-          "name": "Bash",
-          "input": {
-            "command": "ls /c/Users/kgn20/WebstormProjects/context-lab/vendor/jinx-ui/docs/ 2>/dev/null; ls /c/Users/kgn20/WebstormProjects/context-lab/data/ 2>/dev/null",
-            "description": "List jinx-ui docs"
-          },
-          "resultTokens": 44,
-          "isError": true
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 6778,
-        "cacheCreation": 10145
-      },
-      "toolCalls": [
-        {
-          "name": "Bash",
-          "input": {
-            "command": "cd /c/Users/kgn20/WebstormProjects/context-lab && ls && cat package.json | head -40",
-            "description": "List repo root"
-          },
-          "resultTokens": 44,
-          "isError": true
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 16923,
-        "cacheCreation": 612
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 16923,
-        "cacheCreation": 612
+        "cacheRead": 9552,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 4,
-    "output": 4171,
-    "cacheRead": 23701,
-    "cacheCreation": 10757
+    "input": 2,
+    "output": 2276,
+    "cacheRead": 9552,
+    "cacheCreation": 0
   },
-  "costUsd": 0.18337674999999998,
+  "costUsd": 0.061686,
   "stopReason": "end_turn",
   "output": {
-    "code": "import {\n  useCallback,\n  useId,\n  useRef,\n  useState,\n  type ClipboardEvent,\n  type KeyboardEvent,\n} from 'react';\nimport { Button, Input } from '@jinx-ui/react';\n\nexport type TagPickerProps = {\n  label?: string;\n  placeholder?: string;\n  hint?: string;\n  value?: string[];\n  defaultValue?: string[];\n  maxTags?: number;\n  disabled?: boolean;\n  onChange?: (tags: string[]) => void;\n};\n\nfunction normalize(raw: string): string {\n  return raw.trim().replace(/\\s+/g, ' ');\n}\n\nfunction splitInput(raw: string): string[] {\n  return raw\n    .split(',')\n    .map(normalize)\n    .filter((tag) => tag.length > 0);\n}\n\nexport default function TagPicker({\n  label = 'Теги',\n  placeholder = 'Введите тег и нажмите Enter',\n  hint,\n  value,\n  defaultValue = [],\n  maxTags,\n  disabled = false,\n  onChange,\n}: TagPickerProps) {\n  const fieldId = useId();\n  const hintId = `${fieldId}-hint`;\n  const statusId = `${fieldId}-status`;\n  const inputRef = useRef<HTMLInputElement>(null);\n\n  const [internalTags, setInternalTags] = useState<string[]>(defaultValue);\n  const [draft, setDraft] = useState('');\n  const [status, setStatus] = useState('');\n\n  const tags = value ?? internalTags;\n  const isFull = typeof maxTags === 'number' && tags.length >= maxTags;\n\n  const commit = useCallback(\n    (next: string[]) => {\n      if (value === undefined) {\n        setInternalTags(next);\n      }\n      onChange?.(next);\n    },\n    [onChange, value],\n  );\n\n  const addTags = useCallback(\n    (candidates: string[]) => {\n      if (disabled || candidates.length === 0) {\n        return;\n      }\n      const next = [...tags];\n      const added: string[] = [];\n      let rejectedDuplicate = false;\n\n      for (const candidate of candidates) {\n        if (typeof maxTags === 'number' && next.length >= maxTags) {\n          setStatus(`Достигнут предел: ${maxTags}`);\n          break;\n        }\n        const exists = next.some(\n          (tag) => tag.toLowerCase() === candidate.toLowerCase(),\n        );\n        if (exists) {\n          rejectedDuplicate = true;\n          continue;\n        }\n        next.push(candidate);\n        added.push(candidate);\n      }\n\n      if (added.length > 0) {\n        commit(next);\n        setStatus(`Добавлено: ${added.join(', ')}`);\n      } else if (rejectedDuplicate) {\n        setStatus('Такой тег уже добавлен');\n      }\n    },\n    [commit, disabled, maxTags, tags],\n  );\n\n  const removeTag = useCallback(\n    (target: string) => {\n      if (disabled) {\n        return;\n      }\n      commit(tags.filter((tag) => tag !== target));\n      setStatus(`Удалено: ${target}`);\n    },\n    [commit, disabled, tags],\n  );\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTags(splitInput(draft));\n      setDraft('');\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      event.preventDefault();\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const handlePaste = (event: ClipboardEvent<HTMLInputElement>) => {\n    const pasted = event.clipboardData.getData('text');\n    if (!pasted.includes(',')) {\n      return;\n    }\n    event.preventDefault();\n    addTags(splitInput(pasted));\n    setDraft('');\n  };\n\n  const handleBlur = () => {\n    if (draft.trim() === '') {\n      return;\n    }\n    addTags(splitInput(draft));\n    setDraft('');\n  };\n\n  return (\n    <div\n      className=\"jx-field jx-stack\"\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-2)',\n      }}\n    >\n      <label className=\"jx-label\" htmlFor={fieldId}>\n        {label}\n      </label>\n\n      <Input\n        id={fieldId}\n        ref={inputRef}\n        type=\"text\"\n        value={draft}\n        placeholder={isFull ? 'Лимит тегов исчерпан' : placeholder}\n        disabled={disabled || isFull}\n        aria-describedby={hint ? `${hintId} ${statusId}` : statusId}\n        onChange={(event) => setDraft(event.target.value)}\n        onKeyDown={handleKeyDown}\n        onPaste={handlePaste}\n        onBlur={handleBlur}\n      />\n\n      {hint ? (\n        <p\n          className=\"jx-hint\"\n          id={hintId}\n          style={{ color: 'var(--jx-text-muted)', margin: 0 }}\n        >\n          {hint}\n        </p>\n      ) : null}\n\n      {tags.length > 0 ? (\n        <ul\n          className=\"jx-cluster\"\n          aria-label=\"Выбранные теги\"\n          style={{\n            display: 'flex',\n            flexWrap: 'wrap',\n            gap: 'var(--jx-space-2)',\n            listStyle: 'none',\n            margin: 0,\n            padding: 0,\n          }}\n        >\n          {tags.map((tag) => (\n            <li\n              key={tag.toLowerCase()}\n              className=\"jx-tag\"\n              style={{\n                display: 'inline-flex',\n                alignItems: 'center',\n                gap: 'var(--jx-space-1)',\n                padding: 'var(--jx-space-1) var(--jx-space-2)',\n                border: 'var(--jx-border-width) solid var(--jx-border)',\n                borderRadius: 'var(--jx-radius)',\n                background: 'var(--jx-surface-2)',\n                color: 'var(--jx-text)',\n              }}\n            >\n              <span>{tag}</span>\n              <Button\n                type=\"button\"\n                variant=\"ghost\"\n                size=\"sm\"\n                disabled={disabled}\n                aria-label={`Удалить тег ${tag}`}\n                onClick={() => {\n                  removeTag(tag);\n                  inputRef.current?.focus();\n                }}\n              >\n                ×\n              </Button>\n            </li>\n          ))}\n        </ul>\n      ) : null}\n\n      <p\n        className=\"jx-hint\"\n        id={statusId}\n        role=\"status\"\n        aria-live=\"polite\"\n        style={{ color: 'var(--jx-text-muted)', margin: 0 }}\n      >\n        {status}\n      </p>\n    </div>\n  );\n}",
-    "text": "```tsx\nimport {\n  useCallback,\n  useId,\n  useRef,\n  useState,\n  type ClipboardEvent,\n  type KeyboardEvent,\n} from 'react';\nimport { Button, Input } from '@jinx-ui/react';\n\nexport type TagPickerProps = {\n  label?: string;\n  placeholder?: string;\n  hint?: string;\n  value?: string[];\n  defaultValue?: string[];\n  maxTags?: number;\n  disabled?: boolean;\n  onChange?: (tags: string[]) => void;\n};\n\nfunction normalize(raw: string): string {\n  return raw.trim().replace(/\\s+/g, ' ');\n}\n\nfunction splitInput(raw: string): string[] {\n  return raw\n    .split(',')\n    .map(normalize)\n    .filter((tag) => tag.length > 0);\n}\n\nexport default function TagPicker({\n  label = 'Теги',\n  placeholder = 'Введите тег и нажмите Enter',\n  hint,\n  value,\n  defaultValue = [],\n  maxTags,\n  disabled = false,\n  onChange,\n}: TagPickerProps) {\n  const fieldId = useId();\n  const hintId = `${fieldId}-hint`;\n  const statusId = `${fieldId}-status`;\n  const inputRef = useRef<HTMLInputElement>(null);\n\n  const [internalTags, setInternalTags] = useState<string[]>(defaultValue);\n  const [draft, setDraft] = useState('');\n  const [status, setStatus] = useState('');\n\n  const tags = value ?? internalTags;\n  const isFull = typeof maxTags === 'number' && tags.length >= maxTags;\n\n  const commit = useCallback(\n    (next: string[]) => {\n      if (value === undefined) {\n        setInternalTags(next);\n      }\n      onChange?.(next);\n    },\n    [onChange, value],\n  );\n\n  const addTags = useCallback(\n    (candidates: string[]) => {\n      if (disabled || candidates.length === 0) {\n        return;\n      }\n      const next = [...tags];\n      const added: string[] = [];\n      let rejectedDuplicate = false;\n\n      for (const candidate of candidates) {\n        if (typeof maxTags === 'number' && next.length >= maxTags) {\n          setStatus(`Достигнут предел: ${maxTags}`);\n          break;\n        }\n        const exists = next.some(\n          (tag) => tag.toLowerCase() === candidate.toLowerCase(),\n        );\n        if (exists) {\n          rejectedDuplicate = true;\n          continue;\n        }\n        next.push(candidate);\n        added.push(candidate);\n      }\n\n      if (added.length > 0) {\n        commit(next);\n        setStatus(`Добавлено: ${added.join(', ')}`);\n      } else if (rejectedDuplicate) {\n        setStatus('Такой тег уже добавлен');\n      }\n    },\n    [commit, disabled, maxTags, tags],\n  );\n\n  const removeTag = useCallback(\n    (target: string) => {\n      if (disabled) {\n        return;\n      }\n      commit(tags.filter((tag) => tag !== target));\n      setStatus(`Удалено: ${target}`);\n    },\n    [commit, disabled, tags],\n  );\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTags(splitInput(draft));\n      setDraft('');\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      event.preventDefault();\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const handlePaste = (event: ClipboardEvent<HTMLInputElement>) => {\n    const pasted = event.clipboardData.getData('text');\n    if (!pasted.includes(',')) {\n      return;\n    }\n    event.preventDefault();\n    addTags(splitInput(pasted));\n    setDraft('');\n  };\n\n  const handleBlur = () => {\n    if (draft.trim() === '') {\n      return;\n    }\n    addTags(splitInput(draft));\n    setDraft('');\n  };\n\n  return (\n    <div\n      className=\"jx-field jx-stack\"\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-2)',\n      }}\n    >\n      <label className=\"jx-label\" htmlFor={fieldId}>\n        {label}\n      </label>\n\n      <Input\n        id={fieldId}\n        ref={inputRef}\n        type=\"text\"\n        value={draft}\n        placeholder={isFull ? 'Лимит тегов исчерпан' : placeholder}\n        disabled={disabled || isFull}\n        aria-describedby={hint ? `${hintId} ${statusId}` : statusId}\n        onChange={(event) => setDraft(event.target.value)}\n        onKeyDown={handleKeyDown}\n        onPaste={handlePaste}\n        onBlur={handleBlur}\n      />\n\n      {hint ? (\n        <p\n          className=\"jx-hint\"\n          id={hintId}\n          style={{ color: 'var(--jx-text-muted)', margin: 0 }}\n        >\n          {hint}\n        </p>\n      ) : null}\n\n      {tags.length > 0 ? (\n        <ul\n          className=\"jx-cluster\"\n          aria-label=\"Выбранные теги\"\n          style={{\n            display: 'flex',\n            flexWrap: 'wrap',\n            gap: 'var(--jx-space-2)',\n            listStyle: 'none',\n            margin: 0,\n            padding: 0,\n          }}\n        >\n          {tags.map((tag) => (\n            <li\n              key={tag.toLowerCase()}\n              className=\"jx-tag\"\n              style={{\n                display: 'inline-flex',\n                alignItems: 'center',\n                gap: 'var(--jx-space-1)',\n                padding: 'var(--jx-space-1) var(--jx-space-2)',\n                border: 'var(--jx-border-width) solid var(--jx-border)',\n                borderRadius: 'var(--jx-radius)',\n                background: 'var(--jx-surface-2)',\n                color: 'var(--jx-text)',\n              }}\n            >\n              <span>{tag}</span>\n              <Button\n                type=\"button\"\n                variant=\"ghost\"\n                size=\"sm\"\n                disabled={disabled}\n                aria-label={`Удалить тег ${tag}`}\n                onClick={() => {\n                  removeTag(tag);\n                  inputRef.current?.focus();\n                }}\n              >\n                ×\n              </Button>\n            </li>\n          ))}\n        </ul>\n      ) : null}\n\n      <p\n        className=\"jx-hint\"\n        id={statusId}\n        role=\"status\"\n        aria-live=\"polite\"\n        style={{ color: 'var(--jx-text-muted)', margin: 0 }}\n      >\n        {status}\n      </p>\n    </div>\n  );\n}\n```"
+    "code": "import { useCallback, useId, useMemo, useRef, useState } from 'react';\nimport { Button, Input } from '@jinx-ui/react';\n\nexport interface TagPickerProps {\n  value?: string[];\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n  label?: string;\n  placeholder?: string;\n  maxTags?: number;\n  disabled?: boolean;\n}\n\nconst SEPARATORS = /[,\\n\\t]/;\n\nfunction normalize(raw: string): string {\n  return raw.trim().replace(/\\s+/g, ' ');\n}\n\nexport default function TagPicker({\n  value,\n  defaultValue = [],\n  onChange,\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  maxTags = 12,\n  disabled = false,\n}: TagPickerProps) {\n  const inputId = useId();\n  const hintId = `${inputId}-hint`;\n  const inputRef = useRef<HTMLInputElement>(null);\n  const [internal, setInternal] = useState<string[]>(defaultValue);\n  const [draft, setDraft] = useState('');\n\n  const isControlled = value !== undefined;\n  const tags = isControlled ? value : internal;\n  const isFull = tags.length >= maxTags;\n\n  const commit = useCallback(\n    (next: string[]) => {\n      if (!isControlled) setInternal(next);\n      onChange?.(next);\n    },\n    [isControlled, onChange],\n  );\n\n  const addFrom = useCallback(\n    (raw: string) => {\n      const candidates = raw\n        .split(SEPARATORS)\n        .map(normalize)\n        .filter(Boolean);\n      if (candidates.length === 0) return;\n\n      const next = [...tags];\n      for (const candidate of candidates) {\n        if (next.length >= maxTags) break;\n        const exists = next.some(\n          (tag) => tag.toLowerCase() === candidate.toLowerCase(),\n        );\n        if (!exists) next.push(candidate);\n      }\n      if (next.length !== tags.length) commit(next);\n      setDraft('');\n    },\n    [commit, maxTags, tags],\n  );\n\n  const removeAt = useCallback(\n    (index: number) => {\n      commit(tags.filter((_, i) => i !== index));\n      inputRef.current?.focus();\n    },\n    [commit, tags],\n  );\n\n  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addFrom(draft);\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      event.preventDefault();\n      removeAt(tags.length - 1);\n    }\n  };\n\n  const hint = useMemo(\n    () =>\n      isFull\n        ? `Достигнут предел: ${maxTags} тегов`\n        : `Enter или запятая — добавить тег. ${tags.length} из ${maxTags}`,\n    [isFull, maxTags, tags.length],\n  );\n\n  return (\n    <div className=\"jx-field jx-stack\" style={{ gap: 'var(--jx-space-2)' }}>\n      <label className=\"jx-label\" htmlFor={inputId}>\n        {label}\n      </label>\n\n      <Input\n        id={inputId}\n        ref={inputRef}\n        className=\"jx-input\"\n        value={draft}\n        placeholder={isFull ? 'Лимит тегов исчерпан' : placeholder}\n        disabled={disabled || isFull}\n        aria-describedby={hintId}\n        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>\n          setDraft(event.target.value)\n        }\n        onKeyDown={handleKeyDown}\n        onBlur={() => addFrom(draft)}\n      />\n\n      <p id={hintId} className=\"jx-text-muted jx-text-sm\">\n        {hint}\n      </p>\n\n      {tags.length > 0 && (\n        <ul\n          className=\"jx-cluster\"\n          aria-label=\"Выбранные теги\"\n          style={{\n            display: 'flex',\n            flexWrap: 'wrap',\n            gap: 'var(--jx-space-2)',\n            margin: 0,\n            padding: 0,\n            listStyle: 'none',\n          }}\n        >\n          {tags.map((tag, index) => (\n            <li\n              key={tag.toLowerCase()}\n              className=\"jx-badge\"\n              style={{\n                display: 'inline-flex',\n                alignItems: 'center',\n                gap: 'var(--jx-space-1)',\n                borderRadius: 'var(--jx-radius)',\n              }}\n            >\n              <span>{tag}</span>\n              <Button\n                type=\"button\"\n                variant=\"ghost\"\n                size=\"sm\"\n                className=\"jx-btn jx-btn-ghost\"\n                disabled={disabled}\n                aria-label={`Удалить тег ${tag}`}\n                onClick={() => removeAt(index)}\n              >\n                ×\n              </Button>\n            </li>\n          ))}\n        </ul>\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useId, useMemo, useRef, useState } from 'react';\nimport { Button, Input } from '@jinx-ui/react';\n\nexport interface TagPickerProps {\n  value?: string[];\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n  label?: string;\n  placeholder?: string;\n  maxTags?: number;\n  disabled?: boolean;\n}\n\nconst SEPARATORS = /[,\\n\\t]/;\n\nfunction normalize(raw: string): string {\n  return raw.trim().replace(/\\s+/g, ' ');\n}\n\nexport default function TagPicker({\n  value,\n  defaultValue = [],\n  onChange,\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  maxTags = 12,\n  disabled = false,\n}: TagPickerProps) {\n  const inputId = useId();\n  const hintId = `${inputId}-hint`;\n  const inputRef = useRef<HTMLInputElement>(null);\n  const [internal, setInternal] = useState<string[]>(defaultValue);\n  const [draft, setDraft] = useState('');\n\n  const isControlled = value !== undefined;\n  const tags = isControlled ? value : internal;\n  const isFull = tags.length >= maxTags;\n\n  const commit = useCallback(\n    (next: string[]) => {\n      if (!isControlled) setInternal(next);\n      onChange?.(next);\n    },\n    [isControlled, onChange],\n  );\n\n  const addFrom = useCallback(\n    (raw: string) => {\n      const candidates = raw\n        .split(SEPARATORS)\n        .map(normalize)\n        .filter(Boolean);\n      if (candidates.length === 0) return;\n\n      const next = [...tags];\n      for (const candidate of candidates) {\n        if (next.length >= maxTags) break;\n        const exists = next.some(\n          (tag) => tag.toLowerCase() === candidate.toLowerCase(),\n        );\n        if (!exists) next.push(candidate);\n      }\n      if (next.length !== tags.length) commit(next);\n      setDraft('');\n    },\n    [commit, maxTags, tags],\n  );\n\n  const removeAt = useCallback(\n    (index: number) => {\n      commit(tags.filter((_, i) => i !== index));\n      inputRef.current?.focus();\n    },\n    [commit, tags],\n  );\n\n  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addFrom(draft);\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      event.preventDefault();\n      removeAt(tags.length - 1);\n    }\n  };\n\n  const hint = useMemo(\n    () =>\n      isFull\n        ? `Достигнут предел: ${maxTags} тегов`\n        : `Enter или запятая — добавить тег. ${tags.length} из ${maxTags}`,\n    [isFull, maxTags, tags.length],\n  );\n\n  return (\n    <div className=\"jx-field jx-stack\" style={{ gap: 'var(--jx-space-2)' }}>\n      <label className=\"jx-label\" htmlFor={inputId}>\n        {label}\n      </label>\n\n      <Input\n        id={inputId}\n        ref={inputRef}\n        className=\"jx-input\"\n        value={draft}\n        placeholder={isFull ? 'Лимит тегов исчерпан' : placeholder}\n        disabled={disabled || isFull}\n        aria-describedby={hintId}\n        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>\n          setDraft(event.target.value)\n        }\n        onKeyDown={handleKeyDown}\n        onBlur={() => addFrom(draft)}\n      />\n\n      <p id={hintId} className=\"jx-text-muted jx-text-sm\">\n        {hint}\n      </p>\n\n      {tags.length > 0 && (\n        <ul\n          className=\"jx-cluster\"\n          aria-label=\"Выбранные теги\"\n          style={{\n            display: 'flex',\n            flexWrap: 'wrap',\n            gap: 'var(--jx-space-2)',\n            margin: 0,\n            padding: 0,\n            listStyle: 'none',\n          }}\n        >\n          {tags.map((tag, index) => (\n            <li\n              key={tag.toLowerCase()}\n              className=\"jx-badge\"\n              style={{\n                display: 'inline-flex',\n                alignItems: 'center',\n                gap: 'var(--jx-space-1)',\n                borderRadius: 'var(--jx-radius)',\n              }}\n            >\n              <span>{tag}</span>\n              <Button\n                type=\"button\"\n                variant=\"ghost\"\n                size=\"sm\"\n                className=\"jx-btn jx-btn-ghost\"\n                disabled={disabled}\n                aria-label={`Удалить тег ${tag}`}\n                onClick={() => removeAt(index)}\n              >\n                ×\n              </Button>\n            </li>\n          ))}\n        </ul>\n      )}\n    </div>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
       "errors": [
         {
           "code": 2724,
-          "line": 9,
+          "line": 2,
           "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
         },
         {
           "code": 2305,
-          "line": 9,
+          "line": 2,
           "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
-        },
-        {
-          "code": 7006,
-          "line": 163,
-          "message": "Parameter 'event' implicitly has an 'any' type."
         }
       ],
       "unknownComponents": [
@@ -140,31 +88,19 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 145,
+        "line": 98,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 173,
+        "line": 126,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 183,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 196,
-        "message": "инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 231,
+        "line": 139,
         "message": "инлайновые стили вместо классов и токенов библиотеки"
       }
     ],
@@ -174,6 +110,6 @@
   },
   "verdict": {
     "passed": false,
-    "score": 0.28
+    "score": 0.42
   }
 }

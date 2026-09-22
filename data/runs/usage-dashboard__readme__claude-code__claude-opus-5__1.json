@@ -1,0 +1,113 @@
+{
+  "id": "usage-dashboard__readme__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-22T10:00:16.030Z",
+  "repeat": 1,
+  "durationMs": 43837,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "usage-dashboard",
+    "title": "Панель расхода с фильтрами",
+    "prompt": "Сделай панель расхода по проектам. Сверху чипы-фильтры по статусу, которые можно снимать. Под ними на каждый проект строка с названием, круговым индикатором заполненности квоты в процентах и меткой статуса. Список постраничный, по пять строк. Если после фильтрации ничего не осталось, вместо списка показывается пустое состояние с кнопкой сброса фильтров.",
+    "taskType": "ui",
+    "expects": [
+      "JxChip",
+      "JxProgressCircle",
+      "JxBadge",
+      "JxPagination",
+      "JxEmptyState"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 8233,
+        "cacheCreation": 1374
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 8233,
+        "cacheCreation": 1374
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 4234,
+    "cacheRead": 8233,
+    "cacheCreation": 1374
+  },
+  "costUsd": 0.11856399999999999,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\ntype StatusId = 'active' | 'risk' | 'over' | 'paused';\n\ntype Project = {\n  id: string;\n  name: string;\n  used: number;\n  quota: number;\n  status: StatusId;\n};\n\nconst STATUSES: ReadonlyArray<{ id: StatusId; label: string }> = [\n  { id: 'active', label: 'В работе' },\n  { id: 'risk', label: 'Риск' },\n  { id: 'over', label: 'Перерасход' },\n  { id: 'paused', label: 'На паузе' },\n];\n\nconst PROJECTS: ReadonlyArray<Project> = [\n  { id: 'p-01', name: 'Atlas Migration', used: 412, quota: 1000, status: 'active' },\n  { id: 'p-02', name: 'Billing Revamp', used: 870, quota: 1000, status: 'risk' },\n  { id: 'p-03', name: 'Cold Storage', used: 120, quota: 800, status: 'paused' },\n  { id: 'p-04', name: 'Data Lakehouse', used: 1340, quota: 1200, status: 'over' },\n  { id: 'p-05', name: 'Edge Cache', used: 300, quota: 600, status: 'active' },\n  { id: 'p-06', name: 'Fraud Signals', used: 590, quota: 700, status: 'risk' },\n  { id: 'p-07', name: 'Gateway v3', used: 210, quota: 900, status: 'active' },\n  { id: 'p-08', name: 'Hydra Search', used: 980, quota: 950, status: 'over' },\n  { id: 'p-09', name: 'Insights API', used: 45, quota: 500, status: 'paused' },\n  { id: 'p-10', name: 'Jobs Runner', used: 640, quota: 1000, status: 'active' },\n  { id: 'p-11', name: 'Keyring Rotation', used: 720, quota: 800, status: 'risk' },\n  { id: 'p-12', name: 'Ledger Sync', used: 155, quota: 400, status: 'active' },\n];\n\nconst PAGE_SIZE = 5;\nconst RADIUS = 18;\nconst CIRCUMFERENCE = 2 * Math.PI * RADIUS;\n\nfunction quotaTone(percent: number): string {\n  if (percent >= 100) return 'var(--jx-danger)';\n  if (percent >= 80) return 'var(--jx-warning)';\n  return 'var(--jx-accent)';\n}\n\nexport default function ProjectSpendPanel() {\n  const [selected, setSelected] = useState<StatusId[]>(['active', 'risk', 'over']);\n  const [page, setPage] = useState(0);\n\n  const filtered = useMemo(\n    () => (selected.length === 0 ? [] : PROJECTS.filter((p) => selected.includes(p.status))),\n    [selected],\n  );\n\n  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));\n  const safePage = Math.min(page, totalPages - 1);\n  const rows = filtered.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE);\n\n  const toggleStatus = (id: StatusId) => {\n    setSelected((prev) => (prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]));\n    setPage(0);\n  };\n\n  const resetFilters = () => {\n    setSelected(STATUSES.map((s) => s.id));\n    setPage(0);\n  };\n\n  return (\n    <section className=\"jx-panel jx-stack\" aria-labelledby=\"spend-panel-title\">\n      <header className=\"jx-panel__header jx-stack\">\n        <h2 id=\"spend-panel-title\" className=\"jx-title\">\n          Расход по проектам\n        </h2>\n        <div className=\"jx-cluster\" role=\"group\" aria-label=\"Фильтр по статусу\">\n          {STATUSES.map((status) => {\n            const on = selected.includes(status.id);\n            return (\n              <button\n                key={status.id}\n                type=\"button\"\n                className=\"jx-chip\"\n                data-state={on ? 'on' : 'off'}\n                aria-pressed={on}\n                onClick={() => toggleStatus(status.id)}\n              >\n                <span className=\"jx-chip__label\">{status.label}</span>\n                {on ? (\n                  <span className=\"jx-chip__dismiss\" aria-hidden=\"true\">\n                    ×\n                  </span>\n                ) : null}\n              </button>\n            );\n          })}\n        </div>\n      </header>\n\n      {rows.length === 0 ? (\n        <div className=\"jx-empty jx-stack\" role=\"status\">\n          <p className=\"jx-empty__title\">Нет проектов под выбранные фильтры</p>\n          <p className=\"jx-empty__text\" style={{ color: 'var(--jx-fg-muted)' }}>\n            Снятые статусы скрывают все строки списка.\n          </p>\n          <Button type=\"button\" onClick={resetFilters}>\n            Сбросить фильтры\n          </Button>\n        </div>\n      ) : (\n        <ul className=\"jx-list\" style={{ listStyle: 'none', margin: 0, padding: 0 }}>\n          {rows.map((project) => {\n            const percent = Math.round((project.used / project.quota) * 100);\n            const tone = quotaTone(percent);\n            const statusLabel =\n              STATUSES.find((s) => s.id === project.status)?.label ?? project.status;\n            return (\n              <li key={project.id} className=\"jx-list__row jx-cluster\">\n                <span className=\"jx-list__title\">{project.name}</span>\n                <svg\n                  className=\"jx-gauge\"\n                  width={48}\n                  height={48}\n                  viewBox=\"0 0 48 48\"\n                  role=\"img\"\n                  aria-label={`Квота ${project.name}: ${percent} процентов`}\n                >\n                  <circle\n                    cx=\"24\"\n                    cy=\"24\"\n                    r={RADIUS}\n                    fill=\"none\"\n                    stroke=\"var(--jx-border)\"\n                    strokeWidth=\"4\"\n                  />\n                  <circle\n                    cx=\"24\"\n                    cy=\"24\"\n                    r={RADIUS}\n                    fill=\"none\"\n                    stroke={tone}\n                    strokeWidth=\"4\"\n                    strokeLinecap=\"round\"\n                    strokeDasharray={CIRCUMFERENCE}\n                    strokeDashoffset={CIRCUMFERENCE * (1 - Math.min(percent, 100) / 100)}\n                    transform=\"rotate(-90 24 24)\"\n                  />\n                  <text\n                    x=\"24\"\n                    y=\"24\"\n                    textAnchor=\"middle\"\n                    dominantBaseline=\"central\"\n                    fill=\"var(--jx-fg)\"\n                    fontSize=\"10\"\n                  >\n                    {percent}%\n                  </text>\n                </svg>\n                <span className=\"jx-badge\" data-status={project.status}>\n                  {statusLabel}\n                </span>\n              </li>\n            );\n          })}\n        </ul>\n      )}\n\n      {rows.length > 0 ? (\n        <footer className=\"jx-cluster jx-panel__footer\">\n          <Button\n            type=\"button\"\n            disabled={safePage === 0}\n            onClick={() => setPage((p) => Math.max(0, p - 1))}\n          >\n            Назад\n          </Button>\n          <span aria-live=\"polite\" style={{ color: 'var(--jx-fg-muted)' }}>\n            Страница {safePage + 1} из {totalPages}\n          </span>\n          <Button\n            type=\"button\"\n            disabled={safePage >= totalPages - 1}\n            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}\n          >\n            Вперёд\n          </Button>\n        </footer>\n      ) : null}\n    </section>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\ntype StatusId = 'active' | 'risk' | 'over' | 'paused';\n\ntype Project = {\n  id: string;\n  name: string;\n  used: number;\n  quota: number;\n  status: StatusId;\n};\n\nconst STATUSES: ReadonlyArray<{ id: StatusId; label: string }> = [\n  { id: 'active', label: 'В работе' },\n  { id: 'risk', label: 'Риск' },\n  { id: 'over', label: 'Перерасход' },\n  { id: 'paused', label: 'На паузе' },\n];\n\nconst PROJECTS: ReadonlyArray<Project> = [\n  { id: 'p-01', name: 'Atlas Migration', used: 412, quota: 1000, status: 'active' },\n  { id: 'p-02', name: 'Billing Revamp', used: 870, quota: 1000, status: 'risk' },\n  { id: 'p-03', name: 'Cold Storage', used: 120, quota: 800, status: 'paused' },\n  { id: 'p-04', name: 'Data Lakehouse', used: 1340, quota: 1200, status: 'over' },\n  { id: 'p-05', name: 'Edge Cache', used: 300, quota: 600, status: 'active' },\n  { id: 'p-06', name: 'Fraud Signals', used: 590, quota: 700, status: 'risk' },\n  { id: 'p-07', name: 'Gateway v3', used: 210, quota: 900, status: 'active' },\n  { id: 'p-08', name: 'Hydra Search', used: 980, quota: 950, status: 'over' },\n  { id: 'p-09', name: 'Insights API', used: 45, quota: 500, status: 'paused' },\n  { id: 'p-10', name: 'Jobs Runner', used: 640, quota: 1000, status: 'active' },\n  { id: 'p-11', name: 'Keyring Rotation', used: 720, quota: 800, status: 'risk' },\n  { id: 'p-12', name: 'Ledger Sync', used: 155, quota: 400, status: 'active' },\n];\n\nconst PAGE_SIZE = 5;\nconst RADIUS = 18;\nconst CIRCUMFERENCE = 2 * Math.PI * RADIUS;\n\nfunction quotaTone(percent: number): string {\n  if (percent >= 100) return 'var(--jx-danger)';\n  if (percent >= 80) return 'var(--jx-warning)';\n  return 'var(--jx-accent)';\n}\n\nexport default function ProjectSpendPanel() {\n  const [selected, setSelected] = useState<StatusId[]>(['active', 'risk', 'over']);\n  const [page, setPage] = useState(0);\n\n  const filtered = useMemo(\n    () => (selected.length === 0 ? [] : PROJECTS.filter((p) => selected.includes(p.status))),\n    [selected],\n  );\n\n  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));\n  const safePage = Math.min(page, totalPages - 1);\n  const rows = filtered.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE);\n\n  const toggleStatus = (id: StatusId) => {\n    setSelected((prev) => (prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]));\n    setPage(0);\n  };\n\n  const resetFilters = () => {\n    setSelected(STATUSES.map((s) => s.id));\n    setPage(0);\n  };\n\n  return (\n    <section className=\"jx-panel jx-stack\" aria-labelledby=\"spend-panel-title\">\n      <header className=\"jx-panel__header jx-stack\">\n        <h2 id=\"spend-panel-title\" className=\"jx-title\">\n          Расход по проектам\n        </h2>\n        <div className=\"jx-cluster\" role=\"group\" aria-label=\"Фильтр по статусу\">\n          {STATUSES.map((status) => {\n            const on = selected.includes(status.id);\n            return (\n              <button\n                key={status.id}\n                type=\"button\"\n                className=\"jx-chip\"\n                data-state={on ? 'on' : 'off'}\n                aria-pressed={on}\n                onClick={() => toggleStatus(status.id)}\n              >\n                <span className=\"jx-chip__label\">{status.label}</span>\n                {on ? (\n                  <span className=\"jx-chip__dismiss\" aria-hidden=\"true\">\n                    ×\n                  </span>\n                ) : null}\n              </button>\n            );\n          })}\n        </div>\n      </header>\n\n      {rows.length === 0 ? (\n        <div className=\"jx-empty jx-stack\" role=\"status\">\n          <p className=\"jx-empty__title\">Нет проектов под выбранные фильтры</p>\n          <p className=\"jx-empty__text\" style={{ color: 'var(--jx-fg-muted)' }}>\n            Снятые статусы скрывают все строки списка.\n          </p>\n          <Button type=\"button\" onClick={resetFilters}>\n            Сбросить фильтры\n          </Button>\n        </div>\n      ) : (\n        <ul className=\"jx-list\" style={{ listStyle: 'none', margin: 0, padding: 0 }}>\n          {rows.map((project) => {\n            const percent = Math.round((project.used / project.quota) * 100);\n            const tone = quotaTone(percent);\n            const statusLabel =\n              STATUSES.find((s) => s.id === project.status)?.label ?? project.status;\n            return (\n              <li key={project.id} className=\"jx-list__row jx-cluster\">\n                <span className=\"jx-list__title\">{project.name}</span>\n                <svg\n                  className=\"jx-gauge\"\n                  width={48}\n                  height={48}\n                  viewBox=\"0 0 48 48\"\n                  role=\"img\"\n                  aria-label={`Квота ${project.name}: ${percent} процентов`}\n                >\n                  <circle\n                    cx=\"24\"\n                    cy=\"24\"\n                    r={RADIUS}\n                    fill=\"none\"\n                    stroke=\"var(--jx-border)\"\n                    strokeWidth=\"4\"\n                  />\n                  <circle\n                    cx=\"24\"\n                    cy=\"24\"\n                    r={RADIUS}\n                    fill=\"none\"\n                    stroke={tone}\n                    strokeWidth=\"4\"\n                    strokeLinecap=\"round\"\n                    strokeDasharray={CIRCUMFERENCE}\n                    strokeDashoffset={CIRCUMFERENCE * (1 - Math.min(percent, 100) / 100)}\n                    transform=\"rotate(-90 24 24)\"\n                  />\n                  <text\n                    x=\"24\"\n                    y=\"24\"\n                    textAnchor=\"middle\"\n                    dominantBaseline=\"central\"\n                    fill=\"var(--jx-fg)\"\n                    fontSize=\"10\"\n                  >\n                    {percent}%\n                  </text>\n                </svg>\n                <span className=\"jx-badge\" data-status={project.status}>\n                  {statusLabel}\n                </span>\n              </li>\n            );\n          })}\n        </ul>\n      )}\n\n      {rows.length > 0 ? (\n        <footer className=\"jx-cluster jx-panel__footer\">\n          <Button\n            type=\"button\"\n            disabled={safePage === 0}\n            onClick={() => setPage((p) => Math.max(0, p - 1))}\n          >\n            Назад\n          </Button>\n          <span aria-live=\"polite\" style={{ color: 'var(--jx-fg-muted)' }}>\n            Страница {safePage + 1} из {totalPages}\n          </span>\n          <Button\n            type=\"button\"\n            disabled={safePage >= totalPages - 1}\n            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}\n          >\n            Вперёд\n          </Button>\n        </footer>\n      ) : null}\n    </section>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        }
+      ],
+      "unknownComponents": [
+        "Button"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 102,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 110,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 176,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.56
+  }
+}

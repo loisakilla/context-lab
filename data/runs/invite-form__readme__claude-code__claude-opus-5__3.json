@@ -1,0 +1,136 @@
+{
+  "id": "invite-form__readme__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-22T10:03:29.620Z",
+  "repeat": 3,
+  "durationMs": 27725,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "invite-form",
+    "title": "Приглашение в команду с валидацией",
+    "prompt": "Сделай форму приглашения в команду: поле почты с подсказкой под ним, выбор роли из списка, переключатель «отправить уведомление» и кнопка отправки. Пока почта не похожа на адрес, поле показывает ошибку и кнопка заблокирована. После отправки над формой появляется сообщение об успехе, которое можно закрыть.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxAlert",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 9590,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 9590,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2414,
+    "cacheRead": 9590,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.065155,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "// Assumed @jinx-ui/react runtime surface: Alert, Button, Input, Select, Switch.\n// Adjust prop names if the installed version differs.\nimport { useId, useState, type FormEvent } from 'react';\nimport { Alert, Button, Input, Select, Switch } from '@jinx-ui/react';\n\nconst ROLES = [\n  { value: 'viewer', label: 'Наблюдатель' },\n  { value: 'editor', label: 'Редактор' },\n  { value: 'admin', label: 'Администратор' },\n];\n\nconst EMAIL_RE = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nexport default function InviteTeammateForm() {\n  const emailId = useId();\n  const hintId = `${emailId}-hint`;\n  const errorId = `${emailId}-error`;\n  const roleId = useId();\n\n  const [email, setEmail] = useState('');\n  const [role, setRole] = useState('viewer');\n  const [notify, setNotify] = useState(true);\n  const [touched, setTouched] = useState(false);\n  const [invited, setInvited] = useState<string | null>(null);\n\n  const isValid = EMAIL_RE.test(email.trim());\n  const showError = touched && !isValid;\n\n  function handleSubmit(event: FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n    setTouched(true);\n    if (!isValid) return;\n    setInvited(email.trim());\n    setEmail('');\n    setTouched(false);\n  }\n\n  return (\n    <div className=\"jx-stack\" style={{ gap: 'var(--jx-space-4)' }}>\n      {invited && (\n        <Alert\n          tone=\"success\"\n          role=\"status\"\n          title=\"Приглашение отправлено\"\n          onClose={() => setInvited(null)}\n          closeLabel=\"Закрыть сообщение\"\n        >\n          Мы отправили приглашение на {invited}.\n        </Alert>\n      )}\n\n      <form className=\"jx-stack\" style={{ gap: 'var(--jx-space-4)' }} onSubmit={handleSubmit} noValidate>\n        <div className=\"jx-field\">\n          <label className=\"jx-label\" htmlFor={emailId}>\n            Почта участника\n          </label>\n          <Input\n            id={emailId}\n            type=\"email\"\n            name=\"email\"\n            value={email}\n            placeholder=\"name@company.com\"\n            invalid={showError}\n            autoComplete=\"email\"\n            aria-describedby={showError ? `${hintId} ${errorId}` : hintId}\n            onChange={(event) => setEmail(event.target.value)}\n            onBlur={() => setTouched(true)}\n          />\n          <p className=\"jx-hint\" id={hintId}>\n            Приглашение придёт на рабочий адрес и будет действовать 7 дней.\n          </p>\n          {showError && (\n            <p className=\"jx-error\" id={errorId}>\n              Введите адрес в формате name@company.com.\n            </p>\n          )}\n        </div>\n\n        <div className=\"jx-field\">\n          <label className=\"jx-label\" htmlFor={roleId}>\n            Роль в команде\n          </label>\n          <Select\n            id={roleId}\n            name=\"role\"\n            value={role}\n            options={ROLES}\n            onValueChange={setRole}\n          />\n        </div>\n\n        <Switch\n          checked={notify}\n          onCheckedChange={setNotify}\n          label=\"Отправить уведомление\"\n          description=\"Участник получит письмо сразу после создания приглашения.\"\n        />\n\n        <Button type=\"submit\" variant=\"primary\" disabled={!isValid}>\n          Отправить приглашение\n        </Button>\n      </form>\n    </div>\n  );\n}",
+    "text": "```tsx\n// Assumed @jinx-ui/react runtime surface: Alert, Button, Input, Select, Switch.\n// Adjust prop names if the installed version differs.\nimport { useId, useState, type FormEvent } from 'react';\nimport { Alert, Button, Input, Select, Switch } from '@jinx-ui/react';\n\nconst ROLES = [\n  { value: 'viewer', label: 'Наблюдатель' },\n  { value: 'editor', label: 'Редактор' },\n  { value: 'admin', label: 'Администратор' },\n];\n\nconst EMAIL_RE = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nexport default function InviteTeammateForm() {\n  const emailId = useId();\n  const hintId = `${emailId}-hint`;\n  const errorId = `${emailId}-error`;\n  const roleId = useId();\n\n  const [email, setEmail] = useState('');\n  const [role, setRole] = useState('viewer');\n  const [notify, setNotify] = useState(true);\n  const [touched, setTouched] = useState(false);\n  const [invited, setInvited] = useState<string | null>(null);\n\n  const isValid = EMAIL_RE.test(email.trim());\n  const showError = touched && !isValid;\n\n  function handleSubmit(event: FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n    setTouched(true);\n    if (!isValid) return;\n    setInvited(email.trim());\n    setEmail('');\n    setTouched(false);\n  }\n\n  return (\n    <div className=\"jx-stack\" style={{ gap: 'var(--jx-space-4)' }}>\n      {invited && (\n        <Alert\n          tone=\"success\"\n          role=\"status\"\n          title=\"Приглашение отправлено\"\n          onClose={() => setInvited(null)}\n          closeLabel=\"Закрыть сообщение\"\n        >\n          Мы отправили приглашение на {invited}.\n        </Alert>\n      )}\n\n      <form className=\"jx-stack\" style={{ gap: 'var(--jx-space-4)' }} onSubmit={handleSubmit} noValidate>\n        <div className=\"jx-field\">\n          <label className=\"jx-label\" htmlFor={emailId}>\n            Почта участника\n          </label>\n          <Input\n            id={emailId}\n            type=\"email\"\n            name=\"email\"\n            value={email}\n            placeholder=\"name@company.com\"\n            invalid={showError}\n            autoComplete=\"email\"\n            aria-describedby={showError ? `${hintId} ${errorId}` : hintId}\n            onChange={(event) => setEmail(event.target.value)}\n            onBlur={() => setTouched(true)}\n          />\n          <p className=\"jx-hint\" id={hintId}>\n            Приглашение придёт на рабочий адрес и будет действовать 7 дней.\n          </p>\n          {showError && (\n            <p className=\"jx-error\" id={errorId}>\n              Введите адрес в формате name@company.com.\n            </p>\n          )}\n        </div>\n\n        <div className=\"jx-field\">\n          <label className=\"jx-label\" htmlFor={roleId}>\n            Роль в команде\n          </label>\n          <Select\n            id={roleId}\n            name=\"role\"\n            value={role}\n            options={ROLES}\n            onValueChange={setRole}\n          />\n        </div>\n\n        <Switch\n          checked={notify}\n          onCheckedChange={setNotify}\n          label=\"Отправить уведомление\"\n          description=\"Участник получит письмо сразу после создания приглашения.\"\n        />\n\n        <Button type=\"submit\" variant=\"primary\" disabled={!isValid}>\n          Отправить приглашение\n        </Button>\n      </form>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 4,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Alert'. Did you mean 'JxAlert'?"
+        },
+        {
+          "code": 2724,
+          "line": 4,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 4,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
+        },
+        {
+          "code": 2724,
+          "line": 4,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Select'. Did you mean 'JxSelect'?"
+        },
+        {
+          "code": 2724,
+          "line": 4,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Switch'. Did you mean 'JxSwitch'?"
+        },
+        {
+          "code": 7006,
+          "line": 66,
+          "message": "Parameter 'event' implicitly has an 'any' type."
+        }
+      ],
+      "unknownComponents": [
+        "Alert",
+        "Button",
+        "Input",
+        "Select",
+        "Switch"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 39,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 52,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

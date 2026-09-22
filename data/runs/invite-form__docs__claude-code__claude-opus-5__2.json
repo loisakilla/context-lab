@@ -1,0 +1,111 @@
+{
+  "id": "invite-form__docs__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-22T10:08:12.450Z",
+  "repeat": 2,
+  "durationMs": 15970,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "docs",
+  "task": {
+    "id": "invite-form",
+    "title": "Приглашение в команду с валидацией",
+    "prompt": "Сделай форму приглашения в команду: поле почты с подсказкой под ним, выбор роли из списка, переключатель «отправить уведомление» и кнопка отправки. Пока почта не похожа на адрес, поле показывает ошибку и кнопка заблокирована. После отправки над формой появляется сообщение об успехе, которое можно закрыть.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxAlert",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 18704,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.0",
+        "tokens": 18550
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 10,
+        "cacheRead": 40654,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 10,
+        "cacheRead": 40654,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1407,
+    "cacheRead": 40654,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.055512000000000006,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, type FormEvent } from 'react';\nimport {\n  JxAlert,\n  JxButton,\n  JxInputField,\n  JxSelect,\n  JxSwitch,\n} from '@jinx-ui/react';\n\nconst ROLES = [\n  { value: 'viewer', label: 'Наблюдатель', meta: 'только чтение' },\n  { value: 'editor', label: 'Редактор', meta: 'может менять' },\n  { value: 'admin', label: 'Администратор', meta: 'полный доступ' },\n];\n\nconst EMAIL_RE = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nexport default function TeamInviteForm() {\n  const [email, setEmail] = useState('');\n  const [touched, setTouched] = useState(false);\n  const [role, setRole] = useState('editor');\n  const [notify, setNotify] = useState(true);\n  const [invited, setInvited] = useState<string | null>(null);\n\n  const emailValid = EMAIL_RE.test(email.trim());\n  const showError = touched && !emailValid;\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!emailValid) {\n      setTouched(true);\n      return;\n    }\n    setInvited(email.trim());\n    setEmail('');\n    setTouched(false);\n  };\n\n  return (\n    <div style={{ display: 'grid', gap: '16px', maxWidth: '420px' }}>\n      {invited && (\n        <JxAlert intent=\"success\" title=\"Приглашение отправлено\">\n          <div style={{ display: 'grid', gap: '8px', justifyItems: 'start' }}>\n            <span>\n              Мы отправили приглашение на {invited}\n              {notify ? ' и уведомили команду.' : '.'}\n            </span>\n            <JxButton variant=\"ghost\" size=\"sm\" onClick={() => setInvited(null)}>\n              Закрыть\n            </JxButton>\n          </div>\n        </JxAlert>\n      )}\n\n      <form onSubmit={submit} style={{ display: 'grid', gap: '16px' }} noValidate>\n        <JxInputField\n          label=\"Почта участника\"\n          type=\"email\"\n          required\n          placeholder=\"name@company.com\"\n          value={email}\n          onChange={(event) => setEmail(event.target.value)}\n          onBlur={() => setTouched(true)}\n          helperText=\"Приглашение придёт на этот адрес и будет действовать 7 дней\"\n          errorText={showError ? 'Введите адрес вида name@company.com' : undefined}\n        />\n\n        <JxSelect\n          label=\"Роль в команде\"\n          options={ROLES}\n          value={role}\n          onValueChange={setRole}\n          placeholder=\"Выберите роль\"\n        />\n\n        <JxSwitch\n          label=\"Отправить уведомление команде\"\n          checked={notify}\n          onChange={(event) => setNotify(event.target.checked)}\n        />\n\n        <JxButton type=\"submit\" variant=\"primary\" disabled={!emailValid}>\n          Отправить приглашение\n        </JxButton>\n      </form>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState, type FormEvent } from 'react';\nimport {\n  JxAlert,\n  JxButton,\n  JxInputField,\n  JxSelect,\n  JxSwitch,\n} from '@jinx-ui/react';\n\nconst ROLES = [\n  { value: 'viewer', label: 'Наблюдатель', meta: 'только чтение' },\n  { value: 'editor', label: 'Редактор', meta: 'может менять' },\n  { value: 'admin', label: 'Администратор', meta: 'полный доступ' },\n];\n\nconst EMAIL_RE = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nexport default function TeamInviteForm() {\n  const [email, setEmail] = useState('');\n  const [touched, setTouched] = useState(false);\n  const [role, setRole] = useState('editor');\n  const [notify, setNotify] = useState(true);\n  const [invited, setInvited] = useState<string | null>(null);\n\n  const emailValid = EMAIL_RE.test(email.trim());\n  const showError = touched && !emailValid;\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!emailValid) {\n      setTouched(true);\n      return;\n    }\n    setInvited(email.trim());\n    setEmail('');\n    setTouched(false);\n  };\n\n  return (\n    <div style={{ display: 'grid', gap: '16px', maxWidth: '420px' }}>\n      {invited && (\n        <JxAlert intent=\"success\" title=\"Приглашение отправлено\">\n          <div style={{ display: 'grid', gap: '8px', justifyItems: 'start' }}>\n            <span>\n              Мы отправили приглашение на {invited}\n              {notify ? ' и уведомили команду.' : '.'}\n            </span>\n            <JxButton variant=\"ghost\" size=\"sm\" onClick={() => setInvited(null)}>\n              Закрыть\n            </JxButton>\n          </div>\n        </JxAlert>\n      )}\n\n      <form onSubmit={submit} style={{ display: 'grid', gap: '16px' }} noValidate>\n        <JxInputField\n          label=\"Почта участника\"\n          type=\"email\"\n          required\n          placeholder=\"name@company.com\"\n          value={email}\n          onChange={(event) => setEmail(event.target.value)}\n          onBlur={() => setTouched(true)}\n          helperText=\"Приглашение придёт на этот адрес и будет действовать 7 дней\"\n          errorText={showError ? 'Введите адрес вида name@company.com' : undefined}\n        />\n\n        <JxSelect\n          label=\"Роль в команде\"\n          options={ROLES}\n          value={role}\n          onValueChange={setRole}\n          placeholder=\"Выберите роль\"\n        />\n\n        <JxSwitch\n          label=\"Отправить уведомление команде\"\n          checked={notify}\n          onChange={(event) => setNotify(event.target.checked)}\n        />\n\n        <JxButton type=\"submit\" variant=\"primary\" disabled={!emailValid}>\n          Отправить приглашение\n        </JxButton>\n      </form>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 40,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 43,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 55,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxAlert",
+      "JxButton",
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

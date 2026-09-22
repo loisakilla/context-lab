@@ -1,0 +1,129 @@
+{
+  "id": "invite-form__readme__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-22T10:03:01.875Z",
+  "repeat": 2,
+  "durationMs": 38892,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "invite-form",
+    "title": "Приглашение в команду с валидацией",
+    "prompt": "Сделай форму приглашения в команду: поле почты с подсказкой под ним, выбор роли из списка, переключатель «отправить уведомление» и кнопка отправки. Пока почта не похожа на адрес, поле показывает ошибку и кнопка заблокирована. После отправки над формой появляется сообщение об успехе, которое можно закрыть.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxAlert",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 9590,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 9590,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 3703,
+    "cacheRead": 9590,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.09738,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useId, useState, type FormEvent } from 'react';\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nconst ROLES = [\n  { value: 'viewer', label: 'Наблюдатель' },\n  { value: 'editor', label: 'Редактор' },\n  { value: 'admin', label: 'Администратор' },\n] as const;\n\ntype RoleValue = (typeof ROLES)[number]['value'];\n\nexport default function TeamInviteForm() {\n  const fieldId = useId();\n  const emailId = `${fieldId}-email`;\n  const hintId = `${fieldId}-hint`;\n  const errorId = `${fieldId}-error`;\n  const roleId = `${fieldId}-role`;\n  const notifyId = `${fieldId}-notify`;\n\n  const [email, setEmail] = useState('');\n  const [role, setRole] = useState<RoleValue>('editor');\n  const [notify, setNotify] = useState(true);\n  const [touched, setTouched] = useState(false);\n  const [invited, setInvited] = useState<string | null>(null);\n\n  const isValid = EMAIL_PATTERN.test(email.trim());\n  const showError = touched && !isValid;\n\n  function handleSubmit(event: FormEvent<HTMLFormElement>) {\n    setTouched(true);\n    event.preventDefault();\n    if (!isValid) return;\n    setInvited(email.trim());\n    setEmail('');\n    setTouched(false);\n  }\n\n  return (\n    <section\n      className=\"jx-stack\"\n      style={{ display: 'grid', gap: 'var(--jx-space-4)', maxWidth: '28rem' }}\n    >\n      {invited !== null && (\n        <div\n          className=\"jx-alert jx-alert--success\"\n          role=\"status\"\n          aria-live=\"polite\"\n          style={{\n            display: 'flex',\n            alignItems: 'flex-start',\n            gap: 'var(--jx-space-3)',\n            borderRadius: 'var(--jx-radius)',\n          }}\n        >\n          <span style={{ flex: '1 1 auto' }}>\n            Приглашение отправлено на {invited}\n          </span>\n          <button\n            type=\"button\"\n            className=\"jx-btn jx-btn--ghost jx-btn--icon\"\n            aria-label=\"Закрыть сообщение\"\n            onClick={() => setInvited(null)}\n          >\n            ×\n          </button>\n        </div>\n      )}\n\n      <form\n        className=\"jx-card jx-form\"\n        onSubmit={handleSubmit}\n        noValidate\n        style={{\n          display: 'grid',\n          gap: 'var(--jx-space-4)',\n          borderRadius: 'var(--jx-radius)',\n        }}\n      >\n        <div className=\"jx-field\" style={{ display: 'grid', gap: 'var(--jx-space-2)' }}>\n          <label className=\"jx-label\" htmlFor={emailId}>\n            Рабочая почта\n          </label>\n          <input\n            id={emailId}\n            className=\"jx-input\"\n            type=\"email\"\n            name=\"email\"\n            autoComplete=\"email\"\n            placeholder=\"name@company.com\"\n            value={email}\n            aria-invalid={showError}\n            aria-describedby={showError ? `${hintId} ${errorId}` : hintId}\n            onChange={(event) => setEmail(event.target.value)}\n            onBlur={() => setTouched(true)}\n          />\n          <p id={hintId} className=\"jx-field__hint\">\n            Приглашение придёт на этот адрес и будет действовать 7 дней.\n          </p>\n          {showError && (\n            <p id={errorId} className=\"jx-field__error\" role=\"alert\">\n              Введите корректный адрес, например name@company.com\n            </p>\n          )}\n        </div>\n\n        <div className=\"jx-field\" style={{ display: 'grid', gap: 'var(--jx-space-2)' }}>\n          <label className=\"jx-label\" htmlFor={roleId}>\n            Роль в команде\n          </label>\n          <select\n            id={roleId}\n            className=\"jx-select\"\n            name=\"role\"\n            value={role}\n            onChange={(event) => setRole(event.target.value as RoleValue)}\n          >\n            {ROLES.map((item) => (\n              <option key={item.value} value={item.value}>\n                {item.label}\n              </option>\n            ))}\n          </select>\n        </div>\n\n        <div\n          className=\"jx-field jx-field--inline\"\n          style={{ display: 'flex', alignItems: 'center', gap: 'var(--jx-space-3)' }}\n        >\n          <button\n            id={notifyId}\n            type=\"button\"\n            role=\"switch\"\n            aria-checked={notify}\n            className=\"jx-switch\"\n            onClick={() => setNotify((value) => !value)}\n          >\n            <span className=\"jx-switch__track\">\n              <span className=\"jx-switch__thumb\" />\n            </span>\n          </button>\n          <label className=\"jx-label\" htmlFor={notifyId}>\n            Отправить уведомление\n          </label>\n        </div>\n\n        <button type=\"submit\" className=\"jx-btn jx-btn--primary\" disabled={!isValid}>\n          Отправить приглашение\n        </button>\n      </form>\n    </section>\n  );\n}",
+    "text": "```tsx\nimport { useId, useState, type FormEvent } from 'react';\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nconst ROLES = [\n  { value: 'viewer', label: 'Наблюдатель' },\n  { value: 'editor', label: 'Редактор' },\n  { value: 'admin', label: 'Администратор' },\n] as const;\n\ntype RoleValue = (typeof ROLES)[number]['value'];\n\nexport default function TeamInviteForm() {\n  const fieldId = useId();\n  const emailId = `${fieldId}-email`;\n  const hintId = `${fieldId}-hint`;\n  const errorId = `${fieldId}-error`;\n  const roleId = `${fieldId}-role`;\n  const notifyId = `${fieldId}-notify`;\n\n  const [email, setEmail] = useState('');\n  const [role, setRole] = useState<RoleValue>('editor');\n  const [notify, setNotify] = useState(true);\n  const [touched, setTouched] = useState(false);\n  const [invited, setInvited] = useState<string | null>(null);\n\n  const isValid = EMAIL_PATTERN.test(email.trim());\n  const showError = touched && !isValid;\n\n  function handleSubmit(event: FormEvent<HTMLFormElement>) {\n    setTouched(true);\n    event.preventDefault();\n    if (!isValid) return;\n    setInvited(email.trim());\n    setEmail('');\n    setTouched(false);\n  }\n\n  return (\n    <section\n      className=\"jx-stack\"\n      style={{ display: 'grid', gap: 'var(--jx-space-4)', maxWidth: '28rem' }}\n    >\n      {invited !== null && (\n        <div\n          className=\"jx-alert jx-alert--success\"\n          role=\"status\"\n          aria-live=\"polite\"\n          style={{\n            display: 'flex',\n            alignItems: 'flex-start',\n            gap: 'var(--jx-space-3)',\n            borderRadius: 'var(--jx-radius)',\n          }}\n        >\n          <span style={{ flex: '1 1 auto' }}>\n            Приглашение отправлено на {invited}\n          </span>\n          <button\n            type=\"button\"\n            className=\"jx-btn jx-btn--ghost jx-btn--icon\"\n            aria-label=\"Закрыть сообщение\"\n            onClick={() => setInvited(null)}\n          >\n            ×\n          </button>\n        </div>\n      )}\n\n      <form\n        className=\"jx-card jx-form\"\n        onSubmit={handleSubmit}\n        noValidate\n        style={{\n          display: 'grid',\n          gap: 'var(--jx-space-4)',\n          borderRadius: 'var(--jx-radius)',\n        }}\n      >\n        <div className=\"jx-field\" style={{ display: 'grid', gap: 'var(--jx-space-2)' }}>\n          <label className=\"jx-label\" htmlFor={emailId}>\n            Рабочая почта\n          </label>\n          <input\n            id={emailId}\n            className=\"jx-input\"\n            type=\"email\"\n            name=\"email\"\n            autoComplete=\"email\"\n            placeholder=\"name@company.com\"\n            value={email}\n            aria-invalid={showError}\n            aria-describedby={showError ? `${hintId} ${errorId}` : hintId}\n            onChange={(event) => setEmail(event.target.value)}\n            onBlur={() => setTouched(true)}\n          />\n          <p id={hintId} className=\"jx-field__hint\">\n            Приглашение придёт на этот адрес и будет действовать 7 дней.\n          </p>\n          {showError && (\n            <p id={errorId} className=\"jx-field__error\" role=\"alert\">\n              Введите корректный адрес, например name@company.com\n            </p>\n          )}\n        </div>\n\n        <div className=\"jx-field\" style={{ display: 'grid', gap: 'var(--jx-space-2)' }}>\n          <label className=\"jx-label\" htmlFor={roleId}>\n            Роль в команде\n          </label>\n          <select\n            id={roleId}\n            className=\"jx-select\"\n            name=\"role\"\n            value={role}\n            onChange={(event) => setRole(event.target.value as RoleValue)}\n          >\n            {ROLES.map((item) => (\n              <option key={item.value} value={item.value}>\n                {item.label}\n              </option>\n            ))}\n          </select>\n        </div>\n\n        <div\n          className=\"jx-field jx-field--inline\"\n          style={{ display: 'flex', alignItems: 'center', gap: 'var(--jx-space-3)' }}\n        >\n          <button\n            id={notifyId}\n            type=\"button\"\n            role=\"switch\"\n            aria-checked={notify}\n            className=\"jx-switch\"\n            onClick={() => setNotify((value) => !value)}\n          >\n            <span className=\"jx-switch__track\">\n              <span className=\"jx-switch__thumb\" />\n            </span>\n          </button>\n          <label className=\"jx-label\" htmlFor={notifyId}>\n            Отправить уведомление\n          </label>\n        </div>\n\n        <button type=\"submit\" className=\"jx-btn jx-btn--primary\" disabled={!isValid}>\n          Отправить приглашение\n        </button>\n      </form>\n    </section>\n  );\n}\n```\n\nЗамечание: в переданном контексте есть только README без `docs/components.md`, поэтому точные имена экспортов `@jinx-ui/react` мне неизвестны — компонент собран на CSS-first слое `jx-*` (заявленное основное направление v1), чтобы не выдумывать несуществующий API; если пришлёшь список из «core 8», перепишу на рантайм-примитивы."
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 42,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 49,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 56,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 74,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 80,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 107,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 128,
+        "message": "инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.7
+  }
+}

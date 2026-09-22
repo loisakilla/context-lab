@@ -1,8 +1,8 @@
 {
   "id": "date-range__docs+rules__claude-code__claude-opus-5__2",
-  "createdAt": "2026-09-21T13:25:12.494Z",
+  "createdAt": "2026-09-22T09:39:36.072Z",
   "repeat": 2,
-  "durationMs": 10925,
+  "durationMs": 10031,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -23,7 +23,7 @@
     ]
   },
   "context": {
-    "tokens": 17366,
+    "tokens": 17409,
     "sources": [
       {
         "kind": "docs",
@@ -43,24 +43,33 @@
     {
       "usage": {
         "input": 2,
-        "output": 8,
-        "cacheRead": 6778,
-        "cacheCreation": 39212
+        "output": 6,
+        "cacheRead": 38617,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 6,
+        "cacheRead": 38617,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
     "input": 2,
-    "output": 736,
-    "cacheRead": 6778,
-    "cacheCreation": 39212
+    "output": 843,
+    "cacheRead": 38617,
+    "cacheCreation": 0
   },
-  "costUsd": 0.266874,
+  "costUsd": 0.0403935,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date | null;\n  onChange?: (value: Date | null) => void;\n};\n\nconst startOfDay = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst shiftDays = (days: number) => {\n  const base = startOfDay(new Date());\n  base.setDate(base.getDate() + days);\n  return base;\n};\n\nconst quickOptions = [\n  { key: 'today', label: 'Сегодня', offset: 0 },\n  { key: 'yesterday', label: 'Вчера', offset: -1 },\n  { key: 'week-ago', label: 'Неделя назад', offset: -7 },\n];\n\nexport default function ReportDatePicker({ value, onChange }: ReportDatePickerProps) {\n  const [internalDate, setInternalDate] = useState<Date | null>(null);\n  const selected = value !== undefined ? value : internalDate;\n\n  const applyDate = (next: Date | null) => {\n    if (value === undefined) {\n      setInternalDate(next);\n    }\n    onChange?.(next);\n  };\n\n  const isSameDay = (a: Date | null | undefined, b: Date) =>\n    !!a && startOfDay(a).getTime() === b.getTime();\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, fontFamily: 'var(--jx-font-sans)' }}>\n      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>\n        {quickOptions.map((option) => {\n          const optionDate = shiftDays(option.offset);\n          return (\n            <JxChip\n              key={option.key}\n              active={isSameDay(selected, optionDate)}\n              onClick={() => applyDate(optionDate)}\n            >\n              {option.label}\n            </JxChip>\n          );\n        })}\n      </div>\n      <JxCalendar locale=\"ru-RU\" value={selected ?? null} onValueChange={applyDate} />\n    </div>\n  );\n}",
-    "text": "```tsx\nimport { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date | null;\n  onChange?: (value: Date | null) => void;\n};\n\nconst startOfDay = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst shiftDays = (days: number) => {\n  const base = startOfDay(new Date());\n  base.setDate(base.getDate() + days);\n  return base;\n};\n\nconst quickOptions = [\n  { key: 'today', label: 'Сегодня', offset: 0 },\n  { key: 'yesterday', label: 'Вчера', offset: -1 },\n  { key: 'week-ago', label: 'Неделя назад', offset: -7 },\n];\n\nexport default function ReportDatePicker({ value, onChange }: ReportDatePickerProps) {\n  const [internalDate, setInternalDate] = useState<Date | null>(null);\n  const selected = value !== undefined ? value : internalDate;\n\n  const applyDate = (next: Date | null) => {\n    if (value === undefined) {\n      setInternalDate(next);\n    }\n    onChange?.(next);\n  };\n\n  const isSameDay = (a: Date | null | undefined, b: Date) =>\n    !!a && startOfDay(a).getTime() === b.getTime();\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, fontFamily: 'var(--jx-font-sans)' }}>\n      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>\n        {quickOptions.map((option) => {\n          const optionDate = shiftDays(option.offset);\n          return (\n            <JxChip\n              key={option.key}\n              active={isSameDay(selected, optionDate)}\n              onClick={() => applyDate(optionDate)}\n            >\n              {option.label}\n            </JxChip>\n          );\n        })}\n      </div>\n      <JxCalendar locale=\"ru-RU\" value={selected ?? null} onValueChange={applyDate} />\n    </div>\n  );\n}\n```"
+    "code": "import { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  defaultValue?: Date | null;\n  onChange?: (value: Date | null) => void;\n};\n\nconst startOfDay = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst shiftDays = (days: number) => {\n  const base = startOfDay(new Date());\n  base.setDate(base.getDate() + days);\n  return base;\n};\n\nconst isSameDay = (a: Date | null, b: Date) =>\n  a !== null &&\n  a.getFullYear() === b.getFullYear() &&\n  a.getMonth() === b.getMonth() &&\n  a.getDate() === b.getDate();\n\nexport default function ReportDatePicker({ defaultValue = null, onChange }: ReportDatePickerProps) {\n  const [value, setValue] = useState<Date | null>(defaultValue);\n\n  const presets = [\n    { key: 'today', label: 'Сегодня', offset: 0 },\n    { key: 'yesterday', label: 'Вчера', offset: -1 },\n    { key: 'week', label: 'Неделя назад', offset: -7 },\n  ];\n\n  const select = (next: Date | null) => {\n    setValue(next);\n    onChange?.(next);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>\n        {presets.map((preset) => {\n          const presetDate = shiftDays(preset.offset);\n          return (\n            <JxChip\n              key={preset.key}\n              active={isSameDay(value, presetDate)}\n              onClick={() => select(presetDate)}\n            >\n              {preset.label}\n            </JxChip>\n          );\n        })}\n      </div>\n      <JxCalendar locale=\"ru-RU\" value={value} onValueChange={select} />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  defaultValue?: Date | null;\n  onChange?: (value: Date | null) => void;\n};\n\nconst startOfDay = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst shiftDays = (days: number) => {\n  const base = startOfDay(new Date());\n  base.setDate(base.getDate() + days);\n  return base;\n};\n\nconst isSameDay = (a: Date | null, b: Date) =>\n  a !== null &&\n  a.getFullYear() === b.getFullYear() &&\n  a.getMonth() === b.getMonth() &&\n  a.getDate() === b.getDate();\n\nexport default function ReportDatePicker({ defaultValue = null, onChange }: ReportDatePickerProps) {\n  const [value, setValue] = useState<Date | null>(defaultValue);\n\n  const presets = [\n    { key: 'today', label: 'Сегодня', offset: 0 },\n    { key: 'yesterday', label: 'Вчера', offset: -1 },\n    { key: 'week', label: 'Неделя назад', offset: -7 },\n  ];\n\n  const select = (next: Date | null) => {\n    setValue(next);\n    onChange?.(next);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>\n        {presets.map((preset) => {\n          const presetDate = shiftDays(preset.offset);\n          return (\n            <JxChip\n              key={preset.key}\n              active={isSameDay(value, presetDate)}\n              onClick={() => select(presetDate)}\n            >\n              {preset.label}\n            </JxChip>\n          );\n        })}\n      </div>\n      <JxCalendar locale=\"ru-RU\" value={value} onValueChange={select} />\n    </div>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {

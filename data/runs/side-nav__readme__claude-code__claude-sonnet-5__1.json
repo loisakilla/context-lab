@@ -1,0 +1,92 @@
+{
+  "id": "side-nav__readme__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-22T09:45:13.299Z",
+  "repeat": 1,
+  "durationMs": 17175,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": "63b81b611c5912463052a5eda0da76ddfd1eb931"
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "side-nav",
+    "title": "Боковая панель навигации",
+    "prompt": "Сделай кнопку «Меню», по которой слева выезжает панель с навигацией: пункты «Проекты», «Команда», «Настройки», разделитель и пункт «Выйти», выделенный как опасный. Выбор пункта вызывает переданный колбэк onNavigate с ключом пункта и закрывает панель.",
+    "taskType": "ui",
+    "expects": [
+      "JxDrawer",
+      "JxMenu",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 796,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 642
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8235,
+        "cacheCreation": 1347
+      },
+      "toolCalls": []
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8235,
+        "cacheCreation": 1347
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1946,
+    "cacheRead": 8235,
+    "cacheCreation": 1347
+  },
+  "costUsd": 0.06119625000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useEffect, useRef, useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface NavItem {\n  key: NavKey;\n  label: string;\n  danger?: boolean;\n}\n\nconst NAV_ITEMS: NavItem[] = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\ninterface NavigationDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function NavigationDrawer({ onNavigate }: NavigationDrawerProps) {\n  const [isOpen, setIsOpen] = useState(false);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n\n  useEffect(() => {\n    if (!isOpen) {\n      return;\n    }\n\n    const handleKeyDown = (event: KeyboardEvent) => {\n      if (event.key === 'Escape') {\n        setIsOpen(false);\n        triggerRef.current?.focus();\n      }\n    };\n\n    document.addEventListener('keydown', handleKeyDown);\n    return () => document.removeEventListener('keydown', handleKeyDown);\n  }, [isOpen]);\n\n  const handleSelect = (key: NavKey) => {\n    onNavigate(key);\n    setIsOpen(false);\n    triggerRef.current?.focus();\n  };\n\n  return (\n    <>\n      <Button ref={triggerRef} className=\"jx-button\" onClick={() => setIsOpen(true)}>\n        Меню\n      </Button>\n\n      {isOpen ? (\n        <div className=\"jx-drawer jx-drawer--left jx-drawer--open\">\n          <div\n            className=\"jx-drawer__overlay\"\n            onClick={() => setIsOpen(false)}\n            aria-hidden=\"true\"\n          />\n          <nav\n            className=\"jx-drawer__panel\"\n            role=\"dialog\"\n            aria-modal=\"true\"\n            aria-label=\"Навигация\"\n          >\n            <div className=\"jx-drawer__header\">\n              <span className=\"jx-drawer__title\">Навигация</span>\n              <Button\n                className=\"jx-button jx-button--icon jx-button--ghost\"\n                aria-label=\"Закрыть меню\"\n                onClick={() => setIsOpen(false)}\n              >\n                ✕\n              </Button>\n            </div>\n\n            <ul className=\"jx-nav-list\">\n              {NAV_ITEMS.map((item) => (\n                <li key={item.key} className=\"jx-nav-list__item\">\n                  <button\n                    type=\"button\"\n                    className=\"jx-nav-item\"\n                    onClick={() => handleSelect(item.key)}\n                  >\n                    {item.label}\n                  </button>\n                </li>\n              ))}\n\n              <li className=\"jx-divider\" role=\"separator\" />\n\n              <li className=\"jx-nav-list__item\">\n                <button\n                  type=\"button\"\n                  className=\"jx-nav-item jx-nav-item--danger\"\n                  onClick={() => handleSelect('logout')}\n                >\n                  Выйти\n                </button>\n              </li>\n            </ul>\n          </nav>\n        </div>\n      ) : null}\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useEffect, useRef, useState } from 'react';\nimport { Button } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface NavItem {\n  key: NavKey;\n  label: string;\n  danger?: boolean;\n}\n\nconst NAV_ITEMS: NavItem[] = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\ninterface NavigationDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function NavigationDrawer({ onNavigate }: NavigationDrawerProps) {\n  const [isOpen, setIsOpen] = useState(false);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n\n  useEffect(() => {\n    if (!isOpen) {\n      return;\n    }\n\n    const handleKeyDown = (event: KeyboardEvent) => {\n      if (event.key === 'Escape') {\n        setIsOpen(false);\n        triggerRef.current?.focus();\n      }\n    };\n\n    document.addEventListener('keydown', handleKeyDown);\n    return () => document.removeEventListener('keydown', handleKeyDown);\n  }, [isOpen]);\n\n  const handleSelect = (key: NavKey) => {\n    onNavigate(key);\n    setIsOpen(false);\n    triggerRef.current?.focus();\n  };\n\n  return (\n    <>\n      <Button ref={triggerRef} className=\"jx-button\" onClick={() => setIsOpen(true)}>\n        Меню\n      </Button>\n\n      {isOpen ? (\n        <div className=\"jx-drawer jx-drawer--left jx-drawer--open\">\n          <div\n            className=\"jx-drawer__overlay\"\n            onClick={() => setIsOpen(false)}\n            aria-hidden=\"true\"\n          />\n          <nav\n            className=\"jx-drawer__panel\"\n            role=\"dialog\"\n            aria-modal=\"true\"\n            aria-label=\"Навигация\"\n          >\n            <div className=\"jx-drawer__header\">\n              <span className=\"jx-drawer__title\">Навигация</span>\n              <Button\n                className=\"jx-button jx-button--icon jx-button--ghost\"\n                aria-label=\"Закрыть меню\"\n                onClick={() => setIsOpen(false)}\n              >\n                ✕\n              </Button>\n            </div>\n\n            <ul className=\"jx-nav-list\">\n              {NAV_ITEMS.map((item) => (\n                <li key={item.key} className=\"jx-nav-list__item\">\n                  <button\n                    type=\"button\"\n                    className=\"jx-nav-item\"\n                    onClick={() => handleSelect(item.key)}\n                  >\n                    {item.label}\n                  </button>\n                </li>\n              ))}\n\n              <li className=\"jx-divider\" role=\"separator\" />\n\n              <li className=\"jx-nav-list__item\">\n                <button\n                  type=\"button\"\n                  className=\"jx-nav-item jx-nav-item--danger\"\n                  onClick={() => handleSelect('logout')}\n                >\n                  Выйти\n                </button>\n              </li>\n            </ul>\n          </nav>\n        </div>\n      ) : null}\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        }
+      ],
+      "unknownComponents": [
+        "Button"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.56
+  }
+}
