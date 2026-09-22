@@ -128,15 +128,28 @@ export function parseStreamJson(output: string): ParsedStream {
 type ToolCallRef = Turn['toolCalls'][number];
 
 export function buildClaudeArgs(request: GenerationRequest, options: ClaudeCodeDriverOptions): string[] {
-  const args = ['-p', '--output-format', 'stream-json', '--verbose', '--no-session-persistence', '--model', request.model, '--append-system-prompt', request.system];
+  const args = [
+    '-p',
+    '--output-format',
+    'stream-json',
+    '--verbose',
+    '--no-session-persistence',
+    '--setting-sources',
+    '',
+    '--strict-mcp-config',
+    '--tools',
+    '',
+    '--model',
+    request.model,
+    '--append-system-prompt',
+    request.system,
+  ];
   if (options.mcpServer) {
-    args.push('--tools', '');
     args.push('--mcp-config', JSON.stringify({ mcpServers: { [options.mcpServer.name]: options.mcpServer.config } }));
-    args.push('--strict-mcp-config');
     args.push('--allowedTools', options.mcpServer.tools.map((tool) => `mcp__${options.mcpServer!.name}__${tool}`).join(','));
     args.push('--max-turns', String(request.maxTurns));
   } else {
-    args.push('--tools', '');
+    args.push('--mcp-config', JSON.stringify({ mcpServers: {} }));
   }
   return args;
 }

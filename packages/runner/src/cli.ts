@@ -10,6 +10,7 @@ import { findClaudeBinary } from './find-claude.ts';
 import { buildMatrix } from './matrix.ts';
 import { commandMcpServer, repoMcpServer } from './mcp-config.ts';
 import { runFileName, runTask, type CodeChecker } from './run.ts';
+import { agentSandbox } from './sandbox.ts';
 import { CONTEXT_MODES, DRIVER_NAMES, type ContextMode, type Driver, type DriverName, type RunRecord, type Task } from './types.ts';
 
 const USAGE = `context-lab runner
@@ -69,7 +70,7 @@ function buildChecker(config: LabConfig): CodeChecker {
 
 function driverFor(name: DriverName, mode: ContextMode, config: LabConfig, mcpCommand?: string): Driver {
   if (name === 'api') return apiDriver();
-  const options: ClaudeCodeDriverOptions = { binary: findClaudeBinary(), cwd: path.join(config.root, 'data', 'runs') };
+  const options: ClaudeCodeDriverOptions = { binary: findClaudeBinary(), cwd: agentSandbox() };
   if (mode === 'mcp') options.mcpServer = mcpCommand ? commandMcpServer(mcpCommand) : repoMcpServer(config.root);
   return claudeCodeDriver(options);
 }

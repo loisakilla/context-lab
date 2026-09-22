@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { claudeCodeDriver, CONTEXT_MODES, repoMcpServer, runTask, type ContextMode, type Task } from '@context-lab/runner';
+import { agentSandbox, claudeCodeDriver, CONTEXT_MODES, repoMcpServer, runTask, type ContextMode, type Task } from '@context-lab/runner';
 import { checkCode } from '@/lib/checker';
 import { labConfig, loadLabData } from '@/lib/data';
 
@@ -39,7 +39,7 @@ export async function POST(request: Request): Promise<Response> {
   const sources = { index: data.index, readme: data.readme, docs: data.docs, ...(data.rules ? { rules: data.rules } : {}) };
   try {
     const record = await runTask({
-      driver: claudeCodeDriver({ cwd: path.join(root, 'data', 'runs'), ...(mode === 'mcp' ? { mcpServer: repoMcpServer(root) } : {}) }),
+      driver: claudeCodeDriver({ cwd: agentSandbox(), ...(mode === 'mcp' ? { mcpServer: repoMcpServer(root) } : {}) }),
       mode,
       task,
       sources,

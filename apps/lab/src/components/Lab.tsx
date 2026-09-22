@@ -90,7 +90,7 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
   return (
     <div className="flex flex-col gap-10">
       <section className="grid items-start gap-6 lg:grid-cols-[minmax(0,400px)_minmax(0,1fr)] lg:gap-8">
-        <div className="flex flex-col gap-4">
+        <div className="flex min-w-0 flex-col gap-4">
           <JxSelect
             label="Задача"
             options={[...tasks.map((item) => ({ value: item.id, label: item.title })), { value: 'custom', label: 'Своя задача' }]}
@@ -148,7 +148,7 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
           {error && <JxAlert intent="danger" title="Не получилось">{error}</JxAlert>}
         </div>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex min-w-0 flex-col gap-4">
           {!record && !running && !stream && (
             <>
               <JxAlert intent="info" title="Как это работает">Выберите задачу и режим контекста, запустите прогон. Здесь появятся код, живой рендер на Jinx UI и отчёт: что выдумано, что нарушено, сколько стоило. Пока прогона нет, показан контекст, который уйдёт в модель.</JxAlert>

@@ -132,9 +132,15 @@ describe('драйвер claude-code', () => {
 
   it('строит аргументы без встроенных инструментов и с MCP-сервером', () => {
     const request = { model: 'sonnet', system: 'sys', contextText: 'ctx', taskText: 'task', maxTurns: 6 };
-    expect(buildClaudeArgs(request, {})).toEqual(['-p', '--output-format', 'stream-json', '--verbose', '--no-session-persistence', '--model', 'sonnet', '--append-system-prompt', 'sys', '--tools', '']);
+    const bare = buildClaudeArgs(request, {});
+    expect(bare).toContain('--strict-mcp-config');
+    expect(bare[bare.indexOf('--tools') + 1]).toBe('');
+    expect(bare[bare.indexOf('--setting-sources') + 1]).toBe('');
+    expect(bare[bare.indexOf('--mcp-config') + 1]).toBe('{"mcpServers":{}}');
+    expect(bare).not.toContain('--allowedTools');
     const withMcp = buildClaudeArgs(request, { mcpServer: { name: 'context-lab', config: { command: 'node', args: ['mcp.js'] }, tools: ['search_components'] } });
     expect(withMcp).toContain('--strict-mcp-config');
+    expect(withMcp[withMcp.indexOf('--tools') + 1]).toBe('');
     expect(withMcp[withMcp.indexOf('--allowedTools') + 1]).toBe('mcp__context-lab__search_components');
     expect(composePrompt(request)).toBe('ctx\n\ntask');
   });

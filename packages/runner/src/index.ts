@@ -7,6 +7,7 @@ export type { ClaudeCodeDriverOptions, McpServerConfig, ParsedStream } from './d
 export { extractCode } from './extract-code.ts';
 export { buildMatrix, median } from './matrix.ts';
 export { commandMcpServer, MCP_SERVER_NAME, MCP_TOOL_NAMES, repoMcpServer } from './mcp-config.ts';
+export { agentSandbox } from './sandbox.ts';
 export type { Matrix, MatrixCell } from './matrix.ts';
 export { canonicalModel, knownModels, priceOf, PRICES_UPDATED_AT } from './price.ts';
 export type { ModelPrice } from './price.ts';

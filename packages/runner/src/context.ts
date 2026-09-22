@@ -14,6 +14,8 @@ export const OUTPUT_CONTRACT = [
   'Стили только через классы библиотеки и CSS-токены var(--jx-*); без хардкода цветов и без innerHTML.',
 ].join('\n');
 
+export const NO_TOOLS_NOTE = 'Инструментов у тебя нет: не читай файлы, не ищи по коду и не обращайся к памяти. Весь доступный контекст уже в этом сообщении, отвечай сразу блоком кода.';
+
 export const BASE_SYSTEM_PROMPT = [
   'Ты frontend-разработчик. Пишешь React-компоненты на TypeScript с библиотекой компонентов Jinx UI (пакет @jinx-ui/react).',
   OUTPUT_CONTRACT,
@@ -31,7 +33,9 @@ export function buildContext(mode: ContextMode, task: Task, sources: ContextSour
   const version = sources.index.library.version;
   const parts: string[] = [];
   const contextSources: ContextSource[] = [];
-  let system = BASE_SYSTEM_PROMPT;
+  let system = `${BASE_SYSTEM_PROMPT}
+
+${NO_TOOLS_NOTE}`;
   let tools: BuiltContext['tools'];
   let runner: BuiltContext['runTool'];
 
