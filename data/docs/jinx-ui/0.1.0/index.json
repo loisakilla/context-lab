@@ -4,7 +4,7 @@
     "name": "jinx-ui",
     "package": "@jinx-ui/react",
     "version": "0.1.0",
-    "commit": "5c14f2f444280aef43353308063a73419e1ff9fe"
+    "commit": "2a08a1a9c5a14c875264beb97beba4d06c797437"
   },
   "components": [
     {
