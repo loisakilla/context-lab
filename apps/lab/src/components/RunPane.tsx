@@ -16,16 +16,16 @@ export function RunPane({ record, title }: { record: RunRecord; title: string })
       {record.output.code ? (
         <>
           <div className="flex flex-col gap-2">
-            <span className="lab-label">Рендер</span>
+            <span className="field-label">Рендер</span>
             <Preview code={record.output.code} onRendered={onRendered} />
           </div>
           <details>
-            <summary className="lab-label cursor-pointer">Код</summary>
-            <pre className="code-block mt-2 max-h-[32rem] overflow-auto">{record.output.code}</pre>
+            <summary className="field-label cursor-pointer">Код</summary>
+            <pre className="code mt-2 max-h-[32rem] overflow-auto">{record.output.code}</pre>
           </details>
         </>
       ) : (
-        <pre className="code-block max-h-72 overflow-auto whitespace-pre-wrap">{record.output.text}</pre>
+        <pre className="code max-h-72 overflow-auto whitespace-pre-wrap">{record.output.text}</pre>
       )}
     </div>
   );

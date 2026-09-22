@@ -20,14 +20,14 @@ function first(value: string | string[] | undefined, fallback: string): string {
 function Switcher({ label, values, current, href }: { label: string; values: string[]; current: string; href: (value: string) => string }) {
   return (
     <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
-      <span className="lab-label">{label}</span>
+      <span className="field-label">{label}</span>
       {values.map((value) =>
         value === current ? (
-          <span key={value} className="font-mono text-sm" style={{ color: 'var(--jx-accent)' }}>
+          <span key={value} className="mono text-sm" style={{ color: 'var(--accent)' }}>
             {value}
           </span>
         ) : (
-          <Link key={value} href={href(value)} className="lab-muted font-mono text-sm underline">
+          <Link key={value} href={href(value)} className="muted mono text-sm underline">
             {value}
           </Link>
         ),
@@ -48,7 +48,7 @@ export default async function RulesPage({ searchParams }: { searchParams: Promis
 
       <div className="flex flex-col gap-3">
         <h1 className="text-3xl font-bold">Реестр правил</h1>
-        <p className="lab-muted max-w-[62ch] text-lg">
+        <p className="muted max-w-[62ch] text-lg">
           Правила лежат в репозитории как Markdown с frontmatter и собираются в наборы. Набор наследует правила родителей, правило с тем же идентификатором переопределяет родительское, <code>extends</code> уточняет его. Резолвер отдаёт эффективный набор под тип задачи с провенансом.
         </p>
       </div>
@@ -62,18 +62,18 @@ export default async function RulesPage({ searchParams }: { searchParams: Promis
 
       {resolution && (
         <>
-          <div className="lab-panel flex flex-wrap items-baseline gap-x-10 gap-y-4">
+          <div className="panel flex flex-wrap items-baseline gap-x-10 gap-y-4">
             <div className="flex flex-col gap-1">
-              <span className="lab-label">Цепочка</span>
-              <span className="font-mono">{resolution.chain.join(' → ')}</span>
+              <span className="field-label">Цепочка</span>
+              <span className="mono">{resolution.chain.join(' → ')}</span>
             </div>
             <div className="flex flex-col gap-1">
-              <span className="lab-label">Правил</span>
-              <span className="font-mono">{resolution.rules.length}</span>
+              <span className="field-label">Правил</span>
+              <span className="mono">{resolution.rules.length}</span>
             </div>
             <div className="flex flex-col gap-1">
-              <span className="lab-label">Стоимость набора</span>
-              <span className="font-mono" style={{ color: 'var(--jx-accent)' }}>
+              <span className="field-label">Стоимость набора</span>
+              <span className="mono" style={{ color: 'var(--accent)' }}>
                 ~{resolution.tokens.toLocaleString('ru-RU')} токенов
               </span>
             </div>
@@ -81,20 +81,20 @@ export default async function RulesPage({ searchParams }: { searchParams: Promis
 
           <section className="flex flex-col gap-4">
             {resolution.rules.map((rule) => (
-              <article key={rule.qualifiedId} className="lab-panel flex flex-col gap-3">
+              <article key={rule.qualifiedId} className="panel flex flex-col gap-3">
                 <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
                   <h2 className="text-lg font-bold">{rule.title}</h2>
-                  <code className="lab-quiet text-sm">
+                  <code className="quiet text-sm">
                     {rule.qualifiedId}@{rule.version}
                   </code>
                 </div>
                 <p className="max-w-[80ch]">{rule.body}</p>
-                <div className="lab-quiet flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                <div className="quiet flex flex-wrap gap-x-4 gap-y-1 text-sm">
                   <span>из {rule.definedIn}</span>
                   <span>приоритет {rule.priority}</span>
                   <span>~{rule.tokens} ток.</span>
-                  {rule.overrides && <span style={{ color: 'var(--jx-warning)' }}>переопределяет {rule.overrides}</span>}
-                  {rule.refines && <span style={{ color: 'var(--jx-accent)' }}>уточняет {rule.refines}</span>}
+                  {rule.overrides && <span style={{ color: 'var(--warn)' }}>переопределяет {rule.overrides}</span>}
+                  {rule.refines && <span style={{ color: 'var(--accent)' }}>уточняет {rule.refines}</span>}
                   {rule.appliesTo.length > 0 && <span>{rule.appliesTo.join(', ')}</span>}
                   {rule.taskTypes.length > 0 && <span>задачи: {rule.taskTypes.join(', ')}</span>}
                 </div>
@@ -104,8 +104,8 @@ export default async function RulesPage({ searchParams }: { searchParams: Promis
 
           {resolution.omitted.length > 0 && (
             <section className="flex flex-col gap-2">
-              <span className="lab-label">Не поместились в бюджет</span>
-              <ul className="lab-muted flex flex-col gap-1 text-sm">
+              <span className="field-label">Не поместились в бюджет</span>
+              <ul className="muted flex flex-col gap-1 text-sm">
                 {resolution.omitted.map((rule) => (
                   <li key={rule.qualifiedId}>
                     {rule.title} · {rule.qualifiedId}@{rule.version} · ~{rule.tokens} ток.
@@ -119,16 +119,16 @@ export default async function RulesPage({ searchParams }: { searchParams: Promis
 
       <section className="flex flex-col gap-3">
         <h2 className="text-2xl font-bold">Куда это компилируется</h2>
-        <p className="lab-muted max-w-[70ch] text-sm">Один источник, четыре цели. CI падает, если файлы разошлись с реестром.</p>
+        <p className="muted max-w-[70ch] text-sm">Один источник, четыре цели. CI падает, если файлы разошлись с реестром.</p>
         <ul className="flex flex-col gap-1 text-sm">
           {TARGET_FILES.map(([target, files]) => (
             <li key={target} className="flex flex-wrap gap-x-2">
-              <code style={{ color: 'var(--jx-accent)' }}>{target}</code>
-              <span className="lab-muted">{files}</span>
+              <code style={{ color: 'var(--accent)' }}>{target}</code>
+              <span className="muted">{files}</span>
             </li>
           ))}
         </ul>
-        <pre className="code-block whitespace-pre-wrap">npm run rules:resolve -- {set} --task {taskType}</pre>
+        <pre className="code whitespace-pre-wrap">npm run rules:resolve -- {set} --task {taskType}</pre>
       </section>
     </main>
   );

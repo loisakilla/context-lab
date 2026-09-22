@@ -1,4 +1,4 @@
-import { JxAlert } from '@jinx-ui/react';
+import { Note } from '@/components/ui';
 import { CompareControls } from '@/components/CompareControls';
 import { MODE_LABELS } from '@/components/MatrixTable';
 import { RunPane } from '@/components/RunPane';
@@ -35,7 +35,7 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
 
       <div className="flex flex-col gap-3">
         <h1 className="text-3xl font-bold">Один и тот же запрос, разный контекст</h1>
-        <p className="lab-muted max-w-[62ch] text-lg">
+        <p className="muted max-w-[62ch] text-lg">
           Слева и справа — записанные прогоны одной задачи в двух режимах: та же модель, тот же промпт, разный контекст. Сравнивайте не только вердикт, но и цену.
         </p>
       </div>
@@ -43,32 +43,32 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
       <CompareControls tasks={tasks} modes={modes} task={task} left={left} right={right} />
 
       {prompt && (
-        <div className="lab-panel flex flex-col gap-2">
-          <span className="lab-label">Задача</span>
+        <div className="panel flex flex-col gap-2">
+          <span className="field-label">Задача</span>
           <p className="max-w-[80ch]">{prompt}</p>
         </div>
       )}
 
       {mismatched && leftRun && rightRun && (
-        <JxAlert intent="warning" title="Прогоны сделаны по-разному">
+        <Note title="Прогоны сделаны по-разному">
           Слева {leftRun.model} через {leftRun.driver}, справа {rightRun.model} через {rightRun.driver}. Сравнивать их между собой некорректно: перезапишите недостающие ячейки одной моделью.
-        </JxAlert>
+        </Note>
       )}
 
       <section className="grid items-start gap-10 xl:grid-cols-2 xl:gap-14">
         {leftRun ? (
           <RunPane record={leftRun} title={MODE_LABELS[left] ?? left} />
         ) : (
-          <JxAlert intent="warning" title="Прогона нет">
+          <Note title="Прогона нет">
             Для этой задачи в режиме «{MODE_LABELS[left] ?? left}» записи нет.
-          </JxAlert>
+          </Note>
         )}
         {rightRun ? (
           <RunPane record={rightRun} title={MODE_LABELS[right] ?? right} />
         ) : (
-          <JxAlert intent="warning" title="Прогона нет">
+          <Note title="Прогона нет">
             Для этой задачи в режиме «{MODE_LABELS[right] ?? right}» записи нет.
-          </JxAlert>
+          </Note>
         )}
       </section>
     </main>

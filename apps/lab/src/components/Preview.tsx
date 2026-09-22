@@ -86,7 +86,7 @@ export function Preview({ code, onRendered }: PreviewProps) {
     frame.current?.contentWindow?.postMessage({ type: 'render', code, theme: 'dark', style: 'brutal' }, '*');
   }, [ready, code]);
 
-  if (loadError) return <pre className="code-block" style={{ color: 'var(--jx-danger)' }}>{loadError}</pre>;
+  if (loadError) return <pre className="code" style={{ color: 'var(--bad)' }}>{loadError}</pre>;
 
   const broken = status !== null && !status.ok;
 
@@ -101,22 +101,22 @@ export function Preview({ code, onRendered }: PreviewProps) {
         style={{
           height: broken ? 0 : height,
           width: '100%',
-          border: broken ? 'none' : '1px solid var(--lab-line)',
-          borderRadius: 'var(--jx-r, 4px)',
-          background: 'var(--lab-panel-2)',
+          border: broken ? 'none' : '1px solid var(--line)',
+          borderRadius: 'var(--radius-sm)',
+          background: 'var(--surface-2)',
           display: 'block',
         }}
       />
       {broken && (
-        <div className="lab-panel flex flex-col gap-2" style={{ borderColor: 'var(--jx-danger)' }}>
-          <span className="lab-label" style={{ color: 'var(--jx-danger)' }}>
+        <div className="panel flex flex-col gap-2" style={{ borderColor: 'color-mix(in oklab, var(--bad) 35%, transparent)' }}>
+          <span className="text-sm font-medium" style={{ color: 'var(--bad)' }}>
             Превью не построено
           </span>
           <p className="text-sm">{status?.error}</p>
         </div>
       )}
       {status?.filledProps && status.filledProps.length > 0 && (
-        <p className="lab-quiet text-sm">
+        <p className="quiet text-sm">
           Компонент требует пропсы, превью подставило пустые значения: {status.filledProps.join(', ')}.
         </p>
       )}

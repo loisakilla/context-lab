@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { JxAlert, JxButton, JxSelect, JxTabs, JxTextareaField } from '@jinx-ui/react';
 import type { LibraryIndex } from '@context-lab/index-tools';
 import { CONTEXT_MODES, estimateContext, knownModels, type ContextMode, type Matrix, type RunRecord, type Task } from '@/lib/runner-browser';
 import { describeApiError, runInBrowser, runLocally } from '@/lib/browser-run';
@@ -10,6 +9,7 @@ import { KeyForm } from './KeyForm';
 import { MatrixTable, MODE_LABELS } from './MatrixTable';
 import { Preview, type RenderStatus } from './Preview';
 import { Report } from './Report';
+import { Button, Note, Select, Tabs, Textarea } from './ui';
 
 export interface LabProps {
   index: LibraryIndex;
@@ -88,72 +88,72 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
   const canRun = !running && task.prompt.length > 0 && (engine === 'local' || (apiKey !== null && apiKey.length > 0));
 
   return (
-    <div className="flex flex-col gap-14">
-      <section className="grid items-start gap-8 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:gap-12">
-        <div className="flex min-w-0 flex-col gap-6">
-          <div className="flex flex-col gap-4">
-            <JxSelect
-              label="Задача"
-              options={[...tasks.map((item) => ({ value: item.id, label: item.title })), { value: 'custom', label: 'Своя задача' }]}
-              value={taskId}
-              onValueChange={pickTask}
-            />
-            <JxTextareaField label="Формулировка" rows={6} value={prompt} onChange={(event) => setPrompt(event.target.value)} />
-          </div>
+    <div className="flex flex-col gap-16">
+      <section className="grid items-start gap-10 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:gap-16">
+        <div className="flex flex-col gap-6">
+          <Select
+            label="Задача"
+            options={[...tasks.map((item) => ({ value: item.id, label: item.title })), { value: 'custom', label: 'Своя задача' }]}
+            value={taskId}
+            onValueChange={pickTask}
+          />
+          <Textarea label="Формулировка" rows={6} value={prompt} onChange={(event) => setPrompt(event.target.value)} />
 
-          <div className="flex flex-col gap-2">
-            <span className="lab-label">Режим контекста</span>
-            <JxTabs
+          <div className="flex flex-col gap-3">
+            <span className="field-label">Режим контекста</span>
+            <Tabs
               ariaLabel="Режим контекста"
-              variant="underline"
               items={availableModes.map((candidate) => ({ value: candidate, label: MODE_LABELS[candidate] ?? candidate }))}
               value={availableModes.includes(mode) ? mode : 'none'}
               onValueChange={(value) => setMode(value as ContextMode)}
             />
-            <p className="lab-muted text-sm">
+            <p className="quiet text-sm">
               {mode === 'mcp'
                 ? engine === 'local'
-                  ? 'Claude Code подключает MCP-сервер репозитория и берёт контекст точечно по ходу работы.'
+                  ? 'Claude Code подключает MCP-сервер репозитория и берёт контекст точечно.'
                   : 'Те же инструменты, что у MCP-сервера, вызываются через tool use по ходу генерации.'
                 : `≈ ${modeTokens[mode].toLocaleString('ru-RU')} токенов контекста до задачи.`}
             </p>
           </div>
 
-          <JxSelect label="Модель" options={knownModels().map((name) => ({ value: name, label: name }))} value={model} onValueChange={setModel} />
+          <Select label="Модель" options={knownModels().map((name) => ({ value: name, label: name }))} value={model} onValueChange={setModel} />
 
           <div className="flex flex-col gap-3">
-            <span className="lab-label">Как запускать</span>
-            <JxTabs
+            <span className="field-label">Как запускать</span>
+            <Tabs
               ariaLabel="Движок"
-              className="self-start"
-              items={[...(localRunEnabled ? [{ value: 'local', label: 'Claude Code (локально)' }] : []), { value: 'byok', label: 'Свой ключ API' }]}
+              items={[...(localRunEnabled ? [{ value: 'local', label: 'Claude Code' }] : []), { value: 'byok', label: 'Свой ключ API' }]}
               value={engine}
               onValueChange={(value) => setEngine(value as Engine)}
             />
             {engine === 'local' ? (
-              <p className="lab-muted text-sm">Прогон делает установленный на этой машине Claude Code по подписке, без ключа API.</p>
+              <p className="quiet text-sm">Прогон делает установленный на этой машине Claude Code по подписке, без ключа API.</p>
             ) : (
               <KeyForm onChange={setApiKey} />
             )}
           </div>
 
           <div className="flex items-center gap-3">
-            <JxButton variant="primary" onClick={start} disabled={!canRun}>
+            <Button variant="primary" onClick={start} disabled={!canRun}>
               {running ? 'Генерируем…' : 'Запустить'}
-            </JxButton>
+            </Button>
             {running && (
-              <JxButton variant="ghost" onClick={() => abort.current?.abort()}>
+              <Button variant="ghost" onClick={() => abort.current?.abort()}>
                 Отменить
-              </JxButton>
+              </Button>
             )}
           </div>
-          {error && <JxAlert intent="danger" title="Не получилось">{error}</JxAlert>}
+          {error && (
+            <Note tone="bad" title="Не получилось">
+              {error}
+            </Note>
+          )}
         </div>
 
-        <div className="flex min-w-0 flex-col gap-5">
+        <div className="flex flex-col gap-5">
           {!record && !running && !stream && <ContextPreview mode={mode} task={task} sources={sources} />}
           {running && (
-            <pre className="code-block max-h-96 overflow-auto whitespace-pre-wrap">
+            <pre className="code max-h-96 overflow-auto">
               {stream || (engine === 'local' ? 'Claude Code думает… обычно 20–60 секунд.' : 'Ждём первые токены…')}
             </pre>
           )}
@@ -163,16 +163,16 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
               {record.output.code ? (
                 <>
                   <div className="flex flex-col gap-2">
-                    <span className="lab-label">Рендер</span>
+                    <span className="field-label">Рендер на Jinx UI</span>
                     <Preview code={record.output.code} onRendered={onRendered} />
                   </div>
                   <details>
-                    <summary className="lab-label cursor-pointer">Код</summary>
-                    <pre className="code-block mt-2 max-h-[32rem] overflow-auto">{record.output.code}</pre>
+                    <summary>Код</summary>
+                    <pre className="code mt-2 max-h-[32rem] overflow-auto">{record.output.code}</pre>
                   </details>
                 </>
               ) : (
-                <pre className="code-block whitespace-pre-wrap">{record.output.text}</pre>
+                <pre className="code">{record.output.text}</pre>
               )}
             </>
           )}
@@ -180,12 +180,8 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
       </section>
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-2xl font-bold">Записанные прогоны</h2>
-        {matrix ? (
-          <MatrixTable matrix={matrix} />
-        ) : (
-          <p className="lab-muted text-sm">Матрица ещё не записана: запустите `npm run run` и `npm run matrix`.</p>
-        )}
+        <h2>Записанные прогоны</h2>
+        {matrix ? <MatrixTable matrix={matrix} /> : <p className="muted text-sm">Матрица ещё не записана.</p>}
       </section>
     </div>
   );

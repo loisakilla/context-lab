@@ -3,29 +3,26 @@ import Link from 'next/link';
 type Page = 'lab' | 'compare' | 'rules';
 
 const LINKS: { page: Page; href: string; label: string }[] = [
-  { page: 'lab', href: '/', label: 'лаборатория' },
-  { page: 'compare', href: '/compare', label: 'сравнение режимов' },
-  { page: 'rules', href: '/rules', label: 'реестр правил' },
+  { page: 'lab', href: '/', label: 'Лаборатория' },
+  { page: 'compare', href: '/compare', label: 'Сравнение' },
+  { page: 'rules', href: '/rules', label: 'Правила' },
 ];
 
-export function TopBar({ current, home = false }: { current: Page; home?: boolean }) {
-  const wordmark = (
-    <Link href="/" className="lab-wordmark text-2xl font-bold no-underline">
-      Context Lab
-    </Link>
-  );
-
+export function TopBar({ current }: { current: Page }) {
   return (
-    <header className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3 border-b pb-5" style={{ borderColor: 'var(--lab-line)' }}>
-      {home ? <h1 className="text-2xl font-bold">{wordmark}</h1> : wordmark}
-      <nav className="flex flex-wrap items-baseline gap-x-6 gap-y-2 text-sm">
+    <header className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-b pb-4" style={{ borderColor: 'var(--line)' }}>
+      <Link href="/" className="flex items-baseline gap-2">
+        <span className="text-[15px] font-semibold">Context Lab</span>
+        <span className="quiet mono text-xs">jinx-ui</span>
+      </Link>
+      <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
         {LINKS.map((link) =>
           link.page === current ? (
-            <span key={link.page} className="lab-quiet" aria-current="page">
+            <span key={link.page} aria-current="page">
               {link.label}
             </span>
           ) : (
-            <Link key={link.page} href={link.href} className="underline">
+            <Link key={link.page} href={link.href} className="link">
               {link.label}
             </Link>
           ),

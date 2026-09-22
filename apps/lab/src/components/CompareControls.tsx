@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { JxSelect } from '@jinx-ui/react';
+import { Select } from './ui';
 import { MODE_LABELS } from './MatrixTable';
 
 interface CompareControlsProps {
@@ -22,9 +22,9 @@ export function CompareControls({ tasks, modes, task, left, right }: CompareCont
 
   return (
     <div className="grid gap-4 md:grid-cols-3">
-      <JxSelect label="Задача" options={tasks.map((item) => ({ value: item.id, label: item.title }))} value={task} onValueChange={(value) => go({ task: value })} />
-      <JxSelect label="Слева" options={modeOptions} value={left} onValueChange={(value) => go({ left: value })} />
-      <JxSelect label="Справа" options={modeOptions} value={right} onValueChange={(value) => go({ right: value })} />
+      <Select label="Задача" options={tasks.map((item) => ({ value: item.id, label: item.title }))} value={task} onValueChange={(value) => go({ task: value })} />
+      <Select label="Слева" options={modeOptions} value={left} onValueChange={(value) => go({ left: value })} />
+      <Select label="Справа" options={modeOptions} value={right} onValueChange={(value) => go({ right: value })} />
     </div>
   );
 }

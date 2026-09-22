@@ -14,7 +14,7 @@ export function RunView({ record }: { record: RunRecord }) {
       <section className="flex flex-col gap-3">
         <h1 className="text-3xl font-bold">{record.task.title}</h1>
         <p className="max-w-[80ch]">{record.task.prompt}</p>
-        <p className="lab-quiet font-mono text-sm">
+        <p className="quiet font-mono text-sm">
           {record.id} · {new Date(record.createdAt).toLocaleString('ru-RU')}
         </p>
       </section>
@@ -24,16 +24,16 @@ export function RunView({ record }: { record: RunRecord }) {
       {record.output.code ? (
         <>
           <section className="flex flex-col gap-2">
-            <span className="lab-label">Рендер</span>
+            <span className="field-label">Рендер</span>
             <Preview code={record.output.code} onRendered={onRendered} />
           </section>
           <section className="flex flex-col gap-2">
-            <span className="lab-label">Код</span>
-            <pre className="code-block overflow-auto">{record.output.code}</pre>
+            <span className="field-label">Код</span>
+            <pre className="code overflow-auto">{record.output.code}</pre>
           </section>
         </>
       ) : (
-        <pre className="code-block whitespace-pre-wrap">{record.output.text}</pre>
+        <pre className="code whitespace-pre-wrap">{record.output.text}</pre>
       )}
     </div>
   );

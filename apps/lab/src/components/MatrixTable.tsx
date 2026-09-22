@@ -11,15 +11,15 @@ export const MODE_LABELS: Record<string, string> = {
 };
 
 function verdictColor(passRate: number): string {
-  if (passRate === 1) return 'var(--jx-success)';
-  if (passRate === 0) return 'var(--jx-danger)';
-  return 'var(--jx-warning)';
+  if (passRate === 1) return 'var(--ok)';
+  if (passRate === 0) return 'var(--bad)';
+  return 'var(--warn)';
 }
 
 export function MatrixTable({ matrix }: { matrix: Matrix }) {
   return (
     <div className="flex flex-col gap-4">
-      <p className="lab-muted max-w-[70ch] text-sm">
+      <p className="muted max-w-[70ch] text-sm">
         {matrix.generatedFrom} прогонов · модель {matrix.model} · библиотека {matrix.library?.name}@{matrix.library?.version}. В ячейке: доля прогонов без
         ошибок, медиана токенов и цены, ходы и время.
       </p>
@@ -27,11 +27,11 @@ export function MatrixTable({ matrix }: { matrix: Matrix }) {
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr>
-              <th className="lab-label border-b px-3 py-2 text-left" style={{ borderColor: 'var(--lab-line)' }}>
+              <th className="field-label border-b px-3 py-2 text-left" style={{ borderColor: 'var(--line)' }}>
                 Задача
               </th>
               {matrix.modes.map((mode) => (
-                <th key={mode} className="lab-label border-b px-3 py-2 text-left" style={{ borderColor: 'var(--lab-line)' }}>
+                <th key={mode} className="field-label border-b px-3 py-2 text-left" style={{ borderColor: 'var(--line)' }}>
                   {MODE_LABELS[mode] ?? mode}
                 </th>
               ))}
@@ -40,14 +40,14 @@ export function MatrixTable({ matrix }: { matrix: Matrix }) {
           <tbody>
             {matrix.tasks.map((task) => (
               <tr key={task.id}>
-                <td className="border-b px-3 py-3 align-top" style={{ borderColor: 'var(--lab-line)' }}>
+                <td className="border-b px-3 py-3 align-top" style={{ borderColor: 'var(--line)' }}>
                   {task.title}
                 </td>
                 {matrix.modes.map((mode) => {
                   const cell = matrix.cells.find((candidate) => candidate.taskId === task.id && candidate.mode === mode);
                   if (!cell) {
                     return (
-                      <td key={mode} className="lab-quiet border-b px-3 py-3 align-top" style={{ borderColor: 'var(--lab-line)' }}>
+                      <td key={mode} className="quiet border-b px-3 py-3 align-top" style={{ borderColor: 'var(--line)' }}>
                         —
                       </td>
                     );
@@ -55,23 +55,23 @@ export function MatrixTable({ matrix }: { matrix: Matrix }) {
                   const first = cell.runs[0];
                   const passed = Math.round(cell.passRate * cell.runs.length);
                   return (
-                    <td key={mode} className="border-b px-3 py-3 align-top" style={{ borderColor: 'var(--lab-line)' }}>
+                    <td key={mode} className="border-b px-3 py-3 align-top" style={{ borderColor: 'var(--line)' }}>
                       <div className="flex flex-col gap-1">
                         <span className="font-mono" style={{ color: verdictColor(cell.passRate) }}>
                           {passed}/{cell.runs.length} без ошибок
                         </span>
-                        <span className="lab-muted">
+                        <span className="muted">
                           {cell.medianTokens > 0
                             ? `${Math.round(cell.medianTokens).toLocaleString('ru-RU')} ток. · ${formatCost(cell.medianCostUsd)}`
                             : `контекст ~${Math.round(cell.medianContextTokens).toLocaleString('ru-RU')} ток.`}
                         </span>
                         {cell.medianTurns > 0 && (
-                          <span className="lab-quiet">
+                          <span className="quiet">
                             {cell.medianTurns} ход. · {cell.medianSeconds} с
                           </span>
                         )}
                         {first && (
-                          <Link href={`/run/${first}`} className="underline">
+                          <Link href={`/run/${first}`} className="link link--accent">
                             прогон
                           </Link>
                         )}

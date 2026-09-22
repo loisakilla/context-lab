@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { JxButton, JxInputField, JxSwitch } from '@jinx-ui/react';
 import { forgetKey, maskKey, readKey, saveKey, type KeyScope } from '@/lib/key-store';
+import { Button, Field } from './ui';
 
 interface KeyFormProps {
   onChange: (key: string | null) => void;
@@ -37,33 +37,40 @@ export function KeyForm({ onChange }: KeyFormProps) {
 
   if (stored) {
     return (
-      <div className="flex flex-wrap items-center gap-3 text-sm">
-        <span>
-          Ключ {maskKey(stored.key)} хранится {stored.scope === 'session' ? 'до закрытия вкладки' : 'в этом браузере'}. Запросы идут напрямую в api.anthropic.com, на сервер лаборатории ключ не попадает.
-        </span>
-        <JxButton variant="ghost" size="sm" onClick={forget}>
+      <div className="flex flex-col gap-3">
+        <p className="quiet text-sm">
+          Ключ {maskKey(stored.key)} хранится {stored.scope === 'session' ? 'до закрытия вкладки' : 'в этом браузере'}. Запросы идут напрямую в
+          api.anthropic.com.
+        </p>
+        <Button variant="ghost" onClick={forget}>
           Забыть ключ
-        </JxButton>
+        </Button>
       </div>
     );
   }
 
   return (
     <div className="flex flex-col gap-3">
-      <JxInputField
-        label="Ключ Anthropic API"
-        type="password"
-        placeholder="sk-ant-…"
-        value={draft}
-        onChange={(event) => setDraft(event.target.value)}
-        helperText="Нужен только для живого прогона. Ключ остаётся в браузере: страница вызывает api.anthropic.com напрямую, сервер лаборатории получает лишь сгенерированный код для проверки компилятором."
-      />
-      <div className="flex flex-wrap items-center gap-3">
-        <JxSwitch label="Помнить только до закрытия вкладки" checked={sessionOnly} onChange={(event) => setSessionOnly(event.target.checked)} />
-        <JxButton variant="primary" size="sm" onClick={save} disabled={draft.trim().length === 0}>
-          Сохранить ключ
-        </JxButton>
-      </div>
+      <Field label="Ключ Anthropic API">
+        <input
+          className="control"
+          type="password"
+          placeholder="sk-ant-…"
+          value={draft}
+          onChange={(event) => setDraft(event.target.value)}
+          autoComplete="off"
+        />
+      </Field>
+      <p className="quiet text-sm">
+        Ключ остаётся в браузере: страница вызывает api.anthropic.com напрямую, сервер лаборатории получает только сгенерированный код для проверки.
+      </p>
+      <label className="flex items-center gap-2 text-sm">
+        <input type="checkbox" checked={sessionOnly} onChange={(event) => setSessionOnly(event.target.checked)} />
+        <span className="muted">Помнить только до закрытия вкладки</span>
+      </label>
+      <Button variant="primary" onClick={save} disabled={draft.trim().length === 0}>
+        Сохранить ключ
+      </Button>
     </div>
   );
 }
