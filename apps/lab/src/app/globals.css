@@ -23,7 +23,3 @@ h3 {
     overflow-x: auto;
   }
 }
-
-[data-style='brutal'] .jx-tabs-indicator-segment {
-  background: var(--jx-accent) !important;
-}

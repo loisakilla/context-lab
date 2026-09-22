@@ -1,6 +1,6 @@
 # JxSlider
 
-Ползунок для выбора числа в диапазоне: громкость, масштаб, бюджет. Управляемый через `value` и `onValueChange`, неуправляемый — через `defaultValue`.
+Ползунок для выбора числа в диапазоне: громкость, масштаб, бюджет. Управляемый через `value` и `onValueChange`, неуправляемый — через `defaultValue`. Границы и шаг задаются обычными атрибутами `input[type=range]`: `min`, `max`, `step`; по умолчанию это диапазон от 0 до 100 с шагом 1.
 
 Импорт: `import { JxSlider } from '@jinx-ui/react'`  
 Источник: `packages/react/src/components/Slider.tsx:15`
@@ -34,5 +34,5 @@
 ### Бюджет контекста
 
 ```tsx
-<JxSlider label="Бюджет контекста" defaultValue={2500} unit="ток." showOutput />
+<JxSlider label="Масштаб интерфейса" min={80} max={140} step={10} defaultValue={100} unit="%" showOutput />
 ```
