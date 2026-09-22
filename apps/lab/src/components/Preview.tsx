@@ -82,10 +82,13 @@ export function Preview({ code, onRendered }: PreviewProps) {
 
   useEffect(() => {
     if (!ready || !code) return;
+    setStatus(null);
     frame.current?.contentWindow?.postMessage({ type: 'render', code, theme: 'dark', style: 'brutal' }, '*');
   }, [ready, code]);
 
-  if (loadError) return <pre className="code-block text-[var(--jx-danger)]">{loadError}</pre>;
+  if (loadError) return <pre className="code-block" style={{ color: 'var(--jx-danger)' }}>{loadError}</pre>;
+
+  const broken = status !== null && !status.ok;
 
   return (
     <div className="flex flex-col gap-2">
@@ -95,12 +98,26 @@ export function Preview({ code, onRendered }: PreviewProps) {
         sandbox="allow-scripts"
         onLoad={() => setReady(true)}
         {...(shell ? { srcDoc: shell } : {})}
-        style={{ height, width: '100%', border: '2px solid var(--jx-border)', borderRadius: 'var(--jx-r, 4px)', background: 'var(--jx-bg)' }}
+        style={{
+          height: broken ? 0 : height,
+          width: '100%',
+          border: broken ? 'none' : '1px solid var(--lab-line)',
+          borderRadius: 'var(--jx-r, 4px)',
+          background: 'var(--lab-panel-2)',
+          display: 'block',
+        }}
       />
-      {status && !status.ok && <pre className="code-block text-[var(--jx-danger)]">{status.error}</pre>}
+      {broken && (
+        <div className="lab-panel flex flex-col gap-2" style={{ borderColor: 'var(--jx-danger)' }}>
+          <span className="lab-label" style={{ color: 'var(--jx-danger)' }}>
+            Превью не построено
+          </span>
+          <p className="text-sm">{status?.error}</p>
+        </div>
+      )}
       {status?.filledProps && status.filledProps.length > 0 && (
-        <p className="text-sm opacity-70">
-          Компонент требует пропсы, поэтому превью подставило пустые значения: {status.filledProps.join(', ')}.
+        <p className="lab-quiet text-sm">
+          Компонент требует пропсы, превью подставило пустые значения: {status.filledProps.join(', ')}.
         </p>
       )}
     </div>

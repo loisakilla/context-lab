@@ -1,8 +1,8 @@
-import Link from 'next/link';
 import { JxAlert } from '@jinx-ui/react';
 import { CompareControls } from '@/components/CompareControls';
 import { MODE_LABELS } from '@/components/MatrixTable';
 import { RunPane } from '@/components/RunPane';
+import { TopBar } from '@/components/TopBar';
 import { loadLabData, loadRun, loadRunIndex, pickRun } from '@/lib/data';
 
 export const dynamic = 'force-dynamic';
@@ -27,48 +27,47 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
   const leftRun = leftPick ? loadRun(leftPick.id) : null;
   const rightRun = rightPick ? loadRun(rightPick.id) : null;
   const prompt = leftRun?.task.prompt ?? rightRun?.task.prompt ?? '';
+  const mismatched = leftRun && rightRun && (leftRun.model !== rightRun.model || leftRun.driver !== rightRun.driver);
 
   return (
-    <main className="mx-auto flex max-w-[110rem] flex-col gap-8 px-4 py-10">
-      <div className="flex flex-wrap items-center gap-4">
-        <Link href="/" className="text-sm underline">
-          ← к лаборатории
-        </Link>
-        <Link href="/rules" className="text-sm underline">
-          реестр правил
-        </Link>
-      </div>
+    <main className="mx-auto flex max-w-[104rem] flex-col gap-10 px-4 py-8 sm:px-6">
+      <TopBar current="compare" />
 
-      <header className="flex flex-col gap-2">
+      <div className="flex flex-col gap-3">
         <h1 className="text-3xl font-bold">Один и тот же запрос, разный контекст</h1>
-        <p className="max-w-3xl">
-          Слева и справа — записанные прогоны одной задачи в двух режимах: та же модель, тот же промпт задачи, разный контекст. Сравнивайте не только вердикт, но и цену: сколько токенов ушло до задачи и сколько стоил ответ.
+        <p className="lab-muted max-w-[62ch] text-lg">
+          Слева и справа — записанные прогоны одной задачи в двух режимах: та же модель, тот же промпт, разный контекст. Сравнивайте не только вердикт, но и цену.
         </p>
-      </header>
+      </div>
 
       <CompareControls tasks={tasks} modes={modes} task={task} left={left} right={right} />
 
-      {prompt && <p className="max-w-4xl">{prompt}</p>}
+      {prompt && (
+        <div className="lab-panel flex flex-col gap-2">
+          <span className="lab-label">Задача</span>
+          <p className="max-w-[80ch]">{prompt}</p>
+        </div>
+      )}
 
-      {leftRun && rightRun && (leftRun.model !== rightRun.model || leftRun.driver !== rightRun.driver) && (
+      {mismatched && leftRun && rightRun && (
         <JxAlert intent="warning" title="Прогоны сделаны по-разному">
           Слева {leftRun.model} через {leftRun.driver}, справа {rightRun.model} через {rightRun.driver}. Сравнивать их между собой некорректно: перезапишите недостающие ячейки одной моделью.
         </JxAlert>
       )}
 
-      <section className="grid items-start gap-8 xl:grid-cols-2">
+      <section className="grid items-start gap-10 xl:grid-cols-2 xl:gap-14">
         {leftRun ? (
           <RunPane record={leftRun} title={MODE_LABELS[left] ?? left} />
         ) : (
           <JxAlert intent="warning" title="Прогона нет">
-            Для этой задачи в режиме «{MODE_LABELS[left] ?? left}» записи нет. Запишите её: npm run run -- --task {task} --mode {left}
+            Для этой задачи в режиме «{MODE_LABELS[left] ?? left}» записи нет.
           </JxAlert>
         )}
         {rightRun ? (
           <RunPane record={rightRun} title={MODE_LABELS[right] ?? right} />
         ) : (
           <JxAlert intent="warning" title="Прогона нет">
-            Для этой задачи в режиме «{MODE_LABELS[right] ?? right}» записи нет. Запишите её: npm run run -- --task {task} --mode {right}
+            Для этой задачи в режиме «{MODE_LABELS[right] ?? right}» записи нет.
           </JxAlert>
         )}
       </section>

@@ -10,14 +10,17 @@ export function RunPane({ record, title }: { record: RunRecord; title: string })
   const onRendered = useCallback((status: RenderStatus) => setRender(status), []);
 
   return (
-    <div className="flex min-w-0 flex-col gap-3">
-      <h2 className="text-xl font-bold">{title}</h2>
+    <div className="flex min-w-0 flex-col gap-5">
+      <h2 className="text-2xl font-bold">{title}</h2>
       <Report record={record} render={render} />
       {record.output.code ? (
         <>
-          <Preview code={record.output.code} onRendered={onRendered} />
+          <div className="flex flex-col gap-2">
+            <span className="lab-label">Рендер</span>
+            <Preview code={record.output.code} onRendered={onRendered} />
+          </div>
           <details>
-            <summary className="cursor-pointer font-semibold">Код</summary>
+            <summary className="lab-label cursor-pointer">Код</summary>
             <pre className="code-block mt-2 max-h-[32rem] overflow-auto">{record.output.code}</pre>
           </details>
         </>

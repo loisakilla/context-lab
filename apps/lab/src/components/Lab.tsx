@@ -88,19 +88,21 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
   const canRun = !running && task.prompt.length > 0 && (engine === 'local' || (apiKey !== null && apiKey.length > 0));
 
   return (
-    <div className="flex flex-col gap-10">
-      <section className="grid items-start gap-6 lg:grid-cols-[minmax(0,400px)_minmax(0,1fr)] lg:gap-8">
-        <div className="flex min-w-0 flex-col gap-4">
-          <JxSelect
-            label="Задача"
-            options={[...tasks.map((item) => ({ value: item.id, label: item.title })), { value: 'custom', label: 'Своя задача' }]}
-            value={taskId}
-            onValueChange={pickTask}
-          />
-          <JxTextareaField label="Формулировка" rows={6} value={prompt} onChange={(event) => setPrompt(event.target.value)} />
+    <div className="flex flex-col gap-14">
+      <section className="grid items-start gap-8 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:gap-12">
+        <div className="flex min-w-0 flex-col gap-6">
+          <div className="flex flex-col gap-4">
+            <JxSelect
+              label="Задача"
+              options={[...tasks.map((item) => ({ value: item.id, label: item.title })), { value: 'custom', label: 'Своя задача' }]}
+              value={taskId}
+              onValueChange={pickTask}
+            />
+            <JxTextareaField label="Формулировка" rows={6} value={prompt} onChange={(event) => setPrompt(event.target.value)} />
+          </div>
 
           <div className="flex flex-col gap-2">
-            <span className="text-sm font-semibold">Режим контекста</span>
+            <span className="lab-label">Режим контекста</span>
             <JxTabs
               ariaLabel="Режим контекста"
               variant="underline"
@@ -108,7 +110,7 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
               value={availableModes.includes(mode) ? mode : 'none'}
               onValueChange={(value) => setMode(value as ContextMode)}
             />
-            <p className="text-sm opacity-70">
+            <p className="lab-muted text-sm">
               {mode === 'mcp'
                 ? engine === 'local'
                   ? 'Claude Code подключает MCP-сервер репозитория и берёт контекст точечно по ходу работы.'
@@ -119,8 +121,8 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
 
           <JxSelect label="Модель" options={knownModels().map((name) => ({ value: name, label: name }))} value={model} onValueChange={setModel} />
 
-          <div className="flex flex-col gap-2">
-            <span className="text-sm font-semibold">Как запускать</span>
+          <div className="flex flex-col gap-3">
+            <span className="lab-label">Как запускать</span>
             <JxTabs
               ariaLabel="Движок"
               className="self-start"
@@ -129,13 +131,13 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
               onValueChange={(value) => setEngine(value as Engine)}
             />
             {engine === 'local' ? (
-              <p className="text-sm opacity-70">Прогон делает установленный на этой машине Claude Code по подписке, без ключа API.</p>
+              <p className="lab-muted text-sm">Прогон делает установленный на этой машине Claude Code по подписке, без ключа API.</p>
             ) : (
               <KeyForm onChange={setApiKey} />
             )}
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex items-center gap-3">
             <JxButton variant="primary" onClick={start} disabled={!canRun}>
               {running ? 'Генерируем…' : 'Запустить'}
             </JxButton>
@@ -148,38 +150,42 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
           {error && <JxAlert intent="danger" title="Не получилось">{error}</JxAlert>}
         </div>
 
-        <div className="flex min-w-0 flex-col gap-4">
-          {!record && !running && !stream && (
-            <>
-              <JxAlert intent="info" title="Как это работает">Выберите задачу и режим контекста, запустите прогон. Здесь появятся код, живой рендер на Jinx UI и отчёт: что выдумано, что нарушено, сколько стоило. Пока прогона нет, показан контекст, который уйдёт в модель.</JxAlert>
-              <ContextPreview mode={mode} task={task} sources={sources} />
-            </>
-          )}
+        <div className="flex min-w-0 flex-col gap-5">
+          {!record && !running && !stream && <ContextPreview mode={mode} task={task} sources={sources} />}
           {running && (
-            <pre className="code-block max-h-72 overflow-auto whitespace-pre-wrap">{stream || (engine === 'local' ? 'Claude Code думает… обычно 20–60 секунд.' : 'Ждём первые токены…')}</pre>
+            <pre className="code-block max-h-96 overflow-auto whitespace-pre-wrap">
+              {stream || (engine === 'local' ? 'Claude Code думает… обычно 20–60 секунд.' : 'Ждём первые токены…')}
+            </pre>
           )}
           {record && (
             <>
               <Report record={record} render={render} />
-              {record.output.code && (
+              {record.output.code ? (
                 <>
-                  <h3 className="font-semibold">Рендер</h3>
-                  <Preview code={record.output.code} onRendered={onRendered} />
+                  <div className="flex flex-col gap-2">
+                    <span className="lab-label">Рендер</span>
+                    <Preview code={record.output.code} onRendered={onRendered} />
+                  </div>
                   <details>
-                    <summary className="cursor-pointer font-semibold">Код</summary>
-                    <pre className="code-block mt-2 overflow-auto">{record.output.code}</pre>
+                    <summary className="lab-label cursor-pointer">Код</summary>
+                    <pre className="code-block mt-2 max-h-[32rem] overflow-auto">{record.output.code}</pre>
                   </details>
                 </>
+              ) : (
+                <pre className="code-block whitespace-pre-wrap">{record.output.text}</pre>
               )}
-              {!record.output.code && <pre className="code-block whitespace-pre-wrap">{record.output.text}</pre>}
             </>
           )}
         </div>
       </section>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-xl font-bold">Записанные прогоны</h2>
-        {matrix ? <MatrixTable matrix={matrix} /> : <p className="text-sm opacity-70">Матрица ещё не записана: запустите `npm run run` и `npm run matrix`.</p>}
+      <section className="flex flex-col gap-4">
+        <h2 className="text-2xl font-bold">Записанные прогоны</h2>
+        {matrix ? (
+          <MatrixTable matrix={matrix} />
+        ) : (
+          <p className="lab-muted text-sm">Матрица ещё не записана: запустите `npm run run` и `npm run matrix`.</p>
+        )}
       </section>
     </div>
   );

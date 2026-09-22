@@ -1,25 +1,110 @@
 @import 'tailwindcss';
 
+:root {
+  --lab-ink: #ece9f5;
+  --lab-ink-2: #a8a0bd;
+  --lab-ink-3: #756c8c;
+  --lab-panel: #201c30;
+  --lab-panel-2: #16121f;
+  --lab-line: #322b47;
+}
+
+:root[data-theme='light'] {
+  --lab-ink: #1a1726;
+  --lab-ink-2: #4a4258;
+  --lab-ink-3: #7a7187;
+  --lab-panel: #fffdf6;
+  --lab-panel-2: #f0ebdb;
+  --lab-line: #d7cfb8;
+}
+
 body {
   background: var(--jx-bg);
-  color: var(--jx-text);
+  color: var(--lab-ink);
   font-family: var(--jx-font-sans, system-ui, sans-serif);
+  line-height: 1.55;
+}
+
+p,
+li,
+summary,
+td,
+th {
+  color: inherit;
 }
 
 h1,
 h2,
 h3 {
   font-family: var(--jx-font-display, var(--jx-font-sans, system-ui, sans-serif));
+  color: var(--jx-accent);
+  text-wrap: balance;
 }
 
-@layer components {
-  .code-block {
-    font: 13px/1.5 var(--jx-font-mono, ui-monospace, monospace);
-    background: var(--jx-surface-2);
-    border: 1px solid var(--jx-border);
-    border-radius: var(--jx-r, 4px);
-    padding: 10px 12px;
-    white-space: pre;
-    overflow-x: auto;
-  }
+a {
+  color: var(--jx-accent);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.code-block {
+  font: 13px/1.6 var(--jx-font-mono, ui-monospace, monospace);
+  color: var(--lab-ink);
+  background: var(--lab-panel-2);
+  border: 1px solid var(--lab-line);
+  border-radius: var(--jx-r, 4px);
+  padding: 12px 14px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overflow-x: auto;
+}
+
+.lab-panel {
+  background: var(--lab-panel);
+  border: 1px solid var(--lab-line);
+  border-radius: var(--jx-r, 4px);
+  padding: 20px;
+}
+
+.lab-label {
+  font: 500 11px/1.4 var(--jx-font-mono, ui-monospace, monospace);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lab-ink-2);
+}
+
+.lab-muted,
+.lab-muted p,
+.lab-muted li {
+  color: var(--lab-ink-2);
+}
+
+.lab-quiet,
+.lab-quiet p,
+.lab-quiet li {
+  color: var(--lab-ink-3);
+}
+
+.lab-wordmark {
+  font-family: var(--jx-font-display, var(--jx-font-sans, system-ui, sans-serif));
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--jx-accent);
+}
+
+.jx-label,
+.jx-field-help {
+  color: var(--lab-ink-2);
+}
+
+.jx-input,
+.jx-textarea,
+.jx-select-trigger,
+.jx-combobox-input,
+.jx-taginput {
+  color: var(--lab-ink);
 }

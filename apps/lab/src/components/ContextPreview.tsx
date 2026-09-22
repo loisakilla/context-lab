@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { JxAlert, JxBadge } from '@jinx-ui/react';
+import { JxAlert } from '@jinx-ui/react';
 import { buildContext, contextTokens, type ContextMode, type ContextSources, type Task } from '@/lib/runner-browser';
 import { MODE_LABELS } from './MatrixTable';
 
@@ -54,48 +54,55 @@ export function ContextPreview({ mode, task, sources }: ContextPreviewProps) {
   const rest = body.length - BODY_LIMIT;
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1">
-        <h2 className="text-xl font-bold">Что уйдёт в модель</h2>
-        <p className="text-sm opacity-70">
-          Режим «{MODE_LABELS[mode] ?? mode}». {MODE_NOTES[mode] ?? ''}
-        </p>
-      </div>
-
-      <div className="flex flex-wrap gap-2">
-        <JxBadge tone="info">~{contextTokens(built).toLocaleString('ru-RU')} токенов до задачи</JxBadge>
-        {built.sources.map((source) => (
-          <JxBadge key={`${source.kind}-${source.id}`} tone="default">
-            {SOURCE_LABELS[source.kind] ?? source.kind} · ~{source.tokens.toLocaleString('ru-RU')} ток.
-          </JxBadge>
-        ))}
+    <div className="flex flex-col gap-5">
+      <div className="lab-panel flex flex-col gap-4">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+          <h2 className="text-lg font-bold">Что уйдёт в модель</h2>
+          <span className="font-mono text-base" style={{ color: 'var(--jx-accent)' }}>
+            ~{contextTokens(built).toLocaleString('ru-RU')} токенов
+          </span>
+        </div>
+        <p className="lab-muted text-sm">{MODE_NOTES[mode] ?? ''}</p>
+        {built.sources.length > 0 && (
+          <ul className="flex flex-col gap-1 text-sm">
+            {built.sources.map((source) => (
+              <li key={`${source.kind}-${source.id}`} className="flex items-baseline justify-between gap-4">
+                <span className="lab-muted">{SOURCE_LABELS[source.kind] ?? source.kind}</span>
+                <span className="lab-quiet font-mono">~{source.tokens.toLocaleString('ru-RU')}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {built.tools && (
         <section className="flex flex-col gap-2">
-          <h3 className="font-semibold">Инструменты ({built.tools.length})</h3>
+          <span className="lab-label">Инструменты · {built.tools.length}</span>
           <ul className="flex flex-col gap-1 text-sm">
             {built.tools.map((tool) => (
-              <li key={tool.name}>
-                <code className="font-mono">{tool.name}</code> — <span className="opacity-70">{shorten(tool.description)}</span>
+              <li key={tool.name} className="flex flex-wrap gap-x-2">
+                <code className="font-mono" style={{ color: 'var(--jx-accent)' }}>
+                  {tool.name}
+                </code>
+                <span className="lab-muted">{shorten(tool.description)}</span>
               </li>
             ))}
           </ul>
         </section>
       )}
 
+      <section className="flex flex-col gap-2">
+        <span className="lab-label">Задача агенту</span>
+        <pre className="code-block max-h-72 overflow-auto whitespace-pre-wrap">{built.taskText}</pre>
+      </section>
+
       <details>
-        <summary className="cursor-pointer font-semibold">Текст контекста ({body.length.toLocaleString('ru-RU')} символов)</summary>
+        <summary className="lab-label cursor-pointer">Текст контекста · {body.length.toLocaleString('ru-RU')} символов</summary>
         <pre className="code-block mt-2 max-h-96 overflow-auto whitespace-pre-wrap">
           {body.slice(0, BODY_LIMIT)}
           {rest > 0 ? `\n\n… и ещё ${rest.toLocaleString('ru-RU')} символов` : ''}
         </pre>
       </details>
-
-      <section className="flex flex-col gap-2">
-        <h3 className="font-semibold">Задача агенту</h3>
-        <pre className="code-block max-h-72 overflow-auto whitespace-pre-wrap">{built.taskText}</pre>
-      </section>
     </div>
   );
 }

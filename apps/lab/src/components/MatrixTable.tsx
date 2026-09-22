@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { JxTable } from '@jinx-ui/react';
 import type { Matrix } from '@context-lab/runner/browser';
 import { formatCost } from './Report';
 
@@ -11,49 +10,69 @@ export const MODE_LABELS: Record<string, string> = {
   mcp: 'MCP',
 };
 
+function verdictColor(passRate: number): string {
+  if (passRate === 1) return 'var(--jx-success)';
+  if (passRate === 0) return 'var(--jx-danger)';
+  return 'var(--jx-warning)';
+}
+
 export function MatrixTable({ matrix }: { matrix: Matrix }) {
   return (
-    <div className="flex flex-col gap-3">
-      <p className="text-sm">
-        {matrix.generatedFrom} прогонов · драйвер {matrix.driver === 'claude-code' ? 'Claude Code' : matrix.driver} · модель {matrix.model} · библиотека {matrix.library?.name}@{matrix.library?.version}. В ячейке: доля прогонов без ошибок, медиана токенов и стоимости.
+    <div className="flex flex-col gap-4">
+      <p className="lab-muted max-w-[70ch] text-sm">
+        {matrix.generatedFrom} прогонов · модель {matrix.model} · библиотека {matrix.library?.name}@{matrix.library?.version}. В ячейке: доля прогонов без
+        ошибок, медиана токенов и цены, ходы и время.
       </p>
       <div className="overflow-x-auto">
-        <JxTable>
+        <table className="w-full border-collapse text-sm">
           <thead>
             <tr>
-              <th>Задача</th>
+              <th className="lab-label border-b px-3 py-2 text-left" style={{ borderColor: 'var(--lab-line)' }}>
+                Задача
+              </th>
               {matrix.modes.map((mode) => (
-                <th key={mode}>{MODE_LABELS[mode] ?? mode}</th>
+                <th key={mode} className="lab-label border-b px-3 py-2 text-left" style={{ borderColor: 'var(--lab-line)' }}>
+                  {MODE_LABELS[mode] ?? mode}
+                </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {matrix.tasks.map((task) => (
               <tr key={task.id}>
-                <td>{task.title}</td>
+                <td className="border-b px-3 py-3 align-top" style={{ borderColor: 'var(--lab-line)' }}>
+                  {task.title}
+                </td>
                 {matrix.modes.map((mode) => {
                   const cell = matrix.cells.find((candidate) => candidate.taskId === task.id && candidate.mode === mode);
-                  if (!cell) return <td key={mode}>—</td>;
+                  if (!cell) {
+                    return (
+                      <td key={mode} className="lab-quiet border-b px-3 py-3 align-top" style={{ borderColor: 'var(--lab-line)' }}>
+                        —
+                      </td>
+                    );
+                  }
                   const first = cell.runs[0];
+                  const passed = Math.round(cell.passRate * cell.runs.length);
                   return (
-                    <td key={mode}>
-                      <div className="flex flex-col gap-1 text-sm">
-                        <span style={{ color: cell.passRate === 1 ? 'var(--jx-success)' : cell.passRate === 0 ? 'var(--jx-danger)' : 'var(--jx-warning)' }}>
-                          {Math.round(cell.passRate * 100)}% без ошибок
+                    <td key={mode} className="border-b px-3 py-3 align-top" style={{ borderColor: 'var(--lab-line)' }}>
+                      <div className="flex flex-col gap-1">
+                        <span className="font-mono" style={{ color: verdictColor(cell.passRate) }}>
+                          {passed}/{cell.runs.length} без ошибок
                         </span>
-                        <span className="opacity-70">
+                        <span className="lab-muted">
                           {cell.medianTokens > 0
                             ? `${Math.round(cell.medianTokens).toLocaleString('ru-RU')} ток. · ${formatCost(cell.medianCostUsd)}`
                             : `контекст ~${Math.round(cell.medianContextTokens).toLocaleString('ru-RU')} ток.`}
                         </span>
                         {cell.medianTurns > 0 && (
-                          <span className="opacity-70">
-                            {cell.medianTurns} ход. · {cell.medianToolCalls} выз. · {cell.medianSeconds} с
+                          <span className="lab-quiet">
+                            {cell.medianTurns} ход. · {cell.medianSeconds} с
                           </span>
                         )}
                         {first && (
                           <Link href={`/run/${first}`} className="underline">
-                            прогоны ({cell.runs.length})
+                            прогон
                           </Link>
                         )}
                       </div>
@@ -63,7 +82,7 @@ export function MatrixTable({ matrix }: { matrix: Matrix }) {
               </tr>
             ))}
           </tbody>
-        </JxTable>
+        </table>
       </div>
     </div>
   );
