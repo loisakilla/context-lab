@@ -15,10 +15,10 @@
 | `--jx-bg-2` | `#0f0d18` | `[data-theme="light"]`: `#ece8dc`; `[data-style="brutal"]`: `#ece8dc`; `[data-style="brutal"][data-theme="dark"]`: `#0c0a14` |
 | `--jx-border` | `#221c30` | `[data-theme="light"]`: `#ddd6c4`; `[data-style="brutal"]`: `#1a1726`; `[data-style="brutal"][data-theme="dark"]`: `#f5ff3d` |
 | `--jx-border-2` | `#3a3150` | `[data-theme="light"]`: `#b8ae96`; `[data-style="brutal"]`: `#1a1726`; `[data-style="brutal"][data-theme="dark"]`: `#f5ff3d` |
-| `--jx-danger` | `#ff5470` |  |
-| `--jx-info` | `#79c8ff` |  |
+| `--jx-danger` | `#ff5470` | `[data-theme="light"]`: `#c81e3c` |
+| `--jx-info` | `#79c8ff` | `[data-theme="light"]`: `#1d5fb0` |
 | `--jx-rule` | `#1c1828` | `[data-theme="light"]`: `#ddd6c4`; `[data-style="brutal"]`: `#1a1726`; `[data-style="brutal"][data-theme="dark"]`: `#f5ff3d` |
-| `--jx-success` | `#6bd97a` |  |
+| `--jx-success` | `#6bd97a` | `[data-theme="light"]`: `#1f7a45` |
 | `--jx-surface` | `#15121f` | `[data-theme="light"]`: `#ffffff`; `[data-style="brutal"]`: `#ffffff`; `[data-style="brutal"][data-theme="dark"]`: `#1a1726` |
 | `--jx-surface-2` | `#1c1828` | `[data-theme="light"]`: `#f5f1e6`; `[data-style="brutal"]`: `#f0ebdb`; `[data-style="brutal"][data-theme="dark"]`: `#0c0a14` |
 | `--jx-surface-3` | `#2a2438` | `[data-theme="light"]`: `#e6e0d0`; `[data-style="brutal"]`: `#ddd6c4` |
@@ -26,7 +26,7 @@
 | `--jx-text-2` | `#a59cb8` | `[data-theme="light"]`: `#4a4258`; `[data-style="brutal"]`: `#1a1726`; `[data-style="brutal"][data-theme="dark"]`: `#f5ff3d` |
 | `--jx-text-3` | `#6e6386` | `[data-theme="light"]`: `#7a7187`; `[data-style="brutal"][data-theme="dark"]`: `#a59cb8` |
 | `--jx-text-4` | `#463e5a` | `[data-theme="light"]`: `#b4abc0`; `[data-style="brutal"]`: `#b4abc0` |
-| `--jx-warning` | `#ffb547` |  |
+| `--jx-warning` | `#ffb547` | `[data-theme="light"]`: `#9a6300` |
 
 ## font
 

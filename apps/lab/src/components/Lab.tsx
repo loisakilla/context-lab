@@ -9,7 +9,7 @@ import { KeyForm } from './KeyForm';
 import { MatrixTable, MODE_LABELS } from './MatrixTable';
 import { Preview, type RenderStatus } from './Preview';
 import { Report } from './Report';
-import { Button, Note, Select, Tabs, Textarea } from './ui';
+import { Button, CodeBlock, Note, Select, Tabs, Textarea } from './ui';
 
 export interface LabProps {
   index: LibraryIndex;
@@ -169,7 +169,7 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
       <section className="flex flex-col gap-6">
         {!record && !running && !stream && <ContextPreview mode={mode} task={task} sources={sources} />}
         {running && (
-          <pre className="code max-h-[32rem] overflow-auto">
+          <pre className="codebox max-h-[32rem] overflow-auto">
             {stream || (engine === 'local' ? 'Claude Code думает… обычно 20–60 секунд.' : 'Ждём первые токены…')}
           </pre>
         )}
@@ -184,11 +184,13 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
                 </div>
                 <details>
                   <summary>Код компонента</summary>
-                  <pre className="code mt-3 max-h-[32rem] overflow-auto">{record.output.code}</pre>
+                  <div className="mt-3">
+                    <CodeBlock code={record.output.code} maxHeight={512} />
+                  </div>
                 </details>
               </>
             ) : (
-              <pre className="code">{record.output.text}</pre>
+              <pre className="codebox">{record.output.text}</pre>
             )}
           </>
         )}

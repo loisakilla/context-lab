@@ -90,6 +90,32 @@ export function Note({ tone = 'warn', title, children }: { tone?: 'warn' | 'bad'
   );
 }
 
+function plural(count: number, one: string, few: string, many: string): string {
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+  if (mod10 === 1 && mod100 !== 11) return one;
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return few;
+  return many;
+}
+
+export function CodeBlock({ code, title = 'tsx', maxHeight }: { code: string; title?: string; maxHeight?: number }) {
+  const lines = code.replace(/\n+$/, '').split('\n');
+  return (
+    <div className="jx-codeblock">
+      <div className="jx-codeblock-head">
+        <span>{title}</span>
+        <span>
+          {lines.length} {plural(lines.length, 'строка', 'строки', 'строк')}
+        </span>
+      </div>
+      <div className="jx-codeblock-body" style={maxHeight === undefined ? undefined : { maxHeight, overflowY: 'auto' }}>
+        <pre className="ln">{lines.map((_, index) => index + 1).join('\n')}</pre>
+        <pre className="code">{lines.join('\n')}</pre>
+      </div>
+    </div>
+  );
+}
+
 export function Stat({ label, value, tone }: { label: string; value: string; tone?: 'accent' | 'ok' | 'bad' }) {
   return (
     <div className="stat">

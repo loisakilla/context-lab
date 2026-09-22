@@ -87,7 +87,7 @@ export function Preview({ code, onRendered }: PreviewProps) {
     frame.current?.contentWindow?.postMessage({ type: 'render', code, theme: 'light', style: 'brutal' }, '*');
   }, [ready, code]);
 
-  if (loadError) return <pre className="code" style={{ color: 'var(--jx-danger)' }}>{loadError}</pre>;
+  if (loadError) return <pre className="codebox" style={{ color: 'var(--jx-danger)' }}>{loadError}</pre>;
 
   const broken = status !== null && !status.ok;
 

@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { parseArgs } from 'node:util';
-import { findDrift, writeCompiled } from './check.ts';
+import { findDrift, findOrphans, removeOrphans, writeCompiled } from './check.ts';
 import { compileAll } from './compile.ts';
 import { lintRegistry } from './lint.ts';
 import { loadRegistry } from './parse.ts';
@@ -79,13 +79,18 @@ function main(): void {
       const outDir = path.resolve(values.out ?? path.join(root, 'compiled', setName));
       const files = compileAll(resolveRules(registry, setName, options), targets);
       const written = writeCompiled(files, outDir);
+      const removed = removeOrphans(files, outDir);
       process.stderr.write(`Скомпилировано ${written.length} файлов в ${path.relative(process.cwd(), outDir)}: ${written.join(', ')}\n`);
+      if (removed.length > 0) process.stderr.write(`Удалено ${removed.length} файлов удалённых правил: ${removed.join(', ')}\n`);
       return;
     }
     case 'check': {
       if (!setName) fail('Укажите набор: contextlab rules check <set>');
       const outDir = path.resolve(values.out ?? path.join(root, 'compiled', setName));
-      const drifted = findDrift(compileAll(resolveRules(registry, setName, options), targets), outDir);
+      const compiled = compileAll(resolveRules(registry, setName, options), targets);
+      const drifted = findDrift(compiled, outDir);
+      const orphans = findOrphans(compiled, outDir);
+      if (orphans.length > 0) fail(`В ${setName} остались файлы удалённых правил: ${orphans.join(', ')}. Выполните npm run rules:compile`);
       if (drifted.length > 0) fail(`Скомпилированные правила ${setName} разошлись с источником: ${drifted.join(', ')}. Выполните npm run rules:compile`);
       process.stderr.write(`Скомпилированные правила ${setName} соответствуют источнику.\n`);
       return;

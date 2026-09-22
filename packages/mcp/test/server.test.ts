@@ -61,8 +61,9 @@ describe('MCP-сервер по stdio', () => {
   it('get_rules отдаёт правила с наследованием от org и провенансом', async () => {
     const text = textOf(await client.callTool({ name: 'get_rules', arguments: { task: 'ui' } }));
     expect(text).toMatch(/Сначала реальный API, потом разметка/);
-    expect(text).toMatch(/Без комментариев в коде/);
-    expect(text).toMatch(/org\/no-code-comments@1\.1\.0 ← org@1\.0\.0/);
+    expect(text).toMatch(/Внешние действия только по просьбе/);
+    expect(text).toMatch(/org\/ask-before-publish@1\.0\.0 ← org@1\.0\.0/);
+    expect(text).toMatch(/Контраст текста не ниже 4\.5:1/);
   });
 
   it('get_docs отдаёт документ компонента и режет обзор по бюджету', async () => {

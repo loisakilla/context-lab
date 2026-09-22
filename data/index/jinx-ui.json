@@ -4,7 +4,7 @@
     "name": "jinx-ui",
     "package": "@jinx-ui/react",
     "version": "0.1.0",
-    "commit": "91c888ba683e55cbebff36e42a9731598139a0e9"
+    "commit": "5c14f2f444280aef43353308063a73419e1ff9fe"
   },
   "components": [
     {
@@ -2326,7 +2326,8 @@
       "value": "#ff5470",
       "scopes": {
         ":root": "#ff5470",
-        "[data-theme=\"dark\"]": "#ff5470"
+        "[data-theme=\"dark\"]": "#ff5470",
+        "[data-theme=\"light\"]": "#c81e3c"
       }
     },
     {
@@ -2375,7 +2376,8 @@
       "value": "#79c8ff",
       "scopes": {
         ":root": "#79c8ff",
-        "[data-theme=\"dark\"]": "#79c8ff"
+        "[data-theme=\"dark\"]": "#79c8ff",
+        "[data-theme=\"light\"]": "#1d5fb0"
       }
     },
     {
@@ -2495,7 +2497,8 @@
       "value": "#6bd97a",
       "scopes": {
         ":root": "#6bd97a",
-        "[data-theme=\"dark\"]": "#6bd97a"
+        "[data-theme=\"dark\"]": "#6bd97a",
+        "[data-theme=\"light\"]": "#1f7a45"
       }
     },
     {
@@ -2588,7 +2591,8 @@
       "value": "#ffb547",
       "scopes": {
         ":root": "#ffb547",
-        "[data-theme=\"dark\"]": "#ffb547"
+        "[data-theme=\"dark\"]": "#ffb547",
+        "[data-theme=\"light\"]": "#9a6300"
       }
     }
   ]

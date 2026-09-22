@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from 'react';
 import type { RunRecord } from '@context-lab/runner/browser';
+import { CodeBlock } from './ui';
 import { Preview, type RenderStatus } from './Preview';
 import { Report } from './Report';
 
@@ -29,11 +30,11 @@ export function RunView({ record }: { record: RunRecord }) {
           </section>
           <section className="flex flex-col gap-3">
             <h2>Код компонента</h2>
-            <pre className="code overflow-auto">{record.output.code}</pre>
+            <CodeBlock code={record.output.code} />
           </section>
         </>
       ) : (
-        <pre className="code">{record.output.text}</pre>
+        <pre className="codebox">{record.output.text}</pre>
       )}
     </div>
   );

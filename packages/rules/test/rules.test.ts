@@ -2,7 +2,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
-import { findDrift, writeCompiled } from '../src/check.ts';
+import { findDrift, findOrphans, removeOrphans, writeCompiled } from '../src/check.ts';
 import { compile, compileAll, renderRulesText } from '../src/compile.ts';
 import { lintRegistry } from '../src/lint.ts';
 import { parseRule, registryFromSets } from '../src/parse.ts';
@@ -108,6 +108,22 @@ describe('компиляция', () => {
     const edited = project.rules.map((item) => (item.id === 'tokens' ? { ...item, body: 'Цвета только через токены, без исключений.' } : item));
     const changed = resolveRules(registryFromSets([org, set('project', ['org'], edited)]), 'project', { taskType: 'ui' });
     expect(findDrift(compileAll(changed, COMPILE_TARGETS), dir).length).toBeGreaterThan(0);
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  it('удалённое правило не остаётся файлом в скомпилированных', () => {
+    const dir = mkdtempSync(path.join(tmpdir(), 'rules-'));
+    writeCompiled(compileAll(resolution, COMPILE_TARGETS), dir);
+
+    const without = project.rules.filter((item) => item.id !== 'tokens');
+    const shrunk = compileAll(resolveRules(registryFromSets([org, set('project', ['org'], without)]), 'project', { taskType: 'ui' }), COMPILE_TARGETS);
+
+    const orphans = findOrphans(shrunk, dir);
+    expect(orphans.some((file) => file.includes('tokens'))).toBe(true);
+    writeCompiled(shrunk, dir);
+    expect(removeOrphans(shrunk, dir)).toEqual(orphans);
+    expect(findOrphans(shrunk, dir)).toEqual([]);
+    expect(findDrift(shrunk, dir)).toEqual([]);
     rmSync(dir, { recursive: true, force: true });
   });
 });

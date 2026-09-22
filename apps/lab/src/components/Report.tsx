@@ -108,7 +108,7 @@ export function Report({ record, render }: ReportProps) {
             ) : (
               <ul className="flex flex-col gap-2">
                 {checks.tsc.errors.map((error, position) => (
-                  <li key={position} className="code text-[12.5px]">
+                  <li key={position} className="codebox text-[12.5px]">
                     <span className="dim">
                       строка {error.line} · TS{error.code}
                     </span>
@@ -166,7 +166,7 @@ export function Report({ record, render }: ReportProps) {
           <span className="jx-label">Вызовы инструментов · {toolCalls.length}</span>
           <ol className="flex flex-col gap-1">
             {toolCalls.map((call, position) => (
-              <li key={position} className="code code--row text-[12.5px]">
+              <li key={position} className="codebox code--row text-[12.5px]">
                 <span style={{ color: 'var(--jx-accent)' }}>{call.name.replace('mcp__context-lab__', '')}</span>
                 <span className="dim">({JSON.stringify(call.input)})</span>
                 <span className="muted">

@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from 'react';
 import type { RunRecord } from '@context-lab/runner/browser';
+import { CodeBlock } from './ui';
 import { Preview, type RenderStatus } from './Preview';
 import { Report } from './Report';
 
@@ -21,11 +22,13 @@ export function RunPane({ record, title }: { record: RunRecord; title: string })
           </section>
           <details>
             <summary>Код компонента</summary>
-            <pre className="code mt-3 max-h-[32rem] overflow-auto">{record.output.code}</pre>
+            <div className="mt-3">
+              <CodeBlock code={record.output.code} maxHeight={512} />
+            </div>
           </details>
         </>
       ) : (
-        <pre className="code max-h-72 overflow-auto">{record.output.text}</pre>
+        <pre className="codebox max-h-72 overflow-auto">{record.output.text}</pre>
       )}
     </div>
   );

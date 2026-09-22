@@ -177,7 +177,7 @@ a {
   line-height: 1.1;
 }
 
-.code {
+.codebox {
   display: block;
   background: var(--jx-surface);
   border: 2px solid var(--jx-border);
@@ -193,7 +193,7 @@ a {
   tab-size: 2;
 }
 
-.code--row {
+.codebox--row {
   padding: 8px 12px;
   line-height: 1.5;
   box-shadow: none;

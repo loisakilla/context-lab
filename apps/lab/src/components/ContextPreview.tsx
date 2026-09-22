@@ -93,12 +93,12 @@ export function ContextPreview({ mode, task, sources }: ContextPreviewProps) {
 
         <section className="flex flex-col gap-3">
           <span className="jx-label">Задача агенту</span>
-          <pre className="code max-h-80 overflow-auto">{built.taskText}</pre>
+          <pre className="codebox max-h-80 overflow-auto">{built.taskText}</pre>
         </section>
 
         <details>
           <summary>Текст контекста · {body.length.toLocaleString('ru-RU')} символов</summary>
-          <pre className="code mt-3 max-h-96 overflow-auto">
+          <pre className="codebox mt-3 max-h-96 overflow-auto">
             {body.slice(0, BODY_LIMIT)}
             {rest > 0 ? `\n\n… и ещё ${rest.toLocaleString('ru-RU')} символов` : ''}
           </pre>
