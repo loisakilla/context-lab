@@ -2,7 +2,7 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadConfig, resolveFrom } from '@context-lab/docgen';
-import { MODE_LABELS, type Matrix, type MatrixCell } from '@context-lab/runner';
+import { libraryKey, MODE_LABELS, SOURCE_LABELS, type Matrix, type MatrixCell } from '@context-lab/runner';
 
 const DRIVER_PHRASES: Record<string, string> = {
   'claude-code': 'Claude Code по подписке',
@@ -10,8 +10,18 @@ const DRIVER_PHRASES: Record<string, string> = {
   subagent: 'агенты-исполнители',
 };
 
-const START = '<!-- matrix:start -->';
-const END = '<!-- matrix:end -->';
+const MODE_CONTENTS: Record<string, string> = {
+  none: 'только формулировка задачи и требования к ответу',
+  readme: 'README библиотеки: в записанных прогонах README репозитория Jinx UI, в лаборатории сейчас README npm-пакета',
+  docs: 'сгенерированный `llms-full.txt`',
+  'docs+rules': 'то же плюс правила из реестра',
+  mcp: 'описания шести инструментов сервера; API и правила агент берёт сам через `search_components`, `get_component_api` и `get_rules`',
+};
+
+const MATRIX_START = '<!-- matrix:start -->';
+const MATRIX_END = '<!-- matrix:end -->';
+const MODES_START = '<!-- modes:start -->';
+const MODES_END = '<!-- modes:end -->';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const config = loadConfig(path.join(root, 'context-lab.config.json'));
@@ -22,14 +32,16 @@ if (!existsSync(matrixFile)) {
 }
 
 const matrix = JSON.parse(readFileSync(matrixFile, 'utf8')) as Matrix;
+const library = matrix.library ? libraryKey(matrix.library) : '';
 const matrixDir = path.dirname(matrixFile);
 const others = readdirSync(matrixDir)
   .filter((file) => /^matrix-.+\.json$/.test(file))
   .map((file) => JSON.parse(readFileSync(path.join(matrixDir, file), 'utf8')) as Matrix)
-  .filter((other) => other.model !== matrix.model);
+  .filter((other) => other.model !== matrix.model && other.driver === matrix.driver && (other.library ? libraryKey(other.library) : '') === library);
 
 const modes = matrix.modes;
 const withUsage = matrix.cells.some((cell) => cell.medianTokens > 0);
+const withPrompt = matrix.cells.some((cell) => (cell.medianPromptTokens ?? 0) > 0);
 const withCost = matrix.cells.some((cell) => cell.medianCostUsd !== null);
 const withTurns = matrix.cells.some((cell) => cell.medianTurns > 0);
 
@@ -59,12 +71,20 @@ function tokens(value: number): string {
   return `${Math.round(value).toLocaleString('ru-RU')} ток.`;
 }
 
+function thousands(value: number): string {
+  return `${(value / 1000).toLocaleString('ru-RU', { maximumFractionDigits: 1 })}k`;
+}
+
+const prompt = (mode: string) => mean(matrix, mode, (cell) => cell.medianPromptTokens ?? 0);
+const baseline = prompt('none');
+const added = (mode: string) => prompt(mode) - baseline;
+
 const headers = [
   'Режим',
-  'Контекст до задачи',
+  ...(withPrompt ? ['Вход первого вызова', 'Из них контекст режима'] : ['Контекст до задачи']),
   ...(withUsage ? ['Токенов на задачу'] : []),
   ...(withCost ? ['Цена задачи'] : []),
-  ...(withTurns ? ['Ходов', 'Секунд'] : []),
+  ...(withTurns ? ['Вызовов модели', 'Секунд'] : []),
   'Задач, где прошли все прогоны',
   'Ошибок компилятора на задачу',
   'Нарушений правил',
@@ -75,7 +95,7 @@ const summary: string[] = [`| ${headers.join(' | ')} |`, `|${headers.map(() => '
 for (const mode of modes) {
   const columns = [
     MODE_LABELS[mode] ?? mode,
-    `~${tokens(mean(matrix, mode, (cell) => cell.medianContextTokens))}`,
+    ...(withPrompt ? [tokens(prompt(mode)), mode === 'none' ? '—' : `+${tokens(added(mode))}`] : [`~${tokens(mean(matrix, mode, (cell) => cell.medianContextTokens))}`]),
     ...(withUsage ? [tokens(mean(matrix, mode, (cell) => cell.medianTokens))] : []),
     ...(withCost ? [meanCost(matrix, mode)] : []),
     ...(withTurns ? [mean(matrix, mode, (cell) => cell.medianTurns).toFixed(1), mean(matrix, mode, (cell) => cell.medianSeconds).toFixed(0)] : []),
@@ -85,6 +105,18 @@ for (const mode of modes) {
     `${Math.round(mean(matrix, mode, (cell) => cell.meanCoverage) * 100)}%`,
   ];
   summary.push(`| ${columns.join(' | ')} |`);
+}
+
+const notes: string[] = [];
+if (withPrompt) {
+  notes.push(
+    `Вход первого вызова — сколько токенов получил первый запрос к модели, по записанному расходу. У Claude Code в него входит собственный системный промпт, поэтому даже без контекста это ${thousands(baseline)}; контекст режима — разница с режимом без контекста.`,
+  );
+}
+for (const [kind, revisions] of Object.entries(matrix.sourceRevisions ?? {})) {
+  if (revisions.length < 2) continue;
+  const parts = revisions.map((revision) => `${revision.runs} видели редакцию на ~${thousands(revision.tokens)} оценочных токенов`);
+  notes.push(`Источник «${SOURCE_LABELS[kind] ?? kind}» менялся во время записи: из прогонов с ним ${parts.join(', ')}. Контекст режима выше — среднее по ним.`);
 }
 
 const perTask: string[] = [
@@ -130,26 +162,43 @@ const runsPerCell = matrix.cells.length > 0 ? matrix.generatedFrom / matrix.cell
 const repeats = Number.isInteger(runsPerCell) && runsPerCell > 1 ? `, по ${runsPerCell} прогона на ячейку` : '';
 const driver = matrix.driver ? `, драйвер ${DRIVER_PHRASES[matrix.driver] ?? matrix.driver}` : '';
 
-const block = [
-  START,
+const matrixBlock = [
+  MATRIX_START,
   '',
-  `Модель ${matrix.model}, библиотека ${matrix.library?.name}@${matrix.library?.version}${driver}, прогонов ${matrix.generatedFrom}, задач ${matrix.tasks.length}${repeats}. В ячейках медианы.`,
+  `Модель ${matrix.model}, библиотека ${matrix.library?.name} ${library}${driver}, прогонов ${matrix.generatedFrom}, задач ${matrix.tasks.length}${repeats}. В ячейках медианы.`,
   '',
   ...summary,
+  ...notes.flatMap((note) => ['', note]),
   ...perTask,
   ...byModel,
   '',
-  END,
+  MATRIX_END,
 ].join('\n');
+
+const modesTable = [
+  MODES_START,
+  '',
+  '| Режим | Что в контексте | Сколько добавляет к запросу |',
+  '|---|---|---|',
+  ...modes.map((mode) => {
+    const cost = !withPrompt ? '—' : mode === 'none' ? 'ничего' : `~${thousands(added(mode))} токенов${mode === 'mcp' ? ' плюс ответы инструментов' : ''}`;
+    return `| ${MODE_LABELS[mode] ?? mode} | ${MODE_CONTENTS[mode] ?? ''} | ${cost} |`;
+  }),
+  '',
+  MODES_END,
+].join('\n');
+
+function replaceBlock(text: string, start: string, end: string, block: string): string {
+  const from = text.indexOf(start);
+  const to = text.indexOf(end);
+  if (from === -1 || to === -1) {
+    process.stderr.write(`В README нет маркеров ${start} и ${end}\n`);
+    process.exit(1);
+  }
+  return `${text.slice(0, from)}${block}${text.slice(to + end.length)}`;
+}
 
 const readmeFile = path.join(root, 'README.md');
 const readme = readFileSync(readmeFile, 'utf8');
-const start = readme.indexOf(START);
-const end = readme.indexOf(END);
-if (start === -1 || end === -1) {
-  process.stderr.write(`В README нет маркеров ${START} и ${END}\n`);
-  process.exit(1);
-}
-
-writeFileSync(readmeFile, `${readme.slice(0, start)}${block}${readme.slice(end + END.length)}`, 'utf8');
+writeFileSync(readmeFile, replaceBlock(replaceBlock(readme, MODES_START, MODES_END, modesTable), MATRIX_START, MATRIX_END, matrixBlock), 'utf8');
 process.stderr.write(`README обновлён: режимов ${modes.length}, задач ${matrix.tasks.length}, прогонов ${matrix.generatedFrom}${others.length > 0 ? `, моделей ${others.length + 1}` : ''}.\n`);
