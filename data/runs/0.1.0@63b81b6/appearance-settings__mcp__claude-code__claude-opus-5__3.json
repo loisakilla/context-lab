@@ -44,15 +44,6 @@
         "cacheRead": 11094,
         "cacheCreation": 0
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11094,
-        "cacheCreation": 0
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_rules",
@@ -60,102 +51,42 @@
             "task": "ui"
           },
           "resultTokens": 870
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11094,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "сегментированный переключатель"
           },
           "resultTokens": 262
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11094,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "слайдер ползунок значения"
           },
           "resultTokens": 238
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11094,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "переключатель toggle switch"
           },
           "resultTokens": 227
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11094,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "разделитель divider"
           },
           "resultTokens": 231
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11094,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "выпадающий список выбор select"
           },
           "resultTokens": 465
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11094,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
@@ -172,15 +103,6 @@
         "cacheRead": 11094,
         "cacheCreation": 5144
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 11094,
-        "cacheCreation": 5144
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
@@ -188,85 +110,35 @@
             "name": "JxToggle"
           },
           "resultTokens": 324
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 11094,
-        "cacheCreation": 5144
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
             "name": "JxSlider"
           },
           "resultTokens": 294
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 11094,
-        "cacheCreation": 5144
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
             "name": "JxSwitch"
           },
           "resultTokens": 238
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 11094,
-        "cacheCreation": 5144
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
             "name": "JxDivider"
           },
           "resultTokens": 149
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 11094,
-        "cacheCreation": 5144
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
             "name": "JxSelect"
           },
           "resultTokens": 501
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 11094,
-        "cacheCreation": 5144
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -275,24 +147,6 @@
           "resultTokens": 274
         }
       ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 16238,
-        "cacheCreation": 3334
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 16238,
-        "cacheCreation": 3334
-      },
-      "toolCalls": []
     },
     {
       "usage": {

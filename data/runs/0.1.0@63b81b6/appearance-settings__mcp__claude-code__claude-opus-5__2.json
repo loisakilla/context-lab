@@ -44,15 +44,6 @@
         "cacheRead": 11094,
         "cacheCreation": 0
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 7,
-        "cacheRead": 11094,
-        "cacheCreation": 0
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_rules",
@@ -60,102 +51,42 @@
             "task": "ui"
           },
           "resultTokens": 870
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 7,
-        "cacheRead": 11094,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "сегментированный переключатель"
           },
           "resultTokens": 262
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 7,
-        "cacheRead": 11094,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "ползунок slider"
           },
           "resultTokens": 117
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 7,
-        "cacheRead": 11094,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "переключатель toggle switch"
           },
           "resultTokens": 227
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 7,
-        "cacheRead": 11094,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "разделитель divider"
           },
           "resultTokens": 231
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 7,
-        "cacheRead": 11094,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "выбор из списка select"
           },
           "resultTokens": 462
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 7,
-        "cacheRead": 11094,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
@@ -172,24 +103,6 @@
         "cacheRead": 11094,
         "cacheCreation": 4510
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11094,
-        "cacheCreation": 4510
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11094,
-        "cacheCreation": 4510
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
@@ -198,17 +111,7 @@
             "detail": "full"
           },
           "resultTokens": 294
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11094,
-        "cacheCreation": 4510
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -216,17 +119,7 @@
             "detail": "full"
           },
           "resultTokens": 324
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11094,
-        "cacheCreation": 4510
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -234,17 +127,7 @@
             "detail": "full"
           },
           "resultTokens": 238
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11094,
-        "cacheCreation": 4510
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -252,17 +135,7 @@
             "detail": "full"
           },
           "resultTokens": 501
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11094,
-        "cacheCreation": 4510
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -270,17 +143,7 @@
             "detail": "full"
           },
           "resultTokens": 149
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11094,
-        "cacheCreation": 4510
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -298,24 +161,6 @@
         "cacheRead": 15604,
         "cacheCreation": 3581
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 15604,
-        "cacheCreation": 3581
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 15604,
-        "cacheCreation": 3581
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
@@ -324,32 +169,13 @@
             "limit": 6
           },
           "resultTokens": 314
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 15604,
-        "cacheCreation": 3581
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__list_design_tokens",
           "input": {},
           "resultTokens": 924
         }
       ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 19185,
-        "cacheCreation": 2861
-      },
-      "toolCalls": []
     },
     {
       "usage": {

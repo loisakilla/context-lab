@@ -134,6 +134,31 @@ describe('драйвер claude-code', () => {
     expect(parsed.errorText).toBe('boom');
   });
 
+  it('считает ходом один вызов модели, даже если его блоки пришли отдельными событиями', () => {
+    const usage = { input_tokens: 2, output_tokens: 7, cache_read_input_tokens: 8233, cache_creation_input_tokens: 411 };
+    const lines = [
+      JSON.stringify({ type: 'assistant', message: { id: 'msg_1', content: [{ type: 'thinking', thinking: '...' }], usage } }),
+      JSON.stringify({ type: 'assistant', message: { id: 'msg_1', content: [{ type: 'tool_use', id: 't1', name: 'mcp__context-lab__search_components', input: { query: 'modal' } }], usage } }),
+      JSON.stringify({ type: 'assistant', message: { id: 'msg_1', content: [{ type: 'tool_use', id: 't2', name: 'mcp__context-lab__get_component_api', input: { name: 'JxModal' } }], usage } }),
+      JSON.stringify({ type: 'assistant', message: { id: 'msg_2', content: [{ type: 'text', text: 'готово' }], usage: { ...usage, cache_read_input_tokens: 9000 } } }),
+    ];
+    const parsed = parseStreamJson(lines.join('\n'));
+    expect(parsed.turns).toHaveLength(2);
+    expect(parsed.turns[0]?.toolCalls.map((call) => call.name)).toEqual(['mcp__context-lab__search_components', 'mcp__context-lab__get_component_api']);
+    expect(parsed.usage.cacheRead).toBe(8233 + 9000);
+  });
+
+  it('записывает прогон, упёршийся в лимит ходов, как провал, а не как сбой', () => {
+    const parsed = parseStreamJson(JSON.stringify({ type: 'result', subtype: 'error_max_turns', is_error: true, num_turns: 9 }));
+    expect(parsed.isError).toBe(false);
+    expect(parsed.stopReason).toBe('max_turns');
+  });
+
+  it('берёт причину остановки из итогового события', () => {
+    const parsed = parseStreamJson(JSON.stringify({ type: 'result', subtype: 'success', result: 'текст', stop_reason: 'max_tokens', usage: { input_tokens: 1, output_tokens: 1 } }));
+    expect(parsed.stopReason).toBe('max_tokens');
+  });
+
   it('строит аргументы без встроенных инструментов и с MCP-сервером', () => {
     const request = { model: 'sonnet', system: 'sys', contextText: 'ctx', taskText: 'task', maxTurns: 6 };
     const bare = buildClaudeArgs(request, {});

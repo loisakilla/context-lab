@@ -41,15 +41,6 @@
         "cacheRead": 11044,
         "cacheCreation": 0
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 10,
-        "cacheRead": 11044,
-        "cacheCreation": 0
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
@@ -58,17 +49,7 @@
             "limit": 8
           },
           "resultTokens": 715
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 10,
-        "cacheRead": 11044,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
@@ -76,17 +57,7 @@
             "limit": 8
           },
           "resultTokens": 656
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 10,
-        "cacheRead": 11044,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_rules",
           "input": {
@@ -103,24 +74,6 @@
         "cacheRead": 11044,
         "cacheCreation": 3963
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 11044,
-        "cacheCreation": 3963
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 11044,
-        "cacheCreation": 3963
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
@@ -129,17 +82,7 @@
             "detail": "full"
           },
           "resultTokens": 377
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 11044,
-        "cacheCreation": 3963
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -147,17 +90,7 @@
             "detail": "full"
           },
           "resultTokens": 279
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 11044,
-        "cacheCreation": 3963
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_examples",
           "input": {
@@ -174,15 +107,6 @@
         "cacheRead": 15007,
         "cacheCreation": 1476
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 15007,
-        "cacheCreation": 1476
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__list_design_tokens",
@@ -190,17 +114,7 @@
             "group": "font"
           },
           "resultTokens": 55
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 15007,
-        "cacheCreation": 1476
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__list_design_tokens",
           "input": {
@@ -209,15 +123,6 @@
           "resultTokens": 630
         }
       ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 16483,
-        "cacheCreation": 1680
-      },
-      "toolCalls": []
     },
     {
       "usage": {

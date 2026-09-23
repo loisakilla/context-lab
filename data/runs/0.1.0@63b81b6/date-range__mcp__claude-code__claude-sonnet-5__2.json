@@ -41,15 +41,6 @@
         "cacheRead": 11114,
         "cacheCreation": 0
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11114,
-        "cacheCreation": 0
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
@@ -57,17 +48,7 @@
             "query": "календарь выбор даты"
           },
           "resultTokens": 447
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11114,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
@@ -84,15 +65,6 @@
         "cacheRead": 11114,
         "cacheCreation": 1551
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 7,
-        "cacheRead": 11114,
-        "cacheCreation": 1551
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
@@ -101,17 +73,7 @@
             "detail": "full"
           },
           "resultTokens": 377
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 7,
-        "cacheRead": 11114,
-        "cacheCreation": 1551
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -119,34 +81,14 @@
             "detail": "full"
           },
           "resultTokens": 279
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 7,
-        "cacheRead": 11114,
-        "cacheCreation": 1551
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_examples",
           "input": {
             "name": "JxCalendar"
           },
           "resultTokens": 44
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 7,
-        "cacheRead": 11114,
-        "cacheCreation": 1551
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_examples",
           "input": {
@@ -155,15 +97,6 @@
           "resultTokens": 90
         }
       ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 12665,
-        "cacheCreation": 1706
-      },
-      "toolCalls": []
     },
     {
       "usage": {
@@ -181,15 +114,6 @@
           "resultTokens": 22
         }
       ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 14371,
-        "cacheCreation": 155
-      },
-      "toolCalls": []
     },
     {
       "usage": {

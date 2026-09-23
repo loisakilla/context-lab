@@ -44,15 +44,6 @@
         "cacheRead": 11164,
         "cacheCreation": 0
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 11164,
-        "cacheCreation": 0
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
@@ -60,102 +51,42 @@
             "query": "сегментированный переключатель segmented control"
           },
           "resultTokens": 262
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 11164,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "слайдер ползунок slider range"
           },
           "resultTokens": 295
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 11164,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "переключатель switch toggle"
           },
           "resultTokens": 227
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 11164,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "разделитель divider"
           },
           "resultTokens": 231
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 11164,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "выбор из списка select dropdown"
           },
           "resultTokens": 462
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 11164,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "метка бейдж label badge tag"
           },
           "resultTokens": 519
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 11164,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
@@ -172,15 +103,6 @@
         "cacheRead": 11164,
         "cacheCreation": 4376
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11164,
-        "cacheCreation": 4376
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
@@ -189,17 +111,7 @@
             "detail": "full"
           },
           "resultTokens": 324
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11164,
-        "cacheCreation": 4376
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -207,17 +119,7 @@
             "detail": "full"
           },
           "resultTokens": 294
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11164,
-        "cacheCreation": 4376
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -225,17 +127,7 @@
             "detail": "full"
           },
           "resultTokens": 238
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11164,
-        "cacheCreation": 4376
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -243,17 +135,7 @@
             "detail": "full"
           },
           "resultTokens": 149
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11164,
-        "cacheCreation": 4376
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -261,17 +143,7 @@
             "detail": "full"
           },
           "resultTokens": 501
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11164,
-        "cacheCreation": 4376
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -279,17 +151,7 @@
             "detail": "full"
           },
           "resultTokens": 274
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11164,
-        "cacheCreation": 4376
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_rules",
           "input": {
@@ -298,15 +160,6 @@
           "resultTokens": 870
         }
       ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 4,
-        "cacheRead": 15540,
-        "cacheCreation": 5106
-      },
-      "toolCalls": []
     },
     {
       "usage": {

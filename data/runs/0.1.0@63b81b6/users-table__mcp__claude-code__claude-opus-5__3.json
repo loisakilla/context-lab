@@ -42,15 +42,6 @@
         "cacheRead": 11035,
         "cacheCreation": 0
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 11035,
-        "cacheCreation": 0
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
@@ -58,51 +49,21 @@
             "query": "таблица с колонками"
           },
           "resultTokens": 150
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 11035,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "постраничная навигация пагинация"
           },
           "resultTokens": 262
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 11035,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "цветная метка бейдж статус"
           },
           "resultTokens": 304
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 11035,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_rules",
           "input": {
@@ -119,24 +80,6 @@
         "cacheRead": 11035,
         "cacheCreation": 3037
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 11035,
-        "cacheCreation": 3037
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 11035,
-        "cacheCreation": 3037
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_examples",
@@ -144,34 +87,14 @@
             "name": "JxTable"
           },
           "resultTokens": 141
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 11035,
-        "cacheCreation": 3037
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
             "name": "JxBadge"
           },
           "resultTokens": 274
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 11035,
-        "cacheCreation": 3037
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {

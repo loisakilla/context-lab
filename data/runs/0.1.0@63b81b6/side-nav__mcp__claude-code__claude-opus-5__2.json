@@ -42,15 +42,6 @@
         "cacheRead": 11055,
         "cacheCreation": 0
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 4,
-        "cacheRead": 11055,
-        "cacheCreation": 0
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
@@ -58,34 +49,14 @@
             "query": "выезжающая панель drawer боковая"
           },
           "resultTokens": 135
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 4,
-        "cacheRead": 11055,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "меню навигации пункт меню разделитель"
           },
           "resultTokens": 313
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 4,
-        "cacheRead": 11055,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_rules",
           "input": {
@@ -102,24 +73,6 @@
         "cacheRead": 11055,
         "cacheCreation": 2529
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11055,
-        "cacheCreation": 2529
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11055,
-        "cacheCreation": 2529
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
@@ -128,17 +81,7 @@
             "detail": "full"
           },
           "resultTokens": 302
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11055,
-        "cacheCreation": 2529
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -146,17 +89,7 @@
             "detail": "full"
           },
           "resultTokens": 386
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11055,
-        "cacheCreation": 2529
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {

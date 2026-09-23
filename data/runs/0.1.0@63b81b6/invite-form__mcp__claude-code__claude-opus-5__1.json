@@ -44,15 +44,6 @@
         "cacheRead": 10382,
         "cacheCreation": 683
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 10,
-        "cacheRead": 10382,
-        "cacheCreation": 683
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_rules",
@@ -60,85 +51,35 @@
             "task": "ui"
           },
           "resultTokens": 870
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 10,
-        "cacheRead": 10382,
-        "cacheCreation": 683
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "поле ввода текста с ошибкой и подсказкой"
           },
           "resultTokens": 422
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 10,
-        "cacheRead": 10382,
-        "cacheCreation": 683
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "выбор из списка select"
           },
           "resultTokens": 462
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 10,
-        "cacheRead": 10382,
-        "cacheCreation": 683
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "переключатель switch toggle"
           },
           "resultTokens": 227
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 10,
-        "cacheRead": 10382,
-        "cacheCreation": 683
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "сообщение об успехе алерт закрываемый"
           },
           "resultTokens": 396
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 10,
-        "cacheRead": 10382,
-        "cacheCreation": 683
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
@@ -155,24 +96,6 @@
         "cacheRead": 11065,
         "cacheCreation": 5064
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11065,
-        "cacheCreation": 5064
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11065,
-        "cacheCreation": 5064
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
@@ -180,85 +103,35 @@
             "name": "JxInputField"
           },
           "resultTokens": 393
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11065,
-        "cacheCreation": 5064
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
             "name": "JxSelect"
           },
           "resultTokens": 501
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11065,
-        "cacheCreation": 5064
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
             "name": "JxSwitch"
           },
           "resultTokens": 238
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11065,
-        "cacheCreation": 5064
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
             "name": "JxButton"
           },
           "resultTokens": 427
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11065,
-        "cacheCreation": 5064
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
             "name": "JxAlert"
           },
           "resultTokens": 277
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11065,
-        "cacheCreation": 5064
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -275,15 +148,6 @@
         "cacheRead": 16129,
         "cacheCreation": 4043
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 7,
-        "cacheRead": 16129,
-        "cacheCreation": 4043
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__list_design_tokens",
@@ -291,15 +155,6 @@
           "resultTokens": 924
         }
       ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 20172,
-        "cacheCreation": 2303
-      },
-      "toolCalls": []
     },
     {
       "usage": {

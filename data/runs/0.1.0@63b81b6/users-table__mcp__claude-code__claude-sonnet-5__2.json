@@ -42,15 +42,6 @@
         "cacheRead": 11105,
         "cacheCreation": 0
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11105,
-        "cacheCreation": 0
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
@@ -58,34 +49,14 @@
             "query": "таблица"
           },
           "resultTokens": 150
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11105,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "пагинация постраничная навигация"
           },
           "resultTokens": 262
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11105,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
@@ -102,15 +73,6 @@
         "cacheRead": 11105,
         "cacheCreation": 1450
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 5,
-        "cacheRead": 11105,
-        "cacheCreation": 1450
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
@@ -119,17 +81,7 @@
             "detail": "full"
           },
           "resultTokens": 281
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 5,
-        "cacheRead": 11105,
-        "cacheCreation": 1450
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -137,17 +89,7 @@
             "detail": "full"
           },
           "resultTokens": 359
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 5,
-        "cacheRead": 11105,
-        "cacheCreation": 1450
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -155,51 +97,21 @@
             "detail": "full"
           },
           "resultTokens": 274
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 5,
-        "cacheRead": 11105,
-        "cacheCreation": 1450
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_examples",
           "input": {
             "name": "JxTable"
           },
           "resultTokens": 141
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 5,
-        "cacheRead": 11105,
-        "cacheCreation": 1450
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_examples",
           "input": {
             "name": "JxPagination"
           },
           "resultTokens": 86
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 5,
-        "cacheRead": 11105,
-        "cacheCreation": 1450
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_examples",
           "input": {

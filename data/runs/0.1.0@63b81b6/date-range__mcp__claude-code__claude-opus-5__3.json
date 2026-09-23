@@ -41,15 +41,6 @@
         "cacheRead": 11044,
         "cacheCreation": 0
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 10,
-        "cacheRead": 11044,
-        "cacheCreation": 0
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
@@ -58,17 +49,7 @@
             "limit": 8
           },
           "resultTokens": 715
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 10,
-        "cacheRead": 11044,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
@@ -76,17 +57,7 @@
             "limit": 8
           },
           "resultTokens": 633
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 10,
-        "cacheRead": 11044,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_rules",
           "input": {
@@ -103,24 +74,6 @@
         "cacheRead": 14965,
         "cacheCreation": 0
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 14965,
-        "cacheCreation": 0
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 14965,
-        "cacheCreation": 0
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
@@ -129,17 +82,7 @@
             "detail": "full"
           },
           "resultTokens": 377
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 14965,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -149,15 +92,6 @@
           "resultTokens": 279
         }
       ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 14965,
-        "cacheCreation": 1352
-      },
-      "toolCalls": []
     },
     {
       "usage": {

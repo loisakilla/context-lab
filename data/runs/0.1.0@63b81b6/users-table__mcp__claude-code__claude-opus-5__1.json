@@ -42,15 +42,6 @@
         "cacheRead": 10382,
         "cacheCreation": 653
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 10382,
-        "cacheCreation": 653
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
@@ -58,51 +49,21 @@
             "query": "таблица"
           },
           "resultTokens": 150
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 10382,
-        "cacheCreation": 653
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "пагинация постраничная навигация"
           },
           "resultTokens": 262
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 10382,
-        "cacheCreation": 653
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "цветная метка бейдж статус"
           },
           "resultTokens": 304
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 9,
-        "cacheRead": 10382,
-        "cacheCreation": 653
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_rules",
           "input": {
@@ -119,24 +80,6 @@
         "cacheRead": 11035,
         "cacheCreation": 3034
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 11035,
-        "cacheCreation": 3034
-      },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 11035,
-        "cacheCreation": 3034
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
@@ -144,51 +87,21 @@
             "name": "JxTable"
           },
           "resultTokens": 281
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 11035,
-        "cacheCreation": 3034
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_examples",
           "input": {
             "name": "JxTable"
           },
           "resultTokens": 141
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 11035,
-        "cacheCreation": 3034
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
             "name": "JxPagination"
           },
           "resultTokens": 359
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 11035,
-        "cacheCreation": 3034
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -197,15 +110,6 @@
           "resultTokens": 274
         }
       ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 14069,
-        "cacheCreation": 2157
-      },
-      "toolCalls": []
     },
     {
       "usage": {

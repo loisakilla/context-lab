@@ -41,15 +41,6 @@
         "cacheRead": 10452,
         "cacheCreation": 662
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 10452,
-        "cacheCreation": 662
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
@@ -57,17 +48,7 @@
             "query": "календарь выбор даты"
           },
           "resultTokens": 447
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 10452,
-        "cacheCreation": 662
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
@@ -84,15 +65,6 @@
         "cacheRead": 11114,
         "cacheCreation": 1544
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11114,
-        "cacheCreation": 1544
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
@@ -101,17 +73,7 @@
             "detail": "full"
           },
           "resultTokens": 377
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11114,
-        "cacheCreation": 1544
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -121,15 +83,6 @@
           "resultTokens": 279
         }
       ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 4,
-        "cacheRead": 12658,
-        "cacheCreation": 1316
-      },
-      "toolCalls": []
     },
     {
       "usage": {
@@ -155,15 +108,6 @@
         "cacheRead": 13974,
         "cacheCreation": 240
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 13974,
-        "cacheCreation": 240
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__list_design_tokens",
@@ -171,15 +115,6 @@
           "resultTokens": 924
         }
       ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 14214,
-        "cacheCreation": 2059
-      },
-      "toolCalls": []
     },
     {
       "usage": {

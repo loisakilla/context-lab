@@ -41,15 +41,6 @@
         "cacheRead": 11114,
         "cacheCreation": 0
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11114,
-        "cacheCreation": 0
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
@@ -57,17 +48,7 @@
             "query": "календарь выбор даты"
           },
           "resultTokens": 447
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11114,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
@@ -84,15 +65,6 @@
         "cacheRead": 11114,
         "cacheCreation": 1542
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 1,
-        "cacheRead": 11114,
-        "cacheCreation": 1542
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
@@ -101,17 +73,7 @@
             "detail": "full"
           },
           "resultTokens": 377
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 1,
-        "cacheRead": 11114,
-        "cacheCreation": 1542
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -129,15 +91,6 @@
         "cacheRead": 12656,
         "cacheCreation": 1313
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 12656,
-        "cacheCreation": 1313
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__list_design_tokens",
@@ -147,15 +100,6 @@
           "resultTokens": 22
         }
       ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 6,
-        "cacheRead": 13969,
-        "cacheCreation": 175
-      },
-      "toolCalls": []
     },
     {
       "usage": {

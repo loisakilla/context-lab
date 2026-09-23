@@ -42,15 +42,6 @@
         "cacheRead": 11125,
         "cacheCreation": 0
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11125,
-        "cacheCreation": 0
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__search_components",
@@ -58,34 +49,14 @@
             "query": "выезжающая панель drawer сбоку"
           },
           "resultTokens": 135
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11125,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
             "query": "кнопка"
           },
           "resultTokens": 412
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11125,
-        "cacheCreation": 0
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__search_components",
           "input": {
@@ -102,15 +73,6 @@
         "cacheRead": 11125,
         "cacheCreation": 1836
       },
-      "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11125,
-        "cacheCreation": 1836
-      },
       "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
@@ -119,17 +81,7 @@
             "detail": "full"
           },
           "resultTokens": 386
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11125,
-        "cacheCreation": 1836
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -137,17 +89,7 @@
             "detail": "full"
           },
           "resultTokens": 302
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11125,
-        "cacheCreation": 1836
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -155,34 +97,14 @@
             "detail": "signature"
           },
           "resultTokens": 37
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11125,
-        "cacheCreation": 1836
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_examples",
           "input": {
             "name": "JxDrawer"
           },
           "resultTokens": 120
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11125,
-        "cacheCreation": 1836
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_examples",
           "input": {

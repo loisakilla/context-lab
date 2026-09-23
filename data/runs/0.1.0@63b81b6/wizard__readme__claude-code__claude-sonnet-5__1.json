@@ -43,15 +43,6 @@
         "cacheCreation": 1345
       },
       "toolCalls": []
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 8235,
-        "cacheCreation": 1345
-      },
-      "toolCalls": []
     }
   ],
   "usage": {

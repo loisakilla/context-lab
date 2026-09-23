@@ -18,7 +18,7 @@ export interface ClaudeCodeDriverOptions {
 interface StreamEvent {
   type: string;
   subtype?: string;
-  message?: { role?: string; content?: Array<Record<string, unknown>>; usage?: Record<string, number>; stop_reason?: string };
+  message?: { id?: string; role?: string; content?: Array<Record<string, unknown>>; usage?: Record<string, number>; stop_reason?: string };
   result?: string;
   usage?: Record<string, number>;
   total_cost_usd?: number;
@@ -52,6 +52,7 @@ export interface ParsedStream {
 
 export function parseStreamJson(output: string): ParsedStream {
   const turns: Turn[] = [];
+  const turnByMessage = new Map<string, Turn>();
   const pendingResults = new Map<string, ToolCallRef>();
   let text = '';
   let usage = emptyUsage();
@@ -60,7 +61,7 @@ export function parseStreamJson(output: string): ParsedStream {
   let durationMs: number | undefined;
   let isError = false;
   let errorText: string | undefined;
-  let sawResultUsage = false;
+  let sawResult = false;
 
   for (const line of output.split(/\r?\n/)) {
     const trimmed = line.trim();
@@ -73,7 +74,14 @@ export function parseStreamJson(output: string): ParsedStream {
     }
 
     if (event.type === 'assistant' && event.message) {
-      const turn: Turn = { usage: usageFrom(event.message.usage), toolCalls: [] };
+      const messageId = event.message.id;
+      const known = messageId ? turnByMessage.get(messageId) : undefined;
+      const turn: Turn = known ?? { usage: usageFrom(event.message.usage), toolCalls: [] };
+      if (!known) {
+        turns.push(turn);
+        usage = addUsage(usage, turn.usage);
+        if (messageId) turnByMessage.set(messageId, turn);
+      }
       const texts: string[] = [];
       for (const block of event.message.content ?? []) {
         if (block.type === 'text' && typeof block.text === 'string') texts.push(block.text);
@@ -85,8 +93,6 @@ export function parseStreamJson(output: string): ParsedStream {
       }
       if (texts.length > 0) text = texts.join('\n');
       if (typeof event.message.stop_reason === 'string') stopReason = event.message.stop_reason;
-      turns.push(turn);
-      usage = addUsage(usage, turn.usage);
     }
 
     if (event.type === 'user' && event.message) {
@@ -102,22 +108,23 @@ export function parseStreamJson(output: string): ParsedStream {
     }
 
     if (event.type === 'result') {
+      sawResult = true;
       if (typeof event.result === 'string' && event.result.trim().length > 0) text = event.result;
-      if (event.usage) {
-        usage = usageFrom(event.usage);
-        sawResultUsage = true;
-      }
+      if (event.usage) usage = usageFrom(event.usage);
       if (typeof event.total_cost_usd === 'number') costUsd = event.total_cost_usd;
       if (typeof event.duration_ms === 'number') durationMs = event.duration_ms;
-      if (event.is_error) {
+      const hitTurnLimit = event.subtype === 'error_max_turns';
+      if (event.is_error && !hitTurnLimit) {
         isError = true;
         errorText = typeof event.result === 'string' ? event.result : event.subtype;
       }
-      if (event.subtype && event.subtype !== 'success') stopReason = event.subtype;
+      if (hitTurnLimit) stopReason = 'max_turns';
+      else if (typeof event.stop_reason === 'string') stopReason = event.stop_reason;
+      else if (event.subtype && event.subtype !== 'success') stopReason = event.subtype;
     }
   }
 
-  if (!sawResultUsage && turns.length === 0) stopReason = 'no_output';
+  if (!sawResult && turns.length === 0) stopReason = 'no_output';
   const parsed: ParsedStream = { text, turns, usage, stopReason, isError };
   if (costUsd !== undefined) parsed.costUsd = costUsd;
   if (durationMs !== undefined) parsed.durationMs = durationMs;
@@ -175,11 +182,27 @@ export function claudeCodeDriver(options: ClaudeCodeDriverOptions = {}): Driver 
       const started = Date.now();
       const args = buildClaudeArgs(request, options);
       return new Promise<GenerationResult>((resolve, reject) => {
+        if (request.signal?.aborted) {
+          reject(new Error('Прогон отменён'));
+          return;
+        }
         const child = spawn(binary, args, { cwd: options.cwd ?? process.cwd(), env: childEnv(), windowsHide: true });
         let stdout = '';
         let stderr = '';
-        const timer = setTimeout(() => child.kill(), timeoutMs);
-        request.signal?.addEventListener('abort', () => child.kill());
+        let timedOut = false;
+        let aborted = false;
+        const timer = setTimeout(() => {
+          timedOut = true;
+          child.kill();
+        }, timeoutMs);
+        request.signal?.addEventListener(
+          'abort',
+          () => {
+            aborted = true;
+            child.kill();
+          },
+          { once: true },
+        );
 
         child.stdout.setEncoding('utf8');
         child.stderr.setEncoding('utf8');
@@ -196,9 +219,13 @@ export function claudeCodeDriver(options: ClaudeCodeDriverOptions = {}): Driver 
         });
         child.on('close', (code) => {
           clearTimeout(timer);
+          if (aborted) {
+            reject(new Error('Прогон отменён'));
+            return;
+          }
           const parsed = parseStreamJson(stdout);
-          if (parsed.isError || (code !== 0 && parsed.turns.length === 0)) {
-            const detail = parsed.errorText ?? stderr.trim().slice(-800) ?? 'без вывода';
+          if (!timedOut && (parsed.isError || (code !== 0 && parsed.turns.length === 0))) {
+            const detail = parsed.errorText || stderr.trim().slice(-800) || 'без вывода';
             const hint = /not logged in|\/login/i.test(detail) ? ` ${NOT_LOGGED_IN_HINT}` : '';
             reject(new Error(`claude -p завершился с кодом ${code}: ${detail}.${hint}`));
             return;
@@ -207,7 +234,7 @@ export function claudeCodeDriver(options: ClaudeCodeDriverOptions = {}): Driver 
             text: parsed.text,
             turns: parsed.turns,
             usage: parsed.usage,
-            stopReason: parsed.stopReason,
+            stopReason: timedOut ? 'timeout' : parsed.stopReason,
             durationMs: parsed.durationMs ?? Date.now() - started,
           };
           if (parsed.costUsd !== undefined) result.costUsd = parsed.costUsd;
