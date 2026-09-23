@@ -2,26 +2,13 @@
 
 import type { RunRecord } from '@context-lab/runner/browser';
 import type { RenderStatus } from './Preview';
+import { DRIVER_LABELS, MODE_LABELS, SOURCE_LABELS, sentence } from '@/lib/labels';
 import { Badge, Stat } from './ui';
 
 interface ReportProps {
   record: RunRecord;
   render?: RenderStatus | null;
 }
-
-const DRIVER_LABELS: Record<string, string> = {
-  'claude-code': 'Claude Code',
-  api: 'Anthropic API',
-  subagent: 'агент-исполнитель',
-};
-
-const MODE_LABELS: Record<string, string> = {
-  none: 'без контекста',
-  readme: 'README',
-  docs: 'доки',
-  'docs+rules': 'доки + правила',
-  mcp: 'MCP',
-};
 
 function tokensOf(record: RunRecord): number {
   return record.usage.input + record.usage.output + record.usage.cacheRead + record.usage.cacheCreation;
@@ -79,7 +66,7 @@ export function Report({ record, render }: ReportProps) {
       <div className="jx-card flex flex-col gap-6">
         <div className="card-head">
           <Badge tone={passed ? 'ok' : 'bad'} dot>
-            {passed ? 'проверки пройдены' : 'есть проблемы'}
+            {passed ? 'Проверки пройдены' : 'Есть проблемы'}
           </Badge>
           <span className="dim">
             {MODE_LABELS[record.mode] ?? record.mode} · {record.model} · {DRIVER_LABELS[record.driver] ?? record.driver}
@@ -110,7 +97,7 @@ export function Report({ record, render }: ReportProps) {
                 {checks.tsc.errors.map((error, position) => (
                   <li key={position} className="codebox text-[12.5px]">
                     <span className="dim">
-                      строка {error.line} · TS{error.code}
+                      Строка {error.line} · TS{error.code}
                     </span>
                     <br />
                     {error.message.split('\n')[0]}
@@ -135,20 +122,20 @@ export function Report({ record, render }: ReportProps) {
                         {finding.rule}
                       </Badge>
                       <span className="dim mono text-[12.5px]">
-                        {finding.lines.length > 1 ? 'строки' : 'строка'} {finding.lines.join(', ')}
+                        {finding.lines.length > 1 ? 'Строки' : 'Строка'} {finding.lines.join(', ')}
                       </span>
                     </div>
-                    <span className="muted">{finding.message}</span>
+                    <span className="muted">{sentence(finding.message)}</span>
                   </li>
                 ))}
               </ul>
             )}
             <div className="flex flex-col gap-1.5">
               <span className="jx-label">Компоненты библиотеки</span>
-              <p className="text-sm">{checks.usedComponents.length > 0 ? checks.usedComponents.join(', ') : 'ни одного'}</p>
+              <p className="text-sm">{checks.usedComponents.length > 0 ? checks.usedComponents.join(', ') : 'Ни одного'}</p>
               {record.task.expects.length > 0 && (
                 <p className="dim">
-                  ожидались {record.task.expects.join(', ')} · покрытие {Math.round(checks.expectedCoverage * 100)}%
+                  Ожидались {record.task.expects.join(', ')} · покрытие {Math.round(checks.expectedCoverage * 100)}%
                 </p>
               )}
             </div>
@@ -182,12 +169,12 @@ export function Report({ record, render }: ReportProps) {
         <span className="jx-label">Контекст</span>
         <p className="muted text-sm">
           {record.context.sources.length > 0
-            ? record.context.sources.map((source) => `${source.kind} (${source.id}, ~${source.tokens})`).join(' · ')
-            : 'только формулировка задачи'}
+            ? record.context.sources.map((source) => `${SOURCE_LABELS[source.kind] ?? source.kind} (${source.id}, ~${source.tokens})`).join(' · ')
+            : 'Только формулировка задачи'}
         </p>
         {tokens > 0 ? (
           <p className="dim">
-            вход {record.usage.input.toLocaleString('ru-RU')} · выход {record.usage.output.toLocaleString('ru-RU')} · из кэша{' '}
+            Вход {record.usage.input.toLocaleString('ru-RU')} · выход {record.usage.output.toLocaleString('ru-RU')} · из кэша{' '}
             {record.usage.cacheRead.toLocaleString('ru-RU')} · в кэш {record.usage.cacheCreation.toLocaleString('ru-RU')}
             {record.durationMs > 0 && ` · ${Math.round(record.durationMs / 1000)} с`}
           </p>

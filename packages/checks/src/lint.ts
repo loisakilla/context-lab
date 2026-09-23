@@ -49,30 +49,30 @@ export function lintCode(code: string, options: LintOptions = {}): LintFinding[]
     if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier)) {
       const specifier = node.moduleSpecifier.text;
       if (!isImportAllowed(specifier, allowed)) {
-        report('import-allowlist', 'error', node, `импорт "${specifier}" вне списка разрешённых: ${allowed.join(', ')}`);
+        report('import-allowlist', 'error', node, `Импорт "${specifier}" вне списка разрешённых: ${allowed.join(', ')}`);
       }
     }
 
     const text = stringValue(node);
     if (text !== undefined && RAW_COLOR.test(text)) {
-      report('no-raw-colors', 'error', node, `цвет задан напрямую (${text.trim().slice(0, 40)}), вместо него нужен токен var(--jx-*)`);
+      report('no-raw-colors', 'error', node, `Цвет задан напрямую (${text.trim().slice(0, 40)}), вместо него нужен токен var(--jx-*)`);
     }
 
     if (ts.isJsxAttribute(node) && ts.isIdentifier(node.name)) {
       const name = node.name.text;
       if (name === 'dangerouslySetInnerHTML') report('no-inner-html', 'error', node, 'dangerouslySetInnerHTML запрещён');
-      if (name === 'style') report('inline-style', 'warning', node, 'инлайновые стили вместо классов и токенов библиотеки');
+      if (name === 'style') report('inline-style', 'warning', node, 'Инлайновые стили вместо классов и токенов библиотеки');
       if (name === 'className' && node.initializer) {
         const classes = ts.isStringLiteral(node.initializer) ? node.initializer.text : undefined;
         if (classes) {
           const foreign = classes.split(/\s+/).filter((token) => token.length > 0 && !token.startsWith(prefix));
-          if (foreign.length > 0) report('custom-class', 'warning', node, `классы вне библиотеки: ${foreign.join(' ')}`);
+          if (foreign.length > 0) report('custom-class', 'warning', node, `Классы вне библиотеки: ${foreign.join(' ')}`);
         }
       }
     }
 
     if (ts.isPropertyAccessExpression(node) && node.name.text === 'innerHTML') {
-      report('no-inner-html', 'error', node, 'прямая запись innerHTML запрещена');
+      report('no-inner-html', 'error', node, 'Прямая запись innerHTML запрещена');
     }
 
     ts.forEachChild(node, visit);

@@ -1,15 +1,10 @@
 import Link from 'next/link';
 import { JxBadge, JxTable } from '@jinx-ui/react';
 import type { Matrix } from '@context-lab/runner/browser';
+import { MODE_LABELS } from '@/lib/labels';
 import { formatCost } from './Report';
 
-export const MODE_LABELS: Record<string, string> = {
-  none: 'без контекста',
-  readme: 'README',
-  docs: 'доки',
-  'docs+rules': 'доки + правила',
-  mcp: 'MCP',
-};
+export { MODE_LABELS };
 
 function tone(passRate: number): 'success' | 'danger' | 'warning' {
   if (passRate === 1) return 'success';

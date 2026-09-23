@@ -41,7 +41,7 @@ export function KeyForm({ onChange }: KeyFormProps) {
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         <span className="mono text-sm">{maskKey(stored.key)}</span>
         <span className="dim max-w-[62ch]">
-          хранится {stored.scope === 'session' ? 'до закрытия вкладки' : 'в этом браузере'}; запросы идут напрямую в api.anthropic.com.
+          Хранится {stored.scope === 'session' ? 'до закрытия вкладки' : 'в этом браузере'}; запросы идут напрямую в api.anthropic.com.
         </span>
         <Button variant="ghost" onClick={forget}>
           Забыть ключ

@@ -47,12 +47,12 @@ function RuleCard({ rule }: { rule: ResolvedRule }) {
       </div>
       <RuleBody text={rule.body} />
       <div className="flex flex-wrap items-center gap-2 pt-1">
-        <Badge>из {rule.definedIn}</Badge>
-        <Badge>приоритет {rule.priority}</Badge>
+        <Badge>Из {rule.definedIn}</Badge>
+        <Badge>Приоритет {rule.priority}</Badge>
         <Badge>~{rule.tokens} ток.</Badge>
-        {rule.taskTypes.length > 0 && <Badge tone="accent">задачи: {rule.taskTypes.join(', ')}</Badge>}
-        {rule.overrides && <Badge tone="warn">переопределяет {rule.overrides}</Badge>}
-        {rule.refines && <Badge tone="accent">уточняет {rule.refines}</Badge>}
+        {rule.taskTypes.length > 0 && <Badge tone="accent">Задачи: {rule.taskTypes.join(', ')}</Badge>}
+        {rule.overrides && <Badge tone="warn">Переопределяет {rule.overrides}</Badge>}
+        {rule.refines && <Badge tone="accent">Уточняет {rule.refines}</Badge>}
         {rule.appliesTo.length > 0 && <Badge>{rule.appliesTo.join(', ')}</Badge>}
       </div>
     </article>
