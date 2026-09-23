@@ -1,11 +1,13 @@
 import { z } from 'zod';
-import { fitToBudget, renderComponent, renderComponentSections, renderExamples, renderSearchHit, renderTokens, withFooter } from './format.ts';
+import { fitToBudget, renderComponent, renderComponentSections, renderExampleSections, renderSearchHit, renderTokens, withFooter } from './format.ts';
 import { findComponent, searchComponents, suggestNames } from './search.ts';
 import type { LibraryIndex } from './types.ts';
 
 export const DEFAULT_SEARCH_BUDGET = 700;
 export const DEFAULT_API_BUDGET = 1200;
 export const DEFAULT_DOCS_BUDGET = 2500;
+export const DEFAULT_TOKENS_BUDGET = 1500;
+export const DEFAULT_RULES_BUDGET = 2000;
 
 export const TOOL_NAMES = ['search_components', 'get_component_api', 'get_component_examples', 'list_design_tokens', 'get_docs', 'get_rules'] as const;
 
@@ -99,13 +101,13 @@ function rulesTool(rules: NonNullable<ToolSources['rules']>): ToolSpec {
     shape: {
       set: z.string().optional().describe(`Набор правил, по умолчанию ${rules.defaultSet}`),
       task: z.string().optional().describe('Тип задачи: ui, fix, refactor, docs, test'),
-      file: z.string().optional().describe('Путь файла, для которого нужны правила'),
+      file: z.string().optional().describe('Путь файла относительно корня проекта, например src/App.tsx'),
       target: z.enum(RULE_TARGETS).optional().describe('Агент, для которого собираются правила'),
-      budget: z.number().int().min(100).max(20000).optional().describe('Бюджет токенов на набор'),
+      budget: z.number().int().min(100).max(20000).optional().describe(`Бюджет токенов на набор, по умолчанию ${DEFAULT_RULES_BUDGET}`),
     },
     run(query) {
       try {
-        return ok(rules.resolve(query));
+        return ok(rules.resolve({ ...query, budget: query.budget ?? DEFAULT_RULES_BUDGET }));
       } catch (error) {
         return { text: error instanceof Error ? error.message : String(error), isError: true };
       }
@@ -167,34 +169,38 @@ export function createTools(index: LibraryIndex, sources: ToolSources = {}): Too
     },
   };
 
-  const examples: ToolSpec<{ name: z.ZodString }> = {
+  const examples: ToolSpec<{ name: z.ZodString; maxTokens: z.ZodOptional<z.ZodNumber> }> = {
     name: 'get_component_examples',
     title: 'Примеры использования',
     description: 'Возвращает примеры использования компонента из документации библиотеки. Примеры проверяются компилятором и соответствуют текущему коду.',
     shape: {
       name: z.string().min(1).describe('Имя компонента, например JxModal'),
+      maxTokens: z.number().int().min(100).max(20000).optional().describe('Бюджет ответа в токенах, по умолчанию 1200'),
     },
-    run({ name }) {
+    run({ name, maxTokens }) {
       const component = findComponent(index, name);
       if (!component) return notFound(index, name);
-      return ok(renderExamples(component));
+      const budget = fitToBudget(renderExampleSections(component), maxTokens ?? DEFAULT_API_BUDGET, 'Запросите пример с большим maxTokens.');
+      return ok(budget.text);
     },
   };
 
-  const tokens: ToolSpec<{ group: z.ZodOptional<z.ZodString> }> = {
+  const tokens: ToolSpec<{ group: z.ZodOptional<z.ZodString>; maxTokens: z.ZodOptional<z.ZodNumber> }> = {
     name: 'list_design_tokens',
     title: 'Токены дизайн-системы',
     description: 'Перечисляет CSS-токены дизайн-системы с их значениями по темам и режимам. Используйте var(--токен) вместо хардкода цветов, радиусов и шрифтов.',
     shape: {
       group: z.string().optional().describe('Фильтр по группе токенов: color, radius, font, shadow, motion'),
+      maxTokens: z.number().int().min(100).max(20000).optional().describe('Бюджет ответа в токенах, по умолчанию 1500'),
     },
-    run({ group }) {
+    run({ group, maxTokens }) {
       const filtered = group ? index.tokens.filter((token) => token.group.toLowerCase().startsWith(group.toLowerCase())) : index.tokens;
       if (filtered.length === 0) {
         const groups = [...new Set(index.tokens.map((token) => token.group))];
         return { text: `Группы "${group}" нет. Доступные группы: ${groups.join(', ') || 'нет'}.` };
       }
-      return ok(renderTokens(filtered));
+      const budget = fitToBudget(renderTokens(filtered).split('\n\n'), maxTokens ?? DEFAULT_TOKENS_BUDGET, 'Запросите одну группу через параметр group.');
+      return ok(budget.text);
     },
   };
 

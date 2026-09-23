@@ -5,11 +5,26 @@ const MAX_PROP_MATCHES = 3;
 const MIN_FUZZY_LENGTH = 4;
 const MAX_FUZZY_DISTANCE = 2;
 
+const STOP_WORDS = new Set([
+  'на', 'по', 'из', 'за', 'для', 'со', 'во', 'ко', 'от', 'до', 'об', 'не', 'но', 'или', 'как', 'что', 'это', 'при', 'под', 'над', 'без',
+  'the', 'of', 'on', 'in', 'to', 'for', 'with', 'and', 'or', 'an', 'by', 'at',
+]);
+
+const RUSSIAN_ENDINGS = ['ями', 'ами', 'ого', 'его', 'ому', 'ему', 'ыми', 'ими', 'ов', 'ев', 'ей', 'ий', 'ый', 'ой', 'ая', 'яя', 'ое', 'ее', 'ые', 'ие', 'ом', 'ем', 'ам', 'ям', 'ах', 'ях', 'а', 'я', 'ы', 'и', 'у', 'ю', 'е', 'о'];
+
+function stem(term: string): string {
+  if (term.length <= 4 || !/^[а-яё]+$/.test(term)) return term;
+  const ending = RUSSIAN_ENDINGS.find((candidate) => term.endsWith(candidate) && term.length - candidate.length >= 3);
+  return ending ? term.slice(0, term.length - ending.length) : term;
+}
+
 export function tokenize(query: string): string[] {
   return query
     .toLowerCase()
     .split(/[^\p{L}\p{N}]+/u)
-    .filter((term) => term.length > 1);
+    .map((term) => (term.length > 4 && term.startsWith('jx') ? term.slice(2) : term))
+    .filter((term) => term.length > 1 && !STOP_WORDS.has(term))
+    .map(stem);
 }
 
 export function editDistance(a: string, b: string): number {
@@ -54,7 +69,8 @@ function scoreComponent(component: ComponentDoc, query: string, terms: string[])
   const matchedOn = new Set<string>();
   let score = 0;
 
-  if (name === query || short === query) {
+  const bareQuery = query.startsWith('jx') ? query.slice(2) : query;
+  if (name === query || short === query || short === bareQuery) {
     score += 120;
     matchedOn.add('name');
   } else if (query.length > 1 && (name.includes(query) || short.includes(query))) {

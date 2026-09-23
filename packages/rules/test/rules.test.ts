@@ -59,6 +59,25 @@ describe('наследование и переопределение', () => {
     expect(ids({ target: 'claude' })).toContain('memory');
   });
 
+  it('понимает пути с ./ и абсолютные пути так же, как пути от корня проекта', () => {
+    const scoped = set('scoped', [], [rule('scoped', 'id: server\nversion: 1.0.0\ntitle: Сервер\napplies_to: ["packages/**"]', 'Только в пакетах.')]);
+    const ids = (filePath: string) => resolveRules(registryFromSets([scoped]), 'scoped', { filePath }).rules.map((item) => item.id);
+    expect(ids('packages/mcp/src/server.ts')).toEqual(['server']);
+    expect(ids('./packages/mcp/src/server.ts')).toEqual(['server']);
+    expect(ids('C:\\Users\\dev\\context-lab\\packages\\mcp\\src\\server.ts')).toEqual(['server']);
+    expect(ids('/home/dev/context-lab/packages/mcp/src/server.ts')).toEqual(['server']);
+    expect(ids('apps/lab/src/page.tsx')).toEqual([]);
+  });
+
+  it('кладёт в файлы агента только правила, объявленные для него', () => {
+    const files = compileAll(resolveRules(registry, 'project'), COMPILE_TARGETS);
+    const content = (file: string) => files.find((candidate) => candidate.path === file)?.content ?? '';
+    expect(content('CLAUDE.md')).toMatch(/Память/);
+    expect(content('AGENTS.md')).not.toMatch(/Память/);
+    expect(content('.github/copilot-instructions.md')).not.toMatch(/Память/);
+    expect(files.some((file) => file.path === '.cursor/rules/memory.mdc')).toBe(false);
+  });
+
   it('сортирует по приоритету и укладывает в бюджет, сохраняя список опущенных', () => {
     const full = resolveRules(registry, 'project');
     expect(full.rules.map((item) => item.priority)).toEqual([90, 90, 80, 40]);

@@ -86,7 +86,7 @@ describe('документация и правила как инструмент
 
   it('get_rules передаёт запрос источнику правил и превращает его ошибку в isError', () => {
     expect(runTool(full, 'get_rules', { task: 'ui' }).text).toMatch(/^Правила набора sample/);
-    expect(queries.at(-1)).toEqual({ task: 'ui' });
+    expect(queries.at(-1)).toEqual({ task: 'ui', budget: 2000 });
     const failed = runTool(full, 'get_rules', { set: 'missing' });
     expect(failed.isError).toBe(true);
     expect(failed.text).toMatch(/missing/);
@@ -107,10 +107,24 @@ describe('бюджет контекста', () => {
     expect(result.usedTokens).toBe(estimateTokens(sections[0] ?? ''));
   });
 
-  it('никогда не выбрасывает первую секцию', () => {
+  it('никогда не выбрасывает первую секцию, но говорит, что она сама превышает бюджет', () => {
     const result = fitToBudget(['x'.repeat(3600)], 10);
     expect(result.omittedSections).toBe(0);
     expect(result.text.startsWith('x')).toBe(true);
+    expect(result.text).toMatch(/не помещается в бюджет 10/);
+  });
+
+  it('называет опущенные разделы и не берёт поздний раздел вместо раннего', () => {
+    const result = fitToBudget(['Шапка\n' + 'a'.repeat(300), 'Обязательные пропсы (1)\n' + 'b'.repeat(400), 'Необязательные пропсы (1)\nc'], 120);
+    expect(result.text).not.toMatch(/Необязательные пропсы \(1\)\nc/);
+    expect(result.text).toMatch(/опущено разделов: 2 \(Обязательные пропсы \(1\); Необязательные пропсы \(1\)\)/);
+  });
+
+  it('примеры и токены тоже укладываются в бюджет', () => {
+    const examples = runTool(tools, 'get_component_examples', { name: 'JxModal', maxTokens: 100 });
+    expect(examples.isError).toBeUndefined();
+    const tokens = runTool(tools, 'list_design_tokens', { maxTokens: 100 });
+    expect(tokens.text).toMatch(/--jx-/);
   });
 
   it('сигнатура умещается в одну строку и помечает deprecated', () => {

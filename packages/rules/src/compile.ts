@@ -1,4 +1,11 @@
-import type { CompiledFile, CompileTarget, ResolvedRule, Resolution } from './types.ts';
+import type { CompiledFile, CompileTarget, ResolvedRule, Resolution, RuleTarget } from './types.ts';
+
+const AGENT_OF: Partial<Record<CompileTarget, RuleTarget>> = { claude: 'claude', cursor: 'cursor', copilot: 'copilot', agents: 'agents' };
+
+function forTarget(rules: ResolvedRule[], target: CompileTarget): ResolvedRule[] {
+  const agent = AGENT_OF[target];
+  return agent ? rules.filter((rule) => rule.targets.includes(agent)) : rules;
+}
 
 function banner(resolution: Resolution, target: string): string {
   return `<!-- Сгенерировано context-lab rules: набор ${resolution.set} (цепочка ${resolution.chain.join(' → ')}), цель ${target}. Правки вносите в rules/, затем npm run rules:compile. -->`;
@@ -31,7 +38,7 @@ function plainText(resolution: Resolution): string {
     const scope = scoped(rule) ? ` [${rule.appliesTo.join(', ')}]` : '';
     parts.push(`${position + 1}. ${rule.title}${scope}`, rule.body.replace(/^/gm, '   '), '');
   });
-  if (resolution.omitted.length > 0) parts.push(`(не вошли в бюджет: ${resolution.omitted.map((rule) => rule.title).join('; ')})`);
+  if (resolution.omitted.length > 0) parts.push(`(не вошли в бюджет: ${resolution.omitted.map((rule) => rule.title).join('; ')}; запросите набор с большим budget)`);
   return `${parts.join('\n').trimEnd()}\n`;
 }
 
@@ -45,7 +52,7 @@ function frontmatter(fields: Record<string, string | boolean | string[]>): strin
 }
 
 export function compile(resolution: Resolution, target: CompileTarget): CompiledFile[] {
-  const rules = resolution.rules;
+  const rules = forTarget(resolution.rules, target);
   switch (target) {
     case 'text':
       return [{ path: `${resolution.set}.md`, content: plainText(resolution) }];

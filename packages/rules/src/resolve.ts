@@ -27,9 +27,17 @@ export function inheritanceChain(registry: Registry, setName: string): string[] 
   return chain;
 }
 
+function candidatePaths(filePath: string): string[] {
+  const normalized = filePath.replace(/\\/g, '/').replace(/^(\.\/)+/, '');
+  if (!/^([a-zA-Z]:)?\//.test(normalized)) return [normalized];
+  const parts = normalized.split('/').filter((part) => part.length > 0);
+  return parts.map((_, position) => parts.slice(position).join('/'));
+}
+
 function matchesFile(rule: RuleDefinition, filePath: string | undefined): boolean {
   if (!filePath || rule.appliesTo.length === 0) return true;
-  return picomatch(rule.appliesTo, { dot: true })(filePath.replace(/\\/g, '/'));
+  const matches = picomatch(rule.appliesTo, { dot: true });
+  return candidatePaths(filePath).some((candidate) => matches(candidate));
 }
 
 function matchesTask(rule: RuleDefinition, taskType: string | undefined): boolean {

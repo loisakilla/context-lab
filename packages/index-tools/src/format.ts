@@ -68,14 +68,18 @@ function renderPropBlock(prop: PropDoc): string {
   return lines.join('\n');
 }
 
-export function renderExamples(component: ComponentDoc): string {
-  if (component.examples.length === 0) return `${component.name}: примеров в документации нет.`;
+export function renderExampleSections(component: ComponentDoc): string[] {
+  if (component.examples.length === 0) return [`${component.name}: примеров в документации нет.`];
 
   const blocks = component.examples.map((example, position) => {
     const title = example.title ?? `Пример ${position + 1}`;
     return `${title}\n${indent(example.code, '  ')}`;
   });
-  return [`${component.name} — примеры использования`, ...blocks].join('\n\n');
+  return [`${component.name} — примеры использования`, ...blocks];
+}
+
+export function renderExamples(component: ComponentDoc): string {
+  return renderExampleSections(component).join('\n\n');
 }
 
 export function renderComponentSections(component: ComponentDoc): string[] {
@@ -149,26 +153,34 @@ export interface BudgetResult {
   omittedSections: number;
 }
 
+function sectionTitle(section: string): string {
+  const first = (section.split('\n', 1)[0] ?? '').replace(/^#+\s*/, '').trim();
+  return first.length > 60 ? `${first.slice(0, 57)}…` : first;
+}
+
 export function fitToBudget(sections: string[], maxTokens: number, hint = 'Запросите недостающее точечно через get_component_api или get_component_examples.'): BudgetResult {
   const kept: string[] = [];
+  const omitted: string[] = [];
   let used = 0;
-  let omitted = 0;
 
   for (const section of sections) {
     const cost = estimateTokens(section);
-    if (kept.length > 0 && used + cost > maxTokens) {
-      omitted += 1;
+    if (omitted.length > 0 || (kept.length > 0 && used + cost > maxTokens)) {
+      omitted.push(sectionTitle(section));
       continue;
     }
     kept.push(section);
     used += cost;
   }
 
-  if (omitted > 0) {
-    kept.push(`[опущено разделов: ${omitted} — бюджет ${maxTokens} токенов исчерпан. ${hint}]`);
+  if (used > maxTokens) {
+    kept.push(`[первый раздел занимает ~${used} токенов и один не помещается в бюджет ${maxTokens}: он отдан целиком, чтобы не обрывать его на середине]`);
+  }
+  if (omitted.length > 0) {
+    kept.push(`[опущено разделов: ${omitted.length} (${omitted.join('; ')}) — бюджет ${maxTokens} токенов исчерпан. ${hint}]`);
   }
 
-  return { text: kept.join('\n\n'), usedTokens: used, omittedSections: omitted };
+  return { text: kept.join('\n\n'), usedTokens: used, omittedSections: omitted.length };
 }
 
 export function withFooter(text: string): string {

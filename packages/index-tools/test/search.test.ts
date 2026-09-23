@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { editDistance, findComponent, searchComponents, suggestNames } from '../src/search.ts';
+import { editDistance, findComponent, searchComponents, suggestNames, tokenize } from '../src/search.ts';
 import { sampleIndex } from './helpers.ts';
 
 const index = sampleIndex();
@@ -29,6 +29,17 @@ describe('searchComponents', () => {
   it('прощает опечатку в имени', () => {
     const hits = searchComponents(index, 'Modul');
     expect(hits[0]?.component.name).toBe('JxModal');
+  });
+
+  it('понимает выдуманное имя с префиксом Jx по ключевому слову', () => {
+    expect(searchComponents(index, 'JxDialog')[0]?.component.name).toBe('JxModal');
+    expect(suggestNames(index, 'JxDialog')).toContain('JxModal');
+  });
+
+  it('не даёт предлогам перебить смысловые слова', () => {
+    expect(tokenize('кнопка на форме')).not.toContain('на');
+    expect(tokenize('modal on delete')).not.toContain('on');
+    expect(tokenize('модальные тегов')).toEqual(tokenize('модальное тегами'));
   });
 
   it('пустой запрос отдаёт первые компоненты без очков', () => {
