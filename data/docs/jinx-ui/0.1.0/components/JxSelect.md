@@ -26,22 +26,27 @@
 
 ## CSS-классы
 
-`jx-field`, `jx-label`, `jx-select`, `jx-select-caret`, `jx-select-check`, `jx-select-divider`, `jx-select-group`, `jx-select-option`, `jx-select-option-label`, `jx-select-option-meta`, `jx-select-placeholder`, `jx-select-trigger`, `jx-select-value`
+`jx-field`, `jx-label`, `jx-select`, `jx-select-caret`, `jx-select-check`, `jx-select-divider`, `jx-select-group`, `jx-select-menu`, `jx-select-option`, `jx-select-option-label`, `jx-select-option-meta`, `jx-select-placeholder`, `jx-select-trigger`, `jx-select-value`
 
 ## Примеры
 
 ### Выбор языка интерфейса
 
 ```tsx
-<JxSelect
-  label="Язык"
-  options={[
-    { value: 'ru', label: 'Русский' },
-    { value: 'en', label: 'English' },
-  ]}
-  value={language}
-  onValueChange={setLanguage}
-/>
+function LanguageSelect() {
+  const [language, setLanguage] = useState('ru');
+  return (
+    <JxSelect
+      label="Язык"
+      options={[
+        { value: 'ru', label: 'Русский' },
+        { value: 'en', label: 'English' },
+      ]}
+      value={language}
+      onValueChange={setLanguage}
+    />
+  );
+}
 ```
 
 ### Опции с группами и подписями

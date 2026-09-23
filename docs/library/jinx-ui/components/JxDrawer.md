@@ -16,14 +16,24 @@ keywords: [drawer, боковая панель, шторка, sidebar, выез�
 ## Examples
 ### Панель с навигацией
 ```tsx
-<JxDrawer open={menuOpen} onOpenChange={setMenuOpen} title="Разделы" side="left">
-  <JxMenu
-    items={[
-      { label: 'Проекты', onSelect: () => go('/projects') },
-      { label: 'Команда', onSelect: () => go('/team') },
-      { type: 'divider' },
-      { label: 'Выйти', danger: true, onSelect: logout },
-    ]}
-  />
-</JxDrawer>
+function NavigationDrawer({ go, logout }: { go: (path: string) => void; logout: () => void }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  return (
+    <>
+      <JxButton variant="ghost" onClick={() => setMenuOpen(true)}>
+        Разделы
+      </JxButton>
+      <JxDrawer open={menuOpen} onOpenChange={setMenuOpen} title="Разделы" side="left">
+        <JxMenu
+          items={[
+            { label: 'Проекты', onSelect: () => go('/projects') },
+            { label: 'Команда', onSelect: () => go('/team') },
+            { type: 'divider' },
+            { label: 'Выйти', danger: true, onSelect: logout },
+          ]}
+        />
+      </JxDrawer>
+    </>
+  );
+}
 ```

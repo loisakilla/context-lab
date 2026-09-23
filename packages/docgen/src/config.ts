@@ -11,6 +11,7 @@ export interface LibraryConfig {
   entry?: string;
   docsDir?: string;
   tokensCss?: string[];
+  stylesCss?: string[];
   readme?: string;
 }
 
@@ -72,6 +73,7 @@ export function buildOptionsFromConfig(config: LabConfig): BuildOptions {
     ...(library.entry ? { entry: library.entry } : {}),
     ...(library.docsDir ? { docsDir: resolveFrom(config, library.docsDir) } : {}),
     tokensCss: (library.tokensCss ?? []).map((file) => resolveFrom(config, file)),
+    stylesCss: (library.stylesCss ?? []).map((file) => resolveFrom(config, file)),
     library: {
       name: library.name,
       ...(library.package ? { package: library.package } : {}),

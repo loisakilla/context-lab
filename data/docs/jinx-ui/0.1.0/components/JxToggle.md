@@ -32,13 +32,17 @@
 ### Выбор периода
 
 ```tsx
-<JxToggle
-  items={[
-    { value: 'day', label: 'День' },
-    { value: 'week', label: 'Неделя' },
-    { value: 'month', label: 'Месяц' },
-  ]}
-  defaultValue="week"
-  onValueChange={(value) => setPeriod(value)}
-/>
+function ReportPeriod({ setPeriod }: { setPeriod: (period: string) => void }) {
+  return (
+    <JxToggle
+      items={[
+        { value: 'day', label: 'День' },
+        { value: 'week', label: 'Неделя' },
+        { value: 'month', label: 'Месяц' },
+      ]}
+      defaultValue="week"
+      onValueChange={(value) => setPeriod(value)}
+    />
+  );
+}
 ```

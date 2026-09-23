@@ -20,7 +20,22 @@ keywords: [кнопка, button, действие, submit, отправить, �
 
 ### Разрушительное действие с блокировкой
 ```tsx
-<JxButton variant="danger" size="sm" disabled={isDeleting} onClick={remove}>
-  Удалить
-</JxButton>
+function DeleteProjectButton({ onDelete }: { onDelete: () => Promise<void> }) {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const remove = async () => {
+    setIsDeleting(true);
+    try {
+      await onDelete();
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  return (
+    <JxButton variant="danger" size="sm" disabled={isDeleting} onClick={remove}>
+      Удалить
+    </JxButton>
+  );
+}
 ```

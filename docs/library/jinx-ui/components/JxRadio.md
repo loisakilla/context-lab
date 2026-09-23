@@ -11,8 +11,13 @@ keywords: [radio, радиокнопка, один из нескольких, в
 ## Examples
 ### Выбор тарифа
 ```tsx
-<div role="radiogroup" aria-label="Тариф">
-  <JxRadio name="plan" value="basic" label="Базовый" checked={plan === 'basic'} onChange={() => setPlan('basic')} />
-  <JxRadio name="plan" value="pro" label="Про" checked={plan === 'pro'} onChange={() => setPlan('pro')} />
-</div>
+function PlanPicker() {
+  const [plan, setPlan] = useState<'basic' | 'pro'>('basic');
+  return (
+    <div role="radiogroup" aria-label="Тариф">
+      <JxRadio name="plan" value="basic" label="Базовый" checked={plan === 'basic'} onChange={() => setPlan('basic')} />
+      <JxRadio name="plan" value="pro" label="Про" checked={plan === 'pro'} onChange={() => setPlan('pro')} />
+    </div>
+  );
+}
 ```

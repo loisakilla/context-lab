@@ -1,6 +1,8 @@
 import path from 'node:path';
 import { parseArgs } from 'node:util';
+import { buildNodeTypeBundle, createChecker } from '@context-lab/checks';
 import { loadConfig, loadDescriptions, loadIndex, resolveFrom } from '@context-lab/docgen';
+import { checkExamples } from './examples.ts';
 import { lintDocs } from './lint.ts';
 import { docsVersionDir, findDocsDrift, writeDocs } from './write.ts';
 
@@ -9,7 +11,7 @@ const USAGE = `context-lab docs
 Команды:
   build   Сгенерировать llms.txt, llms-full.txt и Markdown по компонентам из индекса
   check   Проверить, что сгенерированные файлы не разошлись с индексом (для CI)
-  lint    Проверить описания компонентов в docs/components против типов
+  lint    Проверить описания компонентов против типов и скомпилировать каждый пример
 
 Опции:
   -c, --config <file>   Путь к конфигу, по умолчанию context-lab.config.json
@@ -60,9 +62,19 @@ function main(): void {
       if (!docsDir) fail('В конфиге не задан library.docsDir');
       const issues = lintDocs(index, loadDescriptions(docsDir));
       for (const issue of issues) process.stderr.write(`${issue.level === 'error' ? 'ОШИБКА' : 'внимание'}  ${issue.component}: ${issue.message}\n`);
-      const errors = issues.filter((issue) => issue.level === 'error').length;
-      process.stderr.write(`Проверка описаний: ошибок ${errors}, предупреждений ${issues.length - errors}.\n`);
-      if (errors > 0) process.exit(1);
+      const checker = createChecker(
+        buildNodeTypeBundle({
+          packageRoot: resolveFrom(config, config.library.packageRoot),
+          packageName: config.library.package ?? index.library.package,
+          nodeModules: resolveFrom(config, 'node_modules'),
+        }),
+      );
+      const broken = checkExamples(index, checker);
+      for (const example of broken) process.stderr.write(`ОШИБКА  ${example.component} «${example.title}»: пример не компилируется: ${example.errors.join('; ')}\n`);
+      const lintErrors = issues.filter((issue) => issue.level === 'error').length;
+      const examples = index.components.reduce((sum, component) => sum + component.examples.length, 0);
+      process.stderr.write(`Проверка описаний: ошибок ${lintErrors + broken.length}, предупреждений ${issues.length - lintErrors}, примеров скомпилировано ${examples}.\n`);
+      if (lintErrors + broken.length > 0) process.exit(1);
       return;
     }
     default:

@@ -28,7 +28,7 @@
 
 ## CSS-классы
 
-`jx-cal-day`, `jx-cal-day--in-range`, `jx-cal-day--out`, `jx-cal-day--range-end`, `jx-cal-day--range-start`, `jx-cal-day--selected`, `jx-cal-day--today`, `jx-cal-dow`, `jx-cal-grid`, `jx-cal-head`, `jx-cal-month`, `jx-cal-nav`, `jx-daterange-arrow`, `jx-daterange-clear`, `jx-daterange-field`, `jx-daterange-field-label`, `jx-daterange-field-value`, `jx-daterange-fields`, `jx-daterange-status`
+`jx-cal-day`, `jx-cal-day--in-range`, `jx-cal-day--out`, `jx-cal-day--range-end`, `jx-cal-day--range-start`, `jx-cal-day--selected`, `jx-cal-day--today`, `jx-cal-dow`, `jx-cal-grid`, `jx-cal-head`, `jx-cal-month`, `jx-cal-nav`, `jx-calendar`, `jx-daterange`, `jx-daterange-arrow`, `jx-daterange-clear`, `jx-daterange-field`, `jx-daterange-field-label`, `jx-daterange-field-value`, `jx-daterange-fields`, `jx-daterange-status`
 
 ## Примеры
 

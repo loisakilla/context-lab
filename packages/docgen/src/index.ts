@@ -8,4 +8,4 @@ export { extract } from './extract.ts';
 export type { ExtractOptions, Extracted } from './extract.ts';
 export { createLibraryProgram, toPosix } from './program.ts';
 export type { LibraryProgram, ProgramOptions } from './program.ts';
-export { groupOf, parseTokensCss } from './tokens.ts';
+export { classNamesFromCss, groupOf, parseTokensCss } from './tokens.ts';

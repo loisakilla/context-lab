@@ -15,8 +15,20 @@ keywords: [pagination, пагинация, страницы, постранич�
 ### Таблица по десять строк
 ```tsx
 const pageSize = 10;
-const pageCount = Math.ceil(users.length / pageSize);
-const visible = users.slice((page - 1) * pageSize, page * pageSize);
 
-<JxPagination total={pageCount} page={page} onPageChange={setPage} />
+function PagedUsers({ users }: { users: Array<{ id: string; name: string }> }) {
+  const [page, setPage] = useState(1);
+  const pageCount = Math.ceil(users.length / pageSize);
+  const visible = users.slice((page - 1) * pageSize, page * pageSize);
+  return (
+    <>
+      <ul>
+        {visible.map((user) => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+      <JxPagination total={pageCount} page={page} onPageChange={setPage} />
+    </>
+  );
+}
 ```

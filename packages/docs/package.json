@@ -12,6 +12,7 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@context-lab/checks": "0.1.0",
     "@context-lab/docgen": "0.1.0",
     "@context-lab/index-tools": "0.1.0"
   }

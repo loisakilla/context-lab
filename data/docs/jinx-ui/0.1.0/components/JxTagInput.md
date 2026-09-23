@@ -25,12 +25,15 @@
 
 ## CSS-классы
 
-`jx-chip-x`, `jx-taginput`
+`jx-chip`, `jx-chip--active`, `jx-chip-x`, `jx-taginput`
 
 ## Примеры
 
 ### Ключевые слова статьи
 
 ```tsx
-<JxTagInput ariaLabel="Ключевые слова" placeholder="Введите тег и нажмите Enter" value={tags} onValueChange={setTags} />
+function ArticleTags() {
+  const [tags, setTags] = useState<string[]>(['react']);
+  return <JxTagInput ariaLabel="Ключевые слова" placeholder="Введите тег и нажмите Enter" value={tags} onValueChange={setTags} />;
+}
 ```

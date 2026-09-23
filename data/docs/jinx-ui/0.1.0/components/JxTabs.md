@@ -22,7 +22,7 @@
 | `defaultValue` | `string` | нет |  | активная вкладка при первом рендере |
 | `onValueChange` | `(value: string) => void` | нет |  | вызывается с `value` выбранной вкладки |
 | `value` | `string` | нет |  | активная вкладка в управляемом режиме |
-| `variant` | `"segmented" \\| "underline"` | нет | `'segmented'` | внешний вид: `segmented` по умолчанию или `underline` |
+| `variant` | `"segmented" \| "underline"` | нет | `'segmented'` | внешний вид: `segmented` по умолчанию или `underline` |
 
 ## CSS-классы
 
@@ -33,16 +33,21 @@
 ### Вкладки с содержимым
 
 ```tsx
-<>
-  <JxTabs
-    ariaLabel="Разделы профиля"
-    items={[
-      { value: 'general', label: 'Общее' },
-      { value: 'security', label: 'Безопасность' },
-    ]}
-    value={tab}
-    onValueChange={setTab}
-  />
-  {tab === 'general' ? <GeneralSettings /> : <SecuritySettings />}
-</>
+function ProfileTabs({ general, security }: { general: ReactNode; security: ReactNode }) {
+  const [tab, setTab] = useState('general');
+  return (
+    <>
+      <JxTabs
+        ariaLabel="Разделы профиля"
+        items={[
+          { value: 'general', label: 'Общее' },
+          { value: 'security', label: 'Безопасность' },
+        ]}
+        value={tab}
+        onValueChange={setTab}
+      />
+      {tab === 'general' ? general : security}
+    </>
+  );
+}
 ```

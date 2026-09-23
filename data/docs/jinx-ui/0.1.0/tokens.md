@@ -14,6 +14,7 @@
 | `--jx-border` | `#221c30` | `[data-theme="light"]`: `#ddd6c4`; `[data-style="brutal"]`: `var(--jx-edge)` |
 | `--jx-border-2` | `#3a3150` | `[data-theme="light"]`: `#b8ae96`; `[data-style="brutal"]`: `var(--jx-edge)` |
 | `--jx-danger` | `#ff5470` | `[data-theme="light"]`: `#b01834` |
+| `--jx-edge` | только в переопределениях | `[data-style="brutal"]`: `color-mix(in oklab, var(--jx-text) 82%, var(--jx-bg))` |
 | `--jx-info` | `#79c8ff` | `[data-theme="light"]`: `#17518f` |
 | `--jx-rule` | `#1c1828` | `[data-theme="light"]`: `#ddd6c4`; `[data-style="brutal"]`: `var(--jx-edge)` |
 | `--jx-success` | `#6bd97a` | `[data-theme="light"]`: `#176034` |
@@ -40,12 +41,6 @@
 |---|---|---|
 | `--jx-ease` | `cubic-bezier(0.4, 0, 0.2, 1)` |  |
 | `--jx-ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` |  |
-
-## other
-
-| Токен | Значение | Переопределения |
-|---|---|---|
-| `--jx-edge` | `color-mix(in oklab, var(--jx-text) 82%, var(--jx-bg))` |  |
 
 ## radius
 

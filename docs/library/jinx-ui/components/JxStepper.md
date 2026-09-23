@@ -11,9 +11,18 @@ keywords: [stepper, шаги, пошаговая форма, мастер, wizar
 ## Examples
 ### Трёхшаговая форма
 ```tsx
-<>
-  <JxStepper steps={[{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }]} current={step} />
-  <JxButton variant="ghost" disabled={step === 0} onClick={() => setStep(step - 1)}>Назад</JxButton>
-  <JxButton variant="primary" onClick={() => setStep(Math.min(step + 1, 2))}>Дальше</JxButton>
-</>
+function CheckoutSteps() {
+  const [step, setStep] = useState(0);
+  return (
+    <>
+      <JxStepper steps={[{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }]} current={step} />
+      <JxButton variant="ghost" disabled={step === 0} onClick={() => setStep(step - 1)}>
+        Назад
+      </JxButton>
+      <JxButton variant="primary" onClick={() => setStep(Math.min(step + 1, 2))}>
+        Дальше
+      </JxButton>
+    </>
+  );
+}
 ```

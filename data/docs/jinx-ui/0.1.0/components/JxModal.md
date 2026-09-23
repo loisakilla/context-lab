@@ -21,28 +21,42 @@
 | `className` | `string` | нет |  | дополнительный класс окна |
 | `defaultOpen` | `boolean` | нет | `false` | начальное состояние в неуправляемом режиме |
 | `icon` | `ReactNode` | нет |  | иконка рядом с заголовком вместо иконки по умолчанию |
-| `intent` | `"danger" \\| "default" \\| "warning" \\| "info" \\| "success"` | нет | `'default'` | смысловой тон; `danger` для разрушительных действий, `warning`, `info`, `success` |
+| `intent` | `"danger" \| "default" \| "warning" \| "info" \| "success"` | нет | `'default'` | смысловой тон; `danger` для разрушительных действий, `warning`, `info`, `success` |
 | `message` | `ReactNode` | нет |  | текст под заголовком |
 | `onOpenChange` | `(open: boolean) => void` | нет |  | вызывается с новым состоянием при закрытии по Escape или клику по подложке |
 | `open` | `boolean` | нет |  | открыто ли окно в управляемом режиме |
 
 ## CSS-классы
 
-`jx-modal-actions`, `jx-modal-close`, `jx-modal-frame`, `jx-modal-icon`, `jx-modal-msg`, `jx-modal-title`
+`jx-modal-actions`, `jx-modal-close`, `jx-modal-frame`, `jx-modal-icon`, `jx-modal-msg`, `jx-modal-overlay`, `jx-modal-title`
 
 ## Примеры
 
 ### Подтверждение удаления
 
 ```tsx
-<JxModal
-  open={confirmOpen}
-  onOpenChange={setConfirmOpen}
-  intent="danger"
-  title="Удалить проект?"
-  message="Проект и все задачи будут удалены безвозвратно."
->
-  <JxButton variant="ghost" onClick={() => setConfirmOpen(false)}>Отмена</JxButton>
-  <JxButton variant="danger" onClick={removeProject}>Удалить</JxButton>
-</JxModal>
+function DeleteProject({ removeProject }: { removeProject: () => void }) {
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  return (
+    <>
+      <JxButton variant="danger" onClick={() => setConfirmOpen(true)}>
+        Удалить проект
+      </JxButton>
+      <JxModal
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        intent="danger"
+        title="Удалить проект?"
+        message="Проект и все задачи будут удалены безвозвратно."
+      >
+        <JxButton variant="ghost" onClick={() => setConfirmOpen(false)}>
+          Отмена
+        </JxButton>
+        <JxButton variant="danger" onClick={removeProject}>
+          Удалить
+        </JxButton>
+      </JxModal>
+    </>
+  );
+}
 ```

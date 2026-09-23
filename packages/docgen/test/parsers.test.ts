@@ -79,6 +79,17 @@ keywords: [кнопка, button, действие]
     ]);
   });
 
+  it('принимает блок кода с любым языком и строкой параметров после него', () => {
+    const fences = parseDescription(
+      '---\ncomponent: JxButton\n---\nКнопка.\n\n## Examples\n### Первый\n```typescript\n<JxButton>Раз</JxButton>\n```\n\n### Второй\n```tsx title="button.tsx"\n<JxButton>Два</JxButton>\n```\n',
+      'JxButton',
+    );
+    expect(fences.examples).toEqual([
+      { title: 'Первый', code: '<JxButton>Раз</JxButton>' },
+      { title: 'Второй', code: '<JxButton>Два</JxButton>' },
+    ]);
+  });
+
   it('берёт имя из файла, если frontmatter пустой, и понимает deprecated', () => {
     const minimal = parseDescription('---\ndeprecated: используйте JxMenu\n---\nСтарое меню.\n', 'JxDropdown');
     expect(minimal.component).toBe('JxDropdown');

@@ -14,5 +14,7 @@ keywords: [toast, уведомление, всплывающее сообщен�
 ## Examples
 ### Одиночное уведомление
 ```tsx
-<JxToast variant="success" title="Сохранено" message="Изменения применены" onClose={hide} />
+function SavedToast({ hide }: { hide: () => void }) {
+  return <JxToast variant="success" title="Сохранено" message="Изменения применены" onClose={hide} />;
+}
 ```

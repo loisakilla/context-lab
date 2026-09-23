@@ -30,9 +30,14 @@
 ### Настройка уведомлений
 
 ```tsx
-<JxSwitch
-  label="Присылать уведомления на почту"
-  checked={notifications}
-  onChange={(event) => setNotifications(event.target.checked)}
-/>
+function EmailNotifications() {
+  const [notifications, setNotifications] = useState(true);
+  return (
+    <JxSwitch
+      label="Присылать уведомления на почту"
+      checked={notifications}
+      onChange={(event) => setNotifications(event.target.checked)}
+    />
+  );
+}
 ```

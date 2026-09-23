@@ -31,5 +31,7 @@
 ### Загрузка файла
 
 ```tsx
-<JxProgress label="Загрузка" value={uploaded} max={total} />
+function UploadProgress({ uploaded, total }: { uploaded: number; total: number }) {
+  return <JxProgress label="Загрузка" value={uploaded} max={total} />;
+}
 ```

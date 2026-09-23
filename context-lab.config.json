@@ -9,6 +9,10 @@
     "tokensCss": [
       "node_modules/@jinx-ui/tokens/src/index.css"
     ],
+    "stylesCss": [
+      "node_modules/@jinx-ui/core/src/jinx-app.css",
+      "node_modules/@jinx-ui/core/src/jinx-skins.css"
+    ],
     "readme": "node_modules/@jinx-ui/react/README.md"
   },
   "index": "data/index/jinx-ui.json",

@@ -9,22 +9,35 @@ keywords: [table, таблица, список пользователей, ст�
 ## Examples
 ### Таблица пользователей
 ```tsx
-<JxTable>
-  <thead>
-    <tr>
-      <th>Имя</th>
-      <th>Роль</th>
-      <th>Статус</th>
-    </tr>
-  </thead>
-  <tbody>
-    {users.map((user) => (
-      <tr key={user.id}>
-        <td>{user.name}</td>
-        <td>{user.role}</td>
-        <td><JxBadge tone={user.active ? 'success' : 'default'}>{user.active ? 'Активен' : 'Отключён'}</JxBadge></td>
-      </tr>
-    ))}
-  </tbody>
-</JxTable>
+interface User {
+  id: string;
+  name: string;
+  role: string;
+  active: boolean;
+}
+
+function UsersTable({ users }: { users: User[] }) {
+  return (
+    <JxTable>
+      <thead>
+        <tr>
+          <th>Имя</th>
+          <th>Роль</th>
+          <th>Статус</th>
+        </tr>
+      </thead>
+      <tbody>
+        {users.map((user) => (
+          <tr key={user.id}>
+            <td>{user.name}</td>
+            <td>{user.role}</td>
+            <td>
+              <JxBadge tone={user.active ? 'success' : 'default'}>{user.active ? 'Активен' : 'Отключён'}</JxBadge>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </JxTable>
+  );
+}
 ```

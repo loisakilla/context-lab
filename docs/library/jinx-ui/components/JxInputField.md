@@ -15,14 +15,20 @@ keywords: [поле ввода, input, текстовое поле, форма, 
 ## Examples
 ### Обязательное поле с ошибкой
 ```tsx
-<JxInputField
-  label="Электронная почта"
-  type="email"
-  required
-  value={email}
-  onChange={(event) => setEmail(event.target.value)}
-  errorText={emailError}
-/>
+function EmailField() {
+  const [email, setEmail] = useState('');
+  const emailError = email.length > 0 && !email.includes('@') ? 'Укажите адрес с символом @' : undefined;
+  return (
+    <JxInputField
+      label="Электронная почта"
+      type="email"
+      required
+      value={email}
+      onChange={(event) => setEmail(event.target.value)}
+      errorText={emailError}
+    />
+  );
+}
 ```
 
 ### Поле с префиксом и подсказкой

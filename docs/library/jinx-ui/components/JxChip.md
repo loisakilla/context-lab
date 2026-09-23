@@ -13,11 +13,22 @@ keywords: [chip, чип, фильтр, быстрый выбор, период, 
 ## Examples
 ### Быстрый выбор периода
 ```tsx
-<div style={{ display: 'flex', gap: '8px' }}>
-  {periods.map((period) => (
-    <JxChip key={period.value} active={period.value === selected} onClick={() => setSelected(period.value)}>
-      {period.label}
-    </JxChip>
-  ))}
-</div>
+const periods = [
+  { value: 'week', label: 'Неделя' },
+  { value: 'month', label: 'Месяц' },
+  { value: 'year', label: 'Год' },
+];
+
+function PeriodChips() {
+  const [selected, setSelected] = useState('month');
+  return (
+    <div style={{ display: 'flex', gap: '8px' }}>
+      {periods.map((period) => (
+        <JxChip key={period.value} active={period.value === selected} onClick={() => setSelected(period.value)}>
+          {period.label}
+        </JxChip>
+      ))}
+    </div>
+  );
+}
 ```

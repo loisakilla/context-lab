@@ -18,12 +18,23 @@ keywords: [combobox, автодополнение, поиск по списку,
 ## Examples
 ### Поиск сотрудника
 ```tsx
-<JxCombobox
-  ariaLabel="Сотрудник"
-  placeholder="Начните вводить имя"
-  emptyText="Никого не нашли"
-  options={people.map((person) => ({ value: person.id, label: person.name, subLabel: person.role }))}
-  value={assigneeId}
-  onValueChange={setAssigneeId}
-/>
+const people = [
+  { id: 'u1', name: 'Анна Смирнова', role: 'Дизайнер' },
+  { id: 'u2', name: 'Илья Ковалёв', role: 'Разработчик' },
+  { id: 'u3', name: 'Мария Орлова', role: 'Менеджер' },
+];
+
+function AssigneePicker() {
+  const [assigneeId, setAssigneeId] = useState('');
+  return (
+    <JxCombobox
+      ariaLabel="Сотрудник"
+      placeholder="Начните вводить имя"
+      emptyText="Никого не нашли"
+      options={people.map((person) => ({ value: person.id, label: person.name, subLabel: person.role }))}
+      value={assigneeId}
+      onValueChange={setAssigneeId}
+    />
+  );
+}
 ```

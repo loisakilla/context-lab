@@ -34,5 +34,8 @@
 ### Выбор даты с русской локалью
 
 ```tsx
-<JxCalendar locale="ru-RU" value={date} onValueChange={setDate} />
+function DueDate() {
+  const [date, setDate] = useState<Date | null>(null);
+  return <JxCalendar locale="ru-RU" value={date} onValueChange={setDate} />;
+}
 ```

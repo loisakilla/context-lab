@@ -33,12 +33,17 @@
 ### Комментарий с ограничением длины
 
 ```tsx
-<JxTextareaField
-  label="Комментарий"
-  rows={4}
-  maxLength={500}
-  value={comment}
-  onChange={(event) => setComment(event.target.value)}
-  helperText={`${comment.length}/500`}
-/>
+function CommentField() {
+  const [comment, setComment] = useState('');
+  return (
+    <JxTextareaField
+      label="Комментарий"
+      rows={4}
+      maxLength={500}
+      value={comment}
+      onChange={(event) => setComment(event.target.value)}
+      helperText={`${comment.length}/500`}
+    />
+  );
+}
 ```

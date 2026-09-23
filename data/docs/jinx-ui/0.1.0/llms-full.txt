@@ -103,10 +103,9 @@
 
 ## Токены
 
-- color (19): --jx-accent, --jx-accent-ink, --jx-accent-soft, --jx-bg, --jx-bg-2, --jx-border, --jx-border-2, --jx-danger, --jx-info, --jx-rule, --jx-success, --jx-surface, --jx-surface-2, --jx-surface-3, --jx-text, --jx-text-2, --jx-text-3, --jx-text-4, --jx-warning
+- color (20): --jx-accent, --jx-accent-ink, --jx-accent-soft, --jx-bg, --jx-bg-2, --jx-border, --jx-border-2, --jx-danger, --jx-edge, --jx-info, --jx-rule, --jx-success, --jx-surface, --jx-surface-2, --jx-surface-3, --jx-text, --jx-text-2, --jx-text-3, --jx-text-4, --jx-warning
 - font (3): --jx-font-display, --jx-font-mono, --jx-font-sans
 - motion (2): --jx-ease, --jx-ease-out
-- other (1): --jx-edge
 - radius (6): --jx-r, --jx-r-lg, --jx-r-pill, --jx-r-sm, --jx-r-xl, --jx-r-xs
 - shadow (3): --jx-shadow, --jx-shadow-lg, --jx-shadow-sm
 
@@ -180,11 +179,11 @@
 | `title` | `ReactNode & string` | да |  | заголовок сообщения |
 | `children` | `ReactNode` | нет |  | текст сообщения |
 | `icon` | `ReactNode` | нет |  | своя иконка вместо иконки тона |
-| `intent` | `"danger" \\| "warning" \\| "info" \\| "success"` | нет | `'info'` | тон: `info` по умолчанию, `success`, `warning`, `danger` |
+| `intent` | `"danger" \| "warning" \| "info" \| "success"` | нет | `'info'` | тон: `info` по умолчанию, `success`, `warning`, `danger` |
 
 ## CSS-классы
 
-`jx-alert`, `jx-alert-body`, `jx-alert-icon`, `jx-alert-msg`, `jx-alert-title`
+`jx-alert`, `jx-alert--danger`, `jx-alert--info`, `jx-alert--success`, `jx-alert--warning`, `jx-alert-body`, `jx-alert-icon`, `jx-alert-msg`, `jx-alert-title`
 
 ## Примеры
 
@@ -219,9 +218,9 @@
 | Проп | Тип | Обязателен | По умолчанию | Описание |
 |---|---|---|---|---|
 | `children` | `ReactNode` | нет |  | инициалы или изображение внутри аватара |
-| `size` | `"sm" \\| "md" \\| "lg"` | нет | `'md'` | размер: `sm`, `md`, `lg` |
+| `size` | `"sm" \| "md" \| "lg"` | нет | `'md'` | размер: `sm`, `md`, `lg` |
 | `status` | `boolean` | нет | `false` | показать точку присутствия |
-| `tone` | `"default" \\| "info" \\| "accent"` | нет | `'default'` | цветовой тон фона: `default`, `accent`, `info` |
+| `tone` | `"default" \| "info" \| "accent"` | нет | `'default'` | цветовой тон фона: `default`, `accent`, `info` |
 
 ## CSS-классы
 
@@ -301,7 +300,7 @@
 |---|---|---|---|---|
 | `children` | `ReactNode` | нет |  | текст метки |
 | `dot` | `boolean` | нет | `false` | показать точку-индикатор |
-| `tone` | `"danger" \\| "default" \\| "warning" \\| "info" \\| "success" \\| "accent" \\| "solid"` | нет | `'default'` | цветовой тон: `default`, `accent`, `success`, `warning`, `danger`, `info`, `solid` |
+| `tone` | `"danger" \| "default" \| "warning" \| "info" \| "success" \| "accent" \| "solid"` | нет | `'default'` | цветовой тон: `default`, `accent`, `success`, `warning`, `danger`, `info`, `solid` |
 
 ## CSS-классы
 
@@ -384,8 +383,8 @@
 | Проп | Тип | Обязателен | По умолчанию | Описание |
 |---|---|---|---|---|
 | `iconOnly` | `boolean` | нет | `false` | квадратная кнопка под одну иконку; обязательно добавьте `aria-label` |
-| `size` | `"sm" \\| "md" \\| "lg"` | нет | `'md'` | размер кнопки, `md` по умолчанию |
-| `variant` | `"primary" \\| "secondary" \\| "ghost" \\| "outline" \\| "danger"` | нет | `'primary'` | визуальный стиль; `primary` для главного действия, `danger` для разрушительного, `outline` и `ghost` для второстепенных |
+| `size` | `"sm" \| "md" \| "lg"` | нет | `'md'` | размер кнопки, `md` по умолчанию |
+| `variant` | `"primary" \| "secondary" \| "ghost" \| "outline" \| "danger"` | нет | `'primary'` | визуальный стиль; `primary` для главного действия, `danger` для разрушительного, `outline` и `ghost` для второстепенных |
 
 ## CSS-классы
 
@@ -405,9 +404,24 @@
 ### Разрушительное действие с блокировкой
 
 ```tsx
-<JxButton variant="danger" size="sm" disabled={isDeleting} onClick={remove}>
-  Удалить
-</JxButton>
+function DeleteProjectButton({ onDelete }: { onDelete: () => Promise<void> }) {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const remove = async () => {
+    setIsDeleting(true);
+    try {
+      await onDelete();
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  return (
+    <JxButton variant="danger" size="sm" disabled={isDeleting} onClick={remove}>
+      Удалить
+    </JxButton>
+  );
+}
 ```
 
 ---
@@ -448,7 +462,10 @@
 ### Выбор даты с русской локалью
 
 ```tsx
-<JxCalendar locale="ru-RU" value={date} onValueChange={setDate} />
+function DueDate() {
+  const [date, setDate] = useState<Date | null>(null);
+  return <JxCalendar locale="ru-RU" value={date} onValueChange={setDate} />;
+}
 ```
 
 ---
@@ -485,11 +502,16 @@
 ### Согласие с условиями
 
 ```tsx
-<JxCheckbox
-  label="Согласен с условиями обработки данных"
-  checked={agreed}
-  onChange={(event) => setAgreed(event.target.checked)}
-/>
+function TermsConsent() {
+  const [agreed, setAgreed] = useState(false);
+  return (
+    <JxCheckbox
+      label="Согласен с условиями обработки данных"
+      checked={agreed}
+      onChange={(event) => setAgreed(event.target.checked)}
+    />
+  );
+}
 ```
 
 ---
@@ -528,13 +550,24 @@
 ### Быстрый выбор периода
 
 ```tsx
-<div style={{ display: 'flex', gap: '8px' }}>
-  {periods.map((period) => (
-    <JxChip key={period.value} active={period.value === selected} onClick={() => setSelected(period.value)}>
-      {period.label}
-    </JxChip>
-  ))}
-</div>
+const periods = [
+  { value: 'week', label: 'Неделя' },
+  { value: 'month', label: 'Месяц' },
+  { value: 'year', label: 'Год' },
+];
+
+function PeriodChips() {
+  const [selected, setSelected] = useState('month');
+  return (
+    <div style={{ display: 'flex', gap: '8px' }}>
+      {periods.map((period) => (
+        <JxChip key={period.value} active={period.value === selected} onClick={() => setSelected(period.value)}>
+          {period.label}
+        </JxChip>
+      ))}
+    </div>
+  );
+}
 ```
 
 ---
@@ -576,14 +609,25 @@
 ### Поиск сотрудника
 
 ```tsx
-<JxCombobox
-  ariaLabel="Сотрудник"
-  placeholder="Начните вводить имя"
-  emptyText="Никого не нашли"
-  options={people.map((person) => ({ value: person.id, label: person.name, subLabel: person.role }))}
-  value={assigneeId}
-  onValueChange={setAssigneeId}
-/>
+const people = [
+  { id: 'u1', name: 'Анна Смирнова', role: 'Дизайнер' },
+  { id: 'u2', name: 'Илья Ковалёв', role: 'Разработчик' },
+  { id: 'u3', name: 'Мария Орлова', role: 'Менеджер' },
+];
+
+function AssigneePicker() {
+  const [assigneeId, setAssigneeId] = useState('');
+  return (
+    <JxCombobox
+      ariaLabel="Сотрудник"
+      placeholder="Начните вводить имя"
+      emptyText="Никого не нашли"
+      options={people.map((person) => ({ value: person.id, label: person.name, subLabel: person.role }))}
+      value={assigneeId}
+      onValueChange={setAssigneeId}
+    />
+  );
+}
 ```
 
 ---
@@ -618,7 +662,7 @@
 
 ## CSS-классы
 
-`jx-cal-day`, `jx-cal-day--in-range`, `jx-cal-day--out`, `jx-cal-day--range-end`, `jx-cal-day--range-start`, `jx-cal-day--selected`, `jx-cal-day--today`, `jx-cal-dow`, `jx-cal-grid`, `jx-cal-head`, `jx-cal-month`, `jx-cal-nav`, `jx-daterange-arrow`, `jx-daterange-clear`, `jx-daterange-field`, `jx-daterange-field-label`, `jx-daterange-field-value`, `jx-daterange-fields`, `jx-daterange-status`
+`jx-cal-day`, `jx-cal-day--in-range`, `jx-cal-day--out`, `jx-cal-day--range-end`, `jx-cal-day--range-start`, `jx-cal-day--selected`, `jx-cal-day--today`, `jx-cal-dow`, `jx-cal-grid`, `jx-cal-head`, `jx-cal-month`, `jx-cal-nav`, `jx-calendar`, `jx-daterange`, `jx-daterange-arrow`, `jx-daterange-clear`, `jx-daterange-field`, `jx-daterange-field-label`, `jx-daterange-field-value`, `jx-daterange-fields`, `jx-daterange-status`
 
 ## Примеры
 
@@ -709,27 +753,37 @@ function ReportRequest() {
 | `defaultOpen` | `boolean` | нет | `false` | начальное состояние в неуправляемом режиме |
 | `onOpenChange` | `(open: boolean) => void` | нет |  | вызывается с новым состоянием при закрытии |
 | `open` | `boolean` | нет |  | открыта ли панель в управляемом режиме |
-| `side` | `"right" \\| "left"` | нет | `'right'` | с какой стороны выезжает, `right` по умолчанию |
+| `side` | `"right" \| "left"` | нет | `'right'` | с какой стороны выезжает, `right` по умолчанию |
 
 ## CSS-классы
 
-`jx-drawer`, `jx-drawer-body`, `jx-drawer-head`, `jx-drawer-title`, `jx-modal-close`
+`jx-drawer`, `jx-drawer--left`, `jx-drawer--right`, `jx-drawer-body`, `jx-drawer-head`, `jx-drawer-title`, `jx-modal-close`, `jx-modal-overlay`, `jx-modal-overlay--drawer`
 
 ## Примеры
 
 ### Панель с навигацией
 
 ```tsx
-<JxDrawer open={menuOpen} onOpenChange={setMenuOpen} title="Разделы" side="left">
-  <JxMenu
-    items={[
-      { label: 'Проекты', onSelect: () => go('/projects') },
-      { label: 'Команда', onSelect: () => go('/team') },
-      { type: 'divider' },
-      { label: 'Выйти', danger: true, onSelect: logout },
-    ]}
-  />
-</JxDrawer>
+function NavigationDrawer({ go, logout }: { go: (path: string) => void; logout: () => void }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  return (
+    <>
+      <JxButton variant="ghost" onClick={() => setMenuOpen(true)}>
+        Разделы
+      </JxButton>
+      <JxDrawer open={menuOpen} onOpenChange={setMenuOpen} title="Разделы" side="left">
+        <JxMenu
+          items={[
+            { label: 'Проекты', onSelect: () => go('/projects') },
+            { label: 'Команда', onSelect: () => go('/team') },
+            { type: 'divider' },
+            { label: 'Выйти', danger: true, onSelect: logout },
+          ]}
+        />
+      </JxDrawer>
+    </>
+  );
+}
 ```
 
 ---
@@ -813,14 +867,20 @@ function ReportRequest() {
 ### Обязательное поле с ошибкой
 
 ```tsx
-<JxInputField
-  label="Электронная почта"
-  type="email"
-  required
-  value={email}
-  onChange={(event) => setEmail(event.target.value)}
-  errorText={emailError}
-/>
+function EmailField() {
+  const [email, setEmail] = useState('');
+  const emailError = email.length > 0 && !email.includes('@') ? 'Укажите адрес с символом @' : undefined;
+  return (
+    <JxInputField
+      label="Электронная почта"
+      type="email"
+      required
+      value={email}
+      onChange={(event) => setEmail(event.target.value)}
+      errorText={emailError}
+    />
+  );
+}
 ```
 
 ### Поле с префиксом и подсказкой
@@ -900,15 +960,19 @@ function ReportRequest() {
 ### Меню действий над проектом
 
 ```tsx
-<JxMenu
-  items={[
-    { type: 'label', label: 'Проект' },
-    { label: 'Переименовать', shortcut: 'F2', onSelect: rename },
-    { label: 'Дублировать', onSelect: duplicate },
-    { type: 'divider' },
-    { label: 'Удалить', danger: true, onSelect: remove },
-  ]}
-/>
+function ProjectActions({ rename, duplicate, remove }: { rename: () => void; duplicate: () => void; remove: () => void }) {
+  return (
+    <JxMenu
+      items={[
+        { type: 'label', label: 'Проект' },
+        { label: 'Переименовать', shortcut: 'F2', onSelect: rename },
+        { label: 'Дублировать', onSelect: duplicate },
+        { type: 'divider' },
+        { label: 'Удалить', danger: true, onSelect: remove },
+      ]}
+    />
+  );
+}
 ```
 
 ---
@@ -936,30 +1000,44 @@ function ReportRequest() {
 | `className` | `string` | нет |  | дополнительный класс окна |
 | `defaultOpen` | `boolean` | нет | `false` | начальное состояние в неуправляемом режиме |
 | `icon` | `ReactNode` | нет |  | иконка рядом с заголовком вместо иконки по умолчанию |
-| `intent` | `"danger" \\| "default" \\| "warning" \\| "info" \\| "success"` | нет | `'default'` | смысловой тон; `danger` для разрушительных действий, `warning`, `info`, `success` |
+| `intent` | `"danger" \| "default" \| "warning" \| "info" \| "success"` | нет | `'default'` | смысловой тон; `danger` для разрушительных действий, `warning`, `info`, `success` |
 | `message` | `ReactNode` | нет |  | текст под заголовком |
 | `onOpenChange` | `(open: boolean) => void` | нет |  | вызывается с новым состоянием при закрытии по Escape или клику по подложке |
 | `open` | `boolean` | нет |  | открыто ли окно в управляемом режиме |
 
 ## CSS-классы
 
-`jx-modal-actions`, `jx-modal-close`, `jx-modal-frame`, `jx-modal-icon`, `jx-modal-msg`, `jx-modal-title`
+`jx-modal-actions`, `jx-modal-close`, `jx-modal-frame`, `jx-modal-icon`, `jx-modal-msg`, `jx-modal-overlay`, `jx-modal-title`
 
 ## Примеры
 
 ### Подтверждение удаления
 
 ```tsx
-<JxModal
-  open={confirmOpen}
-  onOpenChange={setConfirmOpen}
-  intent="danger"
-  title="Удалить проект?"
-  message="Проект и все задачи будут удалены безвозвратно."
->
-  <JxButton variant="ghost" onClick={() => setConfirmOpen(false)}>Отмена</JxButton>
-  <JxButton variant="danger" onClick={removeProject}>Удалить</JxButton>
-</JxModal>
+function DeleteProject({ removeProject }: { removeProject: () => void }) {
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  return (
+    <>
+      <JxButton variant="danger" onClick={() => setConfirmOpen(true)}>
+        Удалить проект
+      </JxButton>
+      <JxModal
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        intent="danger"
+        title="Удалить проект?"
+        message="Проект и все задачи будут удалены безвозвратно."
+      >
+        <JxButton variant="ghost" onClick={() => setConfirmOpen(false)}>
+          Отмена
+        </JxButton>
+        <JxButton variant="danger" onClick={removeProject}>
+          Удалить
+        </JxButton>
+      </JxModal>
+    </>
+  );
+}
 ```
 
 ---
@@ -992,7 +1070,7 @@ function ReportRequest() {
 
 ## CSS-классы
 
-`jx-page-btn`, `jx-page-ellipsis`, `jx-pagination`
+`jx-page-btn`, `jx-page-btn--ghost`, `jx-page-ellipsis`, `jx-pagination`
 
 ## Примеры
 
@@ -1000,10 +1078,22 @@ function ReportRequest() {
 
 ```tsx
 const pageSize = 10;
-const pageCount = Math.ceil(users.length / pageSize);
-const visible = users.slice((page - 1) * pageSize, page * pageSize);
 
-<JxPagination total={pageCount} page={page} onPageChange={setPage} />
+function PagedUsers({ users }: { users: Array<{ id: string; name: string }> }) {
+  const [page, setPage] = useState(1);
+  const pageCount = Math.ceil(users.length / pageSize);
+  const visible = users.slice((page - 1) * pageSize, page * pageSize);
+  return (
+    <>
+      <ul>
+        {visible.map((user) => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+      <JxPagination total={pageCount} page={page} onPageChange={setPage} />
+    </>
+  );
+}
 ```
 
 ---
@@ -1122,7 +1212,9 @@ function NewPassword() {
 ### Загрузка файла
 
 ```tsx
-<JxProgress label="Загрузка" value={uploaded} max={total} />
+function UploadProgress({ uploaded, total }: { uploaded: number; total: number }) {
+  return <JxProgress label="Загрузка" value={uploaded} max={total} />;
+}
 ```
 
 ---
@@ -1197,10 +1289,15 @@ function NewPassword() {
 ### Выбор тарифа
 
 ```tsx
-<div role="radiogroup" aria-label="Тариф">
-  <JxRadio name="plan" value="basic" label="Базовый" checked={plan === 'basic'} onChange={() => setPlan('basic')} />
-  <JxRadio name="plan" value="pro" label="Про" checked={plan === 'pro'} onChange={() => setPlan('pro')} />
-</div>
+function PlanPicker() {
+  const [plan, setPlan] = useState<'basic' | 'pro'>('basic');
+  return (
+    <div role="radiogroup" aria-label="Тариф">
+      <JxRadio name="plan" value="basic" label="Базовый" checked={plan === 'basic'} onChange={() => setPlan('basic')} />
+      <JxRadio name="plan" value="pro" label="Про" checked={plan === 'pro'} onChange={() => setPlan('pro')} />
+    </div>
+  );
+}
 ```
 
 ---
@@ -1233,22 +1330,27 @@ function NewPassword() {
 
 ## CSS-классы
 
-`jx-field`, `jx-label`, `jx-select`, `jx-select-caret`, `jx-select-check`, `jx-select-divider`, `jx-select-group`, `jx-select-option`, `jx-select-option-label`, `jx-select-option-meta`, `jx-select-placeholder`, `jx-select-trigger`, `jx-select-value`
+`jx-field`, `jx-label`, `jx-select`, `jx-select-caret`, `jx-select-check`, `jx-select-divider`, `jx-select-group`, `jx-select-menu`, `jx-select-option`, `jx-select-option-label`, `jx-select-option-meta`, `jx-select-placeholder`, `jx-select-trigger`, `jx-select-value`
 
 ## Примеры
 
 ### Выбор языка интерфейса
 
 ```tsx
-<JxSelect
-  label="Язык"
-  options={[
-    { value: 'ru', label: 'Русский' },
-    { value: 'en', label: 'English' },
-  ]}
-  value={language}
-  onValueChange={setLanguage}
-/>
+function LanguageSelect() {
+  const [language, setLanguage] = useState('ru');
+  return (
+    <JxSelect
+      label="Язык"
+      options={[
+        { value: 'ru', label: 'Русский' },
+        { value: 'en', label: 'English' },
+      ]}
+      value={language}
+      onValueChange={setLanguage}
+    />
+  );
+}
 ```
 
 ### Опции с группами и подписями
@@ -1411,7 +1513,7 @@ function NewPassword() {
 | `children` | `ReactNode` | нет |  | текст команды или кода |
 | `copyText` | `string` | нет |  | что копировать, если это отличается от видимого текста |
 | `prompt` | `ReactNode` | нет |  | приглашение перед командой, например `$` |
-| `tone` | `"default" \\| "info"` | нет | `'default'` | тон знака приглашения: `default` — цвет акцента, `info` — информационный синий |
+| `tone` | `"default" \| "info"` | нет | `'default'` | тон знака приглашения: `default` — цвет акцента, `info` — информационный синий |
 
 ## CSS-классы
 
@@ -1450,7 +1552,7 @@ function NewPassword() {
 | Проп | Тип | Обязателен | По умолчанию | Описание |
 |---|---|---|---|---|
 | `size` | `number` | нет |  | размер в пикселях |
-| `variant` | `"ring" \\| "dots"` | нет | `'ring'` | вид индикатора: `ring` — кольцо, `dots` — точки |
+| `variant` | `"ring" \| "dots"` | нет | `'ring'` | вид индикатора: `ring` — кольцо, `dots` — точки |
 
 ## CSS-классы
 
@@ -1498,11 +1600,20 @@ function NewPassword() {
 ### Трёхшаговая форма
 
 ```tsx
-<>
-  <JxStepper steps={[{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }]} current={step} />
-  <JxButton variant="ghost" disabled={step === 0} onClick={() => setStep(step - 1)}>Назад</JxButton>
-  <JxButton variant="primary" onClick={() => setStep(Math.min(step + 1, 2))}>Дальше</JxButton>
-</>
+function CheckoutSteps() {
+  const [step, setStep] = useState(0);
+  return (
+    <>
+      <JxStepper steps={[{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }]} current={step} />
+      <JxButton variant="ghost" disabled={step === 0} onClick={() => setStep(step - 1)}>
+        Назад
+      </JxButton>
+      <JxButton variant="primary" onClick={() => setStep(Math.min(step + 1, 2))}>
+        Дальше
+      </JxButton>
+    </>
+  );
+}
 ```
 
 ---
@@ -1539,11 +1650,16 @@ function NewPassword() {
 ### Настройка уведомлений
 
 ```tsx
-<JxSwitch
-  label="Присылать уведомления на почту"
-  checked={notifications}
-  onChange={(event) => setNotifications(event.target.checked)}
-/>
+function EmailNotifications() {
+  const [notifications, setNotifications] = useState(true);
+  return (
+    <JxSwitch
+      label="Присылать уведомления на почту"
+      checked={notifications}
+      onChange={(event) => setNotifications(event.target.checked)}
+    />
+  );
+}
 ```
 
 ---
@@ -1577,24 +1693,37 @@ function NewPassword() {
 ### Таблица пользователей
 
 ```tsx
-<JxTable>
-  <thead>
-    <tr>
-      <th>Имя</th>
-      <th>Роль</th>
-      <th>Статус</th>
-    </tr>
-  </thead>
-  <tbody>
-    {users.map((user) => (
-      <tr key={user.id}>
-        <td>{user.name}</td>
-        <td>{user.role}</td>
-        <td><JxBadge tone={user.active ? 'success' : 'default'}>{user.active ? 'Активен' : 'Отключён'}</JxBadge></td>
-      </tr>
-    ))}
-  </tbody>
-</JxTable>
+interface User {
+  id: string;
+  name: string;
+  role: string;
+  active: boolean;
+}
+
+function UsersTable({ users }: { users: User[] }) {
+  return (
+    <JxTable>
+      <thead>
+        <tr>
+          <th>Имя</th>
+          <th>Роль</th>
+          <th>Статус</th>
+        </tr>
+      </thead>
+      <tbody>
+        {users.map((user) => (
+          <tr key={user.id}>
+            <td>{user.name}</td>
+            <td>{user.role}</td>
+            <td>
+              <JxBadge tone={user.active ? 'success' : 'default'}>{user.active ? 'Активен' : 'Отключён'}</JxBadge>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </JxTable>
+  );
+}
 ```
 
 ---
@@ -1623,7 +1752,7 @@ function NewPassword() {
 | `defaultValue` | `string` | нет |  | активная вкладка при первом рендере |
 | `onValueChange` | `(value: string) => void` | нет |  | вызывается с `value` выбранной вкладки |
 | `value` | `string` | нет |  | активная вкладка в управляемом режиме |
-| `variant` | `"segmented" \\| "underline"` | нет | `'segmented'` | внешний вид: `segmented` по умолчанию или `underline` |
+| `variant` | `"segmented" \| "underline"` | нет | `'segmented'` | внешний вид: `segmented` по умолчанию или `underline` |
 
 ## CSS-классы
 
@@ -1634,18 +1763,23 @@ function NewPassword() {
 ### Вкладки с содержимым
 
 ```tsx
-<>
-  <JxTabs
-    ariaLabel="Разделы профиля"
-    items={[
-      { value: 'general', label: 'Общее' },
-      { value: 'security', label: 'Безопасность' },
-    ]}
-    value={tab}
-    onValueChange={setTab}
-  />
-  {tab === 'general' ? <GeneralSettings /> : <SecuritySettings />}
-</>
+function ProfileTabs({ general, security }: { general: ReactNode; security: ReactNode }) {
+  const [tab, setTab] = useState('general');
+  return (
+    <>
+      <JxTabs
+        ariaLabel="Разделы профиля"
+        items={[
+          { value: 'general', label: 'Общее' },
+          { value: 'security', label: 'Безопасность' },
+        ]}
+        value={tab}
+        onValueChange={setTab}
+      />
+      {tab === 'general' ? general : security}
+    </>
+  );
+}
 ```
 
 ---
@@ -1677,14 +1811,17 @@ function NewPassword() {
 
 ## CSS-классы
 
-`jx-chip-x`, `jx-taginput`
+`jx-chip`, `jx-chip--active`, `jx-chip-x`, `jx-taginput`
 
 ## Примеры
 
 ### Ключевые слова статьи
 
 ```tsx
-<JxTagInput ariaLabel="Ключевые слова" placeholder="Введите тег и нажмите Enter" value={tags} onValueChange={setTags} />
+function ArticleTags() {
+  const [tags, setTags] = useState<string[]>(['react']);
+  return <JxTagInput ariaLabel="Ключевые слова" placeholder="Введите тег и нажмите Enter" value={tags} onValueChange={setTags} />;
+}
 ```
 
 ---
@@ -1724,14 +1861,19 @@ function NewPassword() {
 ### Комментарий с ограничением длины
 
 ```tsx
-<JxTextareaField
-  label="Комментарий"
-  rows={4}
-  maxLength={500}
-  value={comment}
-  onChange={(event) => setComment(event.target.value)}
-  helperText={`${comment.length}/500`}
-/>
+function CommentField() {
+  const [comment, setComment] = useState('');
+  return (
+    <JxTextareaField
+      label="Комментарий"
+      rows={4}
+      maxLength={500}
+      value={comment}
+      onChange={(event) => setComment(event.target.value)}
+      helperText={`${comment.length}/500`}
+    />
+  );
+}
 ```
 
 ---
@@ -1758,18 +1900,20 @@ function NewPassword() {
 | `message` | `ReactNode` | нет |  | текст под заголовком |
 | `onClose` | `() => void` | нет |  | вызывается по кнопке закрытия |
 | `showIcon` | `boolean` | нет | `true` | показывать ли иконку тона |
-| `variant` | `"danger" \\| "default" \\| "warning" \\| "success"` | нет | `'default'` | тон уведомления: `default`, `success`, `warning`, `danger` |
+| `variant` | `"danger" \| "default" \| "warning" \| "success"` | нет | `'default'` | тон уведомления: `default`, `success`, `warning`, `danger` |
 
 ## CSS-классы
 
-`jx-toast`, `jx-toast-body`, `jx-toast-close`, `jx-toast-icon`, `jx-toast-msg`, `jx-toast-title`
+`jx-toast`, `jx-toast--danger`, `jx-toast--success`, `jx-toast--warning`, `jx-toast-body`, `jx-toast-close`, `jx-toast-icon`, `jx-toast-msg`, `jx-toast-title`
 
 ## Примеры
 
 ### Одиночное уведомление
 
 ```tsx
-<JxToast variant="success" title="Сохранено" message="Изменения применены" onClose={hide} />
+function SavedToast({ hide }: { hide: () => void }) {
+  return <JxToast variant="success" title="Сохранено" message="Изменения применены" onClose={hide} />;
+}
 ```
 
 ---
@@ -1794,7 +1938,7 @@ function NewPassword() {
 |---|---|---|---|---|
 | `items` | `JxToastItem[]` | да |  | текущая очередь уведомлений |
 | `onDismiss` | `(id: string) => void` | да |  | вызывается с `id` уведомления, которое нужно убрать |
-| `position` | `"bottom-left" \\| "bottom-right" \\| "top-right" \\| "top-left"` | нет | `'bottom-left'` | угол экрана, `bottom-left` по умолчанию |
+| `position` | `"bottom-left" \| "bottom-right" \| "top-right" \| "top-left"` | нет | `'bottom-left'` | угол экрана, `bottom-left` по умолчанию |
 
 ## CSS-классы
 
@@ -1861,15 +2005,19 @@ function SubscribeForm() {
 ### Выбор периода
 
 ```tsx
-<JxToggle
-  items={[
-    { value: 'day', label: 'День' },
-    { value: 'week', label: 'Неделя' },
-    { value: 'month', label: 'Месяц' },
-  ]}
-  defaultValue="week"
-  onValueChange={(value) => setPeriod(value)}
-/>
+function ReportPeriod({ setPeriod }: { setPeriod: (period: string) => void }) {
+  return (
+    <JxToggle
+      items={[
+        { value: 'day', label: 'День' },
+        { value: 'week', label: 'Неделя' },
+        { value: 'month', label: 'Месяц' },
+      ]}
+      defaultValue="week"
+      onValueChange={(value) => setPeriod(value)}
+    />
+  );
+}
 ```
 
 ---
@@ -1929,6 +2077,7 @@ function SubscribeForm() {
 | `--jx-border` | `#221c30` | `[data-theme="light"]`: `#ddd6c4`; `[data-style="brutal"]`: `var(--jx-edge)` |
 | `--jx-border-2` | `#3a3150` | `[data-theme="light"]`: `#b8ae96`; `[data-style="brutal"]`: `var(--jx-edge)` |
 | `--jx-danger` | `#ff5470` | `[data-theme="light"]`: `#b01834` |
+| `--jx-edge` | только в переопределениях | `[data-style="brutal"]`: `color-mix(in oklab, var(--jx-text) 82%, var(--jx-bg))` |
 | `--jx-info` | `#79c8ff` | `[data-theme="light"]`: `#17518f` |
 | `--jx-rule` | `#1c1828` | `[data-theme="light"]`: `#ddd6c4`; `[data-style="brutal"]`: `var(--jx-edge)` |
 | `--jx-success` | `#6bd97a` | `[data-theme="light"]`: `#176034` |
@@ -1955,12 +2104,6 @@ function SubscribeForm() {
 |---|---|---|
 | `--jx-ease` | `cubic-bezier(0.4, 0, 0.2, 1)` |  |
 | `--jx-ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` |  |
-
-## other
-
-| Токен | Значение | Переопределения |
-|---|---|---|
-| `--jx-edge` | `color-mix(in oklab, var(--jx-text) 82%, var(--jx-bg))` |  |
 
 ## radius
 

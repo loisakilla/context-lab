@@ -16,15 +16,20 @@ keywords: [select, выпадающий список, выбор, дропдау
 ## Examples
 ### Выбор языка интерфейса
 ```tsx
-<JxSelect
-  label="Язык"
-  options={[
-    { value: 'ru', label: 'Русский' },
-    { value: 'en', label: 'English' },
-  ]}
-  value={language}
-  onValueChange={setLanguage}
-/>
+function LanguageSelect() {
+  const [language, setLanguage] = useState('ru');
+  return (
+    <JxSelect
+      label="Язык"
+      options={[
+        { value: 'ru', label: 'Русский' },
+        { value: 'en', label: 'English' },
+      ]}
+      value={language}
+      onValueChange={setLanguage}
+    />
+  );
+}
 ```
 
 ### Опции с группами и подписями

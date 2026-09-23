@@ -4,7 +4,7 @@ import type { LibraryIndex, LibraryMeta } from '@context-lab/index-tools';
 import { loadDescriptions } from './descriptions.ts';
 import { extract } from './extract.ts';
 import { createLibraryProgram } from './program.ts';
-import { parseTokensCss } from './tokens.ts';
+import { classNamesFromCss, parseTokensCss } from './tokens.ts';
 
 export interface BuildOptions {
   packageRoot: string;
@@ -12,6 +12,7 @@ export interface BuildOptions {
   entry?: string;
   docsDir?: string;
   tokensCss?: string[];
+  stylesCss?: string[];
   library: Partial<LibraryMeta> & { name: string };
 }
 
@@ -31,7 +32,12 @@ export function buildIndex(options: BuildOptions): LibraryIndex {
     ...(options.entry ? { entry: options.entry } : {}),
   });
   const descriptions = options.docsDir ? loadDescriptions(options.docsDir) : undefined;
-  const extracted = extract(lib, { ...(options.entry ? { entry: options.entry } : {}), ...(descriptions ? { descriptions } : {}) });
+  const knownClasses = options.stylesCss && options.stylesCss.length > 0 ? new Set(options.stylesCss.flatMap((file) => [...classNamesFromCss(readFileSync(file, 'utf8'))])) : undefined;
+  const extracted = extract(lib, {
+    ...(options.entry ? { entry: options.entry } : {}),
+    ...(descriptions ? { descriptions } : {}),
+    ...(knownClasses ? { knownClasses } : {}),
+  });
   if (extracted.components.length === 0) {
     throw new Error(`В ${options.packageRoot} не нашлось ни одного компонента: проверьте library.packageRoot и library.entry в конфиге`);
   }

@@ -19,9 +19,9 @@
 | Проп | Тип | Обязателен | По умолчанию | Описание |
 |---|---|---|---|---|
 | `children` | `ReactNode` | нет |  | инициалы или изображение внутри аватара |
-| `size` | `"sm" \\| "md" \\| "lg"` | нет | `'md'` | размер: `sm`, `md`, `lg` |
+| `size` | `"sm" \| "md" \| "lg"` | нет | `'md'` | размер: `sm`, `md`, `lg` |
 | `status` | `boolean` | нет | `false` | показать точку присутствия |
-| `tone` | `"default" \\| "info" \\| "accent"` | нет | `'default'` | цветовой тон фона: `default`, `accent`, `info` |
+| `tone` | `"default" \| "info" \| "accent"` | нет | `'default'` | цветовой тон фона: `default`, `accent`, `info` |
 
 ## CSS-классы
 

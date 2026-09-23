@@ -19,8 +19,8 @@
 | Проп | Тип | Обязателен | По умолчанию | Описание |
 |---|---|---|---|---|
 | `iconOnly` | `boolean` | нет | `false` | квадратная кнопка под одну иконку; обязательно добавьте `aria-label` |
-| `size` | `"sm" \\| "md" \\| "lg"` | нет | `'md'` | размер кнопки, `md` по умолчанию |
-| `variant` | `"primary" \\| "secondary" \\| "ghost" \\| "outline" \\| "danger"` | нет | `'primary'` | визуальный стиль; `primary` для главного действия, `danger` для разрушительного, `outline` и `ghost` для второстепенных |
+| `size` | `"sm" \| "md" \| "lg"` | нет | `'md'` | размер кнопки, `md` по умолчанию |
+| `variant` | `"primary" \| "secondary" \| "ghost" \| "outline" \| "danger"` | нет | `'primary'` | визуальный стиль; `primary` для главного действия, `danger` для разрушительного, `outline` и `ghost` для второстепенных |
 
 ## CSS-классы
 
@@ -40,7 +40,22 @@
 ### Разрушительное действие с блокировкой
 
 ```tsx
-<JxButton variant="danger" size="sm" disabled={isDeleting} onClick={remove}>
-  Удалить
-</JxButton>
+function DeleteProjectButton({ onDelete }: { onDelete: () => Promise<void> }) {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const remove = async () => {
+    setIsDeleting(true);
+    try {
+      await onDelete();
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  return (
+    <JxButton variant="danger" size="sm" disabled={isDeleting} onClick={remove}>
+      Удалить
+    </JxButton>
+  );
+}
 ```

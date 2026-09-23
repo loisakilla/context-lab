@@ -16,16 +16,21 @@ keywords: [tabs, вкладки, табы, переключение раздел
 ## Examples
 ### Вкладки с содержимым
 ```tsx
-<>
-  <JxTabs
-    ariaLabel="Разделы профиля"
-    items={[
-      { value: 'general', label: 'Общее' },
-      { value: 'security', label: 'Безопасность' },
-    ]}
-    value={tab}
-    onValueChange={setTab}
-  />
-  {tab === 'general' ? <GeneralSettings /> : <SecuritySettings />}
-</>
+function ProfileTabs({ general, security }: { general: ReactNode; security: ReactNode }) {
+  const [tab, setTab] = useState('general');
+  return (
+    <>
+      <JxTabs
+        ariaLabel="Разделы профиля"
+        items={[
+          { value: 'general', label: 'Общее' },
+          { value: 'security', label: 'Безопасность' },
+        ]}
+        value={tab}
+        onValueChange={setTab}
+      />
+      {tab === 'general' ? general : security}
+    </>
+  );
+}
 ```

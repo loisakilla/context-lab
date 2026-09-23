@@ -30,9 +30,14 @@
 ### Согласие с условиями
 
 ```tsx
-<JxCheckbox
-  label="Согласен с условиями обработки данных"
-  checked={agreed}
-  onChange={(event) => setAgreed(event.target.checked)}
-/>
+function TermsConsent() {
+  const [agreed, setAgreed] = useState(false);
+  return (
+    <JxCheckbox
+      label="Согласен с условиями обработки данных"
+      checked={agreed}
+      onChange={(event) => setAgreed(event.target.checked)}
+    />
+  );
+}
 ```

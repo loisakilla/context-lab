@@ -20,7 +20,7 @@
 |---|---|---|---|---|
 | `children` | `ReactNode` | нет |  | текст метки |
 | `dot` | `boolean` | нет | `false` | показать точку-индикатор |
-| `tone` | `"danger" \\| "default" \\| "warning" \\| "info" \\| "success" \\| "accent" \\| "solid"` | нет | `'default'` | цветовой тон: `default`, `accent`, `success`, `warning`, `danger`, `info`, `solid` |
+| `tone` | `"danger" \| "default" \| "warning" \| "info" \| "success" \| "accent" \| "solid"` | нет | `'default'` | цветовой тон: `default`, `accent`, `success`, `warning`, `danger`, `info`, `solid` |
 
 ## CSS-классы
 

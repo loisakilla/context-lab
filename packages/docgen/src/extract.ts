@@ -7,6 +7,7 @@ import { toPosix, type LibraryProgram } from './program.ts';
 export interface ExtractOptions {
   entry?: string;
   descriptions?: Map<string, ComponentDescription>;
+  knownClasses?: Set<string>;
 }
 
 export interface Extracted {
@@ -122,14 +123,59 @@ function exampleTags(symbol: ts.Symbol): ExampleDoc[] {
   return examples;
 }
 
-function collectClassLiterals(node: ts.Node, checker: ts.TypeChecker): string[] {
+const MAX_TEMPLATE_EXPANSIONS = 64;
+
+function classTokens(text: string): string[] {
+  return text.split(/\s+/).filter((token) => CLASS_LITERAL.test(token));
+}
+
+function stringLiteralValues(type: ts.Type): string[] | undefined {
+  const parts = type.isUnion() ? type.types : [type];
+  const values = parts.map((part) => (part.isStringLiteral() ? part.value : undefined));
+  return values.every((value): value is string => value !== undefined) ? values : undefined;
+}
+
+function templateExpansions(template: ts.TemplateExpression, valuesOf: (expression: ts.Expression) => string[] | undefined): string[] | undefined {
+  let results = [template.head.text];
+  for (const span of template.templateSpans) {
+    const values = valuesOf(span.expression);
+    if (!values || values.length === 0) return undefined;
+    results = results.flatMap((prefix) => values.map((value) => `${prefix}${value}${span.literal.text}`));
+    if (results.length > MAX_TEMPLATE_EXPANSIONS) return undefined;
+  }
+  return results;
+}
+
+function staticTemplateTokens(template: ts.TemplateExpression): string[] {
+  const hole = '\u0000';
+  return classTokens([template.head.text, ...template.templateSpans.map((span) => span.literal.text)].join(hole)).filter((token) => !token.includes(hole));
+}
+
+function collectClassLiterals(node: ts.Node, checker: ts.TypeChecker, propValues: Map<string, string[]>, knownClasses?: Set<string>): string[] {
   const found = new Set<string>();
   const visited = new Set<ts.Node>();
   const source = node.getSourceFile();
 
+  const valuesOf = (expression: ts.Expression): string[] | undefined => {
+    const fromType = stringLiteralValues(checker.getTypeAtLocation(expression));
+    if (fromType) return fromType;
+    if (!ts.isIdentifier(expression)) return undefined;
+    const declaration = checker.getSymbolAtLocation(expression)?.valueDeclaration;
+    if (!declaration || !ts.isBindingElement(declaration)) return undefined;
+    const prop = (declaration.propertyName ?? declaration.name).getText();
+    return propValues.get(prop);
+  };
+
   const visit = (current: ts.Node): void => {
-    if ((ts.isStringLiteral(current) || ts.isNoSubstitutionTemplateLiteral(current)) && CLASS_LITERAL.test(current.text)) {
-      found.add(current.text);
+    if (ts.isStringLiteral(current) || ts.isNoSubstitutionTemplateLiteral(current)) {
+      for (const token of classTokens(current.text)) found.add(token);
+    }
+    if (ts.isTemplateExpression(current)) {
+      for (const token of staticTemplateTokens(current)) found.add(token);
+      const expansions = knownClasses ? templateExpansions(current, valuesOf) : undefined;
+      for (const token of (expansions ?? []).flatMap(classTokens)) {
+        if (knownClasses?.has(token)) found.add(token);
+      }
     }
     if (ts.isIdentifier(current)) {
       const declaration = checker.getSymbolAtLocation(current)?.valueDeclaration;
@@ -329,15 +375,21 @@ export function extract(lib: LibraryProgram, options: ExtractOptions = {}): Extr
     const defaults = defaultsFromSignature(fn);
     const propsSymbol = signature.getParameters()[0];
     const propsType = propsSymbol ? lib.checker.getTypeOfSymbolAtLocation(propsSymbol, propsSymbol.valueDeclaration ?? declaration) : undefined;
+    const props = propsType ? extractProps(propsType, declaration, defaults, lib, described?.props ?? {}) : [];
+    const propValues = new Map<string, string[]>();
+    for (const prop of props) {
+      const values = (prop.unionValues ?? []).filter((value) => /^"[^"]*"$/.test(value)).map((value) => value.slice(1, -1));
+      if (values.length > 0) propValues.set(prop.name, values);
+    }
 
     const component: ComponentDoc = {
       name,
       ...location(declaration, lib),
       keywords: described?.keywords ?? (tagText(resolved, 'keywords') ?? '').split(',').map((keyword) => keyword.trim()).filter(Boolean),
       status: 'stable',
-      props: propsType ? extractProps(propsType, declaration, defaults, lib, described?.props ?? {}) : [],
+      props,
       inheritsFrom: propsType ? externalConstituents(propsType, lib.checker, lib.libraryRoot) : [],
-      cssClasses: collectClassLiterals(fn ?? declaration, lib.checker),
+      cssClasses: collectClassLiterals(fn ?? declaration, lib.checker, propValues, options.knownClasses),
       examples: described?.examples.length ? described.examples : exampleTags(resolved),
     };
 

@@ -47,7 +47,7 @@ function parseProps(body: string): Record<string, string> {
 
 function parseExamples(body: string): ExampleDoc[] {
   const examples: ExampleDoc[] = [];
-  const pattern = /^###\s+(.+?)\s*$|```(?:tsx|jsx|ts)?\r?\n([\s\S]*?)```/gm;
+  const pattern = /^###\s+(.+?)\s*$|^```[^\n`]*\r?\n([\s\S]*?)^```/gm;
   let title: string | undefined;
   for (const match of body.matchAll(pattern)) {
     if (match[1] !== undefined) {

@@ -22,25 +22,35 @@
 | `defaultOpen` | `boolean` | нет | `false` | начальное состояние в неуправляемом режиме |
 | `onOpenChange` | `(open: boolean) => void` | нет |  | вызывается с новым состоянием при закрытии |
 | `open` | `boolean` | нет |  | открыта ли панель в управляемом режиме |
-| `side` | `"right" \\| "left"` | нет | `'right'` | с какой стороны выезжает, `right` по умолчанию |
+| `side` | `"right" \| "left"` | нет | `'right'` | с какой стороны выезжает, `right` по умолчанию |
 
 ## CSS-классы
 
-`jx-drawer`, `jx-drawer-body`, `jx-drawer-head`, `jx-drawer-title`, `jx-modal-close`
+`jx-drawer`, `jx-drawer--left`, `jx-drawer--right`, `jx-drawer-body`, `jx-drawer-head`, `jx-drawer-title`, `jx-modal-close`, `jx-modal-overlay`, `jx-modal-overlay--drawer`
 
 ## Примеры
 
 ### Панель с навигацией
 
 ```tsx
-<JxDrawer open={menuOpen} onOpenChange={setMenuOpen} title="Разделы" side="left">
-  <JxMenu
-    items={[
-      { label: 'Проекты', onSelect: () => go('/projects') },
-      { label: 'Команда', onSelect: () => go('/team') },
-      { type: 'divider' },
-      { label: 'Выйти', danger: true, onSelect: logout },
-    ]}
-  />
-</JxDrawer>
+function NavigationDrawer({ go, logout }: { go: (path: string) => void; logout: () => void }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  return (
+    <>
+      <JxButton variant="ghost" onClick={() => setMenuOpen(true)}>
+        Разделы
+      </JxButton>
+      <JxDrawer open={menuOpen} onOpenChange={setMenuOpen} title="Разделы" side="left">
+        <JxMenu
+          items={[
+            { label: 'Проекты', onSelect: () => go('/projects') },
+            { label: 'Команда', onSelect: () => go('/team') },
+            { type: 'divider' },
+            { label: 'Выйти', danger: true, onSelect: logout },
+          ]}
+        />
+      </JxDrawer>
+    </>
+  );
+}
 ```

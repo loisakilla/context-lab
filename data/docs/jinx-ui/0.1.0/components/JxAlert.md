@@ -21,11 +21,11 @@
 | `title` | `ReactNode & string` | да |  | заголовок сообщения |
 | `children` | `ReactNode` | нет |  | текст сообщения |
 | `icon` | `ReactNode` | нет |  | своя иконка вместо иконки тона |
-| `intent` | `"danger" \\| "warning" \\| "info" \\| "success"` | нет | `'info'` | тон: `info` по умолчанию, `success`, `warning`, `danger` |
+| `intent` | `"danger" \| "warning" \| "info" \| "success"` | нет | `'info'` | тон: `info` по умолчанию, `success`, `warning`, `danger` |
 
 ## CSS-классы
 
-`jx-alert`, `jx-alert-body`, `jx-alert-icon`, `jx-alert-msg`, `jx-alert-title`
+`jx-alert`, `jx-alert--danger`, `jx-alert--info`, `jx-alert--success`, `jx-alert--warning`, `jx-alert-body`, `jx-alert-icon`, `jx-alert-msg`, `jx-alert-title`
 
 ## Примеры
 

@@ -103,9 +103,8 @@
 
 ## Токены
 
-- color (19): --jx-accent, --jx-accent-ink, --jx-accent-soft, --jx-bg, --jx-bg-2, --jx-border, --jx-border-2, --jx-danger, --jx-info, --jx-rule, --jx-success, --jx-surface, --jx-surface-2, --jx-surface-3, --jx-text, --jx-text-2, --jx-text-3, --jx-text-4, --jx-warning
+- color (20): --jx-accent, --jx-accent-ink, --jx-accent-soft, --jx-bg, --jx-bg-2, --jx-border, --jx-border-2, --jx-danger, --jx-edge, --jx-info, --jx-rule, --jx-success, --jx-surface, --jx-surface-2, --jx-surface-3, --jx-text, --jx-text-2, --jx-text-3, --jx-text-4, --jx-warning
 - font (3): --jx-font-display, --jx-font-mono, --jx-font-sans
 - motion (2): --jx-ease, --jx-ease-out
-- other (1): --jx-edge
 - radius (6): --jx-r, --jx-r-lg, --jx-r-pill, --jx-r-sm, --jx-r-xl, --jx-r-xs
 - shadow (3): --jx-shadow, --jx-shadow-lg, --jx-shadow-sm

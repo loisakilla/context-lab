@@ -1,4 +1,4 @@
-import { cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -6,6 +6,7 @@ import { afterAll, describe, expect, it } from 'vitest';
 import { buildIndex } from '../src/build.ts';
 import { extract } from '../src/extract.ts';
 import { createLibraryProgram } from '../src/program.ts';
+import { classNamesFromCss } from '../src/tokens.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const fixture = path.join(here, 'fixtures', 'ui-kit');
@@ -101,6 +102,17 @@ describe('экстрактор на опубликованном пакете Ji
     expect(calendar?.cssClasses).toEqual(expect.arrayContaining(['jx-calendar', 'jx-cal-grid', 'jx-cal-day--selected']));
     const range = byName.get('JxDateRangePicker');
     expect(range?.cssClasses).toEqual(expect.arrayContaining(['jx-daterange-field', 'jx-cal-day--range-start', 'jx-cal-day--in-range']));
+  });
+
+  it('раскрывает классы-модификаторы из шаблонов по union-типу пропса и оставляет только те, что есть в CSS', () => {
+    const css = (file: string) => readFileSync(path.resolve(here, '../../../node_modules/@jinx-ui/core/src', file), 'utf8');
+    const knownClasses = new Set([...classNamesFromCss(css('jinx-app.css')), ...classNamesFromCss(css('jinx-skins.css'))]);
+    const withCss = new Map(extract(lib, { entry: 'dist/runtime.d.ts', knownClasses }).components.map((component) => [component.name, component]));
+    expect(withCss.get('JxAlert')?.cssClasses).toEqual(expect.arrayContaining(['jx-alert--danger', 'jx-alert--info', 'jx-alert--success', 'jx-alert--warning']));
+    expect(withCss.get('JxToast')?.cssClasses).toContain('jx-toast--danger');
+    expect(withCss.get('JxToast')?.cssClasses).not.toContain('jx-toast--default');
+    expect(withCss.get('JxSelect')?.cssClasses).toContain('jx-select-menu');
+    expect(withCss.get('JxTagInput')?.cssClasses).toEqual(expect.arrayContaining(['jx-chip', 'jx-chip--active']));
   });
 
   it('падает с понятной ошибкой, когда точки входа в пакете нет', () => {

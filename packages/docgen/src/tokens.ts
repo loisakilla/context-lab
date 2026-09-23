@@ -1,7 +1,7 @@
 import postcss from 'postcss';
 import type { TokenDoc } from '@context-lab/index-tools';
 
-const COLOR_VALUE = /^(#[0-9a-f]{3,8}\b|rgba?\(|hsla?\(|oklch\(|oklab\(|color\()/i;
+const COLOR_VALUE = /^(#[0-9a-f]{3,8}\b|rgba?\(|hsla?\(|oklch\(|oklab\(|color\(|color-mix\()/i;
 
 const GROUP_BY_PREFIX: Array<[RegExp, string]> = [
   [/^--jx-r(-|$)/, 'radius'],
@@ -43,4 +43,16 @@ export function parseTokensCss(css: string): TokenDoc[] {
     token.value = token.scopes[':root'] ?? Object.values(token.scopes)[0] ?? '';
   }
   return list.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+const CLASS_SELECTOR = /\.(jx-[a-z0-9-]+(?:--[a-z0-9-]+)?)/g;
+
+export function classNamesFromCss(css: string): Set<string> {
+  const names = new Set<string>();
+  postcss.parse(css).walkRules((rule) => {
+    for (const match of rule.selector.matchAll(CLASS_SELECTOR)) {
+      if (match[1]) names.add(match[1]);
+    }
+  });
+  return names;
 }

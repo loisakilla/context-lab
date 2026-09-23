@@ -135,11 +135,13 @@ export function renderTokens(tokens: TokenDoc[]): string {
   const blocks: string[] = [];
   for (const [group, entries] of groups) {
     const lines = entries.map((token) => {
+      const global = token.scopes[':root'] !== undefined;
       const scopes = Object.entries(token.scopes)
-        .filter(([selector, value]) => selector !== ':root' && value !== token.value)
+        .filter(([selector, value]) => selector !== ':root' && (!global || value !== token.value))
         .map(([selector, value]) => `${selector}: ${value}`);
-      const suffix = scopes.length > 0 ? `  (${scopes.join('; ')})` : '';
       const description = token.description ? `  — ${collapse(token.description)}` : '';
+      if (!global) return `  ${token.name}: только ${scopes.join('; ')}${description}`;
+      const suffix = scopes.length > 0 ? `  (${scopes.join('; ')})` : '';
       return `  ${token.name}: ${token.value}${suffix}${description}`;
     });
     blocks.push([`${group} (${entries.length})`, ...lines].join('\n'));

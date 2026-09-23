@@ -29,13 +29,17 @@
 ### Меню действий над проектом
 
 ```tsx
-<JxMenu
-  items={[
-    { type: 'label', label: 'Проект' },
-    { label: 'Переименовать', shortcut: 'F2', onSelect: rename },
-    { label: 'Дублировать', onSelect: duplicate },
-    { type: 'divider' },
-    { label: 'Удалить', danger: true, onSelect: remove },
-  ]}
-/>
+function ProjectActions({ rename, duplicate, remove }: { rename: () => void; duplicate: () => void; remove: () => void }) {
+  return (
+    <JxMenu
+      items={[
+        { type: 'label', label: 'Проект' },
+        { label: 'Переименовать', shortcut: 'F2', onSelect: rename },
+        { label: 'Дублировать', onSelect: duplicate },
+        { type: 'divider' },
+        { label: 'Удалить', danger: true, onSelect: remove },
+      ]}
+    />
+  );
+}
 ```

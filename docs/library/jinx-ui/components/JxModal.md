@@ -18,14 +18,28 @@ keywords: [модальное окно, модалка, диалог, dialog, п
 ## Examples
 ### Подтверждение удаления
 ```tsx
-<JxModal
-  open={confirmOpen}
-  onOpenChange={setConfirmOpen}
-  intent="danger"
-  title="Удалить проект?"
-  message="Проект и все задачи будут удалены безвозвратно."
->
-  <JxButton variant="ghost" onClick={() => setConfirmOpen(false)}>Отмена</JxButton>
-  <JxButton variant="danger" onClick={removeProject}>Удалить</JxButton>
-</JxModal>
+function DeleteProject({ removeProject }: { removeProject: () => void }) {
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  return (
+    <>
+      <JxButton variant="danger" onClick={() => setConfirmOpen(true)}>
+        Удалить проект
+      </JxButton>
+      <JxModal
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        intent="danger"
+        title="Удалить проект?"
+        message="Проект и все задачи будут удалены безвозвратно."
+      >
+        <JxButton variant="ghost" onClick={() => setConfirmOpen(false)}>
+          Отмена
+        </JxButton>
+        <JxButton variant="danger" onClick={removeProject}>
+          Удалить
+        </JxButton>
+      </JxModal>
+    </>
+  );
+}
 ```

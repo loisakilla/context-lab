@@ -18,7 +18,7 @@
 |---|---|---|---|---|
 | `items` | `JxToastItem[]` | да |  | текущая очередь уведомлений |
 | `onDismiss` | `(id: string) => void` | да |  | вызывается с `id` уведомления, которое нужно убрать |
-| `position` | `"bottom-left" \\| "bottom-right" \\| "top-right" \\| "top-left"` | нет | `'bottom-left'` | угол экрана, `bottom-left` по умолчанию |
+| `position` | `"bottom-left" \| "bottom-right" \| "top-right" \| "top-left"` | нет | `'bottom-left'` | угол экрана, `bottom-left` по умолчанию |
 
 ## CSS-классы
 

@@ -10,7 +10,7 @@ function escapeCell(text: string): string {
 }
 
 function propRow(prop: PropDoc): string {
-  const type = prop.unionValues && prop.unionValues.length > 0 ? prop.unionValues.join(' \\| ') : prop.type;
+  const type = prop.unionValues && prop.unionValues.length > 0 ? prop.unionValues.join(' | ') : prop.type;
   const cells = [
     `\`${prop.name}\``,
     `\`${escapeCell(type)}\``,
@@ -76,11 +76,13 @@ export function renderTokensDoc(tokens: TokenDoc[]): string {
   for (const [group, entries] of [...groups.entries()].sort(([a], [b]) => a.localeCompare(b))) {
     lines.push(`## ${group}`, '', '| Токен | Значение | Переопределения |', '|---|---|---|');
     for (const token of entries) {
-      const overrides = Object.entries(token.scopes)
-        .filter(([selector, value]) => selector !== ':root' && value !== token.value)
+      const global = token.scopes[':root'] !== undefined;
+      const scoped = Object.entries(token.scopes)
+        .filter(([selector, value]) => selector !== ':root' && (!global || value !== token.value))
         .map(([selector, value]) => `\`${selector}\`: \`${escapeCell(value)}\``)
         .join('; ');
-      lines.push(`| \`${token.name}\` | \`${escapeCell(token.value)}\` | ${overrides} |`);
+      const value = global ? `\`${escapeCell(token.value)}\`` : 'только в переопределениях';
+      lines.push(`| \`${token.name}\` | ${value} | ${scoped} |`);
     }
     lines.push('');
   }

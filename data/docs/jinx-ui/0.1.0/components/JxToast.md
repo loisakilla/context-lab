@@ -20,16 +20,18 @@
 | `message` | `ReactNode` | нет |  | текст под заголовком |
 | `onClose` | `() => void` | нет |  | вызывается по кнопке закрытия |
 | `showIcon` | `boolean` | нет | `true` | показывать ли иконку тона |
-| `variant` | `"danger" \\| "default" \\| "warning" \\| "success"` | нет | `'default'` | тон уведомления: `default`, `success`, `warning`, `danger` |
+| `variant` | `"danger" \| "default" \| "warning" \| "success"` | нет | `'default'` | тон уведомления: `default`, `success`, `warning`, `danger` |
 
 ## CSS-классы
 
-`jx-toast`, `jx-toast-body`, `jx-toast-close`, `jx-toast-icon`, `jx-toast-msg`, `jx-toast-title`
+`jx-toast`, `jx-toast--danger`, `jx-toast--success`, `jx-toast--warning`, `jx-toast-body`, `jx-toast-close`, `jx-toast-icon`, `jx-toast-msg`, `jx-toast-title`
 
 ## Примеры
 
 ### Одиночное уведомление
 
 ```tsx
-<JxToast variant="success" title="Сохранено" message="Изменения применены" onClose={hide} />
+function SavedToast({ hide }: { hide: () => void }) {
+  return <JxToast variant="success" title="Сохранено" message="Изменения применены" onClose={hide} />;
+}
 ```

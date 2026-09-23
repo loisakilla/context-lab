@@ -127,6 +127,10 @@
       ],
       "cssClasses": [
         "jx-alert",
+        "jx-alert--danger",
+        "jx-alert--info",
+        "jx-alert--success",
+        "jx-alert--warning",
         "jx-alert-body",
         "jx-alert-icon",
         "jx-alert-msg",
@@ -420,7 +424,7 @@
         },
         {
           "title": "Разрушительное действие с блокировкой",
-          "code": "<JxButton variant=\"danger\" size=\"sm\" disabled={isDeleting} onClick={remove}>\n  Удалить\n</JxButton>"
+          "code": "function DeleteProjectButton({ onDelete }: { onDelete: () => Promise<void> }) {\n  const [isDeleting, setIsDeleting] = useState(false);\n\n  const remove = async () => {\n    setIsDeleting(true);\n    try {\n      await onDelete();\n    } finally {\n      setIsDeleting(false);\n    }\n  };\n\n  return (\n    <JxButton variant=\"danger\" size=\"sm\" disabled={isDeleting} onClick={remove}>\n      Удалить\n    </JxButton>\n  );\n}"
         }
       ],
       "description": "Кнопка действия. Пять визуальных вариантов и три размера, всё остальное берётся из атрибутов `<button>`: `type`, `disabled`, `onClick`, `aria-label`. По умолчанию `type=\"button\"`, поэтому для отправки формы задавайте `type=\"submit\"` явно."
@@ -499,7 +503,7 @@
       "examples": [
         {
           "title": "Выбор даты с русской локалью",
-          "code": "<JxCalendar locale=\"ru-RU\" value={date} onValueChange={setDate} />"
+          "code": "function DueDate() {\n  const [date, setDate] = useState<Date | null>(null);\n  return <JxCalendar locale=\"ru-RU\" value={date} onValueChange={setDate} />;\n}"
         }
       ],
       "description": "Календарь на один месяц с выбором одной даты. Значение — `Date` или `null`, управляемое через `value` и `onValueChange`. Диапазон подсвечивается через `rangeHover`, а подпись месяца форматируется `monthFormatter` или локалью. Чтобы пользователь сам выбирал период, берите `JxDateRangePicker`: `rangeHover` только показывает готовый диапазон.\n\nС клавиатуры: стрелки ходят по дням и неделям, `Home` и `End` — к краям недели, `PageUp` и `PageDown` — по месяцам. Доступное имя каждого дня — полная дата, а не число."
@@ -540,7 +544,7 @@
       "examples": [
         {
           "title": "Согласие с условиями",
-          "code": "<JxCheckbox\n  label=\"Согласен с условиями обработки данных\"\n  checked={agreed}\n  onChange={(event) => setAgreed(event.target.checked)}\n/>"
+          "code": "function TermsConsent() {\n  const [agreed, setAgreed] = useState(false);\n  return (\n    <JxCheckbox\n      label=\"Согласен с условиями обработки данных\"\n      checked={agreed}\n      onChange={(event) => setAgreed(event.target.checked)}\n    />\n  );\n}"
         }
       ],
       "description": "Флажок с подписью. Внутри обычный `<input type=\"checkbox\">`: `checked`, `onChange`, `name`, `disabled` передаются напрямую. Для взаимоисключающего выбора используйте `JxRadio`, для настроек «вкл/выкл» — `JxSwitch`."
@@ -597,7 +601,7 @@
       "examples": [
         {
           "title": "Быстрый выбор периода",
-          "code": "<div style={{ display: 'flex', gap: '8px' }}>\n  {periods.map((period) => (\n    <JxChip key={period.value} active={period.value === selected} onClick={() => setSelected(period.value)}>\n      {period.label}\n    </JxChip>\n  ))}\n</div>"
+          "code": "const periods = [\n  { value: 'week', label: 'Неделя' },\n  { value: 'month', label: 'Месяц' },\n  { value: 'year', label: 'Год' },\n];\n\nfunction PeriodChips() {\n  const [selected, setSelected] = useState('month');\n  return (\n    <div style={{ display: 'flex', gap: '8px' }}>\n      {periods.map((period) => (\n        <JxChip key={period.value} active={period.value === selected} onClick={() => setSelected(period.value)}>\n          {period.label}\n        </JxChip>\n      ))}\n    </div>\n  );\n}"
         }
       ],
       "description": "Компактная метка-кнопка для фильтров и быстрого выбора. Может быть активной и удаляемой; клик обрабатывается через обычный `onClick`, так как компонент наследует атрибуты `<span>`."
@@ -687,7 +691,7 @@
       "examples": [
         {
           "title": "Поиск сотрудника",
-          "code": "<JxCombobox\n  ariaLabel=\"Сотрудник\"\n  placeholder=\"Начните вводить имя\"\n  emptyText=\"Никого не нашли\"\n  options={people.map((person) => ({ value: person.id, label: person.name, subLabel: person.role }))}\n  value={assigneeId}\n  onValueChange={setAssigneeId}\n/>"
+          "code": "const people = [\n  { id: 'u1', name: 'Анна Смирнова', role: 'Дизайнер' },\n  { id: 'u2', name: 'Илья Ковалёв', role: 'Разработчик' },\n  { id: 'u3', name: 'Мария Орлова', role: 'Менеджер' },\n];\n\nfunction AssigneePicker() {\n  const [assigneeId, setAssigneeId] = useState('');\n  return (\n    <JxCombobox\n      ariaLabel=\"Сотрудник\"\n      placeholder=\"Начните вводить имя\"\n      emptyText=\"Никого не нашли\"\n      options={people.map((person) => ({ value: person.id, label: person.name, subLabel: person.role }))}\n      value={assigneeId}\n      onValueChange={setAssigneeId}\n    />\n  );\n}"
         }
       ],
       "description": "Поле с автодополнением: пользователь печатает, список фильтруется, выбор одного значения. Опции `JxComboboxOption`: `value`, `label`, необязательные `subLabel` и `icon`. Для множественного выбора тегов используйте `JxTagInput`."
@@ -771,6 +775,8 @@
         "jx-cal-head",
         "jx-cal-month",
         "jx-cal-nav",
+        "jx-calendar",
+        "jx-daterange",
         "jx-daterange-arrow",
         "jx-daterange-clear",
         "jx-daterange-field",
@@ -892,15 +898,19 @@
       "inheritsFrom": [],
       "cssClasses": [
         "jx-drawer",
+        "jx-drawer--left",
+        "jx-drawer--right",
         "jx-drawer-body",
         "jx-drawer-head",
         "jx-drawer-title",
-        "jx-modal-close"
+        "jx-modal-close",
+        "jx-modal-overlay",
+        "jx-modal-overlay--drawer"
       ],
       "examples": [
         {
           "title": "Панель с навигацией",
-          "code": "<JxDrawer open={menuOpen} onOpenChange={setMenuOpen} title=\"Разделы\" side=\"left\">\n  <JxMenu\n    items={[\n      { label: 'Проекты', onSelect: () => go('/projects') },\n      { label: 'Команда', onSelect: () => go('/team') },\n      { type: 'divider' },\n      { label: 'Выйти', danger: true, onSelect: logout },\n    ]}\n  />\n</JxDrawer>"
+          "code": "function NavigationDrawer({ go, logout }: { go: (path: string) => void; logout: () => void }) {\n  const [menuOpen, setMenuOpen] = useState(false);\n  return (\n    <>\n      <JxButton variant=\"ghost\" onClick={() => setMenuOpen(true)}>\n        Разделы\n      </JxButton>\n      <JxDrawer open={menuOpen} onOpenChange={setMenuOpen} title=\"Разделы\" side=\"left\">\n        <JxMenu\n          items={[\n            { label: 'Проекты', onSelect: () => go('/projects') },\n            { label: 'Команда', onSelect: () => go('/team') },\n            { type: 'divider' },\n            { label: 'Выйти', danger: true, onSelect: logout },\n          ]}\n        />\n      </JxDrawer>\n    </>\n  );\n}"
         }
       ],
       "description": "Боковая панель, выезжающая слева или справа поверх страницы, с ловушкой фокуса и закрытием по Escape. Управляется парой `open` и `onOpenChange`; содержимое передаётся как `children`."
@@ -1030,7 +1040,7 @@
       "examples": [
         {
           "title": "Обязательное поле с ошибкой",
-          "code": "<JxInputField\n  label=\"Электронная почта\"\n  type=\"email\"\n  required\n  value={email}\n  onChange={(event) => setEmail(event.target.value)}\n  errorText={emailError}\n/>"
+          "code": "function EmailField() {\n  const [email, setEmail] = useState('');\n  const emailError = email.length > 0 && !email.includes('@') ? 'Укажите адрес с символом @' : undefined;\n  return (\n    <JxInputField\n      label=\"Электронная почта\"\n      type=\"email\"\n      required\n      value={email}\n      onChange={(event) => setEmail(event.target.value)}\n      errorText={emailError}\n    />\n  );\n}"
         },
         {
           "title": "Поле с префиксом и подсказкой",
@@ -1108,7 +1118,7 @@
       "examples": [
         {
           "title": "Меню действий над проектом",
-          "code": "<JxMenu\n  items={[\n    { type: 'label', label: 'Проект' },\n    { label: 'Переименовать', shortcut: 'F2', onSelect: rename },\n    { label: 'Дублировать', onSelect: duplicate },\n    { type: 'divider' },\n    { label: 'Удалить', danger: true, onSelect: remove },\n  ]}\n/>"
+          "code": "function ProjectActions({ rename, duplicate, remove }: { rename: () => void; duplicate: () => void; remove: () => void }) {\n  return (\n    <JxMenu\n      items={[\n        { type: 'label', label: 'Проект' },\n        { label: 'Переименовать', shortcut: 'F2', onSelect: rename },\n        { label: 'Дублировать', onSelect: duplicate },\n        { type: 'divider' },\n        { label: 'Удалить', danger: true, onSelect: remove },\n      ]}\n    />\n  );\n}"
         }
       ],
       "description": "Вертикальное меню действий. Пункты описываются массивом `JxMenuItem`: обычный пункт с `label` и `onSelect`, разделитель `{ type: 'divider' }` и подпись группы `{ type: 'label', label }`. Опасные действия помечаются `danger`, недоступные — `disabled`."
@@ -1200,12 +1210,13 @@
         "jx-modal-frame",
         "jx-modal-icon",
         "jx-modal-msg",
+        "jx-modal-overlay",
         "jx-modal-title"
       ],
       "examples": [
         {
           "title": "Подтверждение удаления",
-          "code": "<JxModal\n  open={confirmOpen}\n  onOpenChange={setConfirmOpen}\n  intent=\"danger\"\n  title=\"Удалить проект?\"\n  message=\"Проект и все задачи будут удалены безвозвратно.\"\n>\n  <JxButton variant=\"ghost\" onClick={() => setConfirmOpen(false)}>Отмена</JxButton>\n  <JxButton variant=\"danger\" onClick={removeProject}>Удалить</JxButton>\n</JxModal>"
+          "code": "function DeleteProject({ removeProject }: { removeProject: () => void }) {\n  const [confirmOpen, setConfirmOpen] = useState(false);\n  return (\n    <>\n      <JxButton variant=\"danger\" onClick={() => setConfirmOpen(true)}>\n        Удалить проект\n      </JxButton>\n      <JxModal\n        open={confirmOpen}\n        onOpenChange={setConfirmOpen}\n        intent=\"danger\"\n        title=\"Удалить проект?\"\n        message=\"Проект и все задачи будут удалены безвозвратно.\"\n      >\n        <JxButton variant=\"ghost\" onClick={() => setConfirmOpen(false)}>\n          Отмена\n        </JxButton>\n        <JxButton variant=\"danger\" onClick={removeProject}>\n          Удалить\n        </JxButton>\n      </JxModal>\n    </>\n  );\n}"
         }
       ],
       "description": "Модальное окно с ловушкой фокуса и закрытием по Escape. Управляется парой `open` и `onOpenChange`; кнопки действий передаются как `children`. У окна нет собственной кнопки закрытия, поэтому в `children` всегда должна быть кнопка, которая вызывает `onOpenChange(false)`."
@@ -1261,13 +1272,14 @@
       ],
       "cssClasses": [
         "jx-page-btn",
+        "jx-page-btn--ghost",
         "jx-page-ellipsis",
         "jx-pagination"
       ],
       "examples": [
         {
           "title": "Таблица по десять строк",
-          "code": "const pageSize = 10;\nconst pageCount = Math.ceil(users.length / pageSize);\nconst visible = users.slice((page - 1) * pageSize, page * pageSize);\n\n<JxPagination total={pageCount} page={page} onPageChange={setPage} />"
+          "code": "const pageSize = 10;\n\nfunction PagedUsers({ users }: { users: Array<{ id: string; name: string }> }) {\n  const [page, setPage] = useState(1);\n  const pageCount = Math.ceil(users.length / pageSize);\n  const visible = users.slice((page - 1) * pageSize, page * pageSize);\n  return (\n    <>\n      <ul>\n        {visible.map((user) => (\n          <li key={user.id}>{user.name}</li>\n        ))}\n      </ul>\n      <JxPagination total={pageCount} page={page} onPageChange={setPage} />\n    </>\n  );\n}"
         }
       ],
       "description": "Постраничная навигация с кнопками «назад» и «вперёд» и многоточиями для длинных списков. Страницы нумеруются с единицы; `total` — это количество страниц, а не элементов, поэтому его считают заранее: `Math.ceil(items.length / pageSize)`."
@@ -1402,7 +1414,7 @@
       "examples": [
         {
           "title": "Загрузка файла",
-          "code": "<JxProgress label=\"Загрузка\" value={uploaded} max={total} />"
+          "code": "function UploadProgress({ uploaded, total }: { uploaded: number; total: number }) {\n  return <JxProgress label=\"Загрузка\" value={uploaded} max={total} />;\n}"
         }
       ],
       "description": "Горизонтальная полоса прогресса. Значение сравнивается с `max`, подпись выводится рядом с полосой."
@@ -1491,7 +1503,7 @@
       "examples": [
         {
           "title": "Выбор тарифа",
-          "code": "<div role=\"radiogroup\" aria-label=\"Тариф\">\n  <JxRadio name=\"plan\" value=\"basic\" label=\"Базовый\" checked={plan === 'basic'} onChange={() => setPlan('basic')} />\n  <JxRadio name=\"plan\" value=\"pro\" label=\"Про\" checked={plan === 'pro'} onChange={() => setPlan('pro')} />\n</div>"
+          "code": "function PlanPicker() {\n  const [plan, setPlan] = useState<'basic' | 'pro'>('basic');\n  return (\n    <div role=\"radiogroup\" aria-label=\"Тариф\">\n      <JxRadio name=\"plan\" value=\"basic\" label=\"Базовый\" checked={plan === 'basic'} onChange={() => setPlan('basic')} />\n      <JxRadio name=\"plan\" value=\"pro\" label=\"Про\" checked={plan === 'pro'} onChange={() => setPlan('pro')} />\n    </div>\n  );\n}"
         }
       ],
       "description": "Радиокнопка с подписью. Внутри обычный `<input type=\"radio\">`; варианты одной группы объединяются одинаковым `name`, выбранный задаётся через `checked` и `onChange`."
@@ -1565,6 +1577,7 @@
         "jx-select-check",
         "jx-select-divider",
         "jx-select-group",
+        "jx-select-menu",
         "jx-select-option",
         "jx-select-option-label",
         "jx-select-option-meta",
@@ -1575,7 +1588,7 @@
       "examples": [
         {
           "title": "Выбор языка интерфейса",
-          "code": "<JxSelect\n  label=\"Язык\"\n  options={[\n    { value: 'ru', label: 'Русский' },\n    { value: 'en', label: 'English' },\n  ]}\n  value={language}\n  onValueChange={setLanguage}\n/>"
+          "code": "function LanguageSelect() {\n  const [language, setLanguage] = useState('ru');\n  return (\n    <JxSelect\n      label=\"Язык\"\n      options={[\n        { value: 'ru', label: 'Русский' },\n        { value: 'en', label: 'English' },\n      ]}\n      value={language}\n      onValueChange={setLanguage}\n    />\n  );\n}"
         },
         {
           "title": "Опции с группами и подписями",
@@ -1886,7 +1899,7 @@
       "examples": [
         {
           "title": "Трёхшаговая форма",
-          "code": "<>\n  <JxStepper steps={[{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }]} current={step} />\n  <JxButton variant=\"ghost\" disabled={step === 0} onClick={() => setStep(step - 1)}>Назад</JxButton>\n  <JxButton variant=\"primary\" onClick={() => setStep(Math.min(step + 1, 2))}>Дальше</JxButton>\n</>"
+          "code": "function CheckoutSteps() {\n  const [step, setStep] = useState(0);\n  return (\n    <>\n      <JxStepper steps={[{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }]} current={step} />\n      <JxButton variant=\"ghost\" disabled={step === 0} onClick={() => setStep(step - 1)}>\n        Назад\n      </JxButton>\n      <JxButton variant=\"primary\" onClick={() => setStep(Math.min(step + 1, 2))}>\n        Дальше\n      </JxButton>\n    </>\n  );\n}"
         }
       ],
       "description": "Индикатор шагов для пошаговых форм. Показывает пройденные, текущий и будущие шаги; переключение шагов делает родитель. Шаги описываются массивом `JxStep` с полем `label`, `current` — индекс текущего шага с нуля."
@@ -1929,7 +1942,7 @@
       "examples": [
         {
           "title": "Настройка уведомлений",
-          "code": "<JxSwitch\n  label=\"Присылать уведомления на почту\"\n  checked={notifications}\n  onChange={(event) => setNotifications(event.target.checked)}\n/>"
+          "code": "function EmailNotifications() {\n  const [notifications, setNotifications] = useState(true);\n  return (\n    <JxSwitch\n      label=\"Присылать уведомления на почту\"\n      checked={notifications}\n      onChange={(event) => setNotifications(event.target.checked)}\n    />\n  );\n}"
         }
       ],
       "description": "Переключатель «включено/выключено» с подписью. Внутри обычный `<input type=\"checkbox\">`, поэтому состояние задаётся через `checked` и `onChange`, а имя для формы через `name`."
@@ -1957,7 +1970,7 @@
       "examples": [
         {
           "title": "Таблица пользователей",
-          "code": "<JxTable>\n  <thead>\n    <tr>\n      <th>Имя</th>\n      <th>Роль</th>\n      <th>Статус</th>\n    </tr>\n  </thead>\n  <tbody>\n    {users.map((user) => (\n      <tr key={user.id}>\n        <td>{user.name}</td>\n        <td>{user.role}</td>\n        <td><JxBadge tone={user.active ? 'success' : 'default'}>{user.active ? 'Активен' : 'Отключён'}</JxBadge></td>\n      </tr>\n    ))}\n  </tbody>\n</JxTable>"
+          "code": "interface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\nfunction UsersTable({ users }: { users: User[] }) {\n  return (\n    <JxTable>\n      <thead>\n        <tr>\n          <th>Имя</th>\n          <th>Роль</th>\n          <th>Статус</th>\n        </tr>\n      </thead>\n      <tbody>\n        {users.map((user) => (\n          <tr key={user.id}>\n            <td>{user.name}</td>\n            <td>{user.role}</td>\n            <td>\n              <JxBadge tone={user.active ? 'success' : 'default'}>{user.active ? 'Активен' : 'Отключён'}</JxBadge>\n            </td>\n          </tr>\n        ))}\n      </tbody>\n    </JxTable>\n  );\n}"
         }
       ],
       "description": "Стилизованная таблица. Собственных пропсов нет: это обычный `<table>` с классом библиотеки, поэтому структура `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>` пишется руками, а пагинация делается отдельно через `JxPagination`."
@@ -2034,7 +2047,7 @@
       "examples": [
         {
           "title": "Вкладки с содержимым",
-          "code": "<>\n  <JxTabs\n    ariaLabel=\"Разделы профиля\"\n    items={[\n      { value: 'general', label: 'Общее' },\n      { value: 'security', label: 'Безопасность' },\n    ]}\n    value={tab}\n    onValueChange={setTab}\n  />\n  {tab === 'general' ? <GeneralSettings /> : <SecuritySettings />}\n</>"
+          "code": "function ProfileTabs({ general, security }: { general: ReactNode; security: ReactNode }) {\n  const [tab, setTab] = useState('general');\n  return (\n    <>\n      <JxTabs\n        ariaLabel=\"Разделы профиля\"\n        items={[\n          { value: 'general', label: 'Общее' },\n          { value: 'security', label: 'Безопасность' },\n        ]}\n        value={tab}\n        onValueChange={setTab}\n      />\n      {tab === 'general' ? general : security}\n    </>\n  );\n}"
         }
       ],
       "description": "Вкладки с клавиатурной навигацией стрелками. Компонент рендерит только заголовки вкладок: содержимое активной вкладки показывает родитель по текущему `value`. Элементы описываются типом `JxTabItem`: `value` и `label`."
@@ -2093,13 +2106,15 @@
       ],
       "inheritsFrom": [],
       "cssClasses": [
+        "jx-chip",
+        "jx-chip--active",
         "jx-chip-x",
         "jx-taginput"
       ],
       "examples": [
         {
           "title": "Ключевые слова статьи",
-          "code": "<JxTagInput ariaLabel=\"Ключевые слова\" placeholder=\"Введите тег и нажмите Enter\" value={tags} onValueChange={setTags} />"
+          "code": "function ArticleTags() {\n  const [tags, setTags] = useState<string[]>(['react']);\n  return <JxTagInput ariaLabel=\"Ключевые слова\" placeholder=\"Введите тег и нажмите Enter\" value={tags} onValueChange={setTags} />;\n}"
         }
       ],
       "description": "Поле для набора тегов: пользователь вводит текст, Enter добавляет тег, Backspace удаляет последний. Значение — массив строк, управляемое через `value` и `onValueChange` или неуправляемое через `defaultValue`."
@@ -2163,7 +2178,7 @@
       "examples": [
         {
           "title": "Комментарий с ограничением длины",
-          "code": "<JxTextareaField\n  label=\"Комментарий\"\n  rows={4}\n  maxLength={500}\n  value={comment}\n  onChange={(event) => setComment(event.target.value)}\n  helperText={`${comment.length}/500`}\n/>"
+          "code": "function CommentField() {\n  const [comment, setComment] = useState('');\n  return (\n    <JxTextareaField\n      label=\"Комментарий\"\n      rows={4}\n      maxLength={500}\n      value={comment}\n      onChange={(event) => setComment(event.target.value)}\n      helperText={`${comment.length}/500`}\n    />\n  );\n}"
         }
       ],
       "description": "Многострочное поле с подписью, подсказкой и текстом ошибки. Принимает все атрибуты `<textarea>`: `rows`, `value`, `onChange`, `placeholder`, `maxLength`."
@@ -2224,6 +2239,9 @@
       "inheritsFrom": [],
       "cssClasses": [
         "jx-toast",
+        "jx-toast--danger",
+        "jx-toast--success",
+        "jx-toast--warning",
         "jx-toast-body",
         "jx-toast-close",
         "jx-toast-icon",
@@ -2233,7 +2251,7 @@
       "examples": [
         {
           "title": "Одиночное уведомление",
-          "code": "<JxToast variant=\"success\" title=\"Сохранено\" message=\"Изменения применены\" onClose={hide} />"
+          "code": "function SavedToast({ hide }: { hide: () => void }) {\n  return <JxToast variant=\"success\" title=\"Сохранено\" message=\"Изменения применены\" onClose={hide} />;\n}"
         }
       ],
       "description": "Одно всплывающее уведомление с заголовком, текстом и кнопкой закрытия. В приложении обычно не рендерится напрямую: очередь ведёт хук `useJxToastQueue`, а список показывает `JxToastViewport`."
@@ -2343,7 +2361,7 @@
       "examples": [
         {
           "title": "Выбор периода",
-          "code": "<JxToggle\n  items={[\n    { value: 'day', label: 'День' },\n    { value: 'week', label: 'Неделя' },\n    { value: 'month', label: 'Месяц' },\n  ]}\n  defaultValue=\"week\"\n  onValueChange={(value) => setPeriod(value)}\n/>"
+          "code": "function ReportPeriod({ setPeriod }: { setPeriod: (period: string) => void }) {\n  return (\n    <JxToggle\n      items={[\n        { value: 'day', label: 'День' },\n        { value: 'week', label: 'Неделя' },\n        { value: 'month', label: 'Месяц' },\n      ]}\n      defaultValue=\"week\"\n      onValueChange={(value) => setPeriod(value)}\n    />\n  );\n}"
         }
       ],
       "description": "Сегментированный переключатель на два-три коротких варианта: режим отображения, тема, период. Для большего числа вариантов берите `JxSelect`, для навигации между разделами — `JxTabs`."
@@ -2511,7 +2529,7 @@
     },
     {
       "name": "--jx-edge",
-      "group": "other",
+      "group": "color",
       "value": "color-mix(in oklab, var(--jx-text) 82%, var(--jx-bg))",
       "scopes": {
         "[data-style=\"brutal\"]": "color-mix(in oklab, var(--jx-text) 82%, var(--jx-bg))"

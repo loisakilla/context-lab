@@ -1,7 +1,21 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import type { LibraryIndex } from '@context-lab/index-tools';
 import { renderDocsBundle } from './render.ts';
+
+function listFiles(dir: string, prefix = ''): string[] {
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const relative = prefix ? `${prefix}/${entry.name}` : entry.name;
+    return entry.isDirectory() ? listFiles(path.join(dir, entry.name), relative) : [relative];
+  });
+}
+
+function staleFiles(files: Record<string, string>, outDir: string): string[] {
+  return listFiles(outDir)
+    .filter((relative) => !(relative in files))
+    .sort();
+}
 
 export function writeDocs(index: LibraryIndex, outDir: string): string[] {
   const bundle = renderDocsBundle(index);
@@ -12,6 +26,7 @@ export function writeDocs(index: LibraryIndex, outDir: string): string[] {
     writeFileSync(target, content, 'utf8');
     written.push(relative);
   }
+  for (const stale of staleFiles(bundle.files, outDir)) rmSync(path.join(outDir, stale), { force: true });
   return written;
 }
 
@@ -27,7 +42,7 @@ export function findDocsDrift(index: LibraryIndex, outDir: string): string[] {
     }
     if (committed !== content) drifted.push(relative);
   }
-  return drifted;
+  return [...drifted, ...staleFiles(bundle.files, outDir)];
 }
 
 export function docsVersionDir(baseDir: string, index: LibraryIndex): string {
