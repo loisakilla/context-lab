@@ -73,6 +73,17 @@ describe('MCP-сервер по stdio', () => {
     expect(overview).toMatch(/опущено разделов/);
   });
 
+  it('get_docs принимает имя компонента без префикса и в любом регистре', async () => {
+    const text = textOf(await client.callTool({ name: 'get_docs', arguments: { component: 'modal' } }));
+    expect(text).toMatch(/^# JxModal/);
+  });
+
+  it('get_docs не выходит за каталог документации', async () => {
+    const result = await client.callTool({ name: 'get_docs', arguments: { component: '../../../../../README' } });
+    expect((result as { isError?: boolean }).isError).toBe(true);
+    expect(textOf(result)).not.toMatch(/Context Lab/);
+  });
+
   it('промпт и ресурсы доступны', async () => {
     const prompt = await client.getPrompt({ name: 'jinx_rules', arguments: { task: 'сверстать форму настроек' } });
     const text = prompt.messages.map((message) => (message.content as { text?: string }).text ?? '').join('\n');

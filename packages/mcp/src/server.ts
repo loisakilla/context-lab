@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { createTools, estimateTokens, fitToBudget, libraryOverview, libraryRulesPrompt, withFooter, type LibraryIndex, type ToolResult } from '@context-lab/index-tools';
+import { createTools, estimateTokens, findComponent, fitToBudget, libraryOverview, libraryRulesPrompt, suggestNames, withFooter, type LibraryIndex, type ToolResult } from '@context-lab/index-tools';
 import { renderRulesText, resolveRules, type Registry, type RuleTarget } from '@context-lab/rules';
 
 export interface ServerOptions {
@@ -24,7 +24,9 @@ function textResult(result: ToolResult) {
 
 function readDoc(docsDir: string | undefined, relative: string): string | undefined {
   if (!docsDir) return undefined;
-  const file = path.join(docsDir, relative);
+  const file = path.resolve(docsDir, relative);
+  const inside = path.relative(path.resolve(docsDir), file);
+  if (inside.startsWith('..') || path.isAbsolute(inside)) return undefined;
   return existsSync(file) ? readFileSync(file, 'utf8') : undefined;
 }
 
@@ -58,10 +60,16 @@ export function createServer(options: ServerOptions): McpServer {
       },
     },
     async ({ component, section, maxTokens }) => {
-      const relative = component ? `components/${component}.md` : section === 'tokens' ? 'tokens.md' : 'llms.txt';
+      const found = component ? findComponent(index, component) : undefined;
+      if (component && !found) {
+        const suggestions = suggestNames(index, component);
+        const hint = suggestions.length > 0 ? `Похожие компоненты: ${suggestions.join(', ')}.` : 'Проверьте имя через search_components.';
+        return textResult({ text: `Компонента "${component}" в библиотеке ${index.library.name} нет. ${hint}`, isError: true });
+      }
+      const relative = found ? `components/${found.name}.md` : section === 'tokens' ? 'tokens.md' : 'llms.txt';
       const text = readDoc(options.docsDir, relative);
       if (!text) {
-        return textResult({ text: component ? `Документа для ${component} нет: проверьте имя через search_components.` : 'Документация не собрана: выполните npm run docs:build.', isError: true });
+        return textResult({ text: found ? `Документа для ${found.name} нет: выполните npm run docs:build.` : 'Документация не собрана: выполните npm run docs:build.', isError: true });
       }
       const budget = fitToBudget(text.split(/\n(?=#{1,3} )/), maxTokens ?? DEFAULT_DOCS_BUDGET, 'Запросите документ конкретного компонента через get_docs с параметром component.');
       return textResult({ text: withFooter(budget.text) });
