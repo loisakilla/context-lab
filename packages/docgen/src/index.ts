@@ -1,7 +1,8 @@
-export { buildIndex, loadIndex, serializeIndex } from './build.ts';
+export { buildIndex, serializeIndex } from './build.ts';
 export type { BuildOptions } from './build.ts';
 export { buildOptionsFromConfig, libraryCommit, loadConfig, resolveFrom } from './config.ts';
 export type { LabConfig, LibraryConfig } from './config.ts';
+export { loadIndex } from './load.ts';
 export { loadDescriptions, parseDescription } from './descriptions.ts';
 export type { ComponentDescription } from './descriptions.ts';
 export { extract } from './extract.ts';

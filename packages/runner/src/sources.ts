@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { loadIndex, resolveFrom, type LabConfig } from '@context-lab/docgen';
+import { loadIndex, resolveFrom, type LabConfig } from '@context-lab/docgen/load';
 import { docsDirReader } from '@context-lab/docs';
 import { loadRegistry, rulesToolSource } from '@context-lab/rules';
 import type { ContextSources } from './context.ts';

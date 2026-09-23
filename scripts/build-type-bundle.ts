@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildNodeTypeBundle, serializeBundle } from '@context-lab/checks';
-import { loadConfig, resolveFrom } from '@context-lab/docgen';
+import { loadConfig, resolveFrom } from '@context-lab/docgen/load';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const config = loadConfig(path.join(root, 'context-lab.config.json'));

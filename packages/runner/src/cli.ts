@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { buildNodeTypeBundle, createChecker, runChecks } from '@context-lab/checks';
-import { loadConfig, loadIndex, resolveFrom, type LabConfig } from '@context-lab/docgen';
+import { loadConfig, loadIndex, resolveFrom, type LabConfig } from '@context-lab/docgen/load';
 import { apiDriver } from './drivers/api.ts';
 import { claudeCodeDriver, type ClaudeCodeDriverOptions } from './drivers/claude-code.ts';
 import { findClaudeBinary } from './find-claude.ts';

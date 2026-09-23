@@ -1,4 +1,3 @@
-export { findDrift, writeCompiled } from './check.ts';
 export { compile, compileAll, renderRulesText } from './compile.ts';
 export { lintRegistry } from './lint.ts';
 export type { LintOptions } from './lint.ts';

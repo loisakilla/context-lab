@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { buildNodeTypeBundle, createChecker, runChecks } from '@context-lab/checks';
-import { loadConfig, resolveFrom } from '@context-lab/docgen';
+import { loadConfig, resolveFrom } from '@context-lab/docgen/load';
 import {
   buildContext,
   contextTokens,

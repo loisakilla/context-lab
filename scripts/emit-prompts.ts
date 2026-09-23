@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadConfig } from '@context-lab/docgen';
+import { loadConfig } from '@context-lab/docgen/load';
 import { buildContext, contextTokens, CONTEXT_MODES, libraryKey, loadSources, loadTasks } from '@context-lab/runner';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');

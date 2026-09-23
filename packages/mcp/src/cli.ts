@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { loadConfig, loadIndex, resolveFrom } from '@context-lab/docgen';
+import { loadConfig, loadIndex, resolveFrom } from '@context-lab/docgen/load';
 import { loadRegistry } from '@context-lab/rules';
 import { createServer } from './server.ts';
 

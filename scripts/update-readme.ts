@@ -1,7 +1,7 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadConfig, resolveFrom } from '@context-lab/docgen';
+import { loadConfig, resolveFrom } from '@context-lab/docgen/load';
 import { libraryKey, MODE_LABELS, SOURCE_LABELS, type Matrix, type MatrixCell } from '@context-lab/runner';
 
 const DRIVER_PHRASES: Record<string, string> = {

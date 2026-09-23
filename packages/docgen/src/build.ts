@@ -61,11 +61,3 @@ export function buildIndex(options: BuildOptions): LibraryIndex {
 export function serializeIndex(index: LibraryIndex): string {
   return `${JSON.stringify(index, null, 2)}\n`;
 }
-
-export function loadIndex(file: string): LibraryIndex {
-  const parsed = JSON.parse(readFileSync(file, 'utf8')) as Partial<LibraryIndex>;
-  if (parsed.schemaVersion !== 2 || !Array.isArray(parsed.components) || !parsed.library) {
-    throw new Error(`Файл ${file} не похож на индекс компонентов (schemaVersion 2)`);
-  }
-  return parsed as LibraryIndex;
-}
