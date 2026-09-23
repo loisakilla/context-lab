@@ -25,6 +25,6 @@ export function runChecks(checker: Checker, code: string, expects: string[] = []
     lint,
     usedComponents: used,
     expectedCoverage: expectedCoverage(used, expects),
-    passed: tsc.errors.length === 0 && lintErrors === 0,
+    passed: tsc.errors.length === 0 && lintErrors === 0 && used.length > 0,
   };
 }

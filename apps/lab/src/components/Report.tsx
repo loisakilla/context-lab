@@ -132,7 +132,13 @@ export function Report({ record, render }: ReportProps) {
             )}
             <div className="flex flex-col gap-1.5">
               <span className="jx-label">Компоненты библиотеки</span>
-              <p className="text-sm">{checks.usedComponents.length > 0 ? checks.usedComponents.join(', ') : 'Ни одного'}</p>
+              {checks.usedComponents.length > 0 ? (
+                <p className="text-sm">{checks.usedComponents.join(', ')}</p>
+              ) : (
+                <p className="text-sm" style={{ color: 'var(--jx-danger)' }}>
+                  Ни одного: код написан без библиотеки, поэтому прогон не засчитан
+                </p>
+              )}
               {record.task.expects.length > 0 && (
                 <p className="dim">
                   Ожидались {record.task.expects.join(', ')} · покрытие {Math.round(checks.expectedCoverage * 100)}%

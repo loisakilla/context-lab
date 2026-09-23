@@ -119,4 +119,20 @@ describe('сводный отчёт', () => {
     expect(report.expectedCoverage).toBe(0.67);
     expect(runChecks(checker, INVENTED, ['JxModal']).passed).toBe(false);
   });
+
+  it('не засчитывает разметку, в которой нет ни одного компонента библиотеки', () => {
+    const plain = `export default function Settings() {
+  return (
+    <form className="jx-form jx-stack">
+      <button type="submit" className="jx-button jx-button--primary">Сохранить</button>
+    </form>
+  );
+}
+`;
+    const report = runChecks(checker, plain, ['JxButton']);
+    expect(report.tsc.errors).toEqual([]);
+    expect(report.lint.filter((finding) => finding.severity === 'error')).toEqual([]);
+    expect(report.usedComponents).toEqual([]);
+    expect(report.passed).toBe(false);
+  });
 });

@@ -117,10 +117,10 @@
     ],
     "usedComponents": [],
     "expectedCoverage": 0,
-    "passed": true
+    "passed": false
   },
   "verdict": {
-    "passed": true,
-    "score": 0.7
+    "passed": false,
+    "score": 0
   }
 }

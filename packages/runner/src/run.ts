@@ -38,7 +38,7 @@ export function scoreOf(record: Pick<RunRecord, 'checks'>): number {
   const checks = record.checks;
   if (!checks) return 0;
   const errors = checks.tsc.errors.length + checks.lint.filter((finding) => finding.severity === 'error').length;
-  const base = checks.passed ? 1 : Math.max(0, 1 - errors * 0.2);
+  const base = checks.usedComponents.length === 0 ? 0 : checks.passed ? 1 : Math.max(0, 1 - errors * 0.2);
   return Number((base * 0.7 + checks.expectedCoverage * 0.3).toFixed(2));
 }
 
