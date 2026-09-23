@@ -79,7 +79,7 @@ function main(): void {
       const outDir = path.resolve(values.out ?? path.join(root, 'compiled', setName));
       const files = compileAll(resolveRules(registry, setName, options), targets);
       const written = writeCompiled(files, outDir);
-      const removed = removeOrphans(files, outDir);
+      const removed = removeOrphans(files, outDir, targets);
       process.stderr.write(`Скомпилировано ${written.length} файлов в ${path.relative(process.cwd(), outDir)}: ${written.join(', ')}\n`);
       if (removed.length > 0) process.stderr.write(`Удалено ${removed.length} файлов удалённых правил: ${removed.join(', ')}\n`);
       return;
@@ -89,7 +89,7 @@ function main(): void {
       const outDir = path.resolve(values.out ?? path.join(root, 'compiled', setName));
       const compiled = compileAll(resolveRules(registry, setName, options), targets);
       const drifted = findDrift(compiled, outDir);
-      const orphans = findOrphans(compiled, outDir);
+      const orphans = findOrphans(compiled, outDir, targets);
       if (orphans.length > 0) fail(`В ${setName} остались файлы удалённых правил: ${orphans.join(', ')}. Выполните npm run rules:compile`);
       if (drifted.length > 0) fail(`Скомпилированные правила ${setName} разошлись с источником: ${drifted.join(', ')}. Выполните npm run rules:compile`);
       process.stderr.write(`Скомпилированные правила ${setName} соответствуют источнику.\n`);

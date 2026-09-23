@@ -1,8 +1,14 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import type { CompiledFile } from './types.ts';
+import type { CompiledFile, CompileTarget } from './types.ts';
 
-const GENERATED_EXTENSIONS = new Set(['.md', '.mdc']);
+const RULE_DIRECTORIES: Partial<Record<CompileTarget, string>> = {
+  claude: '.claude/rules',
+  cursor: '.cursor/rules',
+  copilot: '.github/instructions',
+};
+
+const RULE_MARKER = /<!-- [\w-]+\/[\w-]+@\d+\.\d+\.\d+/;
 
 export function writeCompiled(files: CompiledFile[], outDir: string): string[] {
   const written: string[] = [];
@@ -25,24 +31,25 @@ export function findDrift(files: CompiledFile[], outDir: string): string[] {
   return drifted;
 }
 
-export function findOrphans(files: CompiledFile[], outDir: string): string[] {
+export function findOrphans(files: CompiledFile[], outDir: string, targets: readonly CompileTarget[]): string[] {
   const expected = new Set(files.map((file) => file.path));
-  const directories = new Set(files.map((file) => path.posix.dirname(file.path)));
   const orphans: string[] = [];
-  for (const directory of directories) {
-    const full = directory === '.' ? outDir : path.join(outDir, directory);
+  for (const target of targets) {
+    const directory = RULE_DIRECTORIES[target];
+    if (!directory) continue;
+    const full = path.join(outDir, directory);
     if (!existsSync(full)) continue;
     for (const entry of readdirSync(full, { withFileTypes: true })) {
-      if (!entry.isFile() || !GENERATED_EXTENSIONS.has(path.extname(entry.name))) continue;
-      const relative = directory === '.' ? entry.name : `${directory}/${entry.name}`;
-      if (!expected.has(relative)) orphans.push(relative);
+      const relative = `${directory}/${entry.name}`;
+      if (!entry.isFile() || expected.has(relative)) continue;
+      if (RULE_MARKER.test(readFileSync(path.join(full, entry.name), 'utf8'))) orphans.push(relative);
     }
   }
   return orphans.sort();
 }
 
-export function removeOrphans(files: CompiledFile[], outDir: string): string[] {
-  const orphans = findOrphans(files, outDir);
+export function removeOrphans(files: CompiledFile[], outDir: string, targets: readonly CompileTarget[]): string[] {
+  const orphans = findOrphans(files, outDir, targets);
   for (const orphan of orphans) rmSync(path.join(outDir, orphan), { force: true });
   return orphans;
 }

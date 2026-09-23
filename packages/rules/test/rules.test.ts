@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
@@ -118,12 +118,26 @@ describe('компиляция', () => {
     const without = project.rules.filter((item) => item.id !== 'tokens');
     const shrunk = compileAll(resolveRules(registryFromSets([org, set('project', ['org'], without)]), 'project', { taskType: 'ui' }), COMPILE_TARGETS);
 
-    const orphans = findOrphans(shrunk, dir);
-    expect(orphans.some((file) => file.includes('tokens'))).toBe(true);
+    const orphans = findOrphans(shrunk, dir, COMPILE_TARGETS);
+    expect(orphans).toEqual(['.claude/rules/tokens.md', '.cursor/rules/tokens.mdc', '.github/instructions/tokens.instructions.md']);
     writeCompiled(shrunk, dir);
-    expect(removeOrphans(shrunk, dir)).toEqual(orphans);
-    expect(findOrphans(shrunk, dir)).toEqual([]);
+    expect(removeOrphans(shrunk, dir, COMPILE_TARGETS)).toEqual(orphans);
+    expect(findOrphans(shrunk, dir, COMPILE_TARGETS)).toEqual([]);
     expect(findDrift(shrunk, dir)).toEqual([]);
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  it('при компиляции в чужой проект не трогает его собственные файлы', () => {
+    const dir = mkdtempSync(path.join(tmpdir(), 'rules-'));
+    const foreign = ['README.md', 'CHANGELOG.md', '.github/PULL_REQUEST_TEMPLATE.md', '.claude/rules/own.md', '.cursor/rules/own.mdc'];
+    for (const file of foreign) {
+      mkdirSync(path.dirname(path.join(dir, file)), { recursive: true });
+      writeFileSync(path.join(dir, file), '# Свой файл проекта\n', 'utf8');
+    }
+    const files = compileAll(resolution, COMPILE_TARGETS);
+    writeCompiled(files, dir);
+    expect(removeOrphans(files, dir, COMPILE_TARGETS)).toEqual([]);
+    for (const file of foreign) expect(existsSync(path.join(dir, file))).toBe(true);
     rmSync(dir, { recursive: true, force: true });
   });
 });
