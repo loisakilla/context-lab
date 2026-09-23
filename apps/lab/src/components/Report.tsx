@@ -1,6 +1,6 @@
 'use client';
 
-import type { RunRecord } from '@context-lab/runner/browser';
+import { firstPromptTokens, type RunRecord } from '@context-lab/runner/browser';
 import type { RenderStatus } from './Preview';
 import { DRIVER_LABELS, MODE_LABELS, SOURCE_LABELS, sentence } from '@/lib/labels';
 import { Badge, Stat } from './ui';
@@ -59,6 +59,7 @@ export function Report({ record, render }: ReportProps) {
   const lintWarnings = checks?.lint.filter((finding) => finding.severity === 'warning') ?? [];
   const passed = record.verdict.passed && render?.ok !== false;
   const tokens = tokensOf(record);
+  const promptTokens = firstPromptTokens(record);
   const toolCalls = record.turns.flatMap((turn) => turn.toolCalls);
 
   return (
@@ -82,6 +83,13 @@ export function Report({ record, render }: ReportProps) {
             tone={checks && checks.tsc.errors.length > 0 ? 'bad' : 'ok'}
           />
         </div>
+        {promptTokens > 0 && (
+          <p className="dim">
+            Первый вызов модели получил {promptTokens.toLocaleString('ru-RU')} токенов входа
+            {record.driver === 'claude-code' ? ', включая системный промпт Claude Code' : ''}. Контекст до задачи — оценка по длине текста, для
+            русского текста она занижает число токенов в полтора-два раза.
+          </p>
+        )}
       </div>
 
       {!checks && <p className="muted text-sm">В ответе не нашлось блока кода, проверять нечего.</p>}

@@ -7,6 +7,7 @@ export interface MatrixCell {
   passRate: number;
   medianTokens: number;
   medianContextTokens: number;
+  medianPromptTokens: number;
   medianCostUsd: number | null;
   medianTscErrors: number;
   medianLintErrors: number;
@@ -23,7 +24,14 @@ export interface Matrix {
   tasks: Array<{ id: string; title: string }>;
   modes: ContextMode[];
   cells: MatrixCell[];
+  sourceRevisions: Record<string, SourceRevision[]>;
   generatedFrom: number;
+}
+
+export interface SourceRevision {
+  hash: string | null;
+  tokens: number;
+  runs: number;
 }
 
 export function median(values: number[]): number {
@@ -35,6 +43,26 @@ export function median(values: number[]): number {
 
 export function libraryKey(library: { version: string; commit: string }): string {
   return library.commit ? `${library.version}@${library.commit.slice(0, 7)}` : library.version;
+}
+
+export function firstPromptTokens(run: Pick<RunRecord, 'turns'>): number {
+  const usage = run.turns[0]?.usage;
+  return usage ? usage.input + usage.cacheRead + usage.cacheCreation : 0;
+}
+
+function sourceRevisions(runs: RunRecord[]): Record<string, SourceRevision[]> {
+  const revisions = new Map<string, Map<string, SourceRevision>>();
+  for (const run of runs) {
+    for (const source of run.context.sources) {
+      const byKind = revisions.get(source.kind) ?? new Map<string, SourceRevision>();
+      const key = source.hash ?? `tokens:${source.tokens}`;
+      const revision = byKind.get(key) ?? { hash: source.hash ?? null, tokens: source.tokens, runs: 0 };
+      revision.runs += 1;
+      byKind.set(key, revision);
+      revisions.set(source.kind, byKind);
+    }
+  }
+  return Object.fromEntries([...revisions.entries()].sort(([a], [b]) => (a < b ? -1 : 1)).map(([kind, byKind]) => [kind, [...byKind.values()].sort((a, b) => a.tokens - b.tokens)]));
 }
 
 export function buildMatrix(runs: RunRecord[]): Matrix {
@@ -67,6 +95,7 @@ export function buildMatrix(runs: RunRecord[]): Matrix {
       passRate: Number((bucket.filter((run) => run.verdict.passed).length / bucket.length).toFixed(2)),
       medianTokens: median(bucket.map((run) => run.usage.input + run.usage.output + run.usage.cacheRead + run.usage.cacheCreation)),
       medianContextTokens: median(bucket.map((run) => run.context.tokens)),
+      medianPromptTokens: median(bucket.map(firstPromptTokens).filter((tokens) => tokens > 0)),
       medianCostUsd: costs.length > 0 ? median(costs) : null,
       medianTscErrors: median(bucket.map((run) => run.checks?.tsc.errors.length ?? 0)),
       medianLintErrors: median(bucket.map((run) => run.checks?.lint.filter((finding) => finding.severity === 'error').length ?? 0)),
@@ -85,6 +114,7 @@ export function buildMatrix(runs: RunRecord[]): Matrix {
     tasks: [...tasks.entries()].map(([id, title]) => ({ id, title })).sort((a, b) => a.id.localeCompare(b.id)),
     modes,
     cells,
+    sourceRevisions: sourceRevisions(runs),
     generatedFrom: runs.length,
   };
 }

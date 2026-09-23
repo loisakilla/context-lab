@@ -1,4 +1,5 @@
 import { createTools, estimateTokens, libraryRulesPrompt, runTool, toJsonSchemaTools, type LibraryIndex } from '@context-lab/index-tools';
+import { textHash } from './hash.ts';
 import type { BuiltContext, ContextMode, ContextSource, Task } from './types.ts';
 
 export interface ContextSources {
@@ -26,7 +27,7 @@ function wrap(tag: string, body: string): string {
 }
 
 function source(kind: ContextSource['kind'], id: string, version: string, text: string): ContextSource {
-  return { kind, id, version, tokens: estimateTokens(text) };
+  return { kind, id, version, tokens: estimateTokens(text), hash: textHash(text) };
 }
 
 export function buildContext(mode: ContextMode, task: Task, sources: ContextSources): BuiltContext {

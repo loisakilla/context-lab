@@ -7,7 +7,8 @@ import { sampleIndex } from '../../index-tools/test/helpers.ts';
 import { buildContext, contextTokens } from '../src/context.ts';
 import { buildClaudeArgs, composePrompt, parseStreamJson } from '../src/drivers/claude-code.ts';
 import { extractCode } from '../src/extract-code.ts';
-import { buildMatrix, libraryKey, median } from '../src/matrix.ts';
+import { textHash } from '../src/hash.ts';
+import { buildMatrix, firstPromptTokens, libraryKey, median } from '../src/matrix.ts';
 import { priceOf } from '../src/price.ts';
 import { runTask } from '../src/run.ts';
 import { libraryFolders, readRunFolder, runsFolder } from '../src/store.ts';
@@ -208,6 +209,63 @@ describe('матрица', () => {
     expect(none).toMatchObject({ passRate: 0.5, medianTokens: 220, medianContextTokens: 0, medianCostUsd: 0.015, runs: ['a', 'b'] });
     expect(median([3, 1, 2])).toBe(2);
     expect(median([])).toBe(0);
+  });
+
+  it('берёт реальный вход первого вызова модели из usage первого хода', () => {
+    const run = (id: string, turns: RunRecord['turns']): RunRecord => ({
+      id,
+      createdAt: '',
+      repeat: 1,
+      durationMs: 1,
+      driver: 'claude-code',
+      library: { name: 'k', version: '1', commit: '' },
+      model: 'claude-opus-5',
+      mode: 'docs',
+      task,
+      context: { tokens: 100, sources: [] },
+      turns,
+      usage: { input: 0, output: 0, cacheRead: 0, cacheCreation: 0 },
+      costUsd: null,
+      stopReason: 'end_turn',
+      output: { code: '', text: '' },
+      checks: null,
+      verdict: { passed: false, score: 0 },
+    });
+    const first = (cacheRead: number): RunRecord['turns'] => [{ usage: { input: 2, output: 50, cacheRead, cacheCreation: 8 }, toolCalls: [] }];
+    const matrix = buildMatrix([run('a', first(1000)), run('b', first(3000)), run('c', [])]);
+    expect(firstPromptTokens(run('a', first(1000)))).toBe(1010);
+    expect(matrix.cells[0]?.medianPromptTokens).toBe(2010);
+  });
+
+  it('отличает редакции одного источника по отпечатку текста, а в старых записях по числу токенов', () => {
+    const run = (id: string, source: RunRecord['context']['sources'][number]): RunRecord => ({
+      id,
+      createdAt: '',
+      repeat: 1,
+      durationMs: 1,
+      driver: 'claude-code',
+      library: { name: 'k', version: '1', commit: '' },
+      model: 'claude-opus-5',
+      mode: 'docs',
+      task,
+      context: { tokens: source.tokens, sources: [source] },
+      turns: [],
+      usage: { input: 0, output: 0, cacheRead: 0, cacheCreation: 0 },
+      costUsd: null,
+      stopReason: 'end_turn',
+      output: { code: '', text: '' },
+      checks: null,
+      verdict: { passed: false, score: 0 },
+    });
+    const docs = (tokens: number, hash?: string) => ({ kind: 'docs' as const, id: 'llms-full.txt', version: '1', tokens, ...(hash ? { hash } : {}) });
+    const matrix = buildMatrix([run('a', docs(16514)), run('b', docs(18550)), run('c', docs(18550)), run('d', docs(20066, textHash('новая редакция')))]);
+    expect(matrix.sourceRevisions.docs?.map((revision) => [revision.tokens, revision.runs])).toEqual([
+      [16514, 1],
+      [18550, 2],
+      [20066, 1],
+    ]);
+    expect(textHash('новая редакция')).toBe(textHash('новая редакция'));
+    expect(textHash('новая редакция')).not.toBe(textHash('новая редакция.'));
   });
 
   it('не смешивает в одной матрице прогоны против разных версий библиотеки', () => {

@@ -39,6 +39,7 @@ export interface ContextSource {
   id: string;
   version: string;
   tokens: number;
+  hash?: string;
 }
 
 export interface BuiltContext {
