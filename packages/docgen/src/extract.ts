@@ -241,9 +241,16 @@ function extractProps(propsType: ts.Type, location: ts.Node, defaults: Map<strin
 
     const declared = ownDeclaration(property, lib.libraryRoot);
     const type = declared?.type ? lib.checker.getTypeAtLocation(declared.type) : lib.checker.getTypeOfSymbolAtLocation(property, location);
+    const narrowing = declarations
+      .filter((declaration) => !isInside(toPosix(declaration.getSourceFile().fileName), lib.libraryRoot))
+      .flatMap((declaration) => (ts.isPropertySignature(declaration) && declaration.type ? [declaration.type] : []))
+      .filter((inheritedType) => declared?.type && !lib.checker.isTypeAssignableTo(type, lib.checker.getTypeAtLocation(inheritedType)));
+    const inherited = narrowing.map((inheritedType) => stripUndefined(inheritedType.getText().replace(/\s+/g, ' ')));
     const prop: PropDoc = {
       name: property.name,
-      type: declared?.type ? declared.type.getText().replace(/\s+/g, ' ') : stripUndefined(lib.checker.typeToString(type, undefined, TYPE_FLAGS)),
+      type: declared?.type
+        ? [declared.type.getText().replace(/\s+/g, ' '), ...inherited].join(' & ')
+        : stripUndefined(lib.checker.typeToString(type, undefined, TYPE_FLAGS)),
       required: declared ? declared.questionToken === undefined : !(property.flags & ts.SymbolFlags.Optional),
     };
     const values = literalValues(type);

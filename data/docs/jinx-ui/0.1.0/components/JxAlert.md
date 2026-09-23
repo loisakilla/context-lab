@@ -9,7 +9,7 @@
 ## Сигнатура
 
 ```tsx
-<JxAlert title: ReactNode; children?: ReactNode; icon?: ReactNode; intent?: JxAlertIntent = 'info' />
+<JxAlert title: ReactNode & string; children?: ReactNode; icon?: ReactNode; intent?: JxAlertIntent = 'info' />
 ```
 
 Наследует `HTMLAttributes<HTMLDivElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
@@ -18,7 +18,7 @@
 
 | Проп | Тип | Обязателен | По умолчанию | Описание |
 |---|---|---|---|---|
-| `title` | `ReactNode` | да |  | заголовок сообщения |
+| `title` | `ReactNode & string` | да |  | заголовок сообщения |
 | `children` | `ReactNode` | нет |  | текст сообщения |
 | `icon` | `ReactNode` | нет |  | своя иконка вместо иконки тона |
 | `intent` | `"danger" \\| "warning" \\| "info" \\| "success"` | нет | `'info'` | тон: `info` по умолчанию, `success`, `warning`, `danger` |

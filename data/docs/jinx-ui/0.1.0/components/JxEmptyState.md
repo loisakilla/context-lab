@@ -9,7 +9,7 @@
 ## Сигнатура
 
 ```tsx
-<JxEmptyState title: ReactNode; action?: ReactNode; icon?: ReactNode; message?: ReactNode />
+<JxEmptyState title: ReactNode & string; action?: ReactNode; icon?: ReactNode; message?: ReactNode />
 ```
 
 Наследует `HTMLAttributes<HTMLDivElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
@@ -18,7 +18,7 @@
 
 | Проп | Тип | Обязателен | По умолчанию | Описание |
 |---|---|---|---|---|
-| `title` | `ReactNode` | да |  | заголовок пустого состояния |
+| `title` | `ReactNode & string` | да |  | заголовок пустого состояния |
 | `action` | `ReactNode` | нет |  | кнопка основного действия |
 | `icon` | `ReactNode` | нет |  | иллюстрация или иконка над заголовком |
 | `message` | `ReactNode` | нет |  | пояснение под заголовком |

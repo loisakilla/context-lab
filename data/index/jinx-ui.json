@@ -92,7 +92,7 @@
       "props": [
         {
           "name": "title",
-          "type": "ReactNode",
+          "type": "ReactNode & string",
           "required": true,
           "description": "заголовок сообщения"
         },
@@ -920,7 +920,7 @@
       "props": [
         {
           "name": "title",
-          "type": "ReactNode",
+          "type": "ReactNode & string",
           "required": true,
           "description": "заголовок пустого состояния"
         },

@@ -14,7 +14,7 @@
 - **JxAccordion** — Список раскрывающихся секций.
   `<JxAccordion items: JxAccordionItem[]; className?: string; defaultValue?: string[]; onValueChange?: (value: string[]) => void; single?: boolean = true; value?: string[] />`
 - **JxAlert** — Встроенное в разметку сообщение с иконкой, заголовком и текстом.
-  `<JxAlert title: ReactNode; children?: ReactNode; icon?: ReactNode; intent?: JxAlertIntent = 'info' />` extends HTMLAttributes<HTMLDivElement>
+  `<JxAlert title: ReactNode & string; children?: ReactNode; icon?: ReactNode; intent?: JxAlertIntent = 'info' />` extends HTMLAttributes<HTMLDivElement>
 - **JxAvatar** — Аватар пользователя: инициалы или изображение внутри круга.
   `<JxAvatar children?: ReactNode; size?: JxAvatarSize = 'md'; status?: boolean = false; tone?: JxAvatarTone = 'default' />` extends HTMLAttributes<HTMLSpanElement>
 - **JxAvatarStack** — Группа аватаров внахлёст: участники проекта, исполнители задачи, читатели документа.
@@ -40,7 +40,7 @@
 - **JxDrawer** — Боковая панель, выезжающая слева или справа поверх страницы, с ловушкой фокуса и закрытием по Escape.
   `<JxDrawer title: ReactNode; children?: ReactNode; className?: string; defaultOpen?: boolean = false; onOpenChange?: (open: boolean) => void; open?: boolean; side?: JxDrawerSide = 'right' />`
 - **JxEmptyState** — Пустое состояние списка или раздела: что здесь появится и что для этого сделать.
-  `<JxEmptyState title: ReactNode; action?: ReactNode; icon?: ReactNode; message?: ReactNode />` extends HTMLAttributes<HTMLDivElement>
+  `<JxEmptyState title: ReactNode & string; action?: ReactNode; icon?: ReactNode; message?: ReactNode />` extends HTMLAttributes<HTMLDivElement>
 - **JxInputField** — Текстовое поле с подписью, подсказкой и текстом ошибки.
   `<JxInputField className?: string; errorText?: string; helperText?: string; label?: string; prefix?: string; required?: boolean />` extends InputHTMLAttributes<HTMLInputElement>
 - **JxKbd** — Клавиша в тексте: обозначение горячих клавиш и сочетаний.
@@ -168,7 +168,7 @@
 ## Сигнатура
 
 ```tsx
-<JxAlert title: ReactNode; children?: ReactNode; icon?: ReactNode; intent?: JxAlertIntent = 'info' />
+<JxAlert title: ReactNode & string; children?: ReactNode; icon?: ReactNode; intent?: JxAlertIntent = 'info' />
 ```
 
 Наследует `HTMLAttributes<HTMLDivElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
@@ -177,7 +177,7 @@
 
 | Проп | Тип | Обязателен | По умолчанию | Описание |
 |---|---|---|---|---|
-| `title` | `ReactNode` | да |  | заголовок сообщения |
+| `title` | `ReactNode & string` | да |  | заголовок сообщения |
 | `children` | `ReactNode` | нет |  | текст сообщения |
 | `icon` | `ReactNode` | нет |  | своя иконка вместо иконки тона |
 | `intent` | `"danger" \\| "warning" \\| "info" \\| "success"` | нет | `'info'` | тон: `info` по умолчанию, `success`, `warning`, `danger` |
@@ -745,7 +745,7 @@ function ReportRequest() {
 ## Сигнатура
 
 ```tsx
-<JxEmptyState title: ReactNode; action?: ReactNode; icon?: ReactNode; message?: ReactNode />
+<JxEmptyState title: ReactNode & string; action?: ReactNode; icon?: ReactNode; message?: ReactNode />
 ```
 
 Наследует `HTMLAttributes<HTMLDivElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
@@ -754,7 +754,7 @@ function ReportRequest() {
 
 | Проп | Тип | Обязателен | По умолчанию | Описание |
 |---|---|---|---|---|
-| `title` | `ReactNode` | да |  | заголовок пустого состояния |
+| `title` | `ReactNode & string` | да |  | заголовок пустого состояния |
 | `action` | `ReactNode` | нет |  | кнопка основного действия |
 | `icon` | `ReactNode` | нет |  | иллюстрация или иконка над заголовком |
 | `message` | `ReactNode` | нет |  | пояснение под заголовком |

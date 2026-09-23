@@ -83,9 +83,10 @@ describe('экстрактор на опубликованном пакете Ji
     expect(select?.props.find((prop) => prop.name === 'onValueChange')?.type).toBe('(value: string) => void');
   });
 
-  it('показывает объявленный тип пропса, а не пересечение с DOM-атрибутом', () => {
+  it('показывает пересечение с DOM-атрибутом, когда оно сужает тип пропса', () => {
     const alert = byName.get('JxAlert');
-    expect(alert?.props.find((prop) => prop.name === 'title')).toMatchObject({ type: 'ReactNode', required: true });
+    expect(alert?.props.find((prop) => prop.name === 'title')).toMatchObject({ type: 'ReactNode & string', required: true });
+    expect(alert?.props.find((prop) => prop.name === 'children')?.type).toBe('ReactNode');
     expect(alert?.props.find((prop) => prop.name === 'intent')?.unionValues).toEqual(['"danger"', '"warning"', '"info"', '"success"']);
   });
 
