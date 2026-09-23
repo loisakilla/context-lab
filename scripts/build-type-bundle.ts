@@ -12,11 +12,6 @@ const bundle = buildNodeTypeBundle({
   nodeModules: resolveFrom(config, 'node_modules'),
 });
 
-const skip = /^\/lib\.(webworker|scripthost|esnext|es2023|es2024|decorators)/;
-for (const name of Object.keys(bundle.files)) {
-  if (skip.test(name)) delete bundle.files[name];
-}
-
 const target = path.join(root, 'apps/lab/src/generated/type-bundle.json');
 mkdirSync(path.dirname(target), { recursive: true });
 const json = serializeBundle(bundle);

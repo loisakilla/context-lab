@@ -102,6 +102,23 @@ export default () => <div style={styles} className="card jx-card" dangerouslySet
     expect(findings.filter((finding) => finding.severity === 'error')).toHaveLength(4);
   });
 
+  it('не принимает номера, якоря и хэштеги за цвета, а цвет в стиле ловит', () => {
+    const clean = lintCode(`export default () => (
+  <a href="#add" title="Заказ #2024-001" data-id={'#1042'}>
+    {'Invoice #123 paid'}
+  </a>
+);
+`);
+    expect(clean.filter((finding) => finding.rule === 'no-raw-colors')).toEqual([]);
+    const styled = lintCode(`export default () => <p style={{ color: '#fff' }}>{\`border: 1px solid #abc\`}</p>;`);
+    expect(styled.filter((finding) => finding.rule === 'no-raw-colors')).toHaveLength(2);
+  });
+
+  it('react-dom не входит в разрешённые импорты: контракт ответа разрешает только react и библиотеку', () => {
+    const findings = lintCode(`import { createPortal } from 'react-dom';\nexport default () => null;\n`);
+    expect(findings.map((finding) => finding.rule)).toEqual(['import-allowlist']);
+  });
+
   it('токены через var(--jx-*) и классы библиотеки не считаются нарушением', () => {
     const findings = lintCode(`export default () => <div className="jx-card jx-card--raised" data-color="var(--jx-accent)" />;`);
     expect(findings).toEqual([]);

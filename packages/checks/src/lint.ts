@@ -14,8 +14,28 @@ export interface LintOptions {
   classPrefix?: string;
 }
 
-const DEFAULT_ALLOWED_IMPORTS = ['react', 'react-dom', '@jinx-ui/react', '@jinx-ui/react/runtime'];
-const RAW_COLOR = /(^|[^\w-])(#[0-9a-f]{3,8}\b|rgba?\(|hsla?\(|oklch\(|oklab\()/i;
+const DEFAULT_ALLOWED_IMPORTS = ['react', '@jinx-ui/react', '@jinx-ui/react/runtime'];
+const COLOR_FUNCTION = /(^|[^\w-])(rgba?|hsla?|oklch|oklab)\(/i;
+const HEX_COLOR = /(^|[^\w-])#[0-9a-f]{3,8}\b/i;
+const CSS_DECLARATION_WITH_HEX = /[a-z-]+\s*:\s*[^;{}]*#[0-9a-f]{3,8}\b/i;
+const COLOR_PROPERTY = /color|background|border|fill|stroke|outline|shadow/i;
+
+function propertyName(node: ts.PropertyAssignment): string {
+  return ts.isIdentifier(node.name) || ts.isStringLiteral(node.name) ? node.name.text : '';
+}
+
+function inStyleContext(node: ts.Node): boolean {
+  const parent = node.parent;
+  if (parent && ts.isPropertyAssignment(parent) && parent.initializer === node && COLOR_PROPERTY.test(propertyName(parent))) return true;
+  for (let current = node.parent; current; current = current.parent) {
+    if (ts.isJsxAttribute(current)) return ts.isIdentifier(current.name) && current.name.text === 'style';
+  }
+  return false;
+}
+
+function isRawColor(text: string, node: ts.Node): boolean {
+  return COLOR_FUNCTION.test(text) || CSS_DECLARATION_WITH_HEX.test(text) || (HEX_COLOR.test(text) && inStyleContext(node));
+}
 
 export function parseTsx(code: string): ts.SourceFile {
   return ts.createSourceFile('/generated.tsx', code, ts.ScriptTarget.ES2022, true, ts.ScriptKind.TSX);
@@ -54,7 +74,7 @@ export function lintCode(code: string, options: LintOptions = {}): LintFinding[]
     }
 
     const text = stringValue(node);
-    if (text !== undefined && RAW_COLOR.test(text)) {
+    if (text !== undefined && isRawColor(text, node)) {
       report('no-raw-colors', 'error', node, `Цвет задан напрямую (${text.trim().slice(0, 40)}), вместо него нужен токен var(--jx-*)`);
     }
 
