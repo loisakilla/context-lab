@@ -24,9 +24,9 @@ const USAGE = `context-lab runner
 Опции run:
   -t, --task <id|all>          Задача из data/tasks.json, по умолчанию all
   -m, --mode <mode|all>        Режим контекста: ${CONTEXT_MODES.join(', ')} или all
-  -d, --driver <name>          ${DRIVER_NAMES.join(' | ')}, по умолчанию claude-code
+  -d, --driver <name>          claude-code | api, по умолчанию claude-code
       --model <model>          Модель, по умолчанию claude-opus-5
-      --effort <level>         Уровень усилий для API-драйвера
+      --effort <level>         Уровень усилий модели: low, medium, high
   -r, --repeat <n>             Сколько повторов на ячейку, по умолчанию 1
       --resume                 Пропускать ячейки, для которых запись уже есть
       --rules <file>           Скомпилированные правила для режима docs+rules
@@ -83,6 +83,7 @@ function summary(record: RunRecord): string {
 async function commandRun(config: LabConfig, values: Record<string, string | boolean | undefined>): Promise<void> {
   const driverName = (values.driver as DriverName | undefined) ?? 'claude-code';
   if (!DRIVER_NAMES.includes(driverName)) fail(`Неизвестный драйвер "${driverName}"`);
+  if (driverName === 'subagent') fail('Драйвер subagent сам модель не вызывает: ответы субагентов собираются через npm run prompts и npm run record.');
   const model = (values.model as string | undefined) ?? 'claude-opus-5';
   const repeats = Number.parseInt((values.repeat as string | undefined) ?? '1', 10);
   const resume = values.resume === true;
@@ -106,7 +107,7 @@ async function commandRun(config: LabConfig, values: Record<string, string | boo
     const driver = driverFor(driverName, mode, config, values['mcp-command'] as string | undefined);
     for (const task of tasks) {
       for (let repeat = 1; repeat <= repeats; repeat += 1) {
-        const file = path.join(runsDir, runFileName(task, mode, driverName, model, repeat));
+        const file = path.join(runsDir, runFileName(task, mode, driverName, model, repeat, effort));
         if (resume && existsSync(file)) {
           skipped += 1;
           continue;

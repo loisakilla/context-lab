@@ -92,7 +92,11 @@ export function Report({ record, render }: ReportProps) {
         )}
       </div>
 
-      {!checks && <p className="muted text-sm">В ответе не нашлось блока кода, проверять нечего.</p>}
+      {!checks && (
+        <p className="muted text-sm">
+          {record.checkError ? `Проверка не выполнилась: ${record.checkError}. Ответ модели сохранён ниже.` : 'В ответе не нашлось блока кода, проверять нечего.'}
+        </p>
+      )}
 
       {checks && (
         <div className="grid gap-4 md:grid-cols-2">

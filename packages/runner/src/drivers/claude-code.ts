@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 import { estimateTokens } from '@context-lab/index-tools';
+import { launchCommand } from '../find-claude.ts';
 import { addUsage, emptyUsage, type Driver, type GenerationRequest, type GenerationResult, type Turn, type Usage } from '../types.ts';
 
 export interface McpServerConfig {
@@ -151,6 +152,7 @@ export function buildClaudeArgs(request: GenerationRequest, options: ClaudeCodeD
     '--append-system-prompt',
     request.system,
   ];
+  if (request.effort) args.push('--effort', request.effort);
   if (options.mcpServer) {
     args.push('--mcp-config', JSON.stringify({ mcpServers: { [options.mcpServer.name]: options.mcpServer.config } }));
     args.push('--allowedTools', options.mcpServer.tools.map((tool) => `mcp__${options.mcpServer!.name}__${tool}`).join(','));
@@ -186,7 +188,8 @@ export function claudeCodeDriver(options: ClaudeCodeDriverOptions = {}): Driver 
           reject(new Error('Прогон отменён'));
           return;
         }
-        const child = spawn(binary, args, { cwd: options.cwd ?? process.cwd(), env: childEnv(), windowsHide: true });
+        const launch = launchCommand(binary);
+        const child = spawn(launch.command, [...launch.prefix, ...args], { cwd: options.cwd ?? process.cwd(), env: childEnv(), windowsHide: true });
         let stdout = '';
         let stderr = '';
         let timedOut = false;

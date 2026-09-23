@@ -1,18 +1,19 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { lintCode, usedComponents } from '@context-lab/checks';
 import { sampleIndex } from '../../index-tools/test/helpers.ts';
 import { buildContext, contextTokens } from '../src/context.ts';
-import { buildClaudeArgs, composePrompt, parseStreamJson } from '../src/drivers/claude-code.ts';
+import { buildClaudeArgs, claudeCodeDriver, composePrompt, parseStreamJson } from '../src/drivers/claude-code.ts';
 import { extractCode } from '../src/extract-code.ts';
 import { textHash } from '../src/hash.ts';
 import { buildMatrix, firstPromptTokens, libraryKey, median } from '../src/matrix.ts';
 import { priceOf } from '../src/price.ts';
-import { runTask } from '../src/run.ts';
+import { runFileName, runTask } from '../src/run.ts';
 import { libraryFolders, readRunFolder, runsFolder } from '../src/store.ts';
-import type { Driver, RunRecord, Task } from '../src/types.ts';
+import type { Driver, GenerationRequest, RunRecord, Task } from '../src/types.ts';
 
 const index = sampleIndex();
 const task: Task = { id: 'confirm', title: 'Подтверждение', prompt: 'Сделай окно подтверждения', taskType: 'ui', expects: ['JxModal', 'JxButton'] };
@@ -105,6 +106,21 @@ describe('runTask', () => {
     expect(record.checks?.usedComponents).toEqual(['JxButton', 'JxModal']);
     expect(record.costUsd).toBe(priceOf('claude-sonnet-5', record.usage));
     expect(record.library.name).toBe('sample-kit');
+  });
+
+  it('сохраняет ответ модели, даже если проверка кода упала', async () => {
+    const good = '```tsx\nimport { JxButton } from \'@jinx-ui/react\';\nexport default () => <JxButton>ok</JxButton>;\n```';
+    const broken = { check: async () => Promise.reject(new Error('Проверка не уложилась в 5 с')) };
+    const record = await runTask({ driver: fakeDriver(good), mode: 'none', task, sources: { index }, model: 'claude-sonnet-5', checker: broken });
+    expect(record.output.code).toMatch(/JxButton/);
+    expect(record.checks).toBeNull();
+    expect(record.checkError).toBe('Проверка не уложилась в 5 с');
+    expect(record.verdict.passed).toBe(false);
+  });
+
+  it('различает прогоны с разным уровнем усилий в имени записи', () => {
+    expect(runFileName(task, 'docs', 'api', 'claude-sonnet-5', 1)).toBe('confirm__docs__api__claude-sonnet-5__1.json');
+    expect(runFileName(task, 'docs', 'api', 'claude-sonnet-5', 1, 'low')).toBe('confirm__docs__api__claude-sonnet-5__effort-low__1.json');
   });
 
   it('проваливает прогон с выдуманным пропсом и снижает счёт', async () => {
@@ -304,6 +320,33 @@ describe('матрица', () => {
     expect(() => buildMatrix([run('old', sourceBuild), run('new', published)])).toThrow(/0\.1\.0@63b81b6, 0\.1\.0/);
     expect(buildMatrix([run('a', published), run('b', published)]).library).toEqual(published);
   });
+
+  it('не смешивает в одной матрице разные модели, драйверы и уровни усилий', () => {
+    const run = (id: string, overrides: Partial<RunRecord>): RunRecord => ({
+      id,
+      createdAt: '',
+      repeat: 1,
+      durationMs: 1,
+      driver: 'claude-code',
+      library: { name: 'jinx-ui', version: '0.1.0', commit: '' },
+      model: 'claude-opus-5',
+      mode: 'none',
+      task,
+      context: { tokens: 0, sources: [] },
+      turns: [],
+      usage: { input: 1, output: 1, cacheRead: 0, cacheCreation: 0 },
+      costUsd: null,
+      stopReason: 'end_turn',
+      output: { code: '', text: '' },
+      checks: null,
+      verdict: { passed: false, score: 0 },
+      ...overrides,
+    });
+    expect(() => buildMatrix([run('a', {}), run('b', { model: 'claude-sonnet-5' })])).toThrow(/claude-opus-5, claude-sonnet-5/);
+    expect(() => buildMatrix([run('a', {}), run('b', { driver: 'subagent' })])).toThrow(/claude-code, subagent/);
+    expect(() => buildMatrix([run('a', {}), run('b', { effort: 'low' })])).toThrow(/уровней усилий/);
+    expect(buildMatrix([run('a', {}), run('b', {})]).model).toBe('claude-opus-5');
+  });
 });
 
 describe('хранилище прогонов', () => {
@@ -325,5 +368,35 @@ describe('хранилище прогонов', () => {
     expect(readRunFolder(runsFolder(dir, published)).map((run) => run.id)).toEqual(['new']);
     expect(readRunFolder(path.join(dir, 'missing'))).toEqual([]);
     rmSync(dir, { recursive: true, force: true });
+  });
+});
+
+describe('драйвер claude-code как процесс', () => {
+  const fake = path.join(path.dirname(fileURLToPath(import.meta.url)), 'fixtures', 'fake-claude.mjs');
+  const request = (taskText: string, extra: Partial<GenerationRequest> = {}): GenerationRequest => ({ model: 'm', system: 's', contextText: '', taskText, maxTurns: 8, ...extra });
+
+  it('возвращает ответ процесса и передаёт ему уровень усилий', async () => {
+    const result = await claudeCodeDriver({ binary: fake }).generate(request('обычная задача', { effort: 'low' }));
+    expect(result.text).toBe('effort:low');
+    expect(result.stopReason).toBe('end_turn');
+  });
+
+  it('помечает прогон, убитый по таймауту, а не выдаёт его за обычный', async () => {
+    const result = await claudeCodeDriver({ binary: fake, timeoutMs: 500 }).generate(request('HANG'));
+    expect(result.stopReason).toBe('timeout');
+    expect(result.turns).toHaveLength(1);
+  });
+
+  it('возвращает прогон, упёршийся в лимит ходов, вместо ошибки', async () => {
+    const result = await claudeCodeDriver({ binary: fake }).generate(request('MAX_TURNS'));
+    expect(result.stopReason).toBe('max_turns');
+    expect(result.turns[0]?.toolCalls).toHaveLength(1);
+  });
+
+  it('отменённый прогон завершается ошибкой, и процесс не остаётся висеть', async () => {
+    const controller = new AbortController();
+    const pending = claudeCodeDriver({ binary: fake }).generate(request('HANG', { signal: controller.signal }));
+    setTimeout(() => controller.abort(), 200);
+    await expect(pending).rejects.toThrow('Прогон отменён');
   });
 });

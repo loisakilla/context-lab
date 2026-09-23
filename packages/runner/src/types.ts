@@ -98,6 +98,7 @@ export interface RunRecord {
   stopReason: string;
   output: { code: string; text: string };
   checks: CheckReport | null;
+  checkError?: string;
   verdict: { passed: boolean; score: number };
 }
 

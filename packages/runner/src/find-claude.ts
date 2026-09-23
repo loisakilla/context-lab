@@ -26,7 +26,6 @@ export function findClaudeBinary(): string {
 
   const suffix = process.platform === 'win32' ? '.exe' : '';
   const candidates = [path.join(homedir(), '.local', 'bin', `claude${suffix}`)];
-  if (process.platform === 'win32' && process.env.APPDATA) candidates.push(path.join(process.env.APPDATA, 'npm', 'claude.cmd'));
 
   const desktop = process.env.APPDATA ? path.join(process.env.APPDATA, 'Claude', 'claude-code') : undefined;
   if (desktop) {
@@ -34,5 +33,13 @@ export function findClaudeBinary(): string {
     if (newest) candidates.push(path.join(desktop, newest, `claude${suffix}`));
   }
 
+  if (process.platform === 'win32' && process.env.APPDATA) {
+    candidates.push(path.join(process.env.APPDATA, 'npm', 'node_modules', '@anthropic-ai', 'claude-code', 'cli.js'));
+  }
+
   return candidates.find((candidate) => existsSync(candidate)) ?? 'claude';
+}
+
+export function launchCommand(binary: string): { command: string; prefix: string[] } {
+  return /\.m?js$/.test(binary) ? { command: process.execPath, prefix: [binary] } : { command: binary, prefix: [] };
 }

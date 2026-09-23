@@ -30,8 +30,9 @@ export function slugify(value: string): string {
   return value.replace(/[^a-z0-9.-]+/gi, '-');
 }
 
-export function runFileName(task: Task, mode: ContextMode, driver: string, model: string, repeat: number): string {
-  return `${task.id}__${slugify(mode)}__${driver}__${modelSlug(model)}__${repeat}.json`;
+export function runFileName(task: Task, mode: ContextMode, driver: string, model: string, repeat: number, effort?: string): string {
+  const effortPart = effort ? `__effort-${slugify(effort)}` : '';
+  return `${task.id}__${slugify(mode)}__${driver}__${modelSlug(model)}${effortPart}__${repeat}.json`;
 }
 
 export function scoreOf(record: Pick<RunRecord, 'checks'>): number {
@@ -60,11 +61,19 @@ export async function runTask(options: RunOptions): Promise<RunRecord> {
   });
 
   const code = extractCode(generation.text);
-  const checks = options.checker && code.length > 0 ? await options.checker.check(code, options.task.expects) : null;
+  let checks: CheckReport | null = null;
+  let checkError: string | undefined;
+  if (options.checker && code.length > 0) {
+    try {
+      checks = await options.checker.check(code, options.task.expects);
+    } catch (error) {
+      checkError = error instanceof Error ? error.message : String(error);
+    }
+  }
   const priced = generation.costUsd ?? priceOf(options.model, generation.usage);
 
   const record: RunRecord = {
-    id: runFileName(options.task, options.mode, options.driver.name, options.model, repeat).replace(/\.json$/, ''),
+    id: runFileName(options.task, options.mode, options.driver.name, options.model, repeat, options.effort).replace(/\.json$/, ''),
     createdAt: new Date().toISOString(),
     repeat,
     durationMs: Date.now() - started,
@@ -83,6 +92,7 @@ export async function runTask(options: RunOptions): Promise<RunRecord> {
     verdict: { passed: checks?.passed ?? false, score: 0 },
   };
   if (options.effort) record.effort = options.effort;
+  if (checkError) record.checkError = checkError;
   record.verdict.score = scoreOf(record);
   return record;
 }

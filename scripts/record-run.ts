@@ -1,9 +1,28 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parseArgs } from 'node:util';
 import { buildNodeTypeBundle, createChecker, runChecks } from '@context-lab/checks';
 import { loadConfig, resolveFrom } from '@context-lab/docgen';
-import { buildContext, contextTokens, CONTEXT_MODES, extractCode, loadSources, loadTasks, runFileName, runsFolder, scoreOf, type ContextMode, type RunRecord } from '@context-lab/runner';
+import {
+  buildContext,
+  contextTokens,
+  CONTEXT_MODES,
+  extractCode,
+  libraryKey,
+  loadSources,
+  loadTasks,
+  runFileName,
+  runsFolder,
+  scoreOf,
+  type ContextMode,
+  type RunRecord,
+} from '@context-lab/runner';
+
+function fail(message: string): never {
+  process.stderr.write(`${message}\n`);
+  process.exit(1);
+}
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const config = loadConfig(path.join(root, 'context-lab.config.json'));
@@ -11,11 +30,22 @@ const tasks = loadTasks(config);
 const sources = loadSources(config);
 const index = sources.index;
 
+const { values } = parseArgs({ args: process.argv.slice(2), options: { model: { type: 'string' } } });
+const model = values.model ?? process.env.CONTEXT_LAB_MODEL;
+if (!model) fail('Укажите модель, которой отвечали субагенты: npm run record -- --model claude-sonnet-5');
+
+const manifestFile = path.join(root, 'data', 'prompts', 'manifest.json');
+if (!existsSync(manifestFile)) fail('Заданий нет: сначала выполните npm run prompts');
+const issued = (JSON.parse(readFileSync(manifestFile, 'utf8')) as Array<{ library?: string }>)[0]?.library;
+const current = libraryKey(index.library);
+if (issued !== current) {
+  fail(`Задания выпущены против ${issued ?? 'неизвестной версии библиотеки'}, а индекс сейчас ${current}: ответы нельзя записать как прогоны текущей версии. Перевыпустите задания через npm run prompts.`);
+}
+
 const outputsDir = path.join(root, 'data', 'outputs');
 const runsDir = runsFolder(resolveFrom(config, config.runs), index.library);
 mkdirSync(runsDir, { recursive: true });
 
-const model = process.env.CONTEXT_LAB_MODEL ?? 'claude-opus-5';
 const driver = 'subagent';
 
 const checker = createChecker(

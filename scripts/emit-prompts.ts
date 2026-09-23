@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadConfig } from '@context-lab/docgen';
-import { buildContext, contextTokens, CONTEXT_MODES, loadSources, loadTasks } from '@context-lab/runner';
+import { buildContext, contextTokens, CONTEXT_MODES, libraryKey, loadSources, loadTasks } from '@context-lab/runner';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const config = loadConfig(path.join(root, 'context-lab.config.json'));
@@ -12,7 +12,8 @@ const sources = loadSources(config);
 const outDir = path.join(root, 'data', 'prompts');
 mkdirSync(outDir, { recursive: true });
 
-const manifest: Array<{ task: string; mode: string; file: string; contextTokens: number }> = [];
+const library = libraryKey(sources.index.library);
+const manifest: Array<{ task: string; mode: string; file: string; library: string; contextTokens: number }> = [];
 
 for (const task of tasks) {
   for (const mode of CONTEXT_MODES) {
@@ -20,7 +21,7 @@ for (const task of tasks) {
     const body = [context.system, '', context.contextText, '', context.taskText].filter((part) => part.length > 0).join('\n');
     const file = path.join(outDir, `${task.id}__${mode}.md`);
     writeFileSync(file, `${body}\n`, 'utf8');
-    manifest.push({ task: task.id, mode, file: path.relative(root, file).replace(/\\/g, '/'), contextTokens: contextTokens(context) });
+    manifest.push({ task: task.id, mode, file: path.relative(root, file).replace(/\\/g, '/'), library, contextTokens: contextTokens(context) });
   }
 }
 

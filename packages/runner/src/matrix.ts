@@ -72,6 +72,14 @@ export function buildMatrix(runs: RunRecord[]): Matrix {
       `Прогоны сделаны против разных версий библиотеки: ${libraries.join(', ')}. В одной матрице их сравнивать нельзя — выберите одну через --library.`
     );
   }
+  const models = [...new Set(runs.map((run) => run.model))];
+  const drivers = [...new Set(runs.map((run) => run.driver))];
+  const efforts = [...new Set(runs.map((run) => run.effort ?? 'по умолчанию'))];
+  if (models.length > 1 || drivers.length > 1 || efforts.length > 1) {
+    throw new Error(
+      `В одну матрицу попали прогоны разных моделей (${models.join(', ')}), драйверов (${drivers.join(', ')}) или уровней усилий (${efforts.join(', ')}). Выберите одну модель и один драйвер через --model и --driver.`,
+    );
+  }
   const first = runs[0];
   const tasks = new Map<string, string>();
   const groups = new Map<string, RunRecord[]>();
