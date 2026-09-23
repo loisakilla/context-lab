@@ -230,16 +230,16 @@
         "confirm-delete__docs-rules__claude-code__claude-opus-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 49543,
+      "medianTokens": 49539,
       "medianContextTokens": 23785,
       "medianPromptTokens": 49061,
-      "medianCostUsd": 0.271189,
+      "medianCostUsd": 0.0364895,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 6.4
+      "medianSeconds": 6.5
     },
     {
       "taskId": "confirm-delete",

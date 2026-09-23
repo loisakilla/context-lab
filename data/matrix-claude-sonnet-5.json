@@ -950,16 +950,16 @@
         "usage-dashboard__mcp__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 54060,
+      "medianTokens": 76589,
       "medianContextTokens": 1587,
       "medianPromptTokens": 11236,
-      "medianCostUsd": 0.19981999999999997,
+      "medianCostUsd": 0.2067155,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
-      "medianTurns": 3,
-      "medianToolCalls": 12,
-      "medianSeconds": 34.2
+      "medianTurns": 4,
+      "medianToolCalls": 13,
+      "medianSeconds": 42.8
     },
     {
       "taskId": "users-table",
