@@ -1,0 +1,112 @@
+{
+  "id": "date-range__none__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-23T16:54:16.507Z",
+  "repeat": 1,
+  "durationMs": 26870,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "date-range",
+    "title": "Выбор периода",
+    "prompt": "Сделай выбор даты отчёта: календарь на месяц и над ним ряд быстрых вариантов «Сегодня», «Вчера», «Неделя назад», при нажатии на которые дата подставляется в календарь. Выбранная дата отдаётся наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxCalendar",
+      "JxChip"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 8233,
+        "cacheCreation": 361
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2356,
+    "cacheRead": 8233,
+    "cacheCreation": 361
+  },
+  "costUsd": 0.06528275,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useCallback, useMemo, useState } from 'react';\nimport { Button, ButtonGroup, Calendar, Card, Stack, Text } from '@jinx-ui/react';\n\n// Предполагаемый контракт Calendar из @jinx-ui/react:\n// value/onChange для выбранной даты и month/onMonthChange для видимого месяца.\ntype ReportDatePickerProps = {\n  value?: Date;\n  defaultValue?: Date;\n  onChange: (date: Date) => void;\n};\n\nfunction startOfDay(date: Date): Date {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n}\n\nfunction addDays(date: Date, days: number): Date {\n  const result = startOfDay(date);\n  result.setDate(result.getDate() + days);\n  return result;\n}\n\nfunction isSameDay(a: Date, b: Date): boolean {\n  return (\n    a.getFullYear() === b.getFullYear() &&\n    a.getMonth() === b.getMonth() &&\n    a.getDate() === b.getDate()\n  );\n}\n\nfunction startOfMonth(date: Date): Date {\n  const result = startOfDay(date);\n  result.setDate(1);\n  return result;\n}\n\nexport default function ReportDatePicker({ value, defaultValue, onChange }: ReportDatePickerProps) {\n  const [internalDate, setInternalDate] = useState<Date>(() =>\n    startOfDay(defaultValue ?? new Date()),\n  );\n  const selected = value ? startOfDay(value) : internalDate;\n\n  const [visibleMonth, setVisibleMonth] = useState<Date>(() => startOfMonth(selected));\n\n  const presets = useMemo(() => {\n    const today = startOfDay(new Date());\n    return [\n      { id: 'today', label: 'Сегодня', date: today },\n      { id: 'yesterday', label: 'Вчера', date: addDays(today, -1) },\n      { id: 'week-ago', label: 'Неделя назад', date: addDays(today, -7) },\n    ];\n  }, []);\n\n  const selectDate = useCallback(\n    (next: Date) => {\n      const normalized = startOfDay(next);\n      setInternalDate(normalized);\n      setVisibleMonth(startOfMonth(normalized));\n      onChange(normalized);\n    },\n    [onChange],\n  );\n\n  return (\n    <Card>\n      <Stack direction=\"vertical\" style={{ gap: 'var(--jx-space-3)' }}>\n        <Text as=\"label\" variant=\"caption\">\n          Дата отчёта\n        </Text>\n\n        <ButtonGroup aria-label=\"Быстрый выбор даты\">\n          {presets.map((preset) => (\n            <Button\n              key={preset.id}\n              type=\"button\"\n              variant={isSameDay(preset.date, selected) ? 'primary' : 'secondary'}\n              aria-pressed={isSameDay(preset.date, selected)}\n              onClick={() => selectDate(preset.date)}\n            >\n              {preset.label}\n            </Button>\n          ))}\n        </ButtonGroup>\n\n        <Calendar\n          value={selected}\n          month={visibleMonth}\n          onMonthChange={(month: Date) => setVisibleMonth(startOfMonth(month))}\n          onChange={selectDate}\n        />\n      </Stack>\n    </Card>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useMemo, useState } from 'react';\nimport { Button, ButtonGroup, Calendar, Card, Stack, Text } from '@jinx-ui/react';\n\n// Предполагаемый контракт Calendar из @jinx-ui/react:\n// value/onChange для выбранной даты и month/onMonthChange для видимого месяца.\ntype ReportDatePickerProps = {\n  value?: Date;\n  defaultValue?: Date;\n  onChange: (date: Date) => void;\n};\n\nfunction startOfDay(date: Date): Date {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n}\n\nfunction addDays(date: Date, days: number): Date {\n  const result = startOfDay(date);\n  result.setDate(result.getDate() + days);\n  return result;\n}\n\nfunction isSameDay(a: Date, b: Date): boolean {\n  return (\n    a.getFullYear() === b.getFullYear() &&\n    a.getMonth() === b.getMonth() &&\n    a.getDate() === b.getDate()\n  );\n}\n\nfunction startOfMonth(date: Date): Date {\n  const result = startOfDay(date);\n  result.setDate(1);\n  return result;\n}\n\nexport default function ReportDatePicker({ value, defaultValue, onChange }: ReportDatePickerProps) {\n  const [internalDate, setInternalDate] = useState<Date>(() =>\n    startOfDay(defaultValue ?? new Date()),\n  );\n  const selected = value ? startOfDay(value) : internalDate;\n\n  const [visibleMonth, setVisibleMonth] = useState<Date>(() => startOfMonth(selected));\n\n  const presets = useMemo(() => {\n    const today = startOfDay(new Date());\n    return [\n      { id: 'today', label: 'Сегодня', date: today },\n      { id: 'yesterday', label: 'Вчера', date: addDays(today, -1) },\n      { id: 'week-ago', label: 'Неделя назад', date: addDays(today, -7) },\n    ];\n  }, []);\n\n  const selectDate = useCallback(\n    (next: Date) => {\n      const normalized = startOfDay(next);\n      setInternalDate(normalized);\n      setVisibleMonth(startOfMonth(normalized));\n      onChange(normalized);\n    },\n    [onChange],\n  );\n\n  return (\n    <Card>\n      <Stack direction=\"vertical\" style={{ gap: 'var(--jx-space-3)' }}>\n        <Text as=\"label\" variant=\"caption\">\n          Дата отчёта\n        </Text>\n\n        <ButtonGroup aria-label=\"Быстрый выбор даты\">\n          {presets.map((preset) => (\n            <Button\n              key={preset.id}\n              type=\"button\"\n              variant={isSameDay(preset.date, selected) ? 'primary' : 'secondary'}\n              aria-pressed={isSameDay(preset.date, selected)}\n              onClick={() => selectDate(preset.date)}\n            >\n              {preset.label}\n            </Button>\n          ))}\n        </ButtonGroup>\n\n        <Calendar\n          value={selected}\n          month={visibleMonth}\n          onMonthChange={(month: Date) => setVisibleMonth(startOfMonth(month))}\n          onChange={selectDate}\n        />\n      </Stack>\n    </Card>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'ButtonGroup'."
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Calendar'. Did you mean 'JxCalendar'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Card'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "ButtonGroup",
+        "Calendar",
+        "Card",
+        "Stack",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 67,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

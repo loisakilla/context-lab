@@ -1,0 +1,99 @@
+{
+  "id": "side-nav__readme__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-23T17:08:18.430Z",
+  "repeat": 1,
+  "durationMs": 17649,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "side-nav",
+    "title": "Боковая панель навигации",
+    "prompt": "Сделай кнопку «Меню», по которой слева выезжает панель с навигацией: пункты «Проекты», «Команда», «Настройки», разделитель и пункт «Выйти», выделенный как опасный. Выбор пункта вызывает переданный колбэк onNavigate с ключом пункта и закрывает панель.",
+    "taskType": "ui",
+    "expects": [
+      "JxDrawer",
+      "JxMenu",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8233,
+        "cacheCreation": 1308
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1477,
+    "cacheRead": 8233,
+    "cacheCreation": 1308
+  },
+  "costUsd": 0.049226500000000006,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxButton, JxDivider, JxDrawer } from '@jinx-ui/react';\n\nexport type NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface MenuDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nconst NAV_ITEMS: ReadonlyArray<{ key: NavKey; label: string }> = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function MenuDrawer({ onNavigate }: MenuDrawerProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = (key: NavKey) => {\n    setOpen(false);\n    onNavigate(key);\n  };\n\n  const itemStyle = { width: '100%', justifyContent: 'flex-start' } as const;\n\n  return (\n    <>\n      <JxButton variant=\"secondary\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n\n      <JxDrawer\n        open={open}\n        onOpenChange={setOpen}\n        side=\"left\"\n        title=\"Меню\"\n        aria-label=\"Меню навигации\"\n      >\n        <nav\n          aria-label=\"Основная навигация\"\n          style={{ display: 'grid', gap: 'var(--jx-space-1)' }}\n        >\n          {NAV_ITEMS.map((item) => (\n            <JxButton\n              key={item.key}\n              variant=\"ghost\"\n              style={itemStyle}\n              onClick={() => select(item.key)}\n            >\n              {item.label}\n            </JxButton>\n          ))}\n\n          <JxDivider />\n\n          <JxButton\n            variant=\"danger\"\n            style={itemStyle}\n            onClick={() => select('logout')}\n          >\n            Выйти\n          </JxButton>\n        </nav>\n      </JxDrawer>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxDivider, JxDrawer } from '@jinx-ui/react';\n\nexport type NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface MenuDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nconst NAV_ITEMS: ReadonlyArray<{ key: NavKey; label: string }> = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function MenuDrawer({ onNavigate }: MenuDrawerProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = (key: NavKey) => {\n    setOpen(false);\n    onNavigate(key);\n  };\n\n  const itemStyle = { width: '100%', justifyContent: 'flex-start' } as const;\n\n  return (\n    <>\n      <JxButton variant=\"secondary\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n\n      <JxDrawer\n        open={open}\n        onOpenChange={setOpen}\n        side=\"left\"\n        title=\"Меню\"\n        aria-label=\"Меню навигации\"\n      >\n        <nav\n          aria-label=\"Основная навигация\"\n          style={{ display: 'grid', gap: 'var(--jx-space-1)' }}\n        >\n          {NAV_ITEMS.map((item) => (\n            <JxButton\n              key={item.key}\n              variant=\"ghost\"\n              style={itemStyle}\n              onClick={() => select(item.key)}\n            >\n              {item.label}\n            </JxButton>\n          ))}\n\n          <JxDivider />\n\n          <JxButton\n            variant=\"danger\"\n            style={itemStyle}\n            onClick={() => select('logout')}\n          >\n            Выйти\n          </JxButton>\n        </nav>\n      </JxDrawer>\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 41,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 47,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 58,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxDivider",
+      "JxDrawer"
+    ],
+    "expectedCoverage": 0.67,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.9
+  }
+}

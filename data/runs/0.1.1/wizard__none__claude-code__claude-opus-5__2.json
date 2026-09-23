@@ -1,0 +1,106 @@
+{
+  "id": "wizard__none__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T16:51:15.734Z",
+  "repeat": 2,
+  "durationMs": 21052,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 8603,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1902,
+    "cacheRead": 8603,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.051861500000000005,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { Button, Card, Input, Stack, Stepper, Text } from '@jinx-ui/react';\n\nexport interface RegistrationValues {\n  email: string;\n  phone: string;\n  city: string;\n  street: string;\n  zip: string;\n}\n\ninterface RegistrationFormProps {\n  onSubmit: (values: RegistrationValues) => void;\n}\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'];\n\nconst EMPTY: RegistrationValues = {\n  email: '',\n  phone: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nexport default function RegistrationForm({ onSubmit }: RegistrationFormProps) {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<RegistrationValues>(EMPTY);\n\n  const setField =\n    (field: keyof RegistrationValues) =>\n    (event: React.ChangeEvent<HTMLInputElement>) => {\n      const { value } = event.target;\n      setValues((prev) => ({ ...prev, [field]: value }));\n    };\n\n  const isLast = step === STEPS.length - 1;\n\n  return (\n    <Card>\n      <Stack direction=\"column\" gap=\"var(--jx-space-lg)\">\n        <Stepper activeStep={step}>\n          {STEPS.map((label, index) => (\n            <Stepper.Step key={label} index={index} label={label} />\n          ))}\n        </Stepper>\n\n        {step === 0 && (\n          <Stack direction=\"column\" gap=\"var(--jx-space-md)\">\n            <Input\n              label=\"Email\"\n              type=\"email\"\n              value={values.email}\n              onChange={setField('email')}\n            />\n            <Input\n              label=\"Телефон\"\n              type=\"tel\"\n              value={values.phone}\n              onChange={setField('phone')}\n            />\n          </Stack>\n        )}\n\n        {step === 1 && (\n          <Stack direction=\"column\" gap=\"var(--jx-space-md)\">\n            <Input label=\"Город\" value={values.city} onChange={setField('city')} />\n            <Input label=\"Улица, дом\" value={values.street} onChange={setField('street')} />\n            <Input label=\"Индекс\" value={values.zip} onChange={setField('zip')} />\n          </Stack>\n        )}\n\n        {step === 2 && (\n          <Stack direction=\"column\" gap=\"var(--jx-space-sm)\">\n            <Text variant=\"body\">Email: {values.email}</Text>\n            <Text variant=\"body\">Телефон: {values.phone}</Text>\n            <Text variant=\"body\">Город: {values.city}</Text>\n            <Text variant=\"body\">Улица, дом: {values.street}</Text>\n            <Text variant=\"body\">Индекс: {values.zip}</Text>\n          </Stack>\n        )}\n\n        <Stack direction=\"row\" gap=\"var(--jx-space-sm)\" justify=\"space-between\">\n          <Button\n            variant=\"secondary\"\n            disabled={step === 0}\n            onClick={() => setStep((prev) => prev - 1)}\n          >\n            Назад\n          </Button>\n          <Button\n            variant=\"primary\"\n            onClick={() => (isLast ? onSubmit(values) : setStep((prev) => prev + 1))}\n          >\n            {isLast ? 'Отправить' : 'Дальше'}\n          </Button>\n        </Stack>\n      </Stack>\n    </Card>\n  );\n}",
+    "text": "Одна оговорка: я не могу проверить API `@jinx-ui/react`, поэтому имена компонентов (`Card`, `Stepper`, `Stack`, `Input`, `Button`, `Text`) взяты по наиболее конвенциональной схеме — их стоит сверить с реальной библиотекой.\n\n```tsx\nimport { useState } from 'react';\nimport { Button, Card, Input, Stack, Stepper, Text } from '@jinx-ui/react';\n\nexport interface RegistrationValues {\n  email: string;\n  phone: string;\n  city: string;\n  street: string;\n  zip: string;\n}\n\ninterface RegistrationFormProps {\n  onSubmit: (values: RegistrationValues) => void;\n}\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'];\n\nconst EMPTY: RegistrationValues = {\n  email: '',\n  phone: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nexport default function RegistrationForm({ onSubmit }: RegistrationFormProps) {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<RegistrationValues>(EMPTY);\n\n  const setField =\n    (field: keyof RegistrationValues) =>\n    (event: React.ChangeEvent<HTMLInputElement>) => {\n      const { value } = event.target;\n      setValues((prev) => ({ ...prev, [field]: value }));\n    };\n\n  const isLast = step === STEPS.length - 1;\n\n  return (\n    <Card>\n      <Stack direction=\"column\" gap=\"var(--jx-space-lg)\">\n        <Stepper activeStep={step}>\n          {STEPS.map((label, index) => (\n            <Stepper.Step key={label} index={index} label={label} />\n          ))}\n        </Stepper>\n\n        {step === 0 && (\n          <Stack direction=\"column\" gap=\"var(--jx-space-md)\">\n            <Input\n              label=\"Email\"\n              type=\"email\"\n              value={values.email}\n              onChange={setField('email')}\n            />\n            <Input\n              label=\"Телефон\"\n              type=\"tel\"\n              value={values.phone}\n              onChange={setField('phone')}\n            />\n          </Stack>\n        )}\n\n        {step === 1 && (\n          <Stack direction=\"column\" gap=\"var(--jx-space-md)\">\n            <Input label=\"Город\" value={values.city} onChange={setField('city')} />\n            <Input label=\"Улица, дом\" value={values.street} onChange={setField('street')} />\n            <Input label=\"Индекс\" value={values.zip} onChange={setField('zip')} />\n          </Stack>\n        )}\n\n        {step === 2 && (\n          <Stack direction=\"column\" gap=\"var(--jx-space-sm)\">\n            <Text variant=\"body\">Email: {values.email}</Text>\n            <Text variant=\"body\">Телефон: {values.phone}</Text>\n            <Text variant=\"body\">Город: {values.city}</Text>\n            <Text variant=\"body\">Улица, дом: {values.street}</Text>\n            <Text variant=\"body\">Индекс: {values.zip}</Text>\n          </Stack>\n        )}\n\n        <Stack direction=\"row\" gap=\"var(--jx-space-sm)\" justify=\"space-between\">\n          <Button\n            variant=\"secondary\"\n            disabled={step === 0}\n            onClick={() => setStep((prev) => prev - 1)}\n          >\n            Назад\n          </Button>\n          <Button\n            variant=\"primary\"\n            onClick={() => (isLast ? onSubmit(values) : setStep((prev) => prev + 1))}\n          >\n            {isLast ? 'Отправить' : 'Дальше'}\n          </Button>\n        </Stack>\n      </Stack>\n    </Card>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Card'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Stepper'. Did you mean 'JxStepper'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Card",
+        "Input",
+        "Stack",
+        "Stepper",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

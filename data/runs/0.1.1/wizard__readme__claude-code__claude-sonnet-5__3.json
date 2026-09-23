@@ -1,0 +1,235 @@
+{
+  "id": "wizard__readme__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-23T16:56:26.860Z",
+  "repeat": 3,
+  "durationMs": 43823,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 9541,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 5376,
+    "cacheRead": 9541,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.1391805,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxButton } from '@jinx-ui/react';\n\ninterface ContactInfo {\n  fullName: string;\n  email: string;\n  phone: string;\n}\n\ninterface AddressInfo {\n  street: string;\n  city: string;\n  postalCode: string;\n  country: string;\n}\n\ninterface RegistrationData {\n  contact: ContactInfo;\n  address: AddressInfo;\n}\n\ninterface RegistrationWizardProps {\n  onSubmit: (data: RegistrationData) => void;\n}\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nexport default function RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [step, setStep] = useState(0);\n  const [contact, setContact] = useState<ContactInfo>({ fullName: '', email: '', phone: '' });\n  const [address, setAddress] = useState<AddressInfo>({ street: '', city: '', postalCode: '', country: '' });\n\n  const isLastStep = step === STEPS.length - 1;\n\n  const canGoNext =\n    step === 0\n      ? contact.fullName.trim() !== '' && contact.email.trim() !== ''\n      : step === 1\n        ? address.street.trim() !== '' && address.city.trim() !== ''\n        : true;\n\n  const handleNext = () => {\n    if (!isLastStep && canGoNext) {\n      setStep((s) => s + 1);\n    }\n  };\n\n  const handleBack = () => {\n    setStep((s) => Math.max(0, s - 1));\n  };\n\n  const handleSubmit = () => {\n    onSubmit({ contact, address });\n  };\n\n  return (\n    <div\n      className=\"jx-card\"\n      style={{\n        maxWidth: 480,\n        padding: 'var(--jx-space-6)',\n        borderRadius: 'var(--jx-radius-lg)',\n        background: 'var(--jx-color-surface)',\n        border: '1px solid var(--jx-color-border)',\n      }}\n    >\n      <ol\n        role=\"list\"\n        style={{\n          display: 'flex',\n          gap: 'var(--jx-space-3)',\n          listStyle: 'none',\n          padding: 0,\n          margin: '0 0 var(--jx-space-6) 0',\n        }}\n      >\n        {STEPS.map((label, index) => {\n          const isActive = index === step;\n          const isDone = index < step;\n          return (\n            <li\n              key={label}\n              aria-current={isActive ? 'step' : undefined}\n              style={{\n                flex: 1,\n                display: 'flex',\n                flexDirection: 'column',\n                alignItems: 'center',\n                gap: 'var(--jx-space-2)',\n              }}\n            >\n              <span\n                style={{\n                  width: 28,\n                  height: 28,\n                  borderRadius: 'var(--jx-radius-full)',\n                  display: 'flex',\n                  alignItems: 'center',\n                  justifyContent: 'center',\n                  fontSize: 'var(--jx-font-size-sm)',\n                  fontWeight: 'var(--jx-font-weight-medium)',\n                  color: isActive || isDone ? 'var(--jx-color-primary-foreground)' : 'var(--jx-color-foreground-muted)',\n                  background: isActive || isDone ? 'var(--jx-color-primary)' : 'var(--jx-color-surface-muted)',\n                  border: '1px solid var(--jx-color-border)',\n                }}\n              >\n                {index + 1}\n              </span>\n              <span\n                style={{\n                  fontSize: 'var(--jx-font-size-sm)',\n                  color: isActive ? 'var(--jx-color-foreground)' : 'var(--jx-color-foreground-muted)',\n                }}\n              >\n                {label}\n              </span>\n            </li>\n          );\n        })}\n      </ol>\n\n      {step === 0 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-4)' }}>\n          <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-1)' }}>\n            <span className=\"jx-label\">Полное имя</span>\n            <input\n              className=\"jx-input\"\n              value={contact.fullName}\n              onChange={(e) => setContact((c) => ({ ...c, fullName: e.target.value }))}\n              placeholder=\"Иван Иванов\"\n            />\n          </label>\n          <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-1)' }}>\n            <span className=\"jx-label\">Email</span>\n            <input\n              className=\"jx-input\"\n              type=\"email\"\n              value={contact.email}\n              onChange={(e) => setContact((c) => ({ ...c, email: e.target.value }))}\n              placeholder=\"ivan@example.com\"\n            />\n          </label>\n          <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-1)' }}>\n            <span className=\"jx-label\">Телефон</span>\n            <input\n              className=\"jx-input\"\n              type=\"tel\"\n              value={contact.phone}\n              onChange={(e) => setContact((c) => ({ ...c, phone: e.target.value }))}\n              placeholder=\"+48 000 000 000\"\n            />\n          </label>\n        </div>\n      )}\n\n      {step === 1 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-4)' }}>\n          <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-1)' }}>\n            <span className=\"jx-label\">Улица и дом</span>\n            <input\n              className=\"jx-input\"\n              value={address.street}\n              onChange={(e) => setAddress((a) => ({ ...a, street: e.target.value }))}\n              placeholder=\"ул. Примерная, 12\"\n            />\n          </label>\n          <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-1)' }}>\n            <span className=\"jx-label\">Город</span>\n            <input\n              className=\"jx-input\"\n              value={address.city}\n              onChange={(e) => setAddress((a) => ({ ...a, city: e.target.value }))}\n              placeholder=\"Варшава\"\n            />\n          </label>\n          <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-1)' }}>\n            <span className=\"jx-label\">Почтовый индекс</span>\n            <input\n              className=\"jx-input\"\n              value={address.postalCode}\n              onChange={(e) => setAddress((a) => ({ ...a, postalCode: e.target.value }))}\n              placeholder=\"00-001\"\n            />\n          </label>\n          <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-1)' }}>\n            <span className=\"jx-label\">Страна</span>\n            <input\n              className=\"jx-input\"\n              value={address.country}\n              onChange={(e) => setAddress((a) => ({ ...a, country: e.target.value }))}\n              placeholder=\"Польша\"\n            />\n          </label>\n        </div>\n      )}\n\n      {step === 2 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-5)' }}>\n          <section style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-2)' }}>\n            <h3 style={{ margin: 0, fontSize: 'var(--jx-font-size-md)', color: 'var(--jx-color-foreground)' }}>\n              Контакты\n            </h3>\n            <p style={{ margin: 0, color: 'var(--jx-color-foreground-muted)' }}>{contact.fullName || '—'}</p>\n            <p style={{ margin: 0, color: 'var(--jx-color-foreground-muted)' }}>{contact.email || '—'}</p>\n            <p style={{ margin: 0, color: 'var(--jx-color-foreground-muted)' }}>{contact.phone || '—'}</p>\n          </section>\n          <section style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-2)' }}>\n            <h3 style={{ margin: 0, fontSize: 'var(--jx-font-size-md)', color: 'var(--jx-color-foreground)' }}>\n              Адрес\n            </h3>\n            <p style={{ margin: 0, color: 'var(--jx-color-foreground-muted)' }}>{address.street || '—'}</p>\n            <p style={{ margin: 0, color: 'var(--jx-color-foreground-muted)' }}>\n              {[address.postalCode, address.city].filter(Boolean).join(' ') || '—'}\n            </p>\n            <p style={{ margin: 0, color: 'var(--jx-color-foreground-muted)' }}>{address.country || '—'}</p>\n          </section>\n        </div>\n      )}\n\n      <div\n        style={{\n          display: 'flex',\n          justifyContent: 'space-between',\n          marginTop: 'var(--jx-space-6)',\n          gap: 'var(--jx-space-3)',\n        }}\n      >\n        <JxButton variant=\"secondary\" onClick={handleBack} disabled={step === 0}>\n          Назад\n        </JxButton>\n        {isLastStep ? (\n          <JxButton variant=\"primary\" onClick={handleSubmit}>\n            Отправить\n          </JxButton>\n        ) : (\n          <JxButton variant=\"primary\" onClick={handleNext} disabled={!canGoNext}>\n            Дальше\n          </JxButton>\n        )}\n      </div>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton } from '@jinx-ui/react';\n\ninterface ContactInfo {\n  fullName: string;\n  email: string;\n  phone: string;\n}\n\ninterface AddressInfo {\n  street: string;\n  city: string;\n  postalCode: string;\n  country: string;\n}\n\ninterface RegistrationData {\n  contact: ContactInfo;\n  address: AddressInfo;\n}\n\ninterface RegistrationWizardProps {\n  onSubmit: (data: RegistrationData) => void;\n}\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nexport default function RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [step, setStep] = useState(0);\n  const [contact, setContact] = useState<ContactInfo>({ fullName: '', email: '', phone: '' });\n  const [address, setAddress] = useState<AddressInfo>({ street: '', city: '', postalCode: '', country: '' });\n\n  const isLastStep = step === STEPS.length - 1;\n\n  const canGoNext =\n    step === 0\n      ? contact.fullName.trim() !== '' && contact.email.trim() !== ''\n      : step === 1\n        ? address.street.trim() !== '' && address.city.trim() !== ''\n        : true;\n\n  const handleNext = () => {\n    if (!isLastStep && canGoNext) {\n      setStep((s) => s + 1);\n    }\n  };\n\n  const handleBack = () => {\n    setStep((s) => Math.max(0, s - 1));\n  };\n\n  const handleSubmit = () => {\n    onSubmit({ contact, address });\n  };\n\n  return (\n    <div\n      className=\"jx-card\"\n      style={{\n        maxWidth: 480,\n        padding: 'var(--jx-space-6)',\n        borderRadius: 'var(--jx-radius-lg)',\n        background: 'var(--jx-color-surface)',\n        border: '1px solid var(--jx-color-border)',\n      }}\n    >\n      <ol\n        role=\"list\"\n        style={{\n          display: 'flex',\n          gap: 'var(--jx-space-3)',\n          listStyle: 'none',\n          padding: 0,\n          margin: '0 0 var(--jx-space-6) 0',\n        }}\n      >\n        {STEPS.map((label, index) => {\n          const isActive = index === step;\n          const isDone = index < step;\n          return (\n            <li\n              key={label}\n              aria-current={isActive ? 'step' : undefined}\n              style={{\n                flex: 1,\n                display: 'flex',\n                flexDirection: 'column',\n                alignItems: 'center',\n                gap: 'var(--jx-space-2)',\n              }}\n            >\n              <span\n                style={{\n                  width: 28,\n                  height: 28,\n                  borderRadius: 'var(--jx-radius-full)',\n                  display: 'flex',\n                  alignItems: 'center',\n                  justifyContent: 'center',\n                  fontSize: 'var(--jx-font-size-sm)',\n                  fontWeight: 'var(--jx-font-weight-medium)',\n                  color: isActive || isDone ? 'var(--jx-color-primary-foreground)' : 'var(--jx-color-foreground-muted)',\n                  background: isActive || isDone ? 'var(--jx-color-primary)' : 'var(--jx-color-surface-muted)',\n                  border: '1px solid var(--jx-color-border)',\n                }}\n              >\n                {index + 1}\n              </span>\n              <span\n                style={{\n                  fontSize: 'var(--jx-font-size-sm)',\n                  color: isActive ? 'var(--jx-color-foreground)' : 'var(--jx-color-foreground-muted)',\n                }}\n              >\n                {label}\n              </span>\n            </li>\n          );\n        })}\n      </ol>\n\n      {step === 0 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-4)' }}>\n          <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-1)' }}>\n            <span className=\"jx-label\">Полное имя</span>\n            <input\n              className=\"jx-input\"\n              value={contact.fullName}\n              onChange={(e) => setContact((c) => ({ ...c, fullName: e.target.value }))}\n              placeholder=\"Иван Иванов\"\n            />\n          </label>\n          <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-1)' }}>\n            <span className=\"jx-label\">Email</span>\n            <input\n              className=\"jx-input\"\n              type=\"email\"\n              value={contact.email}\n              onChange={(e) => setContact((c) => ({ ...c, email: e.target.value }))}\n              placeholder=\"ivan@example.com\"\n            />\n          </label>\n          <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-1)' }}>\n            <span className=\"jx-label\">Телефон</span>\n            <input\n              className=\"jx-input\"\n              type=\"tel\"\n              value={contact.phone}\n              onChange={(e) => setContact((c) => ({ ...c, phone: e.target.value }))}\n              placeholder=\"+48 000 000 000\"\n            />\n          </label>\n        </div>\n      )}\n\n      {step === 1 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-4)' }}>\n          <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-1)' }}>\n            <span className=\"jx-label\">Улица и дом</span>\n            <input\n              className=\"jx-input\"\n              value={address.street}\n              onChange={(e) => setAddress((a) => ({ ...a, street: e.target.value }))}\n              placeholder=\"ул. Примерная, 12\"\n            />\n          </label>\n          <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-1)' }}>\n            <span className=\"jx-label\">Город</span>\n            <input\n              className=\"jx-input\"\n              value={address.city}\n              onChange={(e) => setAddress((a) => ({ ...a, city: e.target.value }))}\n              placeholder=\"Варшава\"\n            />\n          </label>\n          <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-1)' }}>\n            <span className=\"jx-label\">Почтовый индекс</span>\n            <input\n              className=\"jx-input\"\n              value={address.postalCode}\n              onChange={(e) => setAddress((a) => ({ ...a, postalCode: e.target.value }))}\n              placeholder=\"00-001\"\n            />\n          </label>\n          <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-1)' }}>\n            <span className=\"jx-label\">Страна</span>\n            <input\n              className=\"jx-input\"\n              value={address.country}\n              onChange={(e) => setAddress((a) => ({ ...a, country: e.target.value }))}\n              placeholder=\"Польша\"\n            />\n          </label>\n        </div>\n      )}\n\n      {step === 2 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-5)' }}>\n          <section style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-2)' }}>\n            <h3 style={{ margin: 0, fontSize: 'var(--jx-font-size-md)', color: 'var(--jx-color-foreground)' }}>\n              Контакты\n            </h3>\n            <p style={{ margin: 0, color: 'var(--jx-color-foreground-muted)' }}>{contact.fullName || '—'}</p>\n            <p style={{ margin: 0, color: 'var(--jx-color-foreground-muted)' }}>{contact.email || '—'}</p>\n            <p style={{ margin: 0, color: 'var(--jx-color-foreground-muted)' }}>{contact.phone || '—'}</p>\n          </section>\n          <section style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-2)' }}>\n            <h3 style={{ margin: 0, fontSize: 'var(--jx-font-size-md)', color: 'var(--jx-color-foreground)' }}>\n              Адрес\n            </h3>\n            <p style={{ margin: 0, color: 'var(--jx-color-foreground-muted)' }}>{address.street || '—'}</p>\n            <p style={{ margin: 0, color: 'var(--jx-color-foreground-muted)' }}>\n              {[address.postalCode, address.city].filter(Boolean).join(' ') || '—'}\n            </p>\n            <p style={{ margin: 0, color: 'var(--jx-color-foreground-muted)' }}>{address.country || '—'}</p>\n          </section>\n        </div>\n      )}\n\n      <div\n        style={{\n          display: 'flex',\n          justifyContent: 'space-between',\n          marginTop: 'var(--jx-space-6)',\n          gap: 'var(--jx-space-3)',\n        }}\n      >\n        <JxButton variant=\"secondary\" onClick={handleBack} disabled={step === 0}>\n          Назад\n        </JxButton>\n        {isLastStep ? (\n          <JxButton variant=\"primary\" onClick={handleSubmit}>\n            Отправить\n          </JxButton>\n        ) : (\n          <JxButton variant=\"primary\" onClick={handleNext} disabled={!canGoNext}>\n            Дальше\n          </JxButton>\n        )}\n      </div>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 59,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 69,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 84,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 93,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 110,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 123,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 124,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 133,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 143,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 157,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 158,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 167,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 176,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 185,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 198,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 199,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 200,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 203,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 204,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 205,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 207,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 208,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 211,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 212,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 215,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 221,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton"
+    ],
+    "expectedCoverage": 0.33,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.8
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "id": "tag-picker__readme__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T17:07:33.256Z",
+  "repeat": 2,
+  "durationMs": 27464,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 9513,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2276,
+    "cacheRead": 9513,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0616665,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useCallback, useState } from 'react';\nimport { JxTagInput, JxButton } from '@jinx-ui/react';\n\nexport interface ArticleTagsFieldProps {\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n  label?: string;\n  placeholder?: string;\n}\n\nfunction normalize(tags: string[]): string[] {\n  const seen = new Set<string>();\n  const result: string[] = [];\n  for (const raw of tags) {\n    const tag = raw.trim();\n    const key = tag.toLowerCase();\n    if (!tag || seen.has(key)) continue;\n    seen.add(key);\n    result.push(tag);\n  }\n  return result;\n}\n\nexport default function ArticleTagsField({\n  defaultValue = [],\n  onChange,\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n}: ArticleTagsFieldProps) {\n  const [tags, setTags] = useState<string[]>(() => normalize(defaultValue));\n\n  const commit = useCallback(\n    (next: string[]) => {\n      const cleaned = normalize(next);\n      setTags(cleaned);\n      onChange?.(cleaned);\n    },\n    [onChange],\n  );\n\n  const removeTag = useCallback(\n    (tag: string) => {\n      commit(tags.filter((item) => item !== tag));\n    },\n    [commit, tags],\n  );\n\n  return (\n    <div\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-2, 0.5rem)',\n      }}\n    >\n      <JxTagInput\n        label={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={commit}\n      />\n\n      {tags.length > 0 && (\n        <ul\n          aria-label=\"Выбранные теги\"\n          style={{\n            display: 'flex',\n            flexWrap: 'wrap',\n            gap: 'var(--jx-space-2, 0.5rem)',\n            margin: 0,\n            padding: 0,\n            listStyle: 'none',\n          }}\n        >\n          {tags.map((tag) => (\n            <li key={tag}>\n              <JxButton\n                type=\"button\"\n                size=\"sm\"\n                aria-label={`Удалить тег ${tag}`}\n                onClick={() => removeTag(tag)}\n              >\n                <span>{tag}</span>\n                <span aria-hidden=\"true\">✕</span>\n              </JxButton>\n            </li>\n          ))}\n        </ul>\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useState } from 'react';\nimport { JxTagInput, JxButton } from '@jinx-ui/react';\n\nexport interface ArticleTagsFieldProps {\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n  label?: string;\n  placeholder?: string;\n}\n\nfunction normalize(tags: string[]): string[] {\n  const seen = new Set<string>();\n  const result: string[] = [];\n  for (const raw of tags) {\n    const tag = raw.trim();\n    const key = tag.toLowerCase();\n    if (!tag || seen.has(key)) continue;\n    seen.add(key);\n    result.push(tag);\n  }\n  return result;\n}\n\nexport default function ArticleTagsField({\n  defaultValue = [],\n  onChange,\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n}: ArticleTagsFieldProps) {\n  const [tags, setTags] = useState<string[]>(() => normalize(defaultValue));\n\n  const commit = useCallback(\n    (next: string[]) => {\n      const cleaned = normalize(next);\n      setTags(cleaned);\n      onChange?.(cleaned);\n    },\n    [onChange],\n  );\n\n  const removeTag = useCallback(\n    (tag: string) => {\n      commit(tags.filter((item) => item !== tag));\n    },\n    [commit, tags],\n  );\n\n  return (\n    <div\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-2, 0.5rem)',\n      }}\n    >\n      <JxTagInput\n        label={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={commit}\n      />\n\n      {tags.length > 0 && (\n        <ul\n          aria-label=\"Выбранные теги\"\n          style={{\n            display: 'flex',\n            flexWrap: 'wrap',\n            gap: 'var(--jx-space-2, 0.5rem)',\n            margin: 0,\n            padding: 0,\n            listStyle: 'none',\n          }}\n        >\n          {tags.map((tag) => (\n            <li key={tag}>\n              <JxButton\n                type=\"button\"\n                size=\"sm\"\n                aria-label={`Удалить тег ${tag}`}\n                onClick={() => removeTag(tag)}\n              >\n                <span>{tag}</span>\n                <span aria-hidden=\"true\">✕</span>\n              </JxButton>\n            </li>\n          ))}\n        </ul>\n      )}\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2322,
+          "line": 57,
+          "message": "Type '{ label: string; placeholder: string; value: string[]; onValueChange: (next: string[]) => void; }' is not assignable to type 'IntrinsicAttributes & JxTagInputProps'.\n  Property 'label' does not exist on type 'IntrinsicAttributes & JxTagInputProps'."
+        }
+      ],
+      "unknownComponents": [],
+      "unknownProps": [
+        {
+          "component": "JxTagInput",
+          "prop": "label"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 50,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 66,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxTagInput"
+    ],
+    "expectedCoverage": 1,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.86
+  }
+}

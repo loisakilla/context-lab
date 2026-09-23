@@ -1,0 +1,157 @@
+{
+  "id": "users-table__readme__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T17:04:37.978Z",
+  "repeat": 3,
+  "durationMs": 32154,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "users-table",
+    "title": "Таблица пользователей с пагинацией",
+    "prompt": "Сделай таблицу пользователей с колонками «Имя», «Роль» и «Статус». Список users передаётся пропсом, показывать по десять строк на страницу с постраничной навигацией под таблицей. Статус показывай цветной меткой: активен или отключён.",
+    "taskType": "ui",
+    "expects": [
+      "JxTable",
+      "JxPagination",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 9521,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2854,
+    "cacheRead": 9521,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.07612050000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\nimport { JxButton } from '@jinx-ui/react';\n\nexport type UserStatus = 'active' | 'disabled';\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  status: UserStatus;\n}\n\nexport interface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nconst STATUS_LABEL: Record<UserStatus, string> = {\n  active: 'Активен',\n  disabled: 'Отключён',\n};\n\nconst STATUS_TOKEN: Record<UserStatus, string> = {\n  active: 'var(--jx-color-success)',\n  disabled: 'var(--jx-color-danger)',\n};\n\nfunction StatusBadge({ status }: { status: UserStatus }) {\n  return (\n    <span\n      className=\"jx-badge\"\n      style={{\n        display: 'inline-flex',\n        alignItems: 'center',\n        gap: 'var(--jx-space-1)',\n        padding: 'var(--jx-space-1) var(--jx-space-2)',\n        borderRadius: 'var(--jx-radius-full)',\n        border: '1px solid currentColor',\n        color: STATUS_TOKEN[status],\n        fontSize: 'var(--jx-font-size-sm)',\n        lineHeight: 1.2,\n        whiteSpace: 'nowrap',\n      }}\n    >\n      <span\n        aria-hidden=\"true\"\n        style={{\n          width: 'var(--jx-space-2)',\n          height: 'var(--jx-space-2)',\n          borderRadius: 'var(--jx-radius-full)',\n          background: 'currentColor',\n        }}\n      />\n      {STATUS_LABEL[status]}\n    </span>\n  );\n}\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const safePage = Math.min(page, pageCount);\n\n  const rows = useMemo(\n    () => users.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE),\n    [users, safePage],\n  );\n\n  const cellStyle = {\n    padding: 'var(--jx-space-3)',\n    borderBottom: '1px solid var(--jx-color-border)',\n    textAlign: 'left' as const,\n  };\n\n  return (\n    <div\n      className=\"jx-stack\"\n      style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-3)' }}\n    >\n      <table\n        className=\"jx-table\"\n        style={{\n          width: '100%',\n          borderCollapse: 'collapse',\n          background: 'var(--jx-color-surface)',\n          color: 'var(--jx-color-text)',\n        }}\n      >\n        <thead>\n          <tr>\n            <th scope=\"col\" style={{ ...cellStyle, color: 'var(--jx-color-text-muted)' }}>\n              Имя\n            </th>\n            <th scope=\"col\" style={{ ...cellStyle, color: 'var(--jx-color-text-muted)' }}>\n              Роль\n            </th>\n            <th scope=\"col\" style={{ ...cellStyle, color: 'var(--jx-color-text-muted)' }}>\n              Статус\n            </th>\n          </tr>\n        </thead>\n        <tbody>\n          {rows.length === 0 ? (\n            <tr>\n              <td colSpan={3} style={{ ...cellStyle, color: 'var(--jx-color-text-muted)' }}>\n                Пользователей нет\n              </td>\n            </tr>\n          ) : (\n            rows.map((user) => (\n              <tr key={user.id}>\n                <td style={cellStyle}>{user.name}</td>\n                <td style={cellStyle}>{user.role}</td>\n                <td style={cellStyle}>\n                  <StatusBadge status={user.status} />\n                </td>\n              </tr>\n            ))\n          )}\n        </tbody>\n      </table>\n\n      <nav\n        aria-label=\"Навигация по страницам\"\n        style={{\n          display: 'flex',\n          alignItems: 'center',\n          justifyContent: 'space-between',\n          gap: 'var(--jx-space-3)',\n        }}\n      >\n        <JxButton\n          variant=\"secondary\"\n          disabled={safePage <= 1}\n          onClick={() => setPage(safePage - 1)}\n        >\n          Назад\n        </JxButton>\n\n        <span\n          aria-live=\"polite\"\n          style={{ color: 'var(--jx-color-text-muted)', fontSize: 'var(--jx-font-size-sm)' }}\n        >\n          Страница {safePage} из {pageCount}\n        </span>\n\n        <JxButton\n          variant=\"secondary\"\n          disabled={safePage >= pageCount}\n          onClick={() => setPage(safePage + 1)}\n        >\n          Вперёд\n        </JxButton>\n      </nav>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport { JxButton } from '@jinx-ui/react';\n\nexport type UserStatus = 'active' | 'disabled';\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  status: UserStatus;\n}\n\nexport interface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nconst STATUS_LABEL: Record<UserStatus, string> = {\n  active: 'Активен',\n  disabled: 'Отключён',\n};\n\nconst STATUS_TOKEN: Record<UserStatus, string> = {\n  active: 'var(--jx-color-success)',\n  disabled: 'var(--jx-color-danger)',\n};\n\nfunction StatusBadge({ status }: { status: UserStatus }) {\n  return (\n    <span\n      className=\"jx-badge\"\n      style={{\n        display: 'inline-flex',\n        alignItems: 'center',\n        gap: 'var(--jx-space-1)',\n        padding: 'var(--jx-space-1) var(--jx-space-2)',\n        borderRadius: 'var(--jx-radius-full)',\n        border: '1px solid currentColor',\n        color: STATUS_TOKEN[status],\n        fontSize: 'var(--jx-font-size-sm)',\n        lineHeight: 1.2,\n        whiteSpace: 'nowrap',\n      }}\n    >\n      <span\n        aria-hidden=\"true\"\n        style={{\n          width: 'var(--jx-space-2)',\n          height: 'var(--jx-space-2)',\n          borderRadius: 'var(--jx-radius-full)',\n          background: 'currentColor',\n        }}\n      />\n      {STATUS_LABEL[status]}\n    </span>\n  );\n}\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const safePage = Math.min(page, pageCount);\n\n  const rows = useMemo(\n    () => users.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE),\n    [users, safePage],\n  );\n\n  const cellStyle = {\n    padding: 'var(--jx-space-3)',\n    borderBottom: '1px solid var(--jx-color-border)',\n    textAlign: 'left' as const,\n  };\n\n  return (\n    <div\n      className=\"jx-stack\"\n      style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-3)' }}\n    >\n      <table\n        className=\"jx-table\"\n        style={{\n          width: '100%',\n          borderCollapse: 'collapse',\n          background: 'var(--jx-color-surface)',\n          color: 'var(--jx-color-text)',\n        }}\n      >\n        <thead>\n          <tr>\n            <th scope=\"col\" style={{ ...cellStyle, color: 'var(--jx-color-text-muted)' }}>\n              Имя\n            </th>\n            <th scope=\"col\" style={{ ...cellStyle, color: 'var(--jx-color-text-muted)' }}>\n              Роль\n            </th>\n            <th scope=\"col\" style={{ ...cellStyle, color: 'var(--jx-color-text-muted)' }}>\n              Статус\n            </th>\n          </tr>\n        </thead>\n        <tbody>\n          {rows.length === 0 ? (\n            <tr>\n              <td colSpan={3} style={{ ...cellStyle, color: 'var(--jx-color-text-muted)' }}>\n                Пользователей нет\n              </td>\n            </tr>\n          ) : (\n            rows.map((user) => (\n              <tr key={user.id}>\n                <td style={cellStyle}>{user.name}</td>\n                <td style={cellStyle}>{user.role}</td>\n                <td style={cellStyle}>\n                  <StatusBadge status={user.status} />\n                </td>\n              </tr>\n            ))\n          )}\n        </tbody>\n      </table>\n\n      <nav\n        aria-label=\"Навигация по страницам\"\n        style={{\n          display: 'flex',\n          alignItems: 'center',\n          justifyContent: 'space-between',\n          gap: 'var(--jx-space-3)',\n        }}\n      >\n        <JxButton\n          variant=\"secondary\"\n          disabled={safePage <= 1}\n          onClick={() => setPage(safePage - 1)}\n        >\n          Назад\n        </JxButton>\n\n        <span\n          aria-live=\"polite\"\n          style={{ color: 'var(--jx-color-text-muted)', fontSize: 'var(--jx-font-size-sm)' }}\n        >\n          Страница {safePage} из {pageCount}\n        </span>\n\n        <JxButton\n          variant=\"secondary\"\n          disabled={safePage >= pageCount}\n          onClick={() => setPage(safePage + 1)}\n        >\n          Вперёд\n        </JxButton>\n      </nav>\n    </div>\n  );\n}\n```\n\nОдно уточнение: в доступном мне README перечислены только `JxButton`, оверлеи, поля ввода и календари — табличного компонента и бейджа там нет, поэтому таблица и метка собраны на семантическом HTML с токенами. Имена токенов (`--jx-color-success`, `--jx-space-3` и т. п.) я взял по соглашению `jx-*`, их стоит сверить с `@jinx-ui/core`."
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 33,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 48,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 80,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 84,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 93,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 96,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 99,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 107,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 114,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 115,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 116,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 127,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 144,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton"
+    ],
+    "expectedCoverage": 0,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.7
+  }
+}

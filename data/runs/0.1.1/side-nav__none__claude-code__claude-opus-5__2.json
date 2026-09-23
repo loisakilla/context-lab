@@ -1,0 +1,100 @@
+{
+  "id": "side-nav__none__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T16:53:30.383Z",
+  "repeat": 2,
+  "durationMs": 16972,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "side-nav",
+    "title": "Боковая панель навигации",
+    "prompt": "Сделай кнопку «Меню», по которой слева выезжает панель с навигацией: пункты «Проекты», «Команда», «Настройки», разделитель и пункт «Выйти», выделенный как опасный. Выбор пункта вызывает переданный колбэк onNavigate с ключом пункта и закрывает панель.",
+    "taskType": "ui",
+    "expects": [
+      "JxDrawer",
+      "JxMenu",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 8605,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1552,
+    "cacheRead": 8605,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.043112500000000005,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { Button, Drawer, Menu, MenuItem, Divider } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface AppNavMenuProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nconst NAV_ITEMS: { key: NavKey; label: string }[] = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function AppNavMenu({ onNavigate }: AppNavMenuProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = (key: NavKey) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <Button onClick={() => setOpen(true)}>Меню</Button>\n\n      <Drawer\n        open={open}\n        placement=\"left\"\n        title=\"Навигация\"\n        onClose={() => setOpen(false)}\n      >\n        <Menu aria-label=\"Основная навигация\">\n          {NAV_ITEMS.map((item) => (\n            <MenuItem key={item.key} onSelect={() => select(item.key)}>\n              {item.label}\n            </MenuItem>\n          ))}\n          <Divider />\n          <MenuItem tone=\"danger\" onSelect={() => select('logout')}>\n            Выйти\n          </MenuItem>\n        </Menu>\n      </Drawer>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { Button, Drawer, Menu, MenuItem, Divider } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface AppNavMenuProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nconst NAV_ITEMS: { key: NavKey; label: string }[] = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport default function AppNavMenu({ onNavigate }: AppNavMenuProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = (key: NavKey) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <Button onClick={() => setOpen(true)}>Меню</Button>\n\n      <Drawer\n        open={open}\n        placement=\"left\"\n        title=\"Навигация\"\n        onClose={() => setOpen(false)}\n      >\n        <Menu aria-label=\"Основная навигация\">\n          {NAV_ITEMS.map((item) => (\n            <MenuItem key={item.key} onSelect={() => select(item.key)}>\n              {item.label}\n            </MenuItem>\n          ))}\n          <Divider />\n          <MenuItem tone=\"danger\" onSelect={() => select('logout')}>\n            Выйти\n          </MenuItem>\n        </Menu>\n      </Drawer>\n    </>\n  );\n}\n```\n\nОдно важное замечание вне формата: у меня нет доступа к `@jinx-ui/react`, поэтому имена компонентов и пропсов (`Drawer.placement`, `MenuItem.onSelect`, `tone=\"danger\"`) — предположения по типовым конвенциям, а не проверенный API. Сверьте их с документацией пакета; если пришлёте реальные сигнатуры, поправлю код."
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Drawer'. Did you mean 'JxDrawer'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Menu'."
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'MenuItem'. Did you mean 'JxMenuItem'?"
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Divider'. Did you mean 'JxDivider'?"
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Divider",
+        "Drawer",
+        "Menu",
+        "MenuItem"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

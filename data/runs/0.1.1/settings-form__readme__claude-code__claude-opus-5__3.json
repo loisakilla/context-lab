@@ -1,0 +1,107 @@
+{
+  "id": "settings-form__readme__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T17:01:57.104Z",
+  "repeat": 3,
+  "durationMs": 25327,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "settings-form",
+    "title": "Форма настроек",
+    "prompt": "Сделай форму настроек профиля: поле «Имя», выбор языка интерфейса из списка (русский, английский), переключатель «Уведомления на почту» и кнопка «Сохранить». Состояние полей храни в компоненте, при отправке вызывай переданный колбэк onSave с объектом настроек.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 9536,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2283,
+    "cacheRead": 9536,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.061853,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, type FormEvent } from 'react';\nimport { JxButton, JxInput, JxSelect, JxSwitch } from '@jinx-ui/react';\n\nexport type Language = 'ru' | 'en';\n\nexport interface ProfileSettings {\n  name: string;\n  language: Language;\n  emailNotifications: boolean;\n}\n\nexport interface ProfileSettingsFormProps {\n  initialSettings?: Partial<ProfileSettings>;\n  onSave: (settings: ProfileSettings) => void;\n}\n\nconst LANGUAGE_OPTIONS: Array<{ value: Language; label: string }> = [\n  { value: 'ru', label: 'Русский' },\n  { value: 'en', label: 'Английский' },\n];\n\nexport default function ProfileSettingsForm({\n  initialSettings,\n  onSave,\n}: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialSettings?.name ?? '');\n  const [language, setLanguage] = useState<Language>(initialSettings?.language ?? 'ru');\n  const [emailNotifications, setEmailNotifications] = useState(\n    initialSettings?.emailNotifications ?? false,\n  );\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    onSave({ name: name.trim(), language, emailNotifications });\n  };\n\n  return (\n    <form\n      className=\"jx-stack\"\n      style={{ gap: 'var(--jx-space-4)', maxWidth: 'var(--jx-size-form-md)' }}\n      onSubmit={handleSubmit}\n    >\n      <JxInput\n        label=\"Имя\"\n        name=\"name\"\n        value={name}\n        onValueChange={setName}\n        placeholder=\"Введите имя\"\n        autoComplete=\"name\"\n      />\n\n      <JxSelect\n        label=\"Язык интерфейса\"\n        name=\"language\"\n        value={language}\n        onValueChange={(next: Language) => setLanguage(next)}\n        options={LANGUAGE_OPTIONS}\n      />\n\n      <JxSwitch\n        label=\"Уведомления на почту\"\n        name=\"emailNotifications\"\n        value={emailNotifications}\n        onValueChange={setEmailNotifications}\n      />\n\n      <JxButton type=\"submit\" variant=\"primary\">\n        Сохранить\n      </JxButton>\n    </form>\n  );\n}",
+    "text": "```tsx\nimport { useState, type FormEvent } from 'react';\nimport { JxButton, JxInput, JxSelect, JxSwitch } from '@jinx-ui/react';\n\nexport type Language = 'ru' | 'en';\n\nexport interface ProfileSettings {\n  name: string;\n  language: Language;\n  emailNotifications: boolean;\n}\n\nexport interface ProfileSettingsFormProps {\n  initialSettings?: Partial<ProfileSettings>;\n  onSave: (settings: ProfileSettings) => void;\n}\n\nconst LANGUAGE_OPTIONS: Array<{ value: Language; label: string }> = [\n  { value: 'ru', label: 'Русский' },\n  { value: 'en', label: 'Английский' },\n];\n\nexport default function ProfileSettingsForm({\n  initialSettings,\n  onSave,\n}: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialSettings?.name ?? '');\n  const [language, setLanguage] = useState<Language>(initialSettings?.language ?? 'ru');\n  const [emailNotifications, setEmailNotifications] = useState(\n    initialSettings?.emailNotifications ?? false,\n  );\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    onSave({ name: name.trim(), language, emailNotifications });\n  };\n\n  return (\n    <form\n      className=\"jx-stack\"\n      style={{ gap: 'var(--jx-space-4)', maxWidth: 'var(--jx-size-form-md)' }}\n      onSubmit={handleSubmit}\n    >\n      <JxInput\n        label=\"Имя\"\n        name=\"name\"\n        value={name}\n        onValueChange={setName}\n        placeholder=\"Введите имя\"\n        autoComplete=\"name\"\n      />\n\n      <JxSelect\n        label=\"Язык интерфейса\"\n        name=\"language\"\n        value={language}\n        onValueChange={(next: Language) => setLanguage(next)}\n        options={LANGUAGE_OPTIONS}\n      />\n\n      <JxSwitch\n        label=\"Уведомления на почту\"\n        name=\"emailNotifications\"\n        value={emailNotifications}\n        onValueChange={setEmailNotifications}\n      />\n\n      <JxButton type=\"submit\" variant=\"primary\">\n        Сохранить\n      </JxButton>\n    </form>\n  );\n}\n```\n\nОдно уточнение вне формата, потому что оно влияет на компиляцию: точные имена `JxInput` / `JxSwitch` и их пропсы (`label`, `options`) я вывел из контракта `value` + `onValueChange`, описанного в README, — полного списка экспортов и сигнатур у меня нет, так что сверь их с типами пакета."
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxInput'."
+        },
+        {
+          "code": 2322,
+          "line": 56,
+          "message": "Type '(next: Language) => void' is not assignable to type '(value: string) => void'.\n  Types of parameters 'next' and 'value' are incompatible.\n    Type 'string' is not assignable to type 'Language'."
+        },
+        {
+          "code": 2322,
+          "line": 63,
+          "message": "Type 'boolean' is not assignable to type 'string | number | readonly string[] | undefined'."
+        }
+      ],
+      "unknownComponents": [
+        "JxInput"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 40,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxInput",
+      "JxSelect",
+      "JxSwitch"
+    ],
+    "expectedCoverage": 0.75,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.5
+  }
+}

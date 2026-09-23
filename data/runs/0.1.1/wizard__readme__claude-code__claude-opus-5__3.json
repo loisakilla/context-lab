@@ -1,0 +1,142 @@
+{
+  "id": "wizard__readme__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T17:06:42.503Z",
+  "repeat": 3,
+  "durationMs": 44471,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 9539,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 3848,
+    "cacheRead": 9539,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.10097949999999999,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxButton, JxInput } from '@jinx-ui/react';\n\nexport type RegistrationData = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype Props = {\n  onSubmit: (data: RegistrationData) => void;\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nconst EMPTY: RegistrationData = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst LABELS: Record<keyof RegistrationData, string> = {\n  name: 'Имя',\n  email: 'E-mail',\n  phone: 'Телефон',\n  country: 'Страна',\n  city: 'Город',\n  street: 'Улица, дом',\n  zip: 'Индекс',\n};\n\nexport default function RegistrationWizard({ onSubmit }: Props) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<RegistrationData>(EMPTY);\n\n  const update = (key: keyof RegistrationData) => (value: string) =>\n    setData((prev) => ({ ...prev, [key]: value }));\n\n  const isLast = step === STEPS.length - 1;\n\n  const field = (key: keyof RegistrationData, type = 'text') => (\n    <JxInput\n      label={LABELS[key]}\n      type={type}\n      value={data[key]}\n      onValueChange={update(key)}\n    />\n  );\n\n  return (\n    <section\n      aria-label=\"Регистрация\"\n      style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-5)' }}\n    >\n      <ol\n        style={{\n          display: 'flex',\n          gap: 'var(--jx-space-2)',\n          listStyle: 'none',\n          margin: 0,\n          padding: 0,\n        }}\n      >\n        {STEPS.map((title, index) => (\n          <li key={title} style={{ flex: 1 }}>\n            <JxButton\n              variant={index === step ? 'primary' : 'secondary'}\n              disabled={index > step}\n              aria-current={index === step ? 'step' : undefined}\n              onClick={() => setStep(index)}\n            >\n              {index + 1}. {title}\n            </JxButton>\n          </li>\n        ))}\n      </ol>\n\n      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-4)' }}>\n        {step === 0 && (\n          <>\n            {field('name')}\n            {field('email', 'email')}\n            {field('phone', 'tel')}\n          </>\n        )}\n\n        {step === 1 && (\n          <>\n            {field('country')}\n            {field('city')}\n            {field('street')}\n            {field('zip')}\n          </>\n        )}\n\n        {step === 2 && (\n          <dl\n            style={{\n              display: 'grid',\n              gridTemplateColumns: 'max-content 1fr',\n              gap: 'var(--jx-space-2) var(--jx-space-4)',\n              margin: 0,\n            }}\n          >\n            {(Object.keys(LABELS) as Array<keyof RegistrationData>).map((key) => (\n              <div key={key} style={{ display: 'contents' }}>\n                <dt style={{ color: 'var(--jx-color-text-muted)' }}>{LABELS[key]}</dt>\n                <dd style={{ margin: 0 }}>{data[key] || '—'}</dd>\n              </div>\n            ))}\n          </dl>\n        )}\n      </div>\n\n      <div style={{ display: 'flex', gap: 'var(--jx-space-3)' }}>\n        <JxButton\n          variant=\"secondary\"\n          disabled={step === 0}\n          onClick={() => setStep((prev) => prev - 1)}\n        >\n          Назад\n        </JxButton>\n        <JxButton\n          variant=\"primary\"\n          onClick={() => (isLast ? onSubmit(data) : setStep((prev) => prev + 1))}\n        >\n          {isLast ? 'Отправить' : 'Дальше'}\n        </JxButton>\n      </div>\n    </section>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxInput } from '@jinx-ui/react';\n\nexport type RegistrationData = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype Props = {\n  onSubmit: (data: RegistrationData) => void;\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nconst EMPTY: RegistrationData = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst LABELS: Record<keyof RegistrationData, string> = {\n  name: 'Имя',\n  email: 'E-mail',\n  phone: 'Телефон',\n  country: 'Страна',\n  city: 'Город',\n  street: 'Улица, дом',\n  zip: 'Индекс',\n};\n\nexport default function RegistrationWizard({ onSubmit }: Props) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<RegistrationData>(EMPTY);\n\n  const update = (key: keyof RegistrationData) => (value: string) =>\n    setData((prev) => ({ ...prev, [key]: value }));\n\n  const isLast = step === STEPS.length - 1;\n\n  const field = (key: keyof RegistrationData, type = 'text') => (\n    <JxInput\n      label={LABELS[key]}\n      type={type}\n      value={data[key]}\n      onValueChange={update(key)}\n    />\n  );\n\n  return (\n    <section\n      aria-label=\"Регистрация\"\n      style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-5)' }}\n    >\n      <ol\n        style={{\n          display: 'flex',\n          gap: 'var(--jx-space-2)',\n          listStyle: 'none',\n          margin: 0,\n          padding: 0,\n        }}\n      >\n        {STEPS.map((title, index) => (\n          <li key={title} style={{ flex: 1 }}>\n            <JxButton\n              variant={index === step ? 'primary' : 'secondary'}\n              disabled={index > step}\n              aria-current={index === step ? 'step' : undefined}\n              onClick={() => setStep(index)}\n            >\n              {index + 1}. {title}\n            </JxButton>\n          </li>\n        ))}\n      </ol>\n\n      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-4)' }}>\n        {step === 0 && (\n          <>\n            {field('name')}\n            {field('email', 'email')}\n            {field('phone', 'tel')}\n          </>\n        )}\n\n        {step === 1 && (\n          <>\n            {field('country')}\n            {field('city')}\n            {field('street')}\n            {field('zip')}\n          </>\n        )}\n\n        {step === 2 && (\n          <dl\n            style={{\n              display: 'grid',\n              gridTemplateColumns: 'max-content 1fr',\n              gap: 'var(--jx-space-2) var(--jx-space-4)',\n              margin: 0,\n            }}\n          >\n            {(Object.keys(LABELS) as Array<keyof RegistrationData>).map((key) => (\n              <div key={key} style={{ display: 'contents' }}>\n                <dt style={{ color: 'var(--jx-color-text-muted)' }}>{LABELS[key]}</dt>\n                <dd style={{ margin: 0 }}>{data[key] || '—'}</dd>\n              </div>\n            ))}\n          </dl>\n        )}\n      </div>\n\n      <div style={{ display: 'flex', gap: 'var(--jx-space-3)' }}>\n        <JxButton\n          variant=\"secondary\"\n          disabled={step === 0}\n          onClick={() => setStep((prev) => prev - 1)}\n        >\n          Назад\n        </JxButton>\n        <JxButton\n          variant=\"primary\"\n          onClick={() => (isLast ? onSubmit(data) : setStep((prev) => prev + 1))}\n        >\n          {isLast ? 'Отправить' : 'Дальше'}\n        </JxButton>\n      </div>\n    </section>\n  );\n}\n```\n\nОдно уточнение вне формата, потому что иначе код может не собраться: в переданном README перечислены только `JxButton`, `JxModal`, `JxDrawer`, `JxTabs`, `JxAccordion`, `JxSelect`, `JxCombobox`, `JxTagInput`, `JxSlider`. Имя `JxInput` и его пропсы (`label`, `value`, `onValueChange`) я вывел из описанной модели состояния — сверьте с реальным экспортом пакета, как и имена токенов `--jx-space-*` / `--jx-color-text-muted`."
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxInput'."
+        }
+      ],
+      "unknownComponents": [
+        "JxInput"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 61,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 64,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 73,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 86,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 106,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 114,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 115,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 116,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 123,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxInput"
+    ],
+    "expectedCoverage": 0.33,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.66
+  }
+}

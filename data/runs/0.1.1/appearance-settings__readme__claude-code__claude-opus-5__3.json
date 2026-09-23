@@ -1,0 +1,173 @@
+{
+  "id": "appearance-settings__readme__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T17:16:17.251Z",
+  "repeat": 3,
+  "durationMs": 35504,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "appearance-settings",
+    "title": "Настройки внешнего вида",
+    "prompt": "Сделай экран настроек внешнего вида: сегментированный переключатель темы на три варианта, ползунок масштаба интерфейса от 80 до 140 процентов с показом текущего значения, переключатель плотной вёрстки и раздел «Ещё» под разделителем с выбором шрифта. Справа от заголовка экрана метка с текущей темой. Состояние храни в компоненте и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxToggle",
+      "JxSlider",
+      "JxSwitch",
+      "JxDivider",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 9580,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 3223,
+    "cacheRead": 9580,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.085375,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport {\n  JxBadge,\n  JxDivider,\n  JxSegmented,\n  JxSelect,\n  JxSlider,\n  JxSwitch,\n} from '@jinx-ui/react';\n\ntype Theme = 'light' | 'dark' | 'system';\n\nexport interface AppearanceSettings {\n  theme: Theme;\n  scale: number;\n  dense: boolean;\n  fontFamily: string;\n}\n\nexport interface AppearanceSettingsScreenProps {\n  defaultValue?: Partial<AppearanceSettings>;\n  onChange?: (settings: AppearanceSettings) => void;\n}\n\nconst THEMES: { value: Theme; label: string }[] = [\n  { value: 'light', label: 'Светлая' },\n  { value: 'dark', label: 'Тёмная' },\n  { value: 'system', label: 'Системная' },\n];\n\nconst FONTS = [\n  { value: 'system', label: 'Системный' },\n  { value: 'inter', label: 'Inter' },\n  { value: 'jetbrains-mono', label: 'JetBrains Mono' },\n  { value: 'georgia', label: 'Georgia' },\n];\n\nconst DEFAULTS: AppearanceSettings = {\n  theme: 'system',\n  scale: 100,\n  dense: false,\n  fontFamily: 'system',\n};\n\nfunction AppearanceSettingsScreen({\n  defaultValue,\n  onChange,\n}: AppearanceSettingsScreenProps) {\n  const [settings, setSettings] = useState<AppearanceSettings>({\n    ...DEFAULTS,\n    ...defaultValue,\n  });\n\n  const commit = (patch: Partial<AppearanceSettings>) => {\n    setSettings((prev) => {\n      const next = { ...prev, ...patch };\n      onChange?.(next);\n      return next;\n    });\n  };\n\n  const themeLabel =\n    THEMES.find((t) => t.value === settings.theme)?.label ?? settings.theme;\n\n  return (\n    <section\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-6)',\n        padding: 'var(--jx-space-6)',\n      }}\n    >\n      <header\n        style={{\n          display: 'flex',\n          alignItems: 'center',\n          justifyContent: 'space-between',\n          gap: 'var(--jx-space-3)',\n        }}\n      >\n        <h2 style={{ margin: 0 }}>Внешний вид</h2>\n        <JxBadge>{themeLabel}</JxBadge>\n      </header>\n\n      <div\n        style={{\n          display: 'flex',\n          flexDirection: 'column',\n          gap: 'var(--jx-space-2)',\n        }}\n      >\n        <label htmlFor=\"appearance-theme\">Тема</label>\n        <JxSegmented\n          id=\"appearance-theme\"\n          options={THEMES}\n          value={settings.theme}\n          onValueChange={(value: Theme) => commit({ theme: value })}\n        />\n      </div>\n\n      <div\n        style={{\n          display: 'flex',\n          flexDirection: 'column',\n          gap: 'var(--jx-space-2)',\n        }}\n      >\n        <div\n          style={{\n            display: 'flex',\n            alignItems: 'center',\n            justifyContent: 'space-between',\n            gap: 'var(--jx-space-3)',\n          }}\n        >\n          <label htmlFor=\"appearance-scale\">Масштаб интерфейса</label>\n          <span>{settings.scale}%</span>\n        </div>\n        <JxSlider\n          id=\"appearance-scale\"\n          min={80}\n          max={140}\n          step={5}\n          value={settings.scale}\n          onValueChange={(value: number) => commit({ scale: value })}\n        />\n      </div>\n\n      <div\n        style={{\n          display: 'flex',\n          alignItems: 'center',\n          justifyContent: 'space-between',\n          gap: 'var(--jx-space-3)',\n        }}\n      >\n        <label htmlFor=\"appearance-dense\">Плотная вёрстка</label>\n        <JxSwitch\n          id=\"appearance-dense\"\n          checked={settings.dense}\n          onCheckedChange={(checked: boolean) => commit({ dense: checked })}\n        />\n      </div>\n\n      <JxDivider />\n\n      <div\n        style={{\n          display: 'flex',\n          flexDirection: 'column',\n          gap: 'var(--jx-space-3)',\n        }}\n      >\n        <h3 style={{ margin: 0 }}>Ещё</h3>\n        <div\n          style={{\n            display: 'flex',\n            flexDirection: 'column',\n            gap: 'var(--jx-space-2)',\n          }}\n        >\n          <label htmlFor=\"appearance-font\">Шрифт</label>\n          <JxSelect\n            id=\"appearance-font\"\n            options={FONTS}\n            value={settings.fontFamily}\n            onValueChange={(value: string) => commit({ fontFamily: value })}\n          />\n        </div>\n      </div>\n    </section>\n  );\n}\n\nexport default AppearanceSettingsScreen;",
+    "text": "```tsx\nimport { useState } from 'react';\nimport {\n  JxBadge,\n  JxDivider,\n  JxSegmented,\n  JxSelect,\n  JxSlider,\n  JxSwitch,\n} from '@jinx-ui/react';\n\ntype Theme = 'light' | 'dark' | 'system';\n\nexport interface AppearanceSettings {\n  theme: Theme;\n  scale: number;\n  dense: boolean;\n  fontFamily: string;\n}\n\nexport interface AppearanceSettingsScreenProps {\n  defaultValue?: Partial<AppearanceSettings>;\n  onChange?: (settings: AppearanceSettings) => void;\n}\n\nconst THEMES: { value: Theme; label: string }[] = [\n  { value: 'light', label: 'Светлая' },\n  { value: 'dark', label: 'Тёмная' },\n  { value: 'system', label: 'Системная' },\n];\n\nconst FONTS = [\n  { value: 'system', label: 'Системный' },\n  { value: 'inter', label: 'Inter' },\n  { value: 'jetbrains-mono', label: 'JetBrains Mono' },\n  { value: 'georgia', label: 'Georgia' },\n];\n\nconst DEFAULTS: AppearanceSettings = {\n  theme: 'system',\n  scale: 100,\n  dense: false,\n  fontFamily: 'system',\n};\n\nfunction AppearanceSettingsScreen({\n  defaultValue,\n  onChange,\n}: AppearanceSettingsScreenProps) {\n  const [settings, setSettings] = useState<AppearanceSettings>({\n    ...DEFAULTS,\n    ...defaultValue,\n  });\n\n  const commit = (patch: Partial<AppearanceSettings>) => {\n    setSettings((prev) => {\n      const next = { ...prev, ...patch };\n      onChange?.(next);\n      return next;\n    });\n  };\n\n  const themeLabel =\n    THEMES.find((t) => t.value === settings.theme)?.label ?? settings.theme;\n\n  return (\n    <section\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-6)',\n        padding: 'var(--jx-space-6)',\n      }}\n    >\n      <header\n        style={{\n          display: 'flex',\n          alignItems: 'center',\n          justifyContent: 'space-between',\n          gap: 'var(--jx-space-3)',\n        }}\n      >\n        <h2 style={{ margin: 0 }}>Внешний вид</h2>\n        <JxBadge>{themeLabel}</JxBadge>\n      </header>\n\n      <div\n        style={{\n          display: 'flex',\n          flexDirection: 'column',\n          gap: 'var(--jx-space-2)',\n        }}\n      >\n        <label htmlFor=\"appearance-theme\">Тема</label>\n        <JxSegmented\n          id=\"appearance-theme\"\n          options={THEMES}\n          value={settings.theme}\n          onValueChange={(value: Theme) => commit({ theme: value })}\n        />\n      </div>\n\n      <div\n        style={{\n          display: 'flex',\n          flexDirection: 'column',\n          gap: 'var(--jx-space-2)',\n        }}\n      >\n        <div\n          style={{\n            display: 'flex',\n            alignItems: 'center',\n            justifyContent: 'space-between',\n            gap: 'var(--jx-space-3)',\n          }}\n        >\n          <label htmlFor=\"appearance-scale\">Масштаб интерфейса</label>\n          <span>{settings.scale}%</span>\n        </div>\n        <JxSlider\n          id=\"appearance-scale\"\n          min={80}\n          max={140}\n          step={5}\n          value={settings.scale}\n          onValueChange={(value: number) => commit({ scale: value })}\n        />\n      </div>\n\n      <div\n        style={{\n          display: 'flex',\n          alignItems: 'center',\n          justifyContent: 'space-between',\n          gap: 'var(--jx-space-3)',\n        }}\n      >\n        <label htmlFor=\"appearance-dense\">Плотная вёрстка</label>\n        <JxSwitch\n          id=\"appearance-dense\"\n          checked={settings.dense}\n          onCheckedChange={(checked: boolean) => commit({ dense: checked })}\n        />\n      </div>\n\n      <JxDivider />\n\n      <div\n        style={{\n          display: 'flex',\n          flexDirection: 'column',\n          gap: 'var(--jx-space-3)',\n        }}\n      >\n        <h3 style={{ margin: 0 }}>Ещё</h3>\n        <div\n          style={{\n            display: 'flex',\n            flexDirection: 'column',\n            gap: 'var(--jx-space-2)',\n          }}\n        >\n          <label htmlFor=\"appearance-font\">Шрифт</label>\n          <JxSelect\n            id=\"appearance-font\"\n            options={FONTS}\n            value={settings.fontFamily}\n            onValueChange={(value: string) => commit({ fontFamily: value })}\n          />\n        </div>\n      </div>\n    </section>\n  );\n}\n\nexport default AppearanceSettingsScreen;\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 5,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxSegmented'."
+        },
+        {
+          "code": 2322,
+          "line": 142,
+          "message": "Type '{ id: string; checked: boolean; onCheckedChange: (checked: boolean) => void; }' is not assignable to type 'IntrinsicAttributes & Omit<InputHTMLAttributes<HTMLInputElement>, \"type\" | \"size\"> & { ref?: Ref<HTMLInputElement> | undefined; label?: ReactNode; wrapClassName?: string | undefined; }'.\n  Property 'onCheckedChange' does not exist on type 'IntrinsicAttributes & Omit<InputHTMLAttributes<HTMLInputElement>, \"type\" | \"size\"> & { ref?: Ref<HTMLInputElement> | undefined; label?: ReactNode; wrapClassName?: string | undefined; }'."
+        },
+        {
+          "code": 2322,
+          "line": 165,
+          "message": "Type '{ id: string; options: { value: string; label: string; }[]; value: string; onValueChange: (value: string) => void; }' is not assignable to type 'IntrinsicAttributes & JxSelectProps'.\n  Property 'id' does not exist on type 'IntrinsicAttributes & JxSelectProps'."
+        }
+      ],
+      "unknownComponents": [
+        "JxSegmented"
+      ],
+      "unknownProps": [
+        {
+          "component": "JxSwitch",
+          "prop": "onCheckedChange"
+        },
+        {
+          "component": "JxSelect",
+          "prop": "id"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 67,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 75,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 82,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 87,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 103,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 110,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 131,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 149,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 155,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 157,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxBadge",
+      "JxDivider",
+      "JxSegmented",
+      "JxSelect",
+      "JxSlider",
+      "JxSwitch"
+    ],
+    "expectedCoverage": 0.8,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.52
+  }
+}

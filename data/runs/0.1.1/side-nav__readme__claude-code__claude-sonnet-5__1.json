@@ -1,0 +1,140 @@
+{
+  "id": "side-nav__readme__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-23T16:56:47.349Z",
+  "repeat": 1,
+  "durationMs": 6577,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "side-nav",
+    "title": "Боковая панель навигации",
+    "prompt": "Сделай кнопку «Меню», по которой слева выезжает панель с навигацией: пункты «Проекты», «Команда», «Настройки», разделитель и пункт «Выйти», выделенный как опасный. Выбор пункта вызывает переданный колбэк onNavigate с ключом пункта и закрывает панель.",
+    "taskType": "ui",
+    "expects": [
+      "JxDrawer",
+      "JxMenu",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 8235,
+        "cacheCreation": 1308
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 537,
+    "cacheRead": 8235,
+    "cacheCreation": 1308
+  },
+  "costUsd": 0.0257275,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxButton, JxDrawer, JxMenu, JxMenuItem, JxMenuSeparator } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface NavDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function NavDrawer({ onNavigate }: NavDrawerProps) {\n  const [open, setOpen] = useState(false);\n\n  const handleSelect = (key: NavKey) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <JxButton variant=\"secondary\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n      <JxDrawer open={open} onOpenChange={setOpen} side=\"left\" aria-label=\"Навигация\">\n        <JxMenu aria-label=\"Основная навигация\">\n          <JxMenuItem onSelect={() => handleSelect('projects')}>Проекты</JxMenuItem>\n          <JxMenuItem onSelect={() => handleSelect('team')}>Команда</JxMenuItem>\n          <JxMenuItem onSelect={() => handleSelect('settings')}>Настройки</JxMenuItem>\n          <JxMenuSeparator />\n          <JxMenuItem danger onSelect={() => handleSelect('logout')}>\n            Выйти\n          </JxMenuItem>\n        </JxMenu>\n      </JxDrawer>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxDrawer, JxMenu, JxMenuItem, JxMenuSeparator } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface NavDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function NavDrawer({ onNavigate }: NavDrawerProps) {\n  const [open, setOpen] = useState(false);\n\n  const handleSelect = (key: NavKey) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <JxButton variant=\"secondary\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n      <JxDrawer open={open} onOpenChange={setOpen} side=\"left\" aria-label=\"Навигация\">\n        <JxMenu aria-label=\"Основная навигация\">\n          <JxMenuItem onSelect={() => handleSelect('projects')}>Проекты</JxMenuItem>\n          <JxMenuItem onSelect={() => handleSelect('team')}>Команда</JxMenuItem>\n          <JxMenuItem onSelect={() => handleSelect('settings')}>Настройки</JxMenuItem>\n          <JxMenuSeparator />\n          <JxMenuItem danger onSelect={() => handleSelect('logout')}>\n            Выйти\n          </JxMenuItem>\n        </JxMenu>\n      </JxDrawer>\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxMenuSeparator'."
+        },
+        {
+          "code": 2741,
+          "line": 23,
+          "message": "Property 'title' is missing in type '{ children: Element; open: boolean; onOpenChange: Dispatch<SetStateAction<boolean>>; side: \"left\"; \"aria-label\": string; }' but required in type 'JxDrawerProps'."
+        },
+        {
+          "code": 2741,
+          "line": 24,
+          "message": "Property 'items' is missing in type '{ children: Element[]; \"aria-label\": string; }' but required in type '{ ref?: Ref<HTMLDivElement> | undefined; items: JxMenuItem[]; }'."
+        },
+        {
+          "code": 2693,
+          "line": 25,
+          "message": "'JxMenuItem' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 25,
+          "message": "'JxMenuItem' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 26,
+          "message": "'JxMenuItem' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 26,
+          "message": "'JxMenuItem' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 27,
+          "message": "'JxMenuItem' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 27,
+          "message": "'JxMenuItem' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 29,
+          "message": "'JxMenuItem' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 31,
+          "message": "'JxMenuItem' only refers to a type, but is being used as a value here."
+        }
+      ],
+      "unknownComponents": [
+        "JxMenuSeparator"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [
+      "JxButton",
+      "JxDrawer",
+      "JxMenu",
+      "JxMenuItem",
+      "JxMenuSeparator"
+    ],
+    "expectedCoverage": 1,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.3
+  }
+}

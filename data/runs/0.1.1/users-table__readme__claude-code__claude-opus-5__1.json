@@ -1,0 +1,85 @@
+{
+  "id": "users-table__readme__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-23T17:03:27.585Z",
+  "repeat": 1,
+  "durationMs": 22256,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "users-table",
+    "title": "Таблица пользователей с пагинацией",
+    "prompt": "Сделай таблицу пользователей с колонками «Имя», «Роль» и «Статус». Список users передаётся пропсом, показывать по десять строк на страницу с постраничной навигацией под таблицей. Статус показывай цветной меткой: активен или отключён.",
+    "taskType": "ui",
+    "expects": [
+      "JxTable",
+      "JxPagination",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 8233,
+        "cacheCreation": 1288
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1847,
+    "cacheRead": 8233,
+    "cacheCreation": 1288
+  },
+  "costUsd": 0.05835150000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxButton } from '@jinx-ui/react';\n\nexport type User = {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n};\n\ntype UsersTableProps = {\n  users: User[];\n  pageSize?: number;\n};\n\n// Только JxButton подтверждён в README пакета; таблица и метка собраны\n// на jx-* классах CSS-контракта @jinx-ui/core — сверь имена классов со сборкой.\nexport default function UsersTable({ users, pageSize = 10 }: UsersTableProps) {\n  const [page, setPage] = useState(0);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / pageSize));\n  const current = Math.min(page, pageCount - 1);\n  const start = current * pageSize;\n  const rows = users.slice(start, start + pageSize);\n\n  return (\n    <div className=\"jx-stack\">\n      <table className=\"jx-table\">\n        <thead>\n          <tr>\n            <th scope=\"col\">Имя</th>\n            <th scope=\"col\">Роль</th>\n            <th scope=\"col\">Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {rows.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <span\n                  className={\n                    user.active\n                      ? 'jx-badge jx-badge--success'\n                      : 'jx-badge jx-badge--neutral'\n                  }\n                >\n                  {user.active ? 'Активен' : 'Отключён'}\n                </span>\n              </td>\n            </tr>\n          ))}\n          {rows.length === 0 && (\n            <tr>\n              <td colSpan={3}>Пользователей нет</td>\n            </tr>\n          )}\n        </tbody>\n      </table>\n\n      <nav\n        className=\"jx-cluster\"\n        aria-label=\"Постраничная навигация\"\n        style={{ gap: 'var(--jx-space-2)' }}\n      >\n        <JxButton\n          variant=\"ghost\"\n          disabled={current === 0}\n          onClick={() => setPage(current - 1)}\n        >\n          Назад\n        </JxButton>\n        <span aria-live=\"polite\">\n          Страница {current + 1} из {pageCount}\n        </span>\n        <JxButton\n          variant=\"ghost\"\n          disabled={current >= pageCount - 1}\n          onClick={() => setPage(current + 1)}\n        >\n          Вперёд\n        </JxButton>\n      </nav>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton } from '@jinx-ui/react';\n\nexport type User = {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n};\n\ntype UsersTableProps = {\n  users: User[];\n  pageSize?: number;\n};\n\n// Только JxButton подтверждён в README пакета; таблица и метка собраны\n// на jx-* классах CSS-контракта @jinx-ui/core — сверь имена классов со сборкой.\nexport default function UsersTable({ users, pageSize = 10 }: UsersTableProps) {\n  const [page, setPage] = useState(0);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / pageSize));\n  const current = Math.min(page, pageCount - 1);\n  const start = current * pageSize;\n  const rows = users.slice(start, start + pageSize);\n\n  return (\n    <div className=\"jx-stack\">\n      <table className=\"jx-table\">\n        <thead>\n          <tr>\n            <th scope=\"col\">Имя</th>\n            <th scope=\"col\">Роль</th>\n            <th scope=\"col\">Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {rows.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <span\n                  className={\n                    user.active\n                      ? 'jx-badge jx-badge--success'\n                      : 'jx-badge jx-badge--neutral'\n                  }\n                >\n                  {user.active ? 'Активен' : 'Отключён'}\n                </span>\n              </td>\n            </tr>\n          ))}\n          {rows.length === 0 && (\n            <tr>\n              <td colSpan={3}>Пользователей нет</td>\n            </tr>\n          )}\n        </tbody>\n      </table>\n\n      <nav\n        className=\"jx-cluster\"\n        aria-label=\"Постраничная навигация\"\n        style={{ gap: 'var(--jx-space-2)' }}\n      >\n        <JxButton\n          variant=\"ghost\"\n          disabled={current === 0}\n          onClick={() => setPage(current - 1)}\n        >\n          Назад\n        </JxButton>\n        <span aria-live=\"polite\">\n          Страница {current + 1} из {pageCount}\n        </span>\n        <JxButton\n          variant=\"ghost\"\n          disabled={current >= pageCount - 1}\n          onClick={() => setPage(current + 1)}\n        >\n          Вперёд\n        </JxButton>\n      </nav>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 65,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton"
+    ],
+    "expectedCoverage": 0,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.7
+  }
+}

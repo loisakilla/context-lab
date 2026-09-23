@@ -1,0 +1,98 @@
+{
+  "id": "tag-picker__docs-rules__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T18:55:28.227Z",
+  "repeat": 3,
+  "durationMs": 9091,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "docs+rules",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 23785,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.1",
+        "tokens": 22548,
+        "hash": "423dffab7907a1d0"
+      },
+      {
+        "kind": "rules",
+        "id": "jinx-ui",
+        "version": "0.1.1",
+        "tokens": 1083,
+        "hash": "29f6363615252e9b"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 49035,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 794,
+    "cacheRead": 49035,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0443775,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxTagInput, JxChip, JxEmptyState } from '@jinx-ui/react';\n\ninterface ArticleTagsProps {\n  value?: string[];\n  defaultTags?: string[];\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTags({ value, defaultTags = [], onChange }: ArticleTagsProps) {\n  const [inner, setInner] = useState<string[]>(defaultTags);\n  const tags = value ?? inner;\n\n  const update = (next: string[]) => {\n    if (value === undefined) setInner(next);\n    onChange?.(next);\n  };\n\n  const add = (next: string[]) => {\n    const normalized = next\n      .map((tag) => tag.trim())\n      .filter((tag, index, all) => tag.length > 0 && all.indexOf(tag) === index);\n    update(normalized);\n  };\n\n  const remove = (tag: string) => update(tags.filter((item) => item !== tag));\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>\n      <JxTagInput\n        ariaLabel=\"Теги статьи\"\n        placeholder=\"Введите тег и нажмите Enter\"\n        value={tags}\n        onValueChange={add}\n      />\n\n      {tags.length > 0 ? (\n        <div\n          role=\"list\"\n          aria-label=\"Выбранные теги\"\n          style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}\n        >\n          {tags.map((tag) => (\n            <span role=\"listitem\" key={tag}>\n              <JxChip\n                active\n                removable\n                onRemove={() => remove(tag)}\n                onKeyDown={(event) => {\n                  if (event.key === 'Delete' || event.key === 'Backspace') {\n                    event.preventDefault();\n                    remove(tag);\n                  }\n                }}\n                tabIndex={0}\n                aria-label={`Тег ${tag}`}\n              >\n                {tag}\n              </JxChip>\n            </span>\n          ))}\n        </div>\n      ) : (\n        <JxEmptyState\n          title=\"Тегов пока нет\"\n          message=\"Введите ключевое слово в поле выше и нажмите Enter, чтобы добавить первый тег.\"\n        />\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxTagInput, JxChip, JxEmptyState } from '@jinx-ui/react';\n\ninterface ArticleTagsProps {\n  value?: string[];\n  defaultTags?: string[];\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTags({ value, defaultTags = [], onChange }: ArticleTagsProps) {\n  const [inner, setInner] = useState<string[]>(defaultTags);\n  const tags = value ?? inner;\n\n  const update = (next: string[]) => {\n    if (value === undefined) setInner(next);\n    onChange?.(next);\n  };\n\n  const add = (next: string[]) => {\n    const normalized = next\n      .map((tag) => tag.trim())\n      .filter((tag, index, all) => tag.length > 0 && all.indexOf(tag) === index);\n    update(normalized);\n  };\n\n  const remove = (tag: string) => update(tags.filter((item) => item !== tag));\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>\n      <JxTagInput\n        ariaLabel=\"Теги статьи\"\n        placeholder=\"Введите тег и нажмите Enter\"\n        value={tags}\n        onValueChange={add}\n      />\n\n      {tags.length > 0 ? (\n        <div\n          role=\"list\"\n          aria-label=\"Выбранные теги\"\n          style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}\n        >\n          {tags.map((tag) => (\n            <span role=\"listitem\" key={tag}>\n              <JxChip\n                active\n                removable\n                onRemove={() => remove(tag)}\n                onKeyDown={(event) => {\n                  if (event.key === 'Delete' || event.key === 'Backspace') {\n                    event.preventDefault();\n                    remove(tag);\n                  }\n                }}\n                tabIndex={0}\n                aria-label={`Тег ${tag}`}\n              >\n                {tag}\n              </JxChip>\n            </span>\n          ))}\n        </div>\n      ) : (\n        <JxEmptyState\n          title=\"Тегов пока нет\"\n          message=\"Введите ключевое слово в поле выше и нажмите Enter, чтобы добавить первый тег.\"\n        />\n      )}\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 29,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 41,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxChip",
+      "JxEmptyState",
+      "JxTagInput"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

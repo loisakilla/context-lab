@@ -1,0 +1,93 @@
+{
+  "id": "date-range__none__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-23T16:49:50.311Z",
+  "repeat": 3,
+  "durationMs": 7765,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "none",
+  "task": {
+    "id": "date-range",
+    "title": "Выбор периода",
+    "prompt": "Сделай выбор даты отчёта: календарь на месяц и над ним ряд быстрых вариантов «Сегодня», «Вчера», «Неделя назад», при нажатии на которые дата подставляется в календарь. Выбранная дата отдаётся наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxCalendar",
+      "JxChip"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 8596,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 908,
+    "cacheRead": 8596,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.027007999999999997,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import React, { useState, useCallback } from 'react';\nimport { Calendar, ButtonGroup, Button, Stack } from '@jinx-ui/react';\n\ninterface ReportDatePickerProps {\n  onChange?: (date: Date) => void;\n  defaultDate?: Date;\n}\n\nfunction startOfDay(date: Date): Date {\n  const d = new Date(date);\n  d.setHours(0, 0, 0, 0);\n  return d;\n}\n\nfunction addDays(date: Date, days: number): Date {\n  const d = new Date(date);\n  d.setDate(d.getDate() + days);\n  return d;\n}\n\nconst ReportDatePicker: React.FC<ReportDatePickerProps> = ({\n  onChange,\n  defaultDate,\n}) => {\n  const [selectedDate, setSelectedDate] = useState<Date>(\n    startOfDay(defaultDate ?? new Date())\n  );\n\n  const handleSelect = useCallback(\n    (date: Date) => {\n      const normalized = startOfDay(date);\n      setSelectedDate(normalized);\n      onChange?.(normalized);\n    },\n    [onChange]\n  );\n\n  const handleQuickSelect = useCallback(\n    (offsetDays: number) => {\n      handleSelect(addDays(startOfDay(new Date()), offsetDays));\n    },\n    [handleSelect]\n  );\n\n  const isQuickActive = useCallback(\n    (offsetDays: number) => {\n      const target = addDays(startOfDay(new Date()), offsetDays).getTime();\n      return selectedDate.getTime() === target;\n    },\n    [selectedDate]\n  );\n\n  return (\n    <Stack direction=\"column\" gap=\"jx-space-3\" className=\"jx-report-date-picker\">\n      <ButtonGroup>\n        <Button\n          variant={isQuickActive(0) ? 'primary' : 'secondary'}\n          size=\"sm\"\n          onClick={() => handleQuickSelect(0)}\n        >\n          Сегодня\n        </Button>\n        <Button\n          variant={isQuickActive(-1) ? 'primary' : 'secondary'}\n          size=\"sm\"\n          onClick={() => handleQuickSelect(-1)}\n        >\n          Вчера\n        </Button>\n        <Button\n          variant={isQuickActive(-7) ? 'primary' : 'secondary'}\n          size=\"sm\"\n          onClick={() => handleQuickSelect(-7)}\n        >\n          Неделя назад\n        </Button>\n      </ButtonGroup>\n\n      <Calendar\n        view=\"month\"\n        selected={selectedDate}\n        onSelect={handleSelect}\n      />\n    </Stack>\n  );\n};\n\nexport default ReportDatePicker;",
+    "text": "```tsx\nimport React, { useState, useCallback } from 'react';\nimport { Calendar, ButtonGroup, Button, Stack } from '@jinx-ui/react';\n\ninterface ReportDatePickerProps {\n  onChange?: (date: Date) => void;\n  defaultDate?: Date;\n}\n\nfunction startOfDay(date: Date): Date {\n  const d = new Date(date);\n  d.setHours(0, 0, 0, 0);\n  return d;\n}\n\nfunction addDays(date: Date, days: number): Date {\n  const d = new Date(date);\n  d.setDate(d.getDate() + days);\n  return d;\n}\n\nconst ReportDatePicker: React.FC<ReportDatePickerProps> = ({\n  onChange,\n  defaultDate,\n}) => {\n  const [selectedDate, setSelectedDate] = useState<Date>(\n    startOfDay(defaultDate ?? new Date())\n  );\n\n  const handleSelect = useCallback(\n    (date: Date) => {\n      const normalized = startOfDay(date);\n      setSelectedDate(normalized);\n      onChange?.(normalized);\n    },\n    [onChange]\n  );\n\n  const handleQuickSelect = useCallback(\n    (offsetDays: number) => {\n      handleSelect(addDays(startOfDay(new Date()), offsetDays));\n    },\n    [handleSelect]\n  );\n\n  const isQuickActive = useCallback(\n    (offsetDays: number) => {\n      const target = addDays(startOfDay(new Date()), offsetDays).getTime();\n      return selectedDate.getTime() === target;\n    },\n    [selectedDate]\n  );\n\n  return (\n    <Stack direction=\"column\" gap=\"jx-space-3\" className=\"jx-report-date-picker\">\n      <ButtonGroup>\n        <Button\n          variant={isQuickActive(0) ? 'primary' : 'secondary'}\n          size=\"sm\"\n          onClick={() => handleQuickSelect(0)}\n        >\n          Сегодня\n        </Button>\n        <Button\n          variant={isQuickActive(-1) ? 'primary' : 'secondary'}\n          size=\"sm\"\n          onClick={() => handleQuickSelect(-1)}\n        >\n          Вчера\n        </Button>\n        <Button\n          variant={isQuickActive(-7) ? 'primary' : 'secondary'}\n          size=\"sm\"\n          onClick={() => handleQuickSelect(-7)}\n        >\n          Неделя назад\n        </Button>\n      </ButtonGroup>\n\n      <Calendar\n        view=\"month\"\n        selected={selectedDate}\n        onSelect={handleSelect}\n      />\n    </Stack>\n  );\n};\n\nexport default ReportDatePicker;\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Calendar'. Did you mean 'JxCalendar'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'ButtonGroup'."
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "ButtonGroup",
+        "Calendar",
+        "Stack"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

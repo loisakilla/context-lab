@@ -1,0 +1,94 @@
+{
+  "id": "subscribe-toast__none__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T16:49:07.038Z",
+  "repeat": 2,
+  "durationMs": 16638,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "subscribe-toast",
+    "title": "Подписка с уведомлением",
+    "prompt": "Сделай форму подписки на рассылку с полем для почты и кнопкой «Подписаться». После отправки поле очищается, а в углу экрана появляется уведомление «Готово» с текстом, что письмо отправлено.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxButton",
+      "JxToastViewport"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 8570,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1261,
+    "cacheRead": 8570,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.03582,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "// Имена компонентов Jinx UI взяты по общепринятому соглашению — сверь с версией пакета.\nimport { useEffect, useState } from 'react';\nimport { Button, Stack, TextField, Toast } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [isToastOpen, setIsToastOpen] = useState(false);\n\n  useEffect(() => {\n    if (!isToastOpen) return;\n    const timeoutId = window.setTimeout(() => setIsToastOpen(false), 4000);\n    return () => window.clearTimeout(timeoutId);\n  }, [isToastOpen]);\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    setEmail('');\n    setIsToastOpen(true);\n  };\n\n  return (\n    <>\n      <form onSubmit={handleSubmit} noValidate={false}>\n        <Stack direction=\"row\" gap=\"var(--jx-space-3)\" align=\"end\">\n          <TextField\n            type=\"email\"\n            name=\"email\"\n            label=\"Почта\"\n            placeholder=\"you@example.com\"\n            value={email}\n            required\n            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>\n              setEmail(event.target.value)\n            }\n          />\n          <Button type=\"submit\" variant=\"primary\" disabled={email.trim() === ''}>\n            Подписаться\n          </Button>\n        </Stack>\n      </form>\n\n      {isToastOpen && (\n        <Toast\n          open\n          status=\"success\"\n          title=\"Готово\"\n          placement=\"bottom-right\"\n          onClose={() => setIsToastOpen(false)}\n        >\n          Письмо отправлено — проверьте почту.\n        </Toast>\n      )}\n    </>\n  );\n}",
+    "text": "```tsx\n// Имена компонентов Jinx UI взяты по общепринятому соглашению — сверь с версией пакета.\nimport { useEffect, useState } from 'react';\nimport { Button, Stack, TextField, Toast } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [isToastOpen, setIsToastOpen] = useState(false);\n\n  useEffect(() => {\n    if (!isToastOpen) return;\n    const timeoutId = window.setTimeout(() => setIsToastOpen(false), 4000);\n    return () => window.clearTimeout(timeoutId);\n  }, [isToastOpen]);\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    setEmail('');\n    setIsToastOpen(true);\n  };\n\n  return (\n    <>\n      <form onSubmit={handleSubmit} noValidate={false}>\n        <Stack direction=\"row\" gap=\"var(--jx-space-3)\" align=\"end\">\n          <TextField\n            type=\"email\"\n            name=\"email\"\n            label=\"Почта\"\n            placeholder=\"you@example.com\"\n            value={email}\n            required\n            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>\n              setEmail(event.target.value)\n            }\n          />\n          <Button type=\"submit\" variant=\"primary\" disabled={email.trim() === ''}>\n            Подписаться\n          </Button>\n        </Stack>\n      </form>\n\n      {isToastOpen && (\n        <Toast\n          open\n          status=\"success\"\n          title=\"Готово\"\n          placement=\"bottom-right\"\n          onClose={() => setIsToastOpen(false)}\n        >\n          Письмо отправлено — проверьте почту.\n        </Toast>\n      )}\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 3,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TextField'."
+        },
+        {
+          "code": 2724,
+          "line": 3,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Toast'. Did you mean 'JxToast'?"
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Stack",
+        "TextField",
+        "Toast"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

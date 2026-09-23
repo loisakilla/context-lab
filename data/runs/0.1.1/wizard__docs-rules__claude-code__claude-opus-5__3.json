@@ -1,0 +1,260 @@
+{
+  "id": "wizard__docs-rules__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T18:54:50.260Z",
+  "repeat": 3,
+  "durationMs": 27375,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "docs+rules",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 23785,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.1",
+        "tokens": 22548,
+        "hash": "423dffab7907a1d0"
+      },
+      {
+        "kind": "rules",
+        "id": "jinx-ui",
+        "version": "0.1.1",
+        "tokens": 1083,
+        "hash": "29f6363615252e9b"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 49061,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 3167,
+    "cacheRead": 49061,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.1037155,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport type { FormEvent } from 'react';\nimport {\n  JxStepper,\n  JxInputField,\n  JxSelect,\n  JxTextareaField,\n  JxButton,\n  JxDivider,\n  JxAlert,\n} from '@jinx-ui/react';\n\ninterface RegistrationData {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  note: string;\n}\n\nconst steps = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nconst countries = [\n  { value: 'ru', label: 'Россия' },\n  { value: 'kz', label: 'Казахстан' },\n  { value: 'by', label: 'Беларусь' },\n  { value: 'am', label: 'Армения' },\n];\n\nconst emptyData: RegistrationData = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  note: '',\n};\n\nexport default function RegistrationWizard({\n  onSubmit,\n}: {\n  onSubmit: (data: RegistrationData) => void;\n}) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<RegistrationData>(emptyData);\n  const [touched, setTouched] = useState(false);\n\n  const set = <K extends keyof RegistrationData>(key: K, value: RegistrationData[K]) => {\n    setData((prev) => ({ ...prev, [key]: value }));\n  };\n\n  const nameError = !data.name.trim() ? 'Укажите имя' : undefined;\n  const emailError = !data.email.trim()\n    ? 'Укажите адрес почты'\n    : !data.email.includes('@')\n      ? 'Адрес должен содержать символ @'\n      : undefined;\n  const countryError = !data.country ? 'Выберите страну' : undefined;\n  const cityError = !data.city.trim() ? 'Укажите город' : undefined;\n  const streetError = !data.street.trim() ? 'Укажите улицу и дом' : undefined;\n\n  const stepErrors: Array<Array<string | undefined>> = [\n    [nameError, emailError],\n    [countryError, cityError, streetError],\n    [],\n  ];\n  const stepValid = stepErrors[step].every((error) => !error);\n  const show = (error: string | undefined) => (touched ? error : undefined);\n\n  const goNext = () => {\n    if (!stepValid) {\n      setTouched(true);\n      return;\n    }\n    setTouched(false);\n    setStep((current) => Math.min(current + 1, steps.length - 1));\n  };\n\n  const goBack = () => {\n    setTouched(false);\n    setStep((current) => Math.max(current - 1, 0));\n  };\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (step < steps.length - 1) {\n      goNext();\n      return;\n    }\n    onSubmit(data);\n  };\n\n  const countryLabel = countries.find((item) => item.value === data.country)?.label ?? '—';\n\n  return (\n    <form\n      onSubmit={submit}\n      style={{ display: 'grid', gap: '24px', fontFamily: 'var(--jx-font-sans)', color: 'var(--jx-text)' }}\n    >\n      <JxStepper steps={steps} current={step} />\n\n      {step === 0 && (\n        <div style={{ display: 'grid', gap: '12px' }}>\n          <JxInputField\n            label=\"Имя и фамилия\"\n            required\n            autoComplete=\"name\"\n            value={data.name}\n            onChange={(event) => set('name', event.target.value)}\n            errorText={show(nameError)}\n          />\n          <JxInputField\n            label=\"Электронная почта\"\n            type=\"email\"\n            required\n            autoComplete=\"email\"\n            value={data.email}\n            onChange={(event) => set('email', event.target.value)}\n            errorText={show(emailError)}\n          />\n          <JxInputField\n            label=\"Телефон\"\n            type=\"tel\"\n            prefix=\"+7\"\n            autoComplete=\"tel\"\n            placeholder=\"900 000-00-00\"\n            helperText=\"Необязательно, нужен только для доставки\"\n            value={data.phone}\n            onChange={(event) => set('phone', event.target.value)}\n          />\n        </div>\n      )}\n\n      {step === 1 && (\n        <div style={{ display: 'grid', gap: '12px' }}>\n          <JxSelect\n            label=\"Страна\"\n            placeholder=\"Выберите страну\"\n            options={countries}\n            value={data.country}\n            onValueChange={(value) => set('country', value)}\n          />\n          {show(countryError) && <JxAlert intent=\"danger\" title=\"Страна не выбрана\">{countryError}</JxAlert>}\n          <JxInputField\n            label=\"Город\"\n            required\n            autoComplete=\"address-level2\"\n            value={data.city}\n            onChange={(event) => set('city', event.target.value)}\n            errorText={show(cityError)}\n          />\n          <JxInputField\n            label=\"Улица и дом\"\n            required\n            autoComplete=\"street-address\"\n            value={data.street}\n            onChange={(event) => set('street', event.target.value)}\n            errorText={show(streetError)}\n          />\n          <JxTextareaField\n            label=\"Комментарий для курьера\"\n            rows={3}\n            maxLength={300}\n            value={data.note}\n            onChange={(event) => set('note', event.target.value)}\n            helperText={`${data.note.length}/300`}\n          />\n        </div>\n      )}\n\n      {step === 2 && (\n        <div style={{ display: 'grid', gap: '12px' }}>\n          <JxAlert intent=\"info\" title=\"Проверьте данные\">\n            После отправки изменить анкету можно будет только через поддержку.\n          </JxAlert>\n          <JxDivider label=\"Контакты\" />\n          <dl style={{ display: 'grid', gap: '8px', margin: 0 }}>\n            <div style={{ display: 'flex', gap: '12px', justifyContent: 'space-between' }}>\n              <dt style={{ color: 'var(--jx-text-2)' }}>Имя</dt>\n              <dd style={{ margin: 0, textAlign: 'right', wordBreak: 'break-word' }}>{data.name}</dd>\n            </div>\n            <div style={{ display: 'flex', gap: '12px', justifyContent: 'space-between' }}>\n              <dt style={{ color: 'var(--jx-text-2)' }}>Почта</dt>\n              <dd style={{ margin: 0, textAlign: 'right', wordBreak: 'break-word' }}>{data.email}</dd>\n            </div>\n            <div style={{ display: 'flex', gap: '12px', justifyContent: 'space-between' }}>\n              <dt style={{ color: 'var(--jx-text-2)' }}>Телефон</dt>\n              <dd style={{ margin: 0, textAlign: 'right' }}>{data.phone ? `+7 ${data.phone}` : '—'}</dd>\n            </div>\n          </dl>\n          <JxDivider label=\"Адрес\" />\n          <dl style={{ display: 'grid', gap: '8px', margin: 0 }}>\n            <div style={{ display: 'flex', gap: '12px', justifyContent: 'space-between' }}>\n              <dt style={{ color: 'var(--jx-text-2)' }}>Страна</dt>\n              <dd style={{ margin: 0, textAlign: 'right' }}>{countryLabel}</dd>\n            </div>\n            <div style={{ display: 'flex', gap: '12px', justifyContent: 'space-between' }}>\n              <dt style={{ color: 'var(--jx-text-2)' }}>Город</dt>\n              <dd style={{ margin: 0, textAlign: 'right', wordBreak: 'break-word' }}>{data.city}</dd>\n            </div>\n            <div style={{ display: 'flex', gap: '12px', justifyContent: 'space-between' }}>\n              <dt style={{ color: 'var(--jx-text-2)' }}>Улица и дом</dt>\n              <dd style={{ margin: 0, textAlign: 'right', wordBreak: 'break-word' }}>{data.street}</dd>\n            </div>\n            {data.note && (\n              <div style={{ display: 'flex', gap: '12px', justifyContent: 'space-between' }}>\n                <dt style={{ color: 'var(--jx-text-2)' }}>Комментарий</dt>\n                <dd style={{ margin: 0, textAlign: 'right', wordBreak: 'break-word' }}>{data.note}</dd>\n              </div>\n            )}\n          </dl>\n        </div>\n      )}\n\n      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>\n        <JxButton type=\"button\" variant=\"ghost\" disabled={step === 0} onClick={goBack}>\n          Назад\n        </JxButton>\n        {step < steps.length - 1 ? (\n          <JxButton type=\"button\" variant=\"primary\" onClick={goNext}>\n            Дальше\n          </JxButton>\n        ) : (\n          <JxButton type=\"submit\" variant=\"primary\">\n            Отправить\n          </JxButton>\n        )}\n      </div>\n    </form>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport type { FormEvent } from 'react';\nimport {\n  JxStepper,\n  JxInputField,\n  JxSelect,\n  JxTextareaField,\n  JxButton,\n  JxDivider,\n  JxAlert,\n} from '@jinx-ui/react';\n\ninterface RegistrationData {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  note: string;\n}\n\nconst steps = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nconst countries = [\n  { value: 'ru', label: 'Россия' },\n  { value: 'kz', label: 'Казахстан' },\n  { value: 'by', label: 'Беларусь' },\n  { value: 'am', label: 'Армения' },\n];\n\nconst emptyData: RegistrationData = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  note: '',\n};\n\nexport default function RegistrationWizard({\n  onSubmit,\n}: {\n  onSubmit: (data: RegistrationData) => void;\n}) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<RegistrationData>(emptyData);\n  const [touched, setTouched] = useState(false);\n\n  const set = <K extends keyof RegistrationData>(key: K, value: RegistrationData[K]) => {\n    setData((prev) => ({ ...prev, [key]: value }));\n  };\n\n  const nameError = !data.name.trim() ? 'Укажите имя' : undefined;\n  const emailError = !data.email.trim()\n    ? 'Укажите адрес почты'\n    : !data.email.includes('@')\n      ? 'Адрес должен содержать символ @'\n      : undefined;\n  const countryError = !data.country ? 'Выберите страну' : undefined;\n  const cityError = !data.city.trim() ? 'Укажите город' : undefined;\n  const streetError = !data.street.trim() ? 'Укажите улицу и дом' : undefined;\n\n  const stepErrors: Array<Array<string | undefined>> = [\n    [nameError, emailError],\n    [countryError, cityError, streetError],\n    [],\n  ];\n  const stepValid = stepErrors[step].every((error) => !error);\n  const show = (error: string | undefined) => (touched ? error : undefined);\n\n  const goNext = () => {\n    if (!stepValid) {\n      setTouched(true);\n      return;\n    }\n    setTouched(false);\n    setStep((current) => Math.min(current + 1, steps.length - 1));\n  };\n\n  const goBack = () => {\n    setTouched(false);\n    setStep((current) => Math.max(current - 1, 0));\n  };\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (step < steps.length - 1) {\n      goNext();\n      return;\n    }\n    onSubmit(data);\n  };\n\n  const countryLabel = countries.find((item) => item.value === data.country)?.label ?? '—';\n\n  return (\n    <form\n      onSubmit={submit}\n      style={{ display: 'grid', gap: '24px', fontFamily: 'var(--jx-font-sans)', color: 'var(--jx-text)' }}\n    >\n      <JxStepper steps={steps} current={step} />\n\n      {step === 0 && (\n        <div style={{ display: 'grid', gap: '12px' }}>\n          <JxInputField\n            label=\"Имя и фамилия\"\n            required\n            autoComplete=\"name\"\n            value={data.name}\n            onChange={(event) => set('name', event.target.value)}\n            errorText={show(nameError)}\n          />\n          <JxInputField\n            label=\"Электронная почта\"\n            type=\"email\"\n            required\n            autoComplete=\"email\"\n            value={data.email}\n            onChange={(event) => set('email', event.target.value)}\n            errorText={show(emailError)}\n          />\n          <JxInputField\n            label=\"Телефон\"\n            type=\"tel\"\n            prefix=\"+7\"\n            autoComplete=\"tel\"\n            placeholder=\"900 000-00-00\"\n            helperText=\"Необязательно, нужен только для доставки\"\n            value={data.phone}\n            onChange={(event) => set('phone', event.target.value)}\n          />\n        </div>\n      )}\n\n      {step === 1 && (\n        <div style={{ display: 'grid', gap: '12px' }}>\n          <JxSelect\n            label=\"Страна\"\n            placeholder=\"Выберите страну\"\n            options={countries}\n            value={data.country}\n            onValueChange={(value) => set('country', value)}\n          />\n          {show(countryError) && <JxAlert intent=\"danger\" title=\"Страна не выбрана\">{countryError}</JxAlert>}\n          <JxInputField\n            label=\"Город\"\n            required\n            autoComplete=\"address-level2\"\n            value={data.city}\n            onChange={(event) => set('city', event.target.value)}\n            errorText={show(cityError)}\n          />\n          <JxInputField\n            label=\"Улица и дом\"\n            required\n            autoComplete=\"street-address\"\n            value={data.street}\n            onChange={(event) => set('street', event.target.value)}\n            errorText={show(streetError)}\n          />\n          <JxTextareaField\n            label=\"Комментарий для курьера\"\n            rows={3}\n            maxLength={300}\n            value={data.note}\n            onChange={(event) => set('note', event.target.value)}\n            helperText={`${data.note.length}/300`}\n          />\n        </div>\n      )}\n\n      {step === 2 && (\n        <div style={{ display: 'grid', gap: '12px' }}>\n          <JxAlert intent=\"info\" title=\"Проверьте данные\">\n            После отправки изменить анкету можно будет только через поддержку.\n          </JxAlert>\n          <JxDivider label=\"Контакты\" />\n          <dl style={{ display: 'grid', gap: '8px', margin: 0 }}>\n            <div style={{ display: 'flex', gap: '12px', justifyContent: 'space-between' }}>\n              <dt style={{ color: 'var(--jx-text-2)' }}>Имя</dt>\n              <dd style={{ margin: 0, textAlign: 'right', wordBreak: 'break-word' }}>{data.name}</dd>\n            </div>\n            <div style={{ display: 'flex', gap: '12px', justifyContent: 'space-between' }}>\n              <dt style={{ color: 'var(--jx-text-2)' }}>Почта</dt>\n              <dd style={{ margin: 0, textAlign: 'right', wordBreak: 'break-word' }}>{data.email}</dd>\n            </div>\n            <div style={{ display: 'flex', gap: '12px', justifyContent: 'space-between' }}>\n              <dt style={{ color: 'var(--jx-text-2)' }}>Телефон</dt>\n              <dd style={{ margin: 0, textAlign: 'right' }}>{data.phone ? `+7 ${data.phone}` : '—'}</dd>\n            </div>\n          </dl>\n          <JxDivider label=\"Адрес\" />\n          <dl style={{ display: 'grid', gap: '8px', margin: 0 }}>\n            <div style={{ display: 'flex', gap: '12px', justifyContent: 'space-between' }}>\n              <dt style={{ color: 'var(--jx-text-2)' }}>Страна</dt>\n              <dd style={{ margin: 0, textAlign: 'right' }}>{countryLabel}</dd>\n            </div>\n            <div style={{ display: 'flex', gap: '12px', justifyContent: 'space-between' }}>\n              <dt style={{ color: 'var(--jx-text-2)' }}>Город</dt>\n              <dd style={{ margin: 0, textAlign: 'right', wordBreak: 'break-word' }}>{data.city}</dd>\n            </div>\n            <div style={{ display: 'flex', gap: '12px', justifyContent: 'space-between' }}>\n              <dt style={{ color: 'var(--jx-text-2)' }}>Улица и дом</dt>\n              <dd style={{ margin: 0, textAlign: 'right', wordBreak: 'break-word' }}>{data.street}</dd>\n            </div>\n            {data.note && (\n              <div style={{ display: 'flex', gap: '12px', justifyContent: 'space-between' }}>\n                <dt style={{ color: 'var(--jx-text-2)' }}>Комментарий</dt>\n                <dd style={{ margin: 0, textAlign: 'right', wordBreak: 'break-word' }}>{data.note}</dd>\n              </div>\n            )}\n          </dl>\n        </div>\n      )}\n\n      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>\n        <JxButton type=\"button\" variant=\"ghost\" disabled={step === 0} onClick={goBack}>\n          Назад\n        </JxButton>\n        {step < steps.length - 1 ? (\n          <JxButton type=\"button\" variant=\"primary\" onClick={goNext}>\n            Дальше\n          </JxButton>\n        ) : (\n          <JxButton type=\"submit\" variant=\"primary\">\n            Отправить\n          </JxButton>\n        )}\n      </div>\n    </form>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 101,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 106,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 138,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 175,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 180,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 181,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 182,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 183,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 185,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 186,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 187,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 189,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 190,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 191,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 195,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 196,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 197,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 198,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 200,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 201,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 202,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 204,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 205,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 206,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 209,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 210,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 211,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 218,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxAlert",
+      "JxButton",
+      "JxDivider",
+      "JxInputField",
+      "JxSelect",
+      "JxStepper",
+      "JxTextareaField"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "id": "wizard__none__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T16:51:38.784Z",
+  "repeat": 3,
+  "durationMs": 23049,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8603,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2242,
+    "cacheRead": 8603,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.060361500000000005,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, type ChangeEvent } from 'react';\nimport { Button, Card, Input, Stack, Stepper, Text } from '@jinx-ui/react';\n\ntype FormValues = {\n  name: string;\n  email: string;\n  phone: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype RegistrationWizardProps = {\n  onSubmit: (values: FormValues) => void;\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nconst EMPTY_VALUES: FormValues = {\n  name: '',\n  email: '',\n  phone: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst REVIEW_ROWS: Array<[string, keyof FormValues]> = [\n  ['Имя', 'name'],\n  ['E-mail', 'email'],\n  ['Телефон', 'phone'],\n  ['Город', 'city'],\n  ['Улица, дом', 'street'],\n  ['Индекс', 'zip'],\n];\n\nexport default function RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<FormValues>(EMPTY_VALUES);\n\n  const isLast = step === STEPS.length - 1;\n\n  const bind = (field: keyof FormValues) => ({\n    value: values[field],\n    onChange: (event: ChangeEvent<HTMLInputElement>) =>\n      setValues((prev) => ({ ...prev, [field]: event.target.value })),\n  });\n\n  return (\n    <Card className=\"jx-card\">\n      <Stack direction=\"vertical\" gap=\"var(--jx-space-lg)\">\n        <Stepper activeStep={step} steps={STEPS.map((label) => ({ label }))} />\n\n        {step === 0 && (\n          <Stack direction=\"vertical\" gap=\"var(--jx-space-md)\">\n            <Input label=\"Имя\" name=\"name\" autoComplete=\"name\" {...bind('name')} />\n            <Input label=\"E-mail\" name=\"email\" type=\"email\" autoComplete=\"email\" {...bind('email')} />\n            <Input label=\"Телефон\" name=\"phone\" type=\"tel\" autoComplete=\"tel\" {...bind('phone')} />\n          </Stack>\n        )}\n\n        {step === 1 && (\n          <Stack direction=\"vertical\" gap=\"var(--jx-space-md)\">\n            <Input label=\"Город\" name=\"city\" autoComplete=\"address-level2\" {...bind('city')} />\n            <Input label=\"Улица, дом\" name=\"street\" autoComplete=\"street-address\" {...bind('street')} />\n            <Input label=\"Индекс\" name=\"zip\" autoComplete=\"postal-code\" {...bind('zip')} />\n          </Stack>\n        )}\n\n        {step === 2 && (\n          <Stack direction=\"vertical\" gap=\"var(--jx-space-sm)\">\n            {REVIEW_ROWS.map(([label, field]) => (\n              <Stack key={field} direction=\"horizontal\" justify=\"space-between\" gap=\"var(--jx-space-md)\">\n                <Text tone=\"muted\">{label}</Text>\n                <Text>{values[field] || '—'}</Text>\n              </Stack>\n            ))}\n          </Stack>\n        )}\n\n        <Stack direction=\"horizontal\" justify=\"space-between\" gap=\"var(--jx-space-md)\">\n          <Button variant=\"secondary\" disabled={step === 0} onClick={() => setStep((s) => s - 1)}>\n            Назад\n          </Button>\n          {isLast ? (\n            <Button variant=\"primary\" onClick={() => onSubmit(values)}>\n              Отправить\n            </Button>\n          ) : (\n            <Button variant=\"primary\" onClick={() => setStep((s) => s + 1)}>\n              Дальше\n            </Button>\n          )}\n        </Stack>\n      </Stack>\n    </Card>\n  );\n}",
+    "text": "```tsx\nimport { useState, type ChangeEvent } from 'react';\nimport { Button, Card, Input, Stack, Stepper, Text } from '@jinx-ui/react';\n\ntype FormValues = {\n  name: string;\n  email: string;\n  phone: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype RegistrationWizardProps = {\n  onSubmit: (values: FormValues) => void;\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nconst EMPTY_VALUES: FormValues = {\n  name: '',\n  email: '',\n  phone: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst REVIEW_ROWS: Array<[string, keyof FormValues]> = [\n  ['Имя', 'name'],\n  ['E-mail', 'email'],\n  ['Телефон', 'phone'],\n  ['Город', 'city'],\n  ['Улица, дом', 'street'],\n  ['Индекс', 'zip'],\n];\n\nexport default function RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<FormValues>(EMPTY_VALUES);\n\n  const isLast = step === STEPS.length - 1;\n\n  const bind = (field: keyof FormValues) => ({\n    value: values[field],\n    onChange: (event: ChangeEvent<HTMLInputElement>) =>\n      setValues((prev) => ({ ...prev, [field]: event.target.value })),\n  });\n\n  return (\n    <Card className=\"jx-card\">\n      <Stack direction=\"vertical\" gap=\"var(--jx-space-lg)\">\n        <Stepper activeStep={step} steps={STEPS.map((label) => ({ label }))} />\n\n        {step === 0 && (\n          <Stack direction=\"vertical\" gap=\"var(--jx-space-md)\">\n            <Input label=\"Имя\" name=\"name\" autoComplete=\"name\" {...bind('name')} />\n            <Input label=\"E-mail\" name=\"email\" type=\"email\" autoComplete=\"email\" {...bind('email')} />\n            <Input label=\"Телефон\" name=\"phone\" type=\"tel\" autoComplete=\"tel\" {...bind('phone')} />\n          </Stack>\n        )}\n\n        {step === 1 && (\n          <Stack direction=\"vertical\" gap=\"var(--jx-space-md)\">\n            <Input label=\"Город\" name=\"city\" autoComplete=\"address-level2\" {...bind('city')} />\n            <Input label=\"Улица, дом\" name=\"street\" autoComplete=\"street-address\" {...bind('street')} />\n            <Input label=\"Индекс\" name=\"zip\" autoComplete=\"postal-code\" {...bind('zip')} />\n          </Stack>\n        )}\n\n        {step === 2 && (\n          <Stack direction=\"vertical\" gap=\"var(--jx-space-sm)\">\n            {REVIEW_ROWS.map(([label, field]) => (\n              <Stack key={field} direction=\"horizontal\" justify=\"space-between\" gap=\"var(--jx-space-md)\">\n                <Text tone=\"muted\">{label}</Text>\n                <Text>{values[field] || '—'}</Text>\n              </Stack>\n            ))}\n          </Stack>\n        )}\n\n        <Stack direction=\"horizontal\" justify=\"space-between\" gap=\"var(--jx-space-md)\">\n          <Button variant=\"secondary\" disabled={step === 0} onClick={() => setStep((s) => s - 1)}>\n            Назад\n          </Button>\n          {isLast ? (\n            <Button variant=\"primary\" onClick={() => onSubmit(values)}>\n              Отправить\n            </Button>\n          ) : (\n            <Button variant=\"primary\" onClick={() => setStep((s) => s + 1)}>\n              Дальше\n            </Button>\n          )}\n        </Stack>\n      </Stack>\n    </Card>\n  );\n}\n```\n\nOne caveat outside the requested format, because leaving it out would be misleading: I don't have the `@jinx-ui/react` API available in this session, so the component/prop names above (`Stepper.steps`, `Input.label`, `Stack.gap`) and the `--jx-space-*` token names are assumed. Check them against your library's docs before using."
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Card'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Stepper'. Did you mean 'JxStepper'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Card",
+        "Input",
+        "Stack",
+        "Stepper",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

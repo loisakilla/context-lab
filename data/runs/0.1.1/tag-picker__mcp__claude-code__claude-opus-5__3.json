@@ -1,0 +1,193 @@
+{
+  "id": "tag-picker__mcp__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T19:07:41.495Z",
+  "repeat": 3,
+  "durationMs": 43210,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "mcp",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 1587,
+    "sources": [
+      {
+        "kind": "tools",
+        "id": "search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules",
+        "version": "0.1.1",
+        "tokens": 1191,
+        "hash": "7b624df52b71eb9c"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 11109,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "теги, метка, chip, удаляемая метка",
+            "limit": 8
+          },
+          "resultTokens": 429
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "поле ввода текста input",
+            "limit": 8
+          },
+          "resultTokens": 744
+        },
+        {
+          "name": "mcp__context-lab__get_rules",
+          "input": {
+            "task": "ui"
+          },
+          "resultTokens": 1247
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 11109,
+        "cacheCreation": 4377
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxTagInput",
+            "detail": "full"
+          },
+          "resultTokens": 323
+        },
+        {
+          "name": "mcp__context-lab__get_component_examples",
+          "input": {
+            "name": "JxTagInput"
+          },
+          "resultTokens": 85
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxChip",
+            "detail": "full"
+          },
+          "resultTokens": 360
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 15486,
+        "cacheCreation": 1594
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__list_design_tokens",
+          "input": {
+            "group": "color"
+          },
+          "resultTokens": 377
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "текст, подпись, заголовок поля, вспомогательный текст",
+            "limit": 6
+          },
+          "resultTokens": 457
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 17080,
+        "cacheCreation": 2092
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 8,
+    "output": 3056,
+    "cacheRead": 54784,
+    "cacheCreation": 8063
+  },
+  "costUsd": 0.15422575,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxChip, JxTagInput } from '@jinx-ui/react';\n\ntype ArticleTagPickerProps = {\n  label?: string;\n  placeholder?: string;\n  value?: string[];\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n};\n\nexport default function ArticleTagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  value,\n  defaultValue = [],\n  onChange,\n}: ArticleTagPickerProps) {\n  const [uncontrolled, setUncontrolled] = useState<string[]>(defaultValue);\n  const tags = value ?? uncontrolled;\n\n  const commit = (next: string[]) => {\n    if (value === undefined) setUncontrolled(next);\n    onChange?.(next);\n  };\n\n  const handleValueChange = (next: string[]) => {\n    const cleaned: string[] = [];\n    for (const raw of next) {\n      const tag = raw.trim();\n      if (tag && !cleaned.some((item) => item.toLowerCase() === tag.toLowerCase())) {\n        cleaned.push(tag);\n      }\n    }\n    commit(cleaned);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>\n      <span\n        style={{\n          color: 'var(--jx-text)',\n          font: 'var(--jx-font-ui)',\n          fontWeight: 600,\n        }}\n      >\n        {label}\n      </span>\n\n      <JxTagInput\n        ariaLabel={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={handleValueChange}\n      />\n\n      <div\n        aria-live=\"polite\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', minHeight: '28px' }}\n      >\n        {tags.length === 0 ? (\n          <span style={{ color: 'var(--jx-text-2)', font: 'var(--jx-font-ui)' }}>\n            Пока ни одного тега. Наберите слово и нажмите Enter, чтобы добавить.\n          </span>\n        ) : (\n          tags.map((tag) => (\n            <JxChip\n              key={tag}\n              removable\n              onRemove={() => commit(tags.filter((item) => item !== tag))}\n            >\n              {tag}\n            </JxChip>\n          ))\n        )}\n      </div>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxChip, JxTagInput } from '@jinx-ui/react';\n\ntype ArticleTagPickerProps = {\n  label?: string;\n  placeholder?: string;\n  value?: string[];\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n};\n\nexport default function ArticleTagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  value,\n  defaultValue = [],\n  onChange,\n}: ArticleTagPickerProps) {\n  const [uncontrolled, setUncontrolled] = useState<string[]>(defaultValue);\n  const tags = value ?? uncontrolled;\n\n  const commit = (next: string[]) => {\n    if (value === undefined) setUncontrolled(next);\n    onChange?.(next);\n  };\n\n  const handleValueChange = (next: string[]) => {\n    const cleaned: string[] = [];\n    for (const raw of next) {\n      const tag = raw.trim();\n      if (tag && !cleaned.some((item) => item.toLowerCase() === tag.toLowerCase())) {\n        cleaned.push(tag);\n      }\n    }\n    commit(cleaned);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>\n      <span\n        style={{\n          color: 'var(--jx-text)',\n          font: 'var(--jx-font-ui)',\n          fontWeight: 600,\n        }}\n      >\n        {label}\n      </span>\n\n      <JxTagInput\n        ariaLabel={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={handleValueChange}\n      />\n\n      <div\n        aria-live=\"polite\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', minHeight: '28px' }}\n      >\n        {tags.length === 0 ? (\n          <span style={{ color: 'var(--jx-text-2)', font: 'var(--jx-font-ui)' }}>\n            Пока ни одного тега. Наберите слово и нажмите Enter, чтобы добавить.\n          </span>\n        ) : (\n          tags.map((tag) => (\n            <JxChip\n              key={tag}\n              removable\n              onRemove={() => commit(tags.filter((item) => item !== tag))}\n            >\n              {tag}\n            </JxChip>\n          ))\n        )}\n      </div>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 39,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 41,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 59,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 62,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxChip",
+      "JxTagInput"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

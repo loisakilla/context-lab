@@ -1,0 +1,101 @@
+{
+  "id": "tag-picker__readme__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T17:08:00.781Z",
+  "repeat": 3,
+  "durationMs": 27524,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 9513,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2368,
+    "cacheRead": 9513,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0639665,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useCallback, useId, useState } from 'react';\nimport { JxButton, JxTagInput } from '@jinx-ui/react';\n\nexport interface ArticleTagPickerProps {\n  defaultTags?: string[];\n  onChange?: (tags: string[]) => void;\n  label?: string;\n  placeholder?: string;\n  maxTags?: number;\n}\n\nexport default function ArticleTagPicker({\n  defaultTags = [],\n  onChange,\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  maxTags = 10,\n}: ArticleTagPickerProps) {\n  const listId = useId();\n\n  const normalize = useCallback(\n    (input: string[]): string[] => {\n      const seen = new Set<string>();\n      const result: string[] = [];\n      for (const raw of input) {\n        const tag = raw.trim().replace(/\\s+/g, ' ');\n        const key = tag.toLocaleLowerCase();\n        if (!tag || seen.has(key)) continue;\n        seen.add(key);\n        result.push(tag);\n        if (result.length >= maxTags) break;\n      }\n      return result;\n    },\n    [maxTags],\n  );\n\n  const [tags, setTags] = useState<string[]>(() => normalize(defaultTags));\n\n  const commit = useCallback(\n    (next: string[]) => {\n      setTags(next);\n      onChange?.(next);\n    },\n    [onChange],\n  );\n\n  const handleValueChange = useCallback(\n    (next: string[]) => {\n      commit(normalize(next));\n    },\n    [commit, normalize],\n  );\n\n  const removeTag = useCallback(\n    (tag: string) => {\n      commit(tags.filter((item) => item !== tag));\n    },\n    [commit, tags],\n  );\n\n  return (\n    <div\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-2)',\n      }}\n    >\n      <JxTagInput\n        label={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={handleValueChange}\n        disabled={tags.length >= maxTags}\n        aria-describedby={listId}\n      />\n\n      <div\n        id={listId}\n        role=\"list\"\n        aria-label=\"Выбранные теги\"\n        style={{\n          display: 'flex',\n          flexWrap: 'wrap',\n          gap: 'var(--jx-space-2)',\n          minHeight: 'var(--jx-space-6)',\n        }}\n      >\n        {tags.map((tag) => (\n          <span key={tag} role=\"listitem\">\n            <JxButton\n              type=\"button\"\n              variant=\"ghost\"\n              size=\"sm\"\n              onClick={() => removeTag(tag)}\n              aria-label={`Удалить тег ${tag}`}\n            >\n              {tag} ×\n            </JxButton>\n          </span>\n        ))}\n      </div>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useId, useState } from 'react';\nimport { JxButton, JxTagInput } from '@jinx-ui/react';\n\nexport interface ArticleTagPickerProps {\n  defaultTags?: string[];\n  onChange?: (tags: string[]) => void;\n  label?: string;\n  placeholder?: string;\n  maxTags?: number;\n}\n\nexport default function ArticleTagPicker({\n  defaultTags = [],\n  onChange,\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  maxTags = 10,\n}: ArticleTagPickerProps) {\n  const listId = useId();\n\n  const normalize = useCallback(\n    (input: string[]): string[] => {\n      const seen = new Set<string>();\n      const result: string[] = [];\n      for (const raw of input) {\n        const tag = raw.trim().replace(/\\s+/g, ' ');\n        const key = tag.toLocaleLowerCase();\n        if (!tag || seen.has(key)) continue;\n        seen.add(key);\n        result.push(tag);\n        if (result.length >= maxTags) break;\n      }\n      return result;\n    },\n    [maxTags],\n  );\n\n  const [tags, setTags] = useState<string[]>(() => normalize(defaultTags));\n\n  const commit = useCallback(\n    (next: string[]) => {\n      setTags(next);\n      onChange?.(next);\n    },\n    [onChange],\n  );\n\n  const handleValueChange = useCallback(\n    (next: string[]) => {\n      commit(normalize(next));\n    },\n    [commit, normalize],\n  );\n\n  const removeTag = useCallback(\n    (tag: string) => {\n      commit(tags.filter((item) => item !== tag));\n    },\n    [commit, tags],\n  );\n\n  return (\n    <div\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-2)',\n      }}\n    >\n      <JxTagInput\n        label={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={handleValueChange}\n        disabled={tags.length >= maxTags}\n        aria-describedby={listId}\n      />\n\n      <div\n        id={listId}\n        role=\"list\"\n        aria-label=\"Выбранные теги\"\n        style={{\n          display: 'flex',\n          flexWrap: 'wrap',\n          gap: 'var(--jx-space-2)',\n          minHeight: 'var(--jx-space-6)',\n        }}\n      >\n        {tags.map((tag) => (\n          <span key={tag} role=\"listitem\">\n            <JxButton\n              type=\"button\"\n              variant=\"ghost\"\n              size=\"sm\"\n              onClick={() => removeTag(tag)}\n              aria-label={`Удалить тег ${tag}`}\n            >\n              {tag} ×\n            </JxButton>\n          </span>\n        ))}\n      </div>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2322,
+          "line": 71,
+          "message": "Type '{ label: string; placeholder: string; value: string[]; onValueChange: (next: string[]) => void; disabled: boolean; \"aria-describedby\": string; }' is not assignable to type 'IntrinsicAttributes & JxTagInputProps'.\n  Property 'label' does not exist on type 'IntrinsicAttributes & JxTagInputProps'."
+        }
+      ],
+      "unknownComponents": [],
+      "unknownProps": [
+        {
+          "component": "JxTagInput",
+          "prop": "label"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 64,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 83,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxTagInput"
+    ],
+    "expectedCoverage": 1,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.86
+  }
+}

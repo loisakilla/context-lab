@@ -1,0 +1,143 @@
+{
+  "id": "wizard__none__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-23T16:48:36.590Z",
+  "repeat": 3,
+  "durationMs": 14585,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "none",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 8605,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1977,
+    "cacheRead": 8605,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.05373750000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport {\n  JxCard,\n  JxStepper,\n  JxStep,\n  JxInput,\n  JxButton,\n  JxStack,\n  JxText,\n  JxDivider,\n} from '@jinx-ui/react';\n\ntype FormData = {\n  fullName: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype RegistrationFormProps = {\n  onSubmit: (data: FormData) => void;\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nconst INITIAL_DATA: FormData = {\n  fullName: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nexport default function RegistrationForm({ onSubmit }: RegistrationFormProps) {\n  const [currentStep, setCurrentStep] = useState(0);\n  const [formData, setFormData] = useState<FormData>(INITIAL_DATA);\n\n  const isLastStep = currentStep === STEPS.length - 1;\n  const isFirstStep = currentStep === 0;\n\n  const updateField = (field: keyof FormData) => (value: string) => {\n    setFormData((prev) => ({ ...prev, [field]: value }));\n  };\n\n  const handleNext = () => {\n    if (!isLastStep) {\n      setCurrentStep((step) => step + 1);\n    }\n  };\n\n  const handleBack = () => {\n    if (!isFirstStep) {\n      setCurrentStep((step) => step - 1);\n    }\n  };\n\n  const handleSubmit = () => {\n    onSubmit(formData);\n  };\n\n  return (\n    <JxCard className=\"jx-p-lg jx-max-w-md\">\n      <JxStack direction=\"column\" gap=\"lg\">\n        <JxStepper activeStep={currentStep}>\n          {STEPS.map((label) => (\n            <JxStep key={label} label={label} />\n          ))}\n        </JxStepper>\n\n        <JxDivider />\n\n        {currentStep === 0 && (\n          <JxStack direction=\"column\" gap=\"md\">\n            <JxText variant=\"heading-sm\">Контакты</JxText>\n            <JxInput\n              label=\"Полное имя\"\n              value={formData.fullName}\n              onChange={updateField('fullName')}\n              placeholder=\"Иван Иванов\"\n            />\n            <JxInput\n              label=\"Email\"\n              type=\"email\"\n              value={formData.email}\n              onChange={updateField('email')}\n              placeholder=\"ivan@example.com\"\n            />\n            <JxInput\n              label=\"Телефон\"\n              type=\"tel\"\n              value={formData.phone}\n              onChange={updateField('phone')}\n              placeholder=\"+7 900 000-00-00\"\n            />\n          </JxStack>\n        )}\n\n        {currentStep === 1 && (\n          <JxStack direction=\"column\" gap=\"md\">\n            <JxText variant=\"heading-sm\">Адрес</JxText>\n            <JxInput\n              label=\"Страна\"\n              value={formData.country}\n              onChange={updateField('country')}\n              placeholder=\"Россия\"\n            />\n            <JxInput\n              label=\"Город\"\n              value={formData.city}\n              onChange={updateField('city')}\n              placeholder=\"Москва\"\n            />\n            <JxInput\n              label=\"Улица и дом\"\n              value={formData.street}\n              onChange={updateField('street')}\n              placeholder=\"ул. Ленина, д. 1\"\n            />\n            <JxInput\n              label=\"Индекс\"\n              value={formData.zip}\n              onChange={updateField('zip')}\n              placeholder=\"123456\"\n            />\n          </JxStack>\n        )}\n\n        {currentStep === 2 && (\n          <JxStack direction=\"column\" gap=\"md\">\n            <JxText variant=\"heading-sm\">Проверка</JxText>\n            <JxStack direction=\"column\" gap=\"xs\">\n              <JxText variant=\"body-sm\" style={{ color: 'var(--jx-color-text-secondary)' }}>\n                Имя\n              </JxText>\n              <JxText variant=\"body-md\">{formData.fullName || '—'}</JxText>\n            </JxStack>\n            <JxStack direction=\"column\" gap=\"xs\">\n              <JxText variant=\"body-sm\" style={{ color: 'var(--jx-color-text-secondary)' }}>\n                Email\n              </JxText>\n              <JxText variant=\"body-md\">{formData.email || '—'}</JxText>\n            </JxStack>\n            <JxStack direction=\"column\" gap=\"xs\">\n              <JxText variant=\"body-sm\" style={{ color: 'var(--jx-color-text-secondary)' }}>\n                Телефон\n              </JxText>\n              <JxText variant=\"body-md\">{formData.phone || '—'}</JxText>\n            </JxStack>\n            <JxStack direction=\"column\" gap=\"xs\">\n              <JxText variant=\"body-sm\" style={{ color: 'var(--jx-color-text-secondary)' }}>\n                Адрес\n              </JxText>\n              <JxText variant=\"body-md\">\n                {[formData.street, formData.city, formData.country, formData.zip]\n                  .filter(Boolean)\n                  .join(', ') || '—'}\n              </JxText>\n            </JxStack>\n          </JxStack>\n        )}\n\n        <JxDivider />\n\n        <JxStack direction=\"row\" justify=\"space-between\">\n          <JxButton variant=\"secondary\" onClick={handleBack} disabled={isFirstStep}>\n            Назад\n          </JxButton>\n          {isLastStep ? (\n            <JxButton variant=\"primary\" onClick={handleSubmit}>\n              Отправить\n            </JxButton>\n          ) : (\n            <JxButton variant=\"primary\" onClick={handleNext}>\n              Дальше\n            </JxButton>\n          )}\n        </JxStack>\n      </JxStack>\n    </JxCard>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport {\n  JxCard,\n  JxStepper,\n  JxStep,\n  JxInput,\n  JxButton,\n  JxStack,\n  JxText,\n  JxDivider,\n} from '@jinx-ui/react';\n\ntype FormData = {\n  fullName: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype RegistrationFormProps = {\n  onSubmit: (data: FormData) => void;\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nconst INITIAL_DATA: FormData = {\n  fullName: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nexport default function RegistrationForm({ onSubmit }: RegistrationFormProps) {\n  const [currentStep, setCurrentStep] = useState(0);\n  const [formData, setFormData] = useState<FormData>(INITIAL_DATA);\n\n  const isLastStep = currentStep === STEPS.length - 1;\n  const isFirstStep = currentStep === 0;\n\n  const updateField = (field: keyof FormData) => (value: string) => {\n    setFormData((prev) => ({ ...prev, [field]: value }));\n  };\n\n  const handleNext = () => {\n    if (!isLastStep) {\n      setCurrentStep((step) => step + 1);\n    }\n  };\n\n  const handleBack = () => {\n    if (!isFirstStep) {\n      setCurrentStep((step) => step - 1);\n    }\n  };\n\n  const handleSubmit = () => {\n    onSubmit(formData);\n  };\n\n  return (\n    <JxCard className=\"jx-p-lg jx-max-w-md\">\n      <JxStack direction=\"column\" gap=\"lg\">\n        <JxStepper activeStep={currentStep}>\n          {STEPS.map((label) => (\n            <JxStep key={label} label={label} />\n          ))}\n        </JxStepper>\n\n        <JxDivider />\n\n        {currentStep === 0 && (\n          <JxStack direction=\"column\" gap=\"md\">\n            <JxText variant=\"heading-sm\">Контакты</JxText>\n            <JxInput\n              label=\"Полное имя\"\n              value={formData.fullName}\n              onChange={updateField('fullName')}\n              placeholder=\"Иван Иванов\"\n            />\n            <JxInput\n              label=\"Email\"\n              type=\"email\"\n              value={formData.email}\n              onChange={updateField('email')}\n              placeholder=\"ivan@example.com\"\n            />\n            <JxInput\n              label=\"Телефон\"\n              type=\"tel\"\n              value={formData.phone}\n              onChange={updateField('phone')}\n              placeholder=\"+7 900 000-00-00\"\n            />\n          </JxStack>\n        )}\n\n        {currentStep === 1 && (\n          <JxStack direction=\"column\" gap=\"md\">\n            <JxText variant=\"heading-sm\">Адрес</JxText>\n            <JxInput\n              label=\"Страна\"\n              value={formData.country}\n              onChange={updateField('country')}\n              placeholder=\"Россия\"\n            />\n            <JxInput\n              label=\"Город\"\n              value={formData.city}\n              onChange={updateField('city')}\n              placeholder=\"Москва\"\n            />\n            <JxInput\n              label=\"Улица и дом\"\n              value={formData.street}\n              onChange={updateField('street')}\n              placeholder=\"ул. Ленина, д. 1\"\n            />\n            <JxInput\n              label=\"Индекс\"\n              value={formData.zip}\n              onChange={updateField('zip')}\n              placeholder=\"123456\"\n            />\n          </JxStack>\n        )}\n\n        {currentStep === 2 && (\n          <JxStack direction=\"column\" gap=\"md\">\n            <JxText variant=\"heading-sm\">Проверка</JxText>\n            <JxStack direction=\"column\" gap=\"xs\">\n              <JxText variant=\"body-sm\" style={{ color: 'var(--jx-color-text-secondary)' }}>\n                Имя\n              </JxText>\n              <JxText variant=\"body-md\">{formData.fullName || '—'}</JxText>\n            </JxStack>\n            <JxStack direction=\"column\" gap=\"xs\">\n              <JxText variant=\"body-sm\" style={{ color: 'var(--jx-color-text-secondary)' }}>\n                Email\n              </JxText>\n              <JxText variant=\"body-md\">{formData.email || '—'}</JxText>\n            </JxStack>\n            <JxStack direction=\"column\" gap=\"xs\">\n              <JxText variant=\"body-sm\" style={{ color: 'var(--jx-color-text-secondary)' }}>\n                Телефон\n              </JxText>\n              <JxText variant=\"body-md\">{formData.phone || '—'}</JxText>\n            </JxStack>\n            <JxStack direction=\"column\" gap=\"xs\">\n              <JxText variant=\"body-sm\" style={{ color: 'var(--jx-color-text-secondary)' }}>\n                Адрес\n              </JxText>\n              <JxText variant=\"body-md\">\n                {[formData.street, formData.city, formData.country, formData.zip]\n                  .filter(Boolean)\n                  .join(', ') || '—'}\n              </JxText>\n            </JxStack>\n          </JxStack>\n        )}\n\n        <JxDivider />\n\n        <JxStack direction=\"row\" justify=\"space-between\">\n          <JxButton variant=\"secondary\" onClick={handleBack} disabled={isFirstStep}>\n            Назад\n          </JxButton>\n          {isLastStep ? (\n            <JxButton variant=\"primary\" onClick={handleSubmit}>\n              Отправить\n            </JxButton>\n          ) : (\n            <JxButton variant=\"primary\" onClick={handleNext}>\n              Дальше\n            </JxButton>\n          )}\n        </JxStack>\n      </JxStack>\n    </JxCard>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxCard'."
+        },
+        {
+          "code": 2305,
+          "line": 6,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxInput'."
+        },
+        {
+          "code": 2305,
+          "line": 8,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxStack'."
+        },
+        {
+          "code": 2305,
+          "line": 9,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxText'."
+        },
+        {
+          "code": 2322,
+          "line": 69,
+          "message": "Type '{ children: Element[]; activeStep: number; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributes<HTMLDivElement> & { ref?: Ref<HTMLDivElement> | undefined; steps: JxStep[]; current: number; }'.\n  Property 'activeStep' does not exist on type 'IntrinsicAttributes & HTMLAttributes<HTMLDivElement> & { ref?: Ref<HTMLDivElement> | undefined; steps: JxStep[]; current: number; }'."
+        },
+        {
+          "code": 2693,
+          "line": 71,
+          "message": "'JxStep' only refers to a type, but is being used as a value here."
+        }
+      ],
+      "unknownComponents": [
+        "JxCard",
+        "JxInput",
+        "JxStack",
+        "JxText"
+      ],
+      "unknownProps": [
+        {
+          "component": "JxStepper",
+          "prop": "activeStep"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 137,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 143,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 149,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 155,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxCard",
+      "JxDivider",
+      "JxInput",
+      "JxStack",
+      "JxStep",
+      "JxStepper",
+      "JxText"
+    ],
+    "expectedCoverage": 0.67,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.2
+  }
+}

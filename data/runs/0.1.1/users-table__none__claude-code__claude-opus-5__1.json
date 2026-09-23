@@ -1,0 +1,95 @@
+{
+  "id": "users-table__none__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-23T16:49:46.762Z",
+  "repeat": 1,
+  "durationMs": 19967,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "users-table",
+    "title": "Таблица пользователей с пагинацией",
+    "prompt": "Сделай таблицу пользователей с колонками «Имя», «Роль» и «Статус». Список users передаётся пропсом, показывать по десять строк на страницу с постраничной навигацией под таблицей. Статус показывай цветной меткой: активен или отключён.",
+    "taskType": "ui",
+    "expects": [
+      "JxTable",
+      "JxPagination",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 8233,
+        "cacheCreation": 352
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1699,
+    "cacheRead": 8233,
+    "cacheCreation": 352
+  },
+  "costUsd": 0.048801500000000005,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\nimport { Badge, Pagination, Table } from '@jinx-ui/react';\n\n// Assumes Jinx UI compound Table, Badge `tone`, and controlled Pagination — adjust names if the installed version differs.\n\nexport type User = {\n  id: string | number;\n  name: string;\n  role: string;\n  active: boolean;\n};\n\ntype UsersTableProps = {\n  users: User[];\n};\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n\n  const rows = useMemo(\n    () => users.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),\n    [users, currentPage],\n  );\n\n  return (\n    <div\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-4)',\n      }}\n    >\n      <Table>\n        <Table.Header>\n          <Table.Row>\n            <Table.HeaderCell>Имя</Table.HeaderCell>\n            <Table.HeaderCell>Роль</Table.HeaderCell>\n            <Table.HeaderCell>Статус</Table.HeaderCell>\n          </Table.Row>\n        </Table.Header>\n        <Table.Body>\n          {rows.map((user) => (\n            <Table.Row key={user.id}>\n              <Table.Cell>{user.name}</Table.Cell>\n              <Table.Cell>{user.role}</Table.Cell>\n              <Table.Cell>\n                <Badge tone={user.active ? 'success' : 'neutral'}>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </Badge>\n              </Table.Cell>\n            </Table.Row>\n          ))}\n        </Table.Body>\n      </Table>\n\n      <Pagination page={currentPage} pageCount={pageCount} onChange={setPage} />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport { Badge, Pagination, Table } from '@jinx-ui/react';\n\n// Assumes Jinx UI compound Table, Badge `tone`, and controlled Pagination — adjust names if the installed version differs.\n\nexport type User = {\n  id: string | number;\n  name: string;\n  role: string;\n  active: boolean;\n};\n\ntype UsersTableProps = {\n  users: User[];\n};\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n\n  const rows = useMemo(\n    () => users.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),\n    [users, currentPage],\n  );\n\n  return (\n    <div\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-4)',\n      }}\n    >\n      <Table>\n        <Table.Header>\n          <Table.Row>\n            <Table.HeaderCell>Имя</Table.HeaderCell>\n            <Table.HeaderCell>Роль</Table.HeaderCell>\n            <Table.HeaderCell>Статус</Table.HeaderCell>\n          </Table.Row>\n        </Table.Header>\n        <Table.Body>\n          {rows.map((user) => (\n            <Table.Row key={user.id}>\n              <Table.Cell>{user.name}</Table.Cell>\n              <Table.Cell>{user.role}</Table.Cell>\n              <Table.Cell>\n                <Badge tone={user.active ? 'success' : 'neutral'}>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </Badge>\n              </Table.Cell>\n            </Table.Row>\n          ))}\n        </Table.Body>\n      </Table>\n\n      <Pagination page={currentPage} pageCount={pageCount} onChange={setPage} />\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Badge'. Did you mean 'JxBadge'?"
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Pagination'. Did you mean 'JxPagination'?"
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Table'. Did you mean 'JxTable'?"
+        }
+      ],
+      "unknownComponents": [
+        "Badge",
+        "Pagination",
+        "Table"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 32,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

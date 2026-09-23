@@ -1,0 +1,76 @@
+{
+  "id": "tag-picker__readme__claude-code__claude-sonnet-5__2",
+  "createdAt": "2026-09-23T16:56:36.339Z",
+  "repeat": 2,
+  "durationMs": 5004,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 9515,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 263,
+    "cacheRead": 9515,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.011342499999999998,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxTagInput } from '@jinx-ui/react';\n\ninterface ArticleTagPickerProps {\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagPicker({ onChange }: ArticleTagPickerProps) {\n  const [tags, setTags] = useState<string[]>([]);\n\n  const handleTagsChange = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  return (\n    <div>\n      <JxTagInput\n        value={tags}\n        onValueChange={handleTagsChange}\n        placeholder=\"Добавьте тег и нажмите Enter\"\n        aria-label=\"Теги статьи\"\n      />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxTagInput } from '@jinx-ui/react';\n\ninterface ArticleTagPickerProps {\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagPicker({ onChange }: ArticleTagPickerProps) {\n  const [tags, setTags] = useState<string[]>([]);\n\n  const handleTagsChange = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  return (\n    <div>\n      <JxTagInput\n        value={tags}\n        onValueChange={handleTagsChange}\n        placeholder=\"Добавьте тег и нажмите Enter\"\n        aria-label=\"Теги статьи\"\n      />\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [
+      "JxTagInput"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

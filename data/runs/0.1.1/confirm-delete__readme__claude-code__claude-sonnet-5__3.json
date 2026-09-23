@@ -1,0 +1,103 @@
+{
+  "id": "confirm-delete__readme__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-23T16:52:11.419Z",
+  "repeat": 3,
+  "durationMs": 6305,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "confirm-delete",
+    "title": "Подтверждение удаления",
+    "prompt": "Сделай компонент с кнопкой «Удалить проект». По клику открывается окно подтверждения с заголовком «Удалить проект?», текстом о том, что действие необратимо, и двумя кнопками: отмена и подтверждение удаления. Подтверждение вызывает переданный колбэк onConfirm.",
+    "taskType": "ui",
+    "expects": [
+      "JxModal",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 9539,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 559,
+    "cacheRead": 9539,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0187545,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxButton, JxModal } from '@jinx-ui/react';\n\ninterface DeleteProjectButtonProps {\n  onConfirm: () => void;\n}\n\nexport default function DeleteProjectButton({ onConfirm }: DeleteProjectButtonProps) {\n  const [open, setOpen] = useState(false);\n\n  const handleConfirm = () => {\n    onConfirm();\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <JxButton variant=\"danger\" onClick={() => setOpen(true)}>\n        Удалить проект\n      </JxButton>\n\n      <JxModal open={open} onOpenChange={setOpen} aria-label=\"Удалить проект?\">\n        <div style={{ padding: 'var(--jx-space-4)' }}>\n          <h2 className=\"jx-heading\">Удалить проект?</h2>\n          <p className=\"jx-text\" style={{ color: 'var(--jx-color-text-secondary)' }}>\n            Это действие необратимо. Все данные проекта будут удалены безвозвратно.\n          </p>\n          <div\n            style={{\n              display: 'flex',\n              justifyContent: 'flex-end',\n              gap: 'var(--jx-space-2)',\n              marginTop: 'var(--jx-space-4)',\n            }}\n          >\n            <JxButton variant=\"secondary\" onClick={() => setOpen(false)}>\n              Отмена\n            </JxButton>\n            <JxButton variant=\"danger\" onClick={handleConfirm}>\n              Удалить\n            </JxButton>\n          </div>\n        </div>\n      </JxModal>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxModal } from '@jinx-ui/react';\n\ninterface DeleteProjectButtonProps {\n  onConfirm: () => void;\n}\n\nexport default function DeleteProjectButton({ onConfirm }: DeleteProjectButtonProps) {\n  const [open, setOpen] = useState(false);\n\n  const handleConfirm = () => {\n    onConfirm();\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <JxButton variant=\"danger\" onClick={() => setOpen(true)}>\n        Удалить проект\n      </JxButton>\n\n      <JxModal open={open} onOpenChange={setOpen} aria-label=\"Удалить проект?\">\n        <div style={{ padding: 'var(--jx-space-4)' }}>\n          <h2 className=\"jx-heading\">Удалить проект?</h2>\n          <p className=\"jx-text\" style={{ color: 'var(--jx-color-text-secondary)' }}>\n            Это действие необратимо. Все данные проекта будут удалены безвозвратно.\n          </p>\n          <div\n            style={{\n              display: 'flex',\n              justifyContent: 'flex-end',\n              gap: 'var(--jx-space-2)',\n              marginTop: 'var(--jx-space-4)',\n            }}\n          >\n            <JxButton variant=\"secondary\" onClick={() => setOpen(false)}>\n              Отмена\n            </JxButton>\n            <JxButton variant=\"danger\" onClick={handleConfirm}>\n              Удалить\n            </JxButton>\n          </div>\n        </div>\n      </JxModal>\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2741,
+          "line": 22,
+          "message": "Property 'title' is missing in type '{ children: Element; open: boolean; onOpenChange: Dispatch<SetStateAction<boolean>>; \"aria-label\": string; }' but required in type 'JxModalProps'."
+        }
+      ],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 23,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 25,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 29,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxModal"
+    ],
+    "expectedCoverage": 1,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.86
+  }
+}

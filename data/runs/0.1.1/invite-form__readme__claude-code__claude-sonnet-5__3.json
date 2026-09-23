@@ -1,0 +1,120 @@
+{
+  "id": "invite-form__readme__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-23T17:02:38.743Z",
+  "repeat": 3,
+  "durationMs": 30913,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "invite-form",
+    "title": "Приглашение в команду с валидацией",
+    "prompt": "Сделай форму приглашения в команду: поле почты с подсказкой под ним, выбор роли из списка, переключатель «отправить уведомление» и кнопка отправки. Пока почта не похожа на адрес, поле показывает ошибку и кнопка заблокирована. После отправки над формой появляется сообщение об успехе, которое можно закрыть.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxAlert",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 9553,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 3592,
+    "cacheRead": 9553,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0945865,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, type FormEvent } from 'react';\nimport {\n  JxTextField,\n  JxSelect,\n  JxSwitch,\n  JxButton,\n  JxAlert,\n} from '@jinx-ui/react';\n\nconst ROLE_OPTIONS = [\n  { value: 'member', label: 'Участник' },\n  { value: 'admin', label: 'Администратор' },\n  { value: 'viewer', label: 'Наблюдатель' },\n];\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nexport default function TeamInviteForm() {\n  const [email, setEmail] = useState('');\n  const [role, setRole] = useState('member');\n  const [notify, setNotify] = useState(true);\n  const [successOpen, setSuccessOpen] = useState(false);\n  const [sentTo, setSentTo] = useState('');\n\n  const emailTouched = email.length > 0;\n  const emailValid = EMAIL_PATTERN.test(email);\n  const emailError = emailTouched && !emailValid;\n  const canSubmit = emailValid;\n\n  function handleSubmit(event: FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n    if (!canSubmit) return;\n    setSentTo(email);\n    setSuccessOpen(true);\n    setEmail('');\n    setRole('member');\n    setNotify(true);\n  }\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-4)' }}>\n      <JxAlert\n        variant=\"success\"\n        open={successOpen}\n        onOpenChange={setSuccessOpen}\n      >\n        Приглашение отправлено на {sentTo}\n      </JxAlert>\n\n      <form\n        onSubmit={handleSubmit}\n        style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-4)' }}\n      >\n        <JxTextField\n          label=\"Почта\"\n          type=\"email\"\n          value={email}\n          onValueChange={setEmail}\n          hint={emailError ? 'Введите корректный email-адрес' : 'Например, name@company.com'}\n          error={emailError}\n          required\n        />\n\n        <JxSelect\n          label=\"Роль\"\n          value={role}\n          onValueChange={setRole}\n          options={ROLE_OPTIONS}\n        />\n\n        <JxSwitch\n          label=\"Отправить уведомление\"\n          value={notify}\n          onValueChange={setNotify}\n        />\n\n        <JxButton type=\"submit\" variant=\"primary\" disabled={!canSubmit}>\n          Отправить приглашение\n        </JxButton>\n      </form>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState, type FormEvent } from 'react';\nimport {\n  JxTextField,\n  JxSelect,\n  JxSwitch,\n  JxButton,\n  JxAlert,\n} from '@jinx-ui/react';\n\nconst ROLE_OPTIONS = [\n  { value: 'member', label: 'Участник' },\n  { value: 'admin', label: 'Администратор' },\n  { value: 'viewer', label: 'Наблюдатель' },\n];\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nexport default function TeamInviteForm() {\n  const [email, setEmail] = useState('');\n  const [role, setRole] = useState('member');\n  const [notify, setNotify] = useState(true);\n  const [successOpen, setSuccessOpen] = useState(false);\n  const [sentTo, setSentTo] = useState('');\n\n  const emailTouched = email.length > 0;\n  const emailValid = EMAIL_PATTERN.test(email);\n  const emailError = emailTouched && !emailValid;\n  const canSubmit = emailValid;\n\n  function handleSubmit(event: FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n    if (!canSubmit) return;\n    setSentTo(email);\n    setSuccessOpen(true);\n    setEmail('');\n    setRole('member');\n    setNotify(true);\n  }\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-4)' }}>\n      <JxAlert\n        variant=\"success\"\n        open={successOpen}\n        onOpenChange={setSuccessOpen}\n      >\n        Приглашение отправлено на {sentTo}\n      </JxAlert>\n\n      <form\n        onSubmit={handleSubmit}\n        style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-4)' }}\n      >\n        <JxTextField\n          label=\"Почта\"\n          type=\"email\"\n          value={email}\n          onValueChange={setEmail}\n          hint={emailError ? 'Введите корректный email-адрес' : 'Например, name@company.com'}\n          error={emailError}\n          required\n        />\n\n        <JxSelect\n          label=\"Роль\"\n          value={role}\n          onValueChange={setRole}\n          options={ROLE_OPTIONS}\n        />\n\n        <JxSwitch\n          label=\"Отправить уведомление\"\n          value={notify}\n          onValueChange={setNotify}\n        />\n\n        <JxButton type=\"submit\" variant=\"primary\" disabled={!canSubmit}>\n          Отправить приглашение\n        </JxButton>\n      </form>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxTextField'."
+        },
+        {
+          "code": 2322,
+          "line": 43,
+          "message": "Type '{ children: string[]; variant: string; open: boolean; onOpenChange: Dispatch<SetStateAction<boolean>>; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributes<HTMLDivElement> & { ref?: Ref<HTMLDivElement> | undefined; intent?: JxAlertIntent | undefined; title: ReactNode; icon?: ReactNode; children?: ReactNode; }'.\n  Property 'variant' does not exist on type 'IntrinsicAttributes & HTMLAttributes<HTMLDivElement> & { ref?: Ref<HTMLDivElement> | undefined; intent?: JxAlertIntent | undefined; title: ReactNode; icon?: ReactNode; children?: ReactNode; }'."
+        },
+        {
+          "code": 2322,
+          "line": 73,
+          "message": "Type 'boolean' is not assignable to type 'string | number | readonly string[] | undefined'."
+        }
+      ],
+      "unknownComponents": [
+        "JxTextField"
+      ],
+      "unknownProps": [
+        {
+          "component": "JxAlert",
+          "prop": "variant"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 41,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 52,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxAlert",
+      "JxButton",
+      "JxSelect",
+      "JxSwitch",
+      "JxTextField"
+    ],
+    "expectedCoverage": 0.8,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.52
+  }
+}

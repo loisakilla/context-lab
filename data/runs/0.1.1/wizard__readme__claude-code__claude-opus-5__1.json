@@ -1,0 +1,148 @@
+{
+  "id": "wizard__readme__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-23T17:05:16.683Z",
+  "repeat": 1,
+  "durationMs": 38704,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 8233,
+        "cacheCreation": 1306
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 3647,
+    "cacheRead": 8233,
+    "cacheCreation": 1306
+  },
+  "costUsd": 0.103464,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxButton, JxInput } from '@jinx-ui/react';\n\nexport type RegistrationData = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype RegistrationFormProps = {\n  onSubmit: (data: RegistrationData) => void;\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nconst EMPTY: RegistrationData = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst REVIEW_FIELDS: Array<[keyof RegistrationData, string]> = [\n  ['name', 'Имя'],\n  ['email', 'Email'],\n  ['phone', 'Телефон'],\n  ['country', 'Страна'],\n  ['city', 'Город'],\n  ['street', 'Улица, дом'],\n  ['zip', 'Индекс'],\n];\n\nexport default function RegistrationForm({ onSubmit }: RegistrationFormProps) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<RegistrationData>(EMPTY);\n\n  const update = (key: keyof RegistrationData) => (value: string) =>\n    setData((prev) => ({ ...prev, [key]: value }));\n\n  const isLast = step === STEPS.length - 1;\n\n  return (\n    <section\n      aria-label=\"Регистрация\"\n      style={{ display: 'grid', gap: 'var(--jx-space-6)' }}\n    >\n      <ol\n        aria-label=\"Шаги регистрации\"\n        style={{\n          display: 'flex',\n          gap: 'var(--jx-space-4)',\n          listStyle: 'none',\n          margin: 0,\n          padding: 0,\n        }}\n      >\n        {STEPS.map((title, index) => (\n          <li\n            key={title}\n            aria-current={index === step ? 'step' : undefined}\n            style={{\n              display: 'flex',\n              alignItems: 'center',\n              gap: 'var(--jx-space-2)',\n              color:\n                index === step ? 'var(--jx-color-fg)' : 'var(--jx-color-fg-muted)',\n            }}\n          >\n            <span\n              aria-hidden=\"true\"\n              style={{\n                display: 'inline-flex',\n                alignItems: 'center',\n                justifyContent: 'center',\n                width: 'var(--jx-space-6)',\n                height: 'var(--jx-space-6)',\n                borderRadius: 'var(--jx-radius-full)',\n                border: '1px solid currentColor',\n              }}\n            >\n              {index + 1}\n            </span>\n            <span>{title}</span>\n          </li>\n        ))}\n      </ol>\n\n      <div style={{ display: 'grid', gap: 'var(--jx-space-4)' }}>\n        {step === 0 && (\n          <>\n            <JxInput\n              label=\"Имя\"\n              value={data.name}\n              onValueChange={update('name')}\n              autoComplete=\"name\"\n            />\n            <JxInput\n              label=\"Email\"\n              type=\"email\"\n              value={data.email}\n              onValueChange={update('email')}\n              autoComplete=\"email\"\n            />\n            <JxInput\n              label=\"Телефон\"\n              type=\"tel\"\n              value={data.phone}\n              onValueChange={update('phone')}\n              autoComplete=\"tel\"\n            />\n          </>\n        )}\n\n        {step === 1 && (\n          <>\n            <JxInput\n              label=\"Страна\"\n              value={data.country}\n              onValueChange={update('country')}\n              autoComplete=\"country-name\"\n            />\n            <JxInput\n              label=\"Город\"\n              value={data.city}\n              onValueChange={update('city')}\n              autoComplete=\"address-level2\"\n            />\n            <JxInput\n              label=\"Улица, дом\"\n              value={data.street}\n              onValueChange={update('street')}\n              autoComplete=\"street-address\"\n            />\n            <JxInput\n              label=\"Индекс\"\n              value={data.zip}\n              onValueChange={update('zip')}\n              autoComplete=\"postal-code\"\n            />\n          </>\n        )}\n\n        {step === 2 && (\n          <dl style={{ display: 'grid', gap: 'var(--jx-space-3)', margin: 0 }}>\n            {REVIEW_FIELDS.map(([key, label]) => (\n              <div\n                key={key}\n                style={{\n                  display: 'flex',\n                  justifyContent: 'space-between',\n                  gap: 'var(--jx-space-4)',\n                }}\n              >\n                <dt style={{ color: 'var(--jx-color-fg-muted)' }}>{label}</dt>\n                <dd style={{ margin: 0 }}>{data[key] || '—'}</dd>\n              </div>\n            ))}\n          </dl>\n        )}\n      </div>\n\n      <div style={{ display: 'flex', gap: 'var(--jx-space-3)' }}>\n        <JxButton\n          variant=\"secondary\"\n          disabled={step === 0}\n          onClick={() => setStep((prev) => prev - 1)}\n        >\n          Назад\n        </JxButton>\n        {isLast ? (\n          <JxButton variant=\"primary\" onClick={() => onSubmit(data)}>\n            Отправить\n          </JxButton>\n        ) : (\n          <JxButton variant=\"primary\" onClick={() => setStep((prev) => prev + 1)}>\n            Дальше\n          </JxButton>\n        )}\n      </div>\n    </section>\n  );\n}",
+    "text": "Одно уточнение: в README перечислены только `JxButton`, `JxModal`, `JxDrawer`, `JxTabs`, `JxAccordion`, `JxSelect`, `JxCombobox`, `JxTagInput`, `JxSlider`, `JxCalendar`, `JxDateRangePicker` — имя `JxInput` и конкретные токены `--jx-space-*` я вывел по описанному контракту (`value` + `onValueChange`), проверьте их по своей сборке.\n\n```tsx\nimport { useState } from 'react';\nimport { JxButton, JxInput } from '@jinx-ui/react';\n\nexport type RegistrationData = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype RegistrationFormProps = {\n  onSubmit: (data: RegistrationData) => void;\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nconst EMPTY: RegistrationData = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst REVIEW_FIELDS: Array<[keyof RegistrationData, string]> = [\n  ['name', 'Имя'],\n  ['email', 'Email'],\n  ['phone', 'Телефон'],\n  ['country', 'Страна'],\n  ['city', 'Город'],\n  ['street', 'Улица, дом'],\n  ['zip', 'Индекс'],\n];\n\nexport default function RegistrationForm({ onSubmit }: RegistrationFormProps) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<RegistrationData>(EMPTY);\n\n  const update = (key: keyof RegistrationData) => (value: string) =>\n    setData((prev) => ({ ...prev, [key]: value }));\n\n  const isLast = step === STEPS.length - 1;\n\n  return (\n    <section\n      aria-label=\"Регистрация\"\n      style={{ display: 'grid', gap: 'var(--jx-space-6)' }}\n    >\n      <ol\n        aria-label=\"Шаги регистрации\"\n        style={{\n          display: 'flex',\n          gap: 'var(--jx-space-4)',\n          listStyle: 'none',\n          margin: 0,\n          padding: 0,\n        }}\n      >\n        {STEPS.map((title, index) => (\n          <li\n            key={title}\n            aria-current={index === step ? 'step' : undefined}\n            style={{\n              display: 'flex',\n              alignItems: 'center',\n              gap: 'var(--jx-space-2)',\n              color:\n                index === step ? 'var(--jx-color-fg)' : 'var(--jx-color-fg-muted)',\n            }}\n          >\n            <span\n              aria-hidden=\"true\"\n              style={{\n                display: 'inline-flex',\n                alignItems: 'center',\n                justifyContent: 'center',\n                width: 'var(--jx-space-6)',\n                height: 'var(--jx-space-6)',\n                borderRadius: 'var(--jx-radius-full)',\n                border: '1px solid currentColor',\n              }}\n            >\n              {index + 1}\n            </span>\n            <span>{title}</span>\n          </li>\n        ))}\n      </ol>\n\n      <div style={{ display: 'grid', gap: 'var(--jx-space-4)' }}>\n        {step === 0 && (\n          <>\n            <JxInput\n              label=\"Имя\"\n              value={data.name}\n              onValueChange={update('name')}\n              autoComplete=\"name\"\n            />\n            <JxInput\n              label=\"Email\"\n              type=\"email\"\n              value={data.email}\n              onValueChange={update('email')}\n              autoComplete=\"email\"\n            />\n            <JxInput\n              label=\"Телефон\"\n              type=\"tel\"\n              value={data.phone}\n              onValueChange={update('phone')}\n              autoComplete=\"tel\"\n            />\n          </>\n        )}\n\n        {step === 1 && (\n          <>\n            <JxInput\n              label=\"Страна\"\n              value={data.country}\n              onValueChange={update('country')}\n              autoComplete=\"country-name\"\n            />\n            <JxInput\n              label=\"Город\"\n              value={data.city}\n              onValueChange={update('city')}\n              autoComplete=\"address-level2\"\n            />\n            <JxInput\n              label=\"Улица, дом\"\n              value={data.street}\n              onValueChange={update('street')}\n              autoComplete=\"street-address\"\n            />\n            <JxInput\n              label=\"Индекс\"\n              value={data.zip}\n              onValueChange={update('zip')}\n              autoComplete=\"postal-code\"\n            />\n          </>\n        )}\n\n        {step === 2 && (\n          <dl style={{ display: 'grid', gap: 'var(--jx-space-3)', margin: 0 }}>\n            {REVIEW_FIELDS.map(([key, label]) => (\n              <div\n                key={key}\n                style={{\n                  display: 'flex',\n                  justifyContent: 'space-between',\n                  gap: 'var(--jx-space-4)',\n                }}\n              >\n                <dt style={{ color: 'var(--jx-color-fg-muted)' }}>{label}</dt>\n                <dd style={{ margin: 0 }}>{data[key] || '—'}</dd>\n              </div>\n            ))}\n          </dl>\n        )}\n      </div>\n\n      <div style={{ display: 'flex', gap: 'var(--jx-space-3)' }}>\n        <JxButton\n          variant=\"secondary\"\n          disabled={step === 0}\n          onClick={() => setStep((prev) => prev - 1)}\n        >\n          Назад\n        </JxButton>\n        {isLast ? (\n          <JxButton variant=\"primary\" onClick={() => onSubmit(data)}>\n            Отправить\n          </JxButton>\n        ) : (\n          <JxButton variant=\"primary\" onClick={() => setStep((prev) => prev + 1)}>\n            Дальше\n          </JxButton>\n        )}\n      </div>\n    </section>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxInput'."
+        }
+      ],
+      "unknownComponents": [
+        "JxInput"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 52,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 56,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 68,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 78,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 95,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 151,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 155,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 161,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 162,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 169,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxInput"
+    ],
+    "expectedCoverage": 0.33,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.66
+  }
+}

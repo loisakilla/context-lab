@@ -1,0 +1,118 @@
+{
+  "id": "users-table__none__claude-code__claude-sonnet-5__2",
+  "createdAt": "2026-09-23T16:47:47.397Z",
+  "repeat": 2,
+  "durationMs": 6977,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "none",
+  "task": {
+    "id": "users-table",
+    "title": "Таблица пользователей с пагинацией",
+    "prompt": "Сделай таблицу пользователей с колонками «Имя», «Роль» и «Статус». Список users передаётся пропсом, показывать по десять строк на страницу с постраничной навигацией под таблицей. Статус показывай цветной меткой: активен или отключён.",
+    "taskType": "ui",
+    "expects": [
+      "JxTable",
+      "JxPagination",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 8587,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 660,
+    "cacheRead": 8587,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0208035,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport {\n  Table,\n  TableHead,\n  TableBody,\n  TableRow,\n  TableHeaderCell,\n  TableCell,\n  Badge,\n  Pagination,\n} from '@jinx-ui/react';\n\ninterface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\ninterface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const totalPages = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const startIndex = (page - 1) * PAGE_SIZE;\n  const pageUsers = users.slice(startIndex, startIndex + PAGE_SIZE);\n\n  return (\n    <div className=\"jx-stack jx-stack-gap-md\">\n      <Table>\n        <TableHead>\n          <TableRow>\n            <TableHeaderCell>Имя</TableHeaderCell>\n            <TableHeaderCell>Роль</TableHeaderCell>\n            <TableHeaderCell>Статус</TableHeaderCell>\n          </TableRow>\n        </TableHead>\n        <TableBody>\n          {pageUsers.map((user) => (\n            <TableRow key={user.id}>\n              <TableCell>{user.name}</TableCell>\n              <TableCell>{user.role}</TableCell>\n              <TableCell>\n                <Badge tone={user.active ? 'success' : 'neutral'}>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </Badge>\n              </TableCell>\n            </TableRow>\n          ))}\n        </TableBody>\n      </Table>\n      <Pagination\n        page={page}\n        totalPages={totalPages}\n        onPageChange={setPage}\n      />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport {\n  Table,\n  TableHead,\n  TableBody,\n  TableRow,\n  TableHeaderCell,\n  TableCell,\n  Badge,\n  Pagination,\n} from '@jinx-ui/react';\n\ninterface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\ninterface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const totalPages = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const startIndex = (page - 1) * PAGE_SIZE;\n  const pageUsers = users.slice(startIndex, startIndex + PAGE_SIZE);\n\n  return (\n    <div className=\"jx-stack jx-stack-gap-md\">\n      <Table>\n        <TableHead>\n          <TableRow>\n            <TableHeaderCell>Имя</TableHeaderCell>\n            <TableHeaderCell>Роль</TableHeaderCell>\n            <TableHeaderCell>Статус</TableHeaderCell>\n          </TableRow>\n        </TableHead>\n        <TableBody>\n          {pageUsers.map((user) => (\n            <TableRow key={user.id}>\n              <TableCell>{user.name}</TableCell>\n              <TableCell>{user.role}</TableCell>\n              <TableCell>\n                <Badge tone={user.active ? 'success' : 'neutral'}>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </Badge>\n              </TableCell>\n            </TableRow>\n          ))}\n        </TableBody>\n      </Table>\n      <Pagination\n        page={page}\n        totalPages={totalPages}\n        onPageChange={setPage}\n      />\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 3,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Table'. Did you mean 'JxTable'?"
+        },
+        {
+          "code": 2305,
+          "line": 4,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TableHead'."
+        },
+        {
+          "code": 2305,
+          "line": 5,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TableBody'."
+        },
+        {
+          "code": 2305,
+          "line": 6,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TableRow'."
+        },
+        {
+          "code": 2305,
+          "line": 7,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TableHeaderCell'."
+        },
+        {
+          "code": 2305,
+          "line": 8,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TableCell'."
+        },
+        {
+          "code": 2724,
+          "line": 9,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Badge'. Did you mean 'JxBadge'?"
+        },
+        {
+          "code": 2724,
+          "line": 10,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Pagination'. Did you mean 'JxPagination'?"
+        }
+      ],
+      "unknownComponents": [
+        "Badge",
+        "Pagination",
+        "Table",
+        "TableBody",
+        "TableCell",
+        "TableHead",
+        "TableHeaderCell",
+        "TableRow"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

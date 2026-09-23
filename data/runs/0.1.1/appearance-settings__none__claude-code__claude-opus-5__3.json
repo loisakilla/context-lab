@@ -1,0 +1,151 @@
+{
+  "id": "appearance-settings__none__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T17:00:03.419Z",
+  "repeat": 3,
+  "durationMs": 30400,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "appearance-settings",
+    "title": "Настройки внешнего вида",
+    "prompt": "Сделай экран настроек внешнего вида: сегментированный переключатель темы на три варианта, ползунок масштаба интерфейса от 80 до 140 процентов с показом текущего значения, переключатель плотной вёрстки и раздел «Ещё» под разделителем с выбором шрифта. Справа от заголовка экрана метка с текущей темой. Состояние храни в компоненте и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxToggle",
+      "JxSlider",
+      "JxSwitch",
+      "JxDivider",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8644,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2645,
+    "cacheRead": 8644,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.070457,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport {\n  Badge,\n  Divider,\n  FormField,\n  Heading,\n  SegmentedControl,\n  Select,\n  Slider,\n  Stack,\n  Switch,\n  Text,\n} from '@jinx-ui/react';\n\nexport type ThemeMode = 'light' | 'dark' | 'system';\nexport type FontFamily = 'system' | 'inter' | 'mono';\n\nexport interface AppearanceSettings {\n  theme: ThemeMode;\n  scale: number;\n  dense: boolean;\n  font: FontFamily;\n}\n\nexport interface AppearanceSettingsScreenProps {\n  value?: Partial<AppearanceSettings>;\n  onChange?: (value: AppearanceSettings) => void;\n}\n\nconst DEFAULTS: AppearanceSettings = {\n  theme: 'system',\n  scale: 100,\n  dense: false,\n  font: 'system',\n};\n\nconst THEME_OPTIONS: { value: ThemeMode; label: string }[] = [\n  { value: 'light', label: 'Светлая' },\n  { value: 'dark', label: 'Тёмная' },\n  { value: 'system', label: 'Системная' },\n];\n\nconst FONT_OPTIONS: { value: FontFamily; label: string }[] = [\n  { value: 'system', label: 'Системный' },\n  { value: 'inter', label: 'Inter' },\n  { value: 'mono', label: 'Монospace' },\n];\n\nfunction AppearanceSettingsScreen({ value, onChange }: AppearanceSettingsScreenProps) {\n  const [settings, setSettings] = useState<AppearanceSettings>({ ...DEFAULTS, ...value });\n\n  const update = (patch: Partial<AppearanceSettings>) => {\n    const next = { ...settings, ...patch };\n    setSettings(next);\n    onChange?.(next);\n  };\n\n  const themeLabel =\n    THEME_OPTIONS.find((option) => option.value === settings.theme)?.label ?? '';\n\n  return (\n    <Stack\n      direction=\"column\"\n      gap=\"lg\"\n      className=\"jx-surface jx-p-lg jx-radius-md\"\n      style={{ maxWidth: 'var(--jx-size-container-sm)' }}\n    >\n      <Stack direction=\"row\" align=\"center\" justify=\"space-between\" gap=\"sm\">\n        <Heading level={2}>Внешний вид</Heading>\n        <Badge variant=\"neutral\">{themeLabel}</Badge>\n      </Stack>\n\n      <FormField label=\"Тема\" htmlFor=\"appearance-theme\">\n        <SegmentedControl\n          id=\"appearance-theme\"\n          value={settings.theme}\n          options={THEME_OPTIONS}\n          onChange={(theme: ThemeMode) => update({ theme })}\n        />\n      </FormField>\n\n      <FormField label=\"Масштаб интерфейса\" htmlFor=\"appearance-scale\">\n        <Stack direction=\"row\" align=\"center\" gap=\"md\">\n          <Slider\n            id=\"appearance-scale\"\n            min={80}\n            max={140}\n            step={5}\n            value={settings.scale}\n            onChange={(scale: number) => update({ scale })}\n            style={{ flex: 1 }}\n          />\n          <Text\n            variant=\"body\"\n            tone=\"muted\"\n            style={{ minWidth: 'var(--jx-size-8)', textAlign: 'right' }}\n          >\n            {settings.scale}%\n          </Text>\n        </Stack>\n      </FormField>\n\n      <Switch\n        checked={settings.dense}\n        onChange={(dense: boolean) => update({ dense })}\n        label=\"Плотная вёрстка\"\n        description=\"Уменьшает отступы между элементами интерфейса.\"\n      />\n\n      <Divider />\n\n      <Stack direction=\"column\" gap=\"md\">\n        <Heading level={3}>Ещё</Heading>\n        <FormField label=\"Шрифт\" htmlFor=\"appearance-font\">\n          <Select\n            id=\"appearance-font\"\n            value={settings.font}\n            options={FONT_OPTIONS}\n            onChange={(font: FontFamily) => update({ font })}\n          />\n        </FormField>\n      </Stack>\n    </Stack>\n  );\n}\n\nexport default AppearanceSettingsScreen;",
+    "text": "```tsx\nimport { useState } from 'react';\nimport {\n  Badge,\n  Divider,\n  FormField,\n  Heading,\n  SegmentedControl,\n  Select,\n  Slider,\n  Stack,\n  Switch,\n  Text,\n} from '@jinx-ui/react';\n\nexport type ThemeMode = 'light' | 'dark' | 'system';\nexport type FontFamily = 'system' | 'inter' | 'mono';\n\nexport interface AppearanceSettings {\n  theme: ThemeMode;\n  scale: number;\n  dense: boolean;\n  font: FontFamily;\n}\n\nexport interface AppearanceSettingsScreenProps {\n  value?: Partial<AppearanceSettings>;\n  onChange?: (value: AppearanceSettings) => void;\n}\n\nconst DEFAULTS: AppearanceSettings = {\n  theme: 'system',\n  scale: 100,\n  dense: false,\n  font: 'system',\n};\n\nconst THEME_OPTIONS: { value: ThemeMode; label: string }[] = [\n  { value: 'light', label: 'Светлая' },\n  { value: 'dark', label: 'Тёмная' },\n  { value: 'system', label: 'Системная' },\n];\n\nconst FONT_OPTIONS: { value: FontFamily; label: string }[] = [\n  { value: 'system', label: 'Системный' },\n  { value: 'inter', label: 'Inter' },\n  { value: 'mono', label: 'Монospace' },\n];\n\nfunction AppearanceSettingsScreen({ value, onChange }: AppearanceSettingsScreenProps) {\n  const [settings, setSettings] = useState<AppearanceSettings>({ ...DEFAULTS, ...value });\n\n  const update = (patch: Partial<AppearanceSettings>) => {\n    const next = { ...settings, ...patch };\n    setSettings(next);\n    onChange?.(next);\n  };\n\n  const themeLabel =\n    THEME_OPTIONS.find((option) => option.value === settings.theme)?.label ?? '';\n\n  return (\n    <Stack\n      direction=\"column\"\n      gap=\"lg\"\n      className=\"jx-surface jx-p-lg jx-radius-md\"\n      style={{ maxWidth: 'var(--jx-size-container-sm)' }}\n    >\n      <Stack direction=\"row\" align=\"center\" justify=\"space-between\" gap=\"sm\">\n        <Heading level={2}>Внешний вид</Heading>\n        <Badge variant=\"neutral\">{themeLabel}</Badge>\n      </Stack>\n\n      <FormField label=\"Тема\" htmlFor=\"appearance-theme\">\n        <SegmentedControl\n          id=\"appearance-theme\"\n          value={settings.theme}\n          options={THEME_OPTIONS}\n          onChange={(theme: ThemeMode) => update({ theme })}\n        />\n      </FormField>\n\n      <FormField label=\"Масштаб интерфейса\" htmlFor=\"appearance-scale\">\n        <Stack direction=\"row\" align=\"center\" gap=\"md\">\n          <Slider\n            id=\"appearance-scale\"\n            min={80}\n            max={140}\n            step={5}\n            value={settings.scale}\n            onChange={(scale: number) => update({ scale })}\n            style={{ flex: 1 }}\n          />\n          <Text\n            variant=\"body\"\n            tone=\"muted\"\n            style={{ minWidth: 'var(--jx-size-8)', textAlign: 'right' }}\n          >\n            {settings.scale}%\n          </Text>\n        </Stack>\n      </FormField>\n\n      <Switch\n        checked={settings.dense}\n        onChange={(dense: boolean) => update({ dense })}\n        label=\"Плотная вёрстка\"\n        description=\"Уменьшает отступы между элементами интерфейса.\"\n      />\n\n      <Divider />\n\n      <Stack direction=\"column\" gap=\"md\">\n        <Heading level={3}>Ещё</Heading>\n        <FormField label=\"Шрифт\" htmlFor=\"appearance-font\">\n          <Select\n            id=\"appearance-font\"\n            value={settings.font}\n            options={FONT_OPTIONS}\n            onChange={(font: FontFamily) => update({ font })}\n          />\n        </FormField>\n      </Stack>\n    </Stack>\n  );\n}\n\nexport default AppearanceSettingsScreen;\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 3,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Badge'. Did you mean 'JxBadge'?"
+        },
+        {
+          "code": 2724,
+          "line": 4,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Divider'. Did you mean 'JxDivider'?"
+        },
+        {
+          "code": 2305,
+          "line": 5,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'FormField'."
+        },
+        {
+          "code": 2305,
+          "line": 6,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Heading'."
+        },
+        {
+          "code": 2305,
+          "line": 7,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'SegmentedControl'."
+        },
+        {
+          "code": 2724,
+          "line": 8,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Select'. Did you mean 'JxSelect'?"
+        },
+        {
+          "code": 2724,
+          "line": 9,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Slider'. Did you mean 'JxSlider'?"
+        },
+        {
+          "code": 2305,
+          "line": 10,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2724,
+          "line": 11,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Switch'. Did you mean 'JxSwitch'?"
+        },
+        {
+          "code": 2305,
+          "line": 12,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        }
+      ],
+      "unknownComponents": [
+        "Badge",
+        "Divider",
+        "FormField",
+        "Heading",
+        "SegmentedControl",
+        "Select",
+        "Slider",
+        "Stack",
+        "Switch",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 66,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 91,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 96,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "id": "appearance-settings__none__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-23T16:51:27.759Z",
+  "repeat": 1,
+  "durationMs": 13385,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "none",
+  "task": {
+    "id": "appearance-settings",
+    "title": "Настройки внешнего вида",
+    "prompt": "Сделай экран настроек внешнего вида: сегментированный переключатель темы на три варианта, ползунок масштаба интерфейса от 80 до 140 процентов с показом текущего значения, переключатель плотной вёрстки и раздел «Ещё» под разделителем с выбором шрифта. Справа от заголовка экрана метка с текущей темой. Состояние храни в компоненте и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxToggle",
+      "JxSlider",
+      "JxSwitch",
+      "JxDivider",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 8235,
+        "cacheCreation": 411
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1706,
+    "cacheRead": 8235,
+    "cacheCreation": 411
+  },
+  "costUsd": 0.04934625,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import React, { useState, useCallback } from 'react';\nimport {\n  Stack,\n  Cluster,\n  Heading,\n  Text,\n  Badge,\n  Divider,\n  SegmentedControl,\n  SegmentedControlItem,\n  Slider,\n  Switch,\n  RadioGroup,\n  RadioGroupItem,\n  Card,\n  FieldLabel,\n} from '@jinx-ui/react';\n\ntype ThemeOption = 'light' | 'dark' | 'system';\ntype FontOption = 'system' | 'rounded' | 'mono';\n\nexport interface AppearanceSettings {\n  theme: ThemeOption;\n  scale: number;\n  dense: boolean;\n  font: FontOption;\n}\n\nexport interface AppearanceSettingsScreenProps {\n  initialSettings?: Partial<AppearanceSettings>;\n  onChange?: (settings: AppearanceSettings) => void;\n}\n\nconst themeLabels: Record<ThemeOption, string> = {\n  light: 'Светлая',\n  dark: 'Тёмная',\n  system: 'Системная',\n};\n\nconst defaultSettings: AppearanceSettings = {\n  theme: 'system',\n  scale: 100,\n  dense: false,\n  font: 'system',\n};\n\nconst AppearanceSettingsScreen: React.FC<AppearanceSettingsScreenProps> = ({\n  initialSettings,\n  onChange,\n}) => {\n  const [settings, setSettings] = useState<AppearanceSettings>({\n    ...defaultSettings,\n    ...initialSettings,\n  });\n\n  const update = useCallback(\n    <K extends keyof AppearanceSettings>(key: K, value: AppearanceSettings[K]) => {\n      setSettings((prev) => {\n        const next = { ...prev, [key]: value };\n        onChange?.(next);\n        return next;\n      });\n    },\n    [onChange]\n  );\n\n  return (\n    <Stack gap=\"var(--jx-space-6)\" className=\"jx-p-6\">\n      <Cluster justify=\"space-between\" align=\"center\">\n        <Heading level={1} size=\"lg\">\n          Внешний вид\n        </Heading>\n        <Badge tone=\"neutral\">{themeLabels[settings.theme]}</Badge>\n      </Cluster>\n\n      <Card padding=\"var(--jx-space-5)\">\n        <Stack gap=\"var(--jx-space-6)\">\n          <Stack gap=\"var(--jx-space-2)\">\n            <FieldLabel>Тема</FieldLabel>\n            <SegmentedControl\n              value={settings.theme}\n              onChange={(value) => update('theme', value as ThemeOption)}\n            >\n              <SegmentedControlItem value=\"light\">Светлая</SegmentedControlItem>\n              <SegmentedControlItem value=\"dark\">Тёмная</SegmentedControlItem>\n              <SegmentedControlItem value=\"system\">Системная</SegmentedControlItem>\n            </SegmentedControl>\n          </Stack>\n\n          <Stack gap=\"var(--jx-space-2)\">\n            <Cluster justify=\"space-between\" align=\"center\">\n              <FieldLabel htmlFor=\"ui-scale-slider\">Масштаб интерфейса</FieldLabel>\n              <Text size=\"sm\" tone=\"muted\">\n                {settings.scale}%\n              </Text>\n            </Cluster>\n            <Slider\n              id=\"ui-scale-slider\"\n              min={80}\n              max={140}\n              step={5}\n              value={settings.scale}\n              onChange={(value) => update('scale', value as number)}\n              aria-valuetext={`${settings.scale}%`}\n            />\n          </Stack>\n\n          <Cluster justify=\"space-between\" align=\"center\">\n            <Stack gap=\"var(--jx-space-1)\">\n              <FieldLabel htmlFor=\"dense-layout-switch\">Плотная вёрстка</FieldLabel>\n              <Text size=\"sm\" tone=\"muted\">\n                Уменьшает отступы и высоту элементов\n              </Text>\n            </Stack>\n            <Switch\n              id=\"dense-layout-switch\"\n              checked={settings.dense}\n              onChange={(checked) => update('dense', checked)}\n            />\n          </Cluster>\n\n          <Divider />\n\n          <Stack gap=\"var(--jx-space-3)\">\n            <Heading level={2} size=\"sm\">\n              Ещё\n            </Heading>\n            <Stack gap=\"var(--jx-space-2)\">\n              <FieldLabel>Шрифт</FieldLabel>\n              <RadioGroup\n                value={settings.font}\n                onChange={(value) => update('font', value as FontOption)}\n              >\n                <RadioGroupItem value=\"system\">Системный</RadioGroupItem>\n                <RadioGroupItem value=\"rounded\">Скруглённый</RadioGroupItem>\n                <RadioGroupItem value=\"mono\">Моноширинный</RadioGroupItem>\n              </RadioGroup>\n            </Stack>\n          </Stack>\n        </Stack>\n      </Card>\n    </Stack>\n  );\n};\n\nexport default AppearanceSettingsScreen;",
+    "text": "```tsx\nimport React, { useState, useCallback } from 'react';\nimport {\n  Stack,\n  Cluster,\n  Heading,\n  Text,\n  Badge,\n  Divider,\n  SegmentedControl,\n  SegmentedControlItem,\n  Slider,\n  Switch,\n  RadioGroup,\n  RadioGroupItem,\n  Card,\n  FieldLabel,\n} from '@jinx-ui/react';\n\ntype ThemeOption = 'light' | 'dark' | 'system';\ntype FontOption = 'system' | 'rounded' | 'mono';\n\nexport interface AppearanceSettings {\n  theme: ThemeOption;\n  scale: number;\n  dense: boolean;\n  font: FontOption;\n}\n\nexport interface AppearanceSettingsScreenProps {\n  initialSettings?: Partial<AppearanceSettings>;\n  onChange?: (settings: AppearanceSettings) => void;\n}\n\nconst themeLabels: Record<ThemeOption, string> = {\n  light: 'Светлая',\n  dark: 'Тёмная',\n  system: 'Системная',\n};\n\nconst defaultSettings: AppearanceSettings = {\n  theme: 'system',\n  scale: 100,\n  dense: false,\n  font: 'system',\n};\n\nconst AppearanceSettingsScreen: React.FC<AppearanceSettingsScreenProps> = ({\n  initialSettings,\n  onChange,\n}) => {\n  const [settings, setSettings] = useState<AppearanceSettings>({\n    ...defaultSettings,\n    ...initialSettings,\n  });\n\n  const update = useCallback(\n    <K extends keyof AppearanceSettings>(key: K, value: AppearanceSettings[K]) => {\n      setSettings((prev) => {\n        const next = { ...prev, [key]: value };\n        onChange?.(next);\n        return next;\n      });\n    },\n    [onChange]\n  );\n\n  return (\n    <Stack gap=\"var(--jx-space-6)\" className=\"jx-p-6\">\n      <Cluster justify=\"space-between\" align=\"center\">\n        <Heading level={1} size=\"lg\">\n          Внешний вид\n        </Heading>\n        <Badge tone=\"neutral\">{themeLabels[settings.theme]}</Badge>\n      </Cluster>\n\n      <Card padding=\"var(--jx-space-5)\">\n        <Stack gap=\"var(--jx-space-6)\">\n          <Stack gap=\"var(--jx-space-2)\">\n            <FieldLabel>Тема</FieldLabel>\n            <SegmentedControl\n              value={settings.theme}\n              onChange={(value) => update('theme', value as ThemeOption)}\n            >\n              <SegmentedControlItem value=\"light\">Светлая</SegmentedControlItem>\n              <SegmentedControlItem value=\"dark\">Тёмная</SegmentedControlItem>\n              <SegmentedControlItem value=\"system\">Системная</SegmentedControlItem>\n            </SegmentedControl>\n          </Stack>\n\n          <Stack gap=\"var(--jx-space-2)\">\n            <Cluster justify=\"space-between\" align=\"center\">\n              <FieldLabel htmlFor=\"ui-scale-slider\">Масштаб интерфейса</FieldLabel>\n              <Text size=\"sm\" tone=\"muted\">\n                {settings.scale}%\n              </Text>\n            </Cluster>\n            <Slider\n              id=\"ui-scale-slider\"\n              min={80}\n              max={140}\n              step={5}\n              value={settings.scale}\n              onChange={(value) => update('scale', value as number)}\n              aria-valuetext={`${settings.scale}%`}\n            />\n          </Stack>\n\n          <Cluster justify=\"space-between\" align=\"center\">\n            <Stack gap=\"var(--jx-space-1)\">\n              <FieldLabel htmlFor=\"dense-layout-switch\">Плотная вёрстка</FieldLabel>\n              <Text size=\"sm\" tone=\"muted\">\n                Уменьшает отступы и высоту элементов\n              </Text>\n            </Stack>\n            <Switch\n              id=\"dense-layout-switch\"\n              checked={settings.dense}\n              onChange={(checked) => update('dense', checked)}\n            />\n          </Cluster>\n\n          <Divider />\n\n          <Stack gap=\"var(--jx-space-3)\">\n            <Heading level={2} size=\"sm\">\n              Ещё\n            </Heading>\n            <Stack gap=\"var(--jx-space-2)\">\n              <FieldLabel>Шрифт</FieldLabel>\n              <RadioGroup\n                value={settings.font}\n                onChange={(value) => update('font', value as FontOption)}\n              >\n                <RadioGroupItem value=\"system\">Системный</RadioGroupItem>\n                <RadioGroupItem value=\"rounded\">Скруглённый</RadioGroupItem>\n                <RadioGroupItem value=\"mono\">Моноширинный</RadioGroupItem>\n              </RadioGroup>\n            </Stack>\n          </Stack>\n        </Stack>\n      </Card>\n    </Stack>\n  );\n};\n\nexport default AppearanceSettingsScreen;\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 4,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Cluster'."
+        },
+        {
+          "code": 2305,
+          "line": 5,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Heading'."
+        },
+        {
+          "code": 2305,
+          "line": 6,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        },
+        {
+          "code": 2724,
+          "line": 7,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Badge'. Did you mean 'JxBadge'?"
+        },
+        {
+          "code": 2724,
+          "line": 8,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Divider'. Did you mean 'JxDivider'?"
+        },
+        {
+          "code": 2305,
+          "line": 9,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'SegmentedControl'."
+        },
+        {
+          "code": 2305,
+          "line": 10,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'SegmentedControlItem'."
+        },
+        {
+          "code": 2724,
+          "line": 11,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Slider'. Did you mean 'JxSlider'?"
+        },
+        {
+          "code": 2724,
+          "line": 12,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Switch'. Did you mean 'JxSwitch'?"
+        },
+        {
+          "code": 2305,
+          "line": 13,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'RadioGroup'."
+        },
+        {
+          "code": 2305,
+          "line": 14,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'RadioGroupItem'."
+        },
+        {
+          "code": 2305,
+          "line": 15,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Card'."
+        },
+        {
+          "code": 2305,
+          "line": 16,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'FieldLabel'."
+        },
+        {
+          "code": 7006,
+          "line": 82,
+          "message": "Parameter 'value' implicitly has an 'any' type."
+        },
+        {
+          "code": 7006,
+          "line": 103,
+          "message": "Parameter 'value' implicitly has an 'any' type."
+        },
+        {
+          "code": 7006,
+          "line": 118,
+          "message": "Parameter 'checked' implicitly has an 'any' type."
+        },
+        {
+          "code": 7006,
+          "line": 132,
+          "message": "Parameter 'value' implicitly has an 'any' type."
+        }
+      ],
+      "unknownComponents": [
+        "Badge",
+        "Card",
+        "Cluster",
+        "Divider",
+        "FieldLabel",
+        "Heading",
+        "RadioGroup",
+        "RadioGroupItem",
+        "SegmentedControl",
+        "SegmentedControlItem",
+        "Slider",
+        "Stack",
+        "Switch",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

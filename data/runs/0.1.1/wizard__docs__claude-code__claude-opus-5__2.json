@@ -1,0 +1,163 @@
+{
+  "id": "wizard__docs__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T17:18:19.672Z",
+  "repeat": 2,
+  "durationMs": 17544,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "docs",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 22702,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.1",
+        "tokens": 22548,
+        "hash": "423dffab7907a1d0"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 47356,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1881,
+    "cacheRead": 47356,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.07071300000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport {\n  JxStepper,\n  JxInputField,\n  JxTextareaField,\n  JxSelect,\n  JxButton,\n  JxDivider,\n  JxBadge,\n} from '@jinx-ui/react';\n\ninterface SignUpData {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  address: string;\n}\n\ninterface SignUpWizardProps {\n  onSubmit: (data: SignUpData) => void;\n}\n\nconst steps = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nconst countries = [\n  { value: 'ru', label: 'Россия' },\n  { value: 'kz', label: 'Казахстан' },\n  { value: 'by', label: 'Беларусь' },\n];\n\nexport default function SignUpWizard({ onSubmit }: SignUpWizardProps) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<SignUpData>({\n    name: '',\n    email: '',\n    phone: '',\n    country: '',\n    city: '',\n    address: '',\n  });\n\n  const set = (field: keyof SignUpData) => (value: string) =>\n    setData((prev) => ({ ...prev, [field]: value }));\n\n  const emailError =\n    data.email.length > 0 && !data.email.includes('@')\n      ? 'Укажите адрес с символом @'\n      : undefined;\n\n  const contactsReady = Boolean(data.name && data.email && !emailError);\n  const addressReady = Boolean(data.country && data.city && data.address);\n  const canGoNext = step === 0 ? contactsReady : addressReady;\n\n  const countryLabel =\n    countries.find((country) => country.value === data.country)?.label ?? '—';\n\n  return (\n    <div style={{ display: 'grid', gap: '20px' }}>\n      <JxStepper steps={steps} current={step} />\n\n      {step === 0 && (\n        <div style={{ display: 'grid', gap: '12px' }}>\n          <JxInputField\n            label=\"Имя\"\n            required\n            value={data.name}\n            onChange={(event) => set('name')(event.target.value)}\n          />\n          <JxInputField\n            label=\"Электронная почта\"\n            type=\"email\"\n            required\n            value={data.email}\n            onChange={(event) => set('email')(event.target.value)}\n            errorText={emailError}\n          />\n          <JxInputField\n            label=\"Телефон\"\n            type=\"tel\"\n            prefix=\"+7\"\n            helperText=\"Необязательно\"\n            value={data.phone}\n            onChange={(event) => set('phone')(event.target.value)}\n          />\n        </div>\n      )}\n\n      {step === 1 && (\n        <div style={{ display: 'grid', gap: '12px' }}>\n          <JxSelect\n            label=\"Страна\"\n            placeholder=\"Выберите страну\"\n            options={countries}\n            value={data.country}\n            onValueChange={set('country')}\n          />\n          <JxInputField\n            label=\"Город\"\n            required\n            value={data.city}\n            onChange={(event) => set('city')(event.target.value)}\n          />\n          <JxTextareaField\n            label=\"Адрес\"\n            required\n            rows={3}\n            value={data.address}\n            onChange={(event) => set('address')(event.target.value)}\n          />\n        </div>\n      )}\n\n      {step === 2 && (\n        <div style={{ display: 'grid', gap: '10px' }}>\n          <JxDivider label=\"Контакты\" />\n          <div style={{ display: 'grid', gap: '6px', color: 'var(--jx-text-2)' }}>\n            <div>\n              Имя: <span style={{ color: 'var(--jx-text)' }}>{data.name}</span>\n            </div>\n            <div>\n              Почта: <span style={{ color: 'var(--jx-text)' }}>{data.email}</span>\n            </div>\n            <div>\n              Телефон:{' '}\n              <span style={{ color: 'var(--jx-text)' }}>\n                {data.phone ? `+7${data.phone}` : 'не указан'}\n              </span>\n            </div>\n          </div>\n\n          <JxDivider label=\"Адрес\" />\n          <div style={{ display: 'grid', gap: '6px', color: 'var(--jx-text-2)' }}>\n            <div>\n              Страна: <span style={{ color: 'var(--jx-text)' }}>{countryLabel}</span>\n            </div>\n            <div>\n              Город: <span style={{ color: 'var(--jx-text)' }}>{data.city}</span>\n            </div>\n            <div>\n              Адрес: <span style={{ color: 'var(--jx-text)' }}>{data.address}</span>\n            </div>\n          </div>\n\n          <JxBadge tone=\"success\" dot>\n            Данные заполнены\n          </JxBadge>\n        </div>\n      )}\n\n      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>\n        <JxButton\n          variant=\"ghost\"\n          disabled={step === 0}\n          onClick={() => setStep((current) => current - 1)}\n        >\n          Назад\n        </JxButton>\n        {step < 2 ? (\n          <JxButton\n            variant=\"primary\"\n            disabled={!canGoNext}\n            onClick={() => setStep((current) => current + 1)}\n          >\n            Дальше\n          </JxButton>\n        ) : (\n          <JxButton variant=\"primary\" onClick={() => onSubmit(data)}>\n            Отправить\n          </JxButton>\n        )}\n      </div>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport {\n  JxStepper,\n  JxInputField,\n  JxTextareaField,\n  JxSelect,\n  JxButton,\n  JxDivider,\n  JxBadge,\n} from '@jinx-ui/react';\n\ninterface SignUpData {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  address: string;\n}\n\ninterface SignUpWizardProps {\n  onSubmit: (data: SignUpData) => void;\n}\n\nconst steps = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nconst countries = [\n  { value: 'ru', label: 'Россия' },\n  { value: 'kz', label: 'Казахстан' },\n  { value: 'by', label: 'Беларусь' },\n];\n\nexport default function SignUpWizard({ onSubmit }: SignUpWizardProps) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<SignUpData>({\n    name: '',\n    email: '',\n    phone: '',\n    country: '',\n    city: '',\n    address: '',\n  });\n\n  const set = (field: keyof SignUpData) => (value: string) =>\n    setData((prev) => ({ ...prev, [field]: value }));\n\n  const emailError =\n    data.email.length > 0 && !data.email.includes('@')\n      ? 'Укажите адрес с символом @'\n      : undefined;\n\n  const contactsReady = Boolean(data.name && data.email && !emailError);\n  const addressReady = Boolean(data.country && data.city && data.address);\n  const canGoNext = step === 0 ? contactsReady : addressReady;\n\n  const countryLabel =\n    countries.find((country) => country.value === data.country)?.label ?? '—';\n\n  return (\n    <div style={{ display: 'grid', gap: '20px' }}>\n      <JxStepper steps={steps} current={step} />\n\n      {step === 0 && (\n        <div style={{ display: 'grid', gap: '12px' }}>\n          <JxInputField\n            label=\"Имя\"\n            required\n            value={data.name}\n            onChange={(event) => set('name')(event.target.value)}\n          />\n          <JxInputField\n            label=\"Электронная почта\"\n            type=\"email\"\n            required\n            value={data.email}\n            onChange={(event) => set('email')(event.target.value)}\n            errorText={emailError}\n          />\n          <JxInputField\n            label=\"Телефон\"\n            type=\"tel\"\n            prefix=\"+7\"\n            helperText=\"Необязательно\"\n            value={data.phone}\n            onChange={(event) => set('phone')(event.target.value)}\n          />\n        </div>\n      )}\n\n      {step === 1 && (\n        <div style={{ display: 'grid', gap: '12px' }}>\n          <JxSelect\n            label=\"Страна\"\n            placeholder=\"Выберите страну\"\n            options={countries}\n            value={data.country}\n            onValueChange={set('country')}\n          />\n          <JxInputField\n            label=\"Город\"\n            required\n            value={data.city}\n            onChange={(event) => set('city')(event.target.value)}\n          />\n          <JxTextareaField\n            label=\"Адрес\"\n            required\n            rows={3}\n            value={data.address}\n            onChange={(event) => set('address')(event.target.value)}\n          />\n        </div>\n      )}\n\n      {step === 2 && (\n        <div style={{ display: 'grid', gap: '10px' }}>\n          <JxDivider label=\"Контакты\" />\n          <div style={{ display: 'grid', gap: '6px', color: 'var(--jx-text-2)' }}>\n            <div>\n              Имя: <span style={{ color: 'var(--jx-text)' }}>{data.name}</span>\n            </div>\n            <div>\n              Почта: <span style={{ color: 'var(--jx-text)' }}>{data.email}</span>\n            </div>\n            <div>\n              Телефон:{' '}\n              <span style={{ color: 'var(--jx-text)' }}>\n                {data.phone ? `+7${data.phone}` : 'не указан'}\n              </span>\n            </div>\n          </div>\n\n          <JxDivider label=\"Адрес\" />\n          <div style={{ display: 'grid', gap: '6px', color: 'var(--jx-text-2)' }}>\n            <div>\n              Страна: <span style={{ color: 'var(--jx-text)' }}>{countryLabel}</span>\n            </div>\n            <div>\n              Город: <span style={{ color: 'var(--jx-text)' }}>{data.city}</span>\n            </div>\n            <div>\n              Адрес: <span style={{ color: 'var(--jx-text)' }}>{data.address}</span>\n            </div>\n          </div>\n\n          <JxBadge tone=\"success\" dot>\n            Данные заполнены\n          </JxBadge>\n        </div>\n      )}\n\n      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>\n        <JxButton\n          variant=\"ghost\"\n          disabled={step === 0}\n          onClick={() => setStep((current) => current - 1)}\n        >\n          Назад\n        </JxButton>\n        {step < 2 ? (\n          <JxButton\n            variant=\"primary\"\n            disabled={!canGoNext}\n            onClick={() => setStep((current) => current + 1)}\n          >\n            Дальше\n          </JxButton>\n        ) : (\n          <JxButton variant=\"primary\" onClick={() => onSubmit(data)}>\n            Отправить\n          </JxButton>\n        )}\n      </div>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 60,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 64,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 91,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 116,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 118,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 120,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 123,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 127,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 134,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 136,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 139,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 142,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 152,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxBadge",
+      "JxButton",
+      "JxDivider",
+      "JxInputField",
+      "JxSelect",
+      "JxStepper",
+      "JxTextareaField"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

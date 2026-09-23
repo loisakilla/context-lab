@@ -1,0 +1,99 @@
+{
+  "id": "tag-picker__none__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-23T16:52:01.019Z",
+  "repeat": 1,
+  "durationMs": 22233,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 8233,
+        "cacheCreation": 344
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1824,
+    "cacheRead": 8233,
+    "cacheCreation": 344
+  },
+  "costUsd": 0.051876500000000006,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, useCallback, type KeyboardEvent, type ChangeEvent } from 'react';\nimport { Stack, Tag, TextField } from '@jinx-ui/react';\n\n// API names (TextField / Tag.onRemove / Stack) assumed from Jinx UI conventions — verify against the installed version.\n\ntype ArticleTagPickerProps = {\n  label?: string;\n  placeholder?: string;\n  initialTags?: string[];\n  maxTags?: number;\n  onChange?: (tags: string[]) => void;\n};\n\nfunction ArticleTagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  initialTags = [],\n  maxTags = 10,\n  onChange,\n}: ArticleTagPickerProps) {\n  const [tags, setTags] = useState<string[]>(initialTags);\n  const [draft, setDraft] = useState('');\n\n  const commit = useCallback(\n    (raw: string) => {\n      const next = raw.trim().replace(/\\s+/g, ' ');\n      if (!next) return;\n      if (tags.length >= maxTags) return;\n      if (tags.some((tag) => tag.toLowerCase() === next.toLowerCase())) {\n        setDraft('');\n        return;\n      }\n      const updated = [...tags, next];\n      setTags(updated);\n      setDraft('');\n      onChange?.(updated);\n    },\n    [tags, maxTags, onChange],\n  );\n\n  const remove = useCallback(\n    (target: string) => {\n      const updated = tags.filter((tag) => tag !== target);\n      setTags(updated);\n      onChange?.(updated);\n    },\n    [tags, onChange],\n  );\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      commit(draft);\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      remove(tags[tags.length - 1]);\n    }\n  };\n\n  const isFull = tags.length >= maxTags;\n\n  return (\n    <Stack direction=\"column\" style={{ gap: 'var(--jx-space-2)' }}>\n      <TextField\n        label={label}\n        value={draft}\n        placeholder={isFull ? `Достигнут предел: ${maxTags}` : placeholder}\n        disabled={isFull}\n        hint={`${tags.length} из ${maxTags}`}\n        onChange={(event: ChangeEvent<HTMLInputElement>) => setDraft(event.target.value)}\n        onKeyDown={handleKeyDown}\n        onBlur={() => commit(draft)}\n      />\n\n      {tags.length > 0 && (\n        <Stack direction=\"row\" wrap style={{ gap: 'var(--jx-space-1)' }}>\n          {tags.map((tag) => (\n            <Tag key={tag} onRemove={() => remove(tag)} removeLabel={`Удалить тег ${tag}`}>\n              {tag}\n            </Tag>\n          ))}\n        </Stack>\n      )}\n    </Stack>\n  );\n}\n\nexport default ArticleTagPicker;",
+    "text": "```tsx\nimport { useState, useCallback, type KeyboardEvent, type ChangeEvent } from 'react';\nimport { Stack, Tag, TextField } from '@jinx-ui/react';\n\n// API names (TextField / Tag.onRemove / Stack) assumed from Jinx UI conventions — verify against the installed version.\n\ntype ArticleTagPickerProps = {\n  label?: string;\n  placeholder?: string;\n  initialTags?: string[];\n  maxTags?: number;\n  onChange?: (tags: string[]) => void;\n};\n\nfunction ArticleTagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  initialTags = [],\n  maxTags = 10,\n  onChange,\n}: ArticleTagPickerProps) {\n  const [tags, setTags] = useState<string[]>(initialTags);\n  const [draft, setDraft] = useState('');\n\n  const commit = useCallback(\n    (raw: string) => {\n      const next = raw.trim().replace(/\\s+/g, ' ');\n      if (!next) return;\n      if (tags.length >= maxTags) return;\n      if (tags.some((tag) => tag.toLowerCase() === next.toLowerCase())) {\n        setDraft('');\n        return;\n      }\n      const updated = [...tags, next];\n      setTags(updated);\n      setDraft('');\n      onChange?.(updated);\n    },\n    [tags, maxTags, onChange],\n  );\n\n  const remove = useCallback(\n    (target: string) => {\n      const updated = tags.filter((tag) => tag !== target);\n      setTags(updated);\n      onChange?.(updated);\n    },\n    [tags, onChange],\n  );\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      commit(draft);\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      remove(tags[tags.length - 1]);\n    }\n  };\n\n  const isFull = tags.length >= maxTags;\n\n  return (\n    <Stack direction=\"column\" style={{ gap: 'var(--jx-space-2)' }}>\n      <TextField\n        label={label}\n        value={draft}\n        placeholder={isFull ? `Достигнут предел: ${maxTags}` : placeholder}\n        disabled={isFull}\n        hint={`${tags.length} из ${maxTags}`}\n        onChange={(event: ChangeEvent<HTMLInputElement>) => setDraft(event.target.value)}\n        onKeyDown={handleKeyDown}\n        onBlur={() => commit(draft)}\n      />\n\n      {tags.length > 0 && (\n        <Stack direction=\"row\" wrap style={{ gap: 'var(--jx-space-1)' }}>\n          {tags.map((tag) => (\n            <Tag key={tag} onRemove={() => remove(tag)} removeLabel={`Удалить тег ${tag}`}>\n              {tag}\n            </Tag>\n          ))}\n        </Stack>\n      )}\n    </Stack>\n  );\n}\n\nexport default ArticleTagPicker;\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Tag'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TextField'."
+        }
+      ],
+      "unknownComponents": [
+        "Stack",
+        "Tag",
+        "TextField"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 64,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 77,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

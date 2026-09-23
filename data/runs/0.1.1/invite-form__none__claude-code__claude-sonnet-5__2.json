@@ -1,0 +1,160 @@
+{
+  "id": "invite-form__none__claude-code__claude-sonnet-5__2",
+  "createdAt": "2026-09-23T16:51:04.880Z",
+  "repeat": 2,
+  "durationMs": 10745,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "none",
+  "task": {
+    "id": "invite-form",
+    "title": "Приглашение в команду с валидацией",
+    "prompt": "Сделай форму приглашения в команду: поле почты с подсказкой под ним, выбор роли из списка, переключатель «отправить уведомление» и кнопка отправки. Пока почта не похожа на адрес, поле показывает ошибку и кнопка заблокирована. После отправки над формой появляется сообщение об успехе, которое можно закрыть.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxAlert",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 8617,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1120,
+    "cacheRead": 8617,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0323185,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport {\n  JxFormField,\n  JxInput,\n  JxHelperText,\n  JxSelect,\n  JxSelectOption,\n  JxSwitch,\n  JxButton,\n  JxAlert,\n  JxStack,\n} from '@jinx-ui/react';\n\ntype Role = 'member' | 'admin' | 'viewer';\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nexport default function InviteTeamForm() {\n  const [email, setEmail] = useState('');\n  const [role, setRole] = useState<Role>('member');\n  const [notify, setNotify] = useState(true);\n  const [touched, setTouched] = useState(false);\n  const [success, setSuccess] = useState(false);\n\n  const isEmailValid = EMAIL_PATTERN.test(email);\n  const showError = touched && email.length > 0 && !isEmailValid;\n  const canSubmit = isEmailValid;\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!canSubmit) {\n      return;\n    }\n    setSuccess(true);\n  };\n\n  return (\n    <JxStack direction=\"column\" gap=\"md\" className=\"jx-container\">\n      {success && (\n        <JxAlert\n          variant=\"success\"\n          title=\"Приглашение отправлено\"\n          onClose={() => setSuccess(false)}\n        >\n          Пользователь {email} приглашён в команду.\n        </JxAlert>\n      )}\n\n      <form onSubmit={handleSubmit} noValidate>\n        <JxStack direction=\"column\" gap=\"md\">\n          <JxFormField\n            label=\"Email\"\n            required\n            invalid={showError}\n          >\n            <JxInput\n              type=\"email\"\n              name=\"email\"\n              placeholder=\"name@company.com\"\n              value={email}\n              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>\n                setEmail(event.target.value)\n              }\n              onBlur={() => setTouched(true)}\n              invalid={showError}\n              aria-invalid={showError}\n            />\n            <JxHelperText tone={showError ? 'danger' : 'neutral'}>\n              {showError\n                ? 'Введите корректный email-адрес'\n                : 'На этот адрес придёт ссылка для присоединения к команде'}\n            </JxHelperText>\n          </JxFormField>\n\n          <JxFormField label=\"Роль\">\n            <JxSelect\n              name=\"role\"\n              value={role}\n              onChange={(value: string) => setRole(value as Role)}\n            >\n              <JxSelectOption value=\"member\">Участник</JxSelectOption>\n              <JxSelectOption value=\"admin\">Администратор</JxSelectOption>\n              <JxSelectOption value=\"viewer\">Наблюдатель</JxSelectOption>\n            </JxSelect>\n          </JxFormField>\n\n          <JxSwitch\n            checked={notify}\n            onChange={(checked: boolean) => setNotify(checked)}\n            label=\"Отправить уведомление на почту\"\n          />\n\n          <JxButton type=\"submit\" disabled={!canSubmit}>\n            Отправить приглашение\n          </JxButton>\n        </JxStack>\n      </form>\n    </JxStack>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport {\n  JxFormField,\n  JxInput,\n  JxHelperText,\n  JxSelect,\n  JxSelectOption,\n  JxSwitch,\n  JxButton,\n  JxAlert,\n  JxStack,\n} from '@jinx-ui/react';\n\ntype Role = 'member' | 'admin' | 'viewer';\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nexport default function InviteTeamForm() {\n  const [email, setEmail] = useState('');\n  const [role, setRole] = useState<Role>('member');\n  const [notify, setNotify] = useState(true);\n  const [touched, setTouched] = useState(false);\n  const [success, setSuccess] = useState(false);\n\n  const isEmailValid = EMAIL_PATTERN.test(email);\n  const showError = touched && email.length > 0 && !isEmailValid;\n  const canSubmit = isEmailValid;\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!canSubmit) {\n      return;\n    }\n    setSuccess(true);\n  };\n\n  return (\n    <JxStack direction=\"column\" gap=\"md\" className=\"jx-container\">\n      {success && (\n        <JxAlert\n          variant=\"success\"\n          title=\"Приглашение отправлено\"\n          onClose={() => setSuccess(false)}\n        >\n          Пользователь {email} приглашён в команду.\n        </JxAlert>\n      )}\n\n      <form onSubmit={handleSubmit} noValidate>\n        <JxStack direction=\"column\" gap=\"md\">\n          <JxFormField\n            label=\"Email\"\n            required\n            invalid={showError}\n          >\n            <JxInput\n              type=\"email\"\n              name=\"email\"\n              placeholder=\"name@company.com\"\n              value={email}\n              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>\n                setEmail(event.target.value)\n              }\n              onBlur={() => setTouched(true)}\n              invalid={showError}\n              aria-invalid={showError}\n            />\n            <JxHelperText tone={showError ? 'danger' : 'neutral'}>\n              {showError\n                ? 'Введите корректный email-адрес'\n                : 'На этот адрес придёт ссылка для присоединения к команде'}\n            </JxHelperText>\n          </JxFormField>\n\n          <JxFormField label=\"Роль\">\n            <JxSelect\n              name=\"role\"\n              value={role}\n              onChange={(value: string) => setRole(value as Role)}\n            >\n              <JxSelectOption value=\"member\">Участник</JxSelectOption>\n              <JxSelectOption value=\"admin\">Администратор</JxSelectOption>\n              <JxSelectOption value=\"viewer\">Наблюдатель</JxSelectOption>\n            </JxSelect>\n          </JxFormField>\n\n          <JxSwitch\n            checked={notify}\n            onChange={(checked: boolean) => setNotify(checked)}\n            label=\"Отправить уведомление на почту\"\n          />\n\n          <JxButton type=\"submit\" disabled={!canSubmit}>\n            Отправить приглашение\n          </JxButton>\n        </JxStack>\n      </form>\n    </JxStack>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxFormField'."
+        },
+        {
+          "code": 2305,
+          "line": 4,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxInput'."
+        },
+        {
+          "code": 2305,
+          "line": 5,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxHelperText'."
+        },
+        {
+          "code": 2305,
+          "line": 11,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxStack'."
+        },
+        {
+          "code": 2322,
+          "line": 41,
+          "message": "Type '{ children: string[]; variant: string; title: string; onClose: () => void; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributes<HTMLDivElement> & { ref?: Ref<HTMLDivElement> | undefined; intent?: JxAlertIntent | undefined; title: ReactNode; icon?: ReactNode; children?: ReactNode; }'.\n  Property 'variant' does not exist on type 'IntrinsicAttributes & HTMLAttributes<HTMLDivElement> & { ref?: Ref<HTMLDivElement> | undefined; intent?: JxAlertIntent | undefined; title: ReactNode; icon?: ReactNode; children?: ReactNode; }'."
+        },
+        {
+          "code": 2322,
+          "line": 76,
+          "message": "Type '{ children: Element[]; name: string; value: Role; onChange: (value: string) => void; }' is not assignable to type 'IntrinsicAttributes & JxSelectProps'.\n  Property 'children' does not exist on type 'IntrinsicAttributes & JxSelectProps'."
+        },
+        {
+          "code": 2693,
+          "line": 81,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 81,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 82,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 82,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 83,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 83,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2322,
+          "line": 89,
+          "message": "Type '(checked: boolean) => void' is not assignable to type 'ChangeEventHandler<HTMLInputElement, HTMLInputElement>'.\n  Types of parameters 'checked' and 'event' are incompatible.\n    Type 'ChangeEvent<HTMLInputElement, HTMLInputElement>' is not assignable to type 'boolean'."
+        }
+      ],
+      "unknownComponents": [
+        "JxFormField",
+        "JxHelperText",
+        "JxInput",
+        "JxStack"
+      ],
+      "unknownProps": [
+        {
+          "component": "JxAlert",
+          "prop": "variant"
+        },
+        {
+          "component": "JxSelect",
+          "prop": "children"
+        }
+      ]
+    },
+    "lint": [],
+    "usedComponents": [
+      "JxAlert",
+      "JxButton",
+      "JxFormField",
+      "JxHelperText",
+      "JxInput",
+      "JxSelect",
+      "JxSelectOption",
+      "JxStack",
+      "JxSwitch"
+    ],
+    "expectedCoverage": 0.8,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.24
+  }
+}

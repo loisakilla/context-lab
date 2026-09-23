@@ -1,0 +1,108 @@
+{
+  "id": "date-range__readme__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T17:09:39.888Z",
+  "repeat": 2,
+  "durationMs": 23774,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "date-range",
+    "title": "Выбор периода",
+    "prompt": "Сделай выбор даты отчёта: календарь на месяц и над ним ряд быстрых вариантов «Сегодня», «Вчера», «Неделя назад», при нажатии на которые дата подставляется в календарь. Выбранная дата отдаётся наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxCalendar",
+      "JxChip"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 9530,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2091,
+    "cacheRead": 9530,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.057050000000000003,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxButton, JxCalendar } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date | null;\n  defaultValue?: Date | null;\n  onChange?: (date: Date) => void;\n};\n\nconst startOfDay = (date: Date) =>\n  new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst shiftDays = (date: Date, days: number) =>\n  new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);\n\nconst isSameDay = (a: Date | null, b: Date) =>\n  a != null &&\n  a.getFullYear() === b.getFullYear() &&\n  a.getMonth() === b.getMonth() &&\n  a.getDate() === b.getDate();\n\nexport default function ReportDatePicker({\n  value,\n  defaultValue = null,\n  onChange,\n}: ReportDatePickerProps) {\n  const isControlled = value !== undefined;\n  const [internalDate, setInternalDate] = useState<Date | null>(\n    defaultValue ? startOfDay(defaultValue) : null,\n  );\n  const selected = isControlled ? (value ? startOfDay(value) : null) : internalDate;\n  const [month, setMonth] = useState<Date>(selected ?? startOfDay(new Date()));\n\n  const today = startOfDay(new Date());\n  const presets: { id: string; label: string; date: Date }[] = [\n    { id: 'today', label: 'Сегодня', date: today },\n    { id: 'yesterday', label: 'Вчера', date: shiftDays(today, -1) },\n    { id: 'week-ago', label: 'Неделя назад', date: shiftDays(today, -7) },\n  ];\n\n  const select = (next: Date | null) => {\n    if (!next) return;\n    const normalized = startOfDay(next);\n    if (!isControlled) setInternalDate(normalized);\n    setMonth(normalized);\n    onChange?.(normalized);\n  };\n\n  return (\n    <div\n      className=\"jx-stack\"\n      style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-3)' }}\n    >\n      <div\n        role=\"group\"\n        aria-label=\"Быстрый выбор даты отчёта\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--jx-space-2)' }}\n      >\n        {presets.map((preset) => (\n          <JxButton\n            key={preset.id}\n            type=\"button\"\n            size=\"sm\"\n            variant={isSameDay(selected, preset.date) ? 'primary' : 'secondary'}\n            aria-pressed={isSameDay(selected, preset.date)}\n            onClick={() => select(preset.date)}\n          >\n            {preset.label}\n          </JxButton>\n        ))}\n      </div>\n\n      <JxCalendar\n        aria-label=\"Дата отчёта\"\n        value={selected}\n        onValueChange={select}\n        month={month}\n        onMonthChange={setMonth}\n        max={today}\n      />\n\n      <p style={{ margin: 0, color: 'var(--jx-color-text-muted)' }}>\n        {selected\n          ? `Дата отчёта: ${selected.toLocaleDateString('ru-RU')}`\n          : 'Дата отчёта не выбрана'}\n      </p>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxCalendar } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date | null;\n  defaultValue?: Date | null;\n  onChange?: (date: Date) => void;\n};\n\nconst startOfDay = (date: Date) =>\n  new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst shiftDays = (date: Date, days: number) =>\n  new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);\n\nconst isSameDay = (a: Date | null, b: Date) =>\n  a != null &&\n  a.getFullYear() === b.getFullYear() &&\n  a.getMonth() === b.getMonth() &&\n  a.getDate() === b.getDate();\n\nexport default function ReportDatePicker({\n  value,\n  defaultValue = null,\n  onChange,\n}: ReportDatePickerProps) {\n  const isControlled = value !== undefined;\n  const [internalDate, setInternalDate] = useState<Date | null>(\n    defaultValue ? startOfDay(defaultValue) : null,\n  );\n  const selected = isControlled ? (value ? startOfDay(value) : null) : internalDate;\n  const [month, setMonth] = useState<Date>(selected ?? startOfDay(new Date()));\n\n  const today = startOfDay(new Date());\n  const presets: { id: string; label: string; date: Date }[] = [\n    { id: 'today', label: 'Сегодня', date: today },\n    { id: 'yesterday', label: 'Вчера', date: shiftDays(today, -1) },\n    { id: 'week-ago', label: 'Неделя назад', date: shiftDays(today, -7) },\n  ];\n\n  const select = (next: Date | null) => {\n    if (!next) return;\n    const normalized = startOfDay(next);\n    if (!isControlled) setInternalDate(normalized);\n    setMonth(normalized);\n    onChange?.(normalized);\n  };\n\n  return (\n    <div\n      className=\"jx-stack\"\n      style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-3)' }}\n    >\n      <div\n        role=\"group\"\n        aria-label=\"Быстрый выбор даты отчёта\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--jx-space-2)' }}\n      >\n        {presets.map((preset) => (\n          <JxButton\n            key={preset.id}\n            type=\"button\"\n            size=\"sm\"\n            variant={isSameDay(selected, preset.date) ? 'primary' : 'secondary'}\n            aria-pressed={isSameDay(selected, preset.date)}\n            onClick={() => select(preset.date)}\n          >\n            {preset.label}\n          </JxButton>\n        ))}\n      </div>\n\n      <JxCalendar\n        aria-label=\"Дата отчёта\"\n        value={selected}\n        onValueChange={select}\n        month={month}\n        onMonthChange={setMonth}\n        max={today}\n      />\n\n      <p style={{ margin: 0, color: 'var(--jx-color-text-muted)' }}>\n        {selected\n          ? `Дата отчёта: ${selected.toLocaleDateString('ru-RU')}`\n          : 'Дата отчёта не выбрана'}\n      </p>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2322,
+          "line": 77,
+          "message": "Type '{ \"aria-label\": string; value: Date | null; onValueChange: (next: Date | null) => void; month: Date; onMonthChange: Dispatch<SetStateAction<Date>>; max: Date; }' is not assignable to type 'IntrinsicAttributes & Omit<HTMLAttributes<HTMLDivElement>, \"defaultValue\" | \"onChange\"> & { ref?: Ref<HTMLDivElement> | undefined; ... 5 more ...; locale?: string | undefined; }'.\n  Property 'month' does not exist on type 'IntrinsicAttributes & Omit<HTMLAttributes<HTMLDivElement>, \"defaultValue\" | \"onChange\"> & { ref?: Ref<HTMLDivElement> | undefined; ... 5 more ...; locale?: string | undefined; }'."
+        }
+      ],
+      "unknownComponents": [],
+      "unknownProps": [
+        {
+          "component": "JxCalendar",
+          "prop": "month"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 52,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 57,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 82,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxCalendar"
+    ],
+    "expectedCoverage": 0.5,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.71
+  }
+}

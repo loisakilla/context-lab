@@ -1,0 +1,133 @@
+{
+  "id": "invite-form__readme__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T17:13:55.884Z",
+  "repeat": 2,
+  "durationMs": 20234,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "invite-form",
+    "title": "Приглашение в команду с валидацией",
+    "prompt": "Сделай форму приглашения в команду: поле почты с подсказкой под ним, выбор роли из списка, переключатель «отправить уведомление» и кнопка отправки. Пока почта не похожа на адрес, поле показывает ошибку и кнопка заблокирована. После отправки над формой появляется сообщение об успехе, которое можно закрыть.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxAlert",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 9551,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1872,
+    "cacheRead": 9551,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.051585500000000006,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useId, useState } from 'react';\nimport { JxAlert, JxButton, JxInput, JxSelect, JxSwitch } from '@jinx-ui/react';\n\nconst ROLES = [\n  { value: 'viewer', label: 'Наблюдатель' },\n  { value: 'editor', label: 'Редактор' },\n  { value: 'admin', label: 'Администратор' },\n];\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nexport default function TeamInviteForm() {\n  const formId = useId();\n  const [email, setEmail] = useState('');\n  const [touched, setTouched] = useState(false);\n  const [role, setRole] = useState('viewer');\n  const [notify, setNotify] = useState(true);\n  const [invitedEmail, setInvitedEmail] = useState<string | null>(null);\n\n  const isValid = EMAIL_PATTERN.test(email.trim());\n  const showError = touched && !isValid;\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!isValid) {\n      setTouched(true);\n      return;\n    }\n    setInvitedEmail(email.trim());\n    setEmail('');\n    setTouched(false);\n  };\n\n  return (\n    <div\n      className=\"jx-stack\"\n      style={{ display: 'grid', gap: 'var(--jx-space-4)', maxWidth: 'var(--jx-size-md, 420px)' }}\n    >\n      {invitedEmail !== null && (\n        <JxAlert\n          variant=\"success\"\n          title=\"Приглашение отправлено\"\n          dismissible\n          onDismiss={() => setInvitedEmail(null)}\n        >\n          {invitedEmail} получит доступ к команде.\n        </JxAlert>\n      )}\n\n      <form\n        onSubmit={handleSubmit}\n        noValidate\n        style={{ display: 'grid', gap: 'var(--jx-space-4)' }}\n      >\n        <JxInput\n          id={`${formId}-email`}\n          type=\"email\"\n          label=\"Рабочая почта\"\n          placeholder=\"name@company.com\"\n          value={email}\n          onValueChange={setEmail}\n          onBlur={() => setTouched(true)}\n          invalid={showError}\n          hint=\"Приглашение придёт на этот адрес и будет действовать 7 дней.\"\n          error={showError ? 'Введите корректный адрес электронной почты.' : undefined}\n          autoComplete=\"email\"\n          required\n        />\n\n        <JxSelect\n          id={`${formId}-role`}\n          label=\"Роль в команде\"\n          value={role}\n          onValueChange={setRole}\n          options={ROLES}\n        />\n\n        <JxSwitch\n          id={`${formId}-notify`}\n          label=\"Отправить уведомление\"\n          checked={notify}\n          onCheckedChange={setNotify}\n        />\n\n        <JxButton type=\"submit\" variant=\"primary\" disabled={!isValid}>\n          Отправить приглашение\n        </JxButton>\n      </form>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useId, useState } from 'react';\nimport { JxAlert, JxButton, JxInput, JxSelect, JxSwitch } from '@jinx-ui/react';\n\nconst ROLES = [\n  { value: 'viewer', label: 'Наблюдатель' },\n  { value: 'editor', label: 'Редактор' },\n  { value: 'admin', label: 'Администратор' },\n];\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nexport default function TeamInviteForm() {\n  const formId = useId();\n  const [email, setEmail] = useState('');\n  const [touched, setTouched] = useState(false);\n  const [role, setRole] = useState('viewer');\n  const [notify, setNotify] = useState(true);\n  const [invitedEmail, setInvitedEmail] = useState<string | null>(null);\n\n  const isValid = EMAIL_PATTERN.test(email.trim());\n  const showError = touched && !isValid;\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!isValid) {\n      setTouched(true);\n      return;\n    }\n    setInvitedEmail(email.trim());\n    setEmail('');\n    setTouched(false);\n  };\n\n  return (\n    <div\n      className=\"jx-stack\"\n      style={{ display: 'grid', gap: 'var(--jx-space-4)', maxWidth: 'var(--jx-size-md, 420px)' }}\n    >\n      {invitedEmail !== null && (\n        <JxAlert\n          variant=\"success\"\n          title=\"Приглашение отправлено\"\n          dismissible\n          onDismiss={() => setInvitedEmail(null)}\n        >\n          {invitedEmail} получит доступ к команде.\n        </JxAlert>\n      )}\n\n      <form\n        onSubmit={handleSubmit}\n        noValidate\n        style={{ display: 'grid', gap: 'var(--jx-space-4)' }}\n      >\n        <JxInput\n          id={`${formId}-email`}\n          type=\"email\"\n          label=\"Рабочая почта\"\n          placeholder=\"name@company.com\"\n          value={email}\n          onValueChange={setEmail}\n          onBlur={() => setTouched(true)}\n          invalid={showError}\n          hint=\"Приглашение придёт на этот адрес и будет действовать 7 дней.\"\n          error={showError ? 'Введите корректный адрес электронной почты.' : undefined}\n          autoComplete=\"email\"\n          required\n        />\n\n        <JxSelect\n          id={`${formId}-role`}\n          label=\"Роль в команде\"\n          value={role}\n          onValueChange={setRole}\n          options={ROLES}\n        />\n\n        <JxSwitch\n          id={`${formId}-notify`}\n          label=\"Отправить уведомление\"\n          checked={notify}\n          onCheckedChange={setNotify}\n        />\n\n        <JxButton type=\"submit\" variant=\"primary\" disabled={!isValid}>\n          Отправить приглашение\n        </JxButton>\n      </form>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxInput'."
+        },
+        {
+          "code": 2322,
+          "line": 41,
+          "message": "Type '{ children: string[]; variant: string; title: string; dismissible: true; onDismiss: () => void; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributes<HTMLDivElement> & { ref?: Ref<HTMLDivElement> | undefined; intent?: JxAlertIntent | undefined; title: ReactNode; icon?: ReactNode; children?: ReactNode; }'.\n  Property 'variant' does not exist on type 'IntrinsicAttributes & HTMLAttributes<HTMLDivElement> & { ref?: Ref<HTMLDivElement> | undefined; intent?: JxAlertIntent | undefined; title: ReactNode; icon?: ReactNode; children?: ReactNode; }'."
+        },
+        {
+          "code": 2322,
+          "line": 71,
+          "message": "Type '{ id: string; label: string; value: string; onValueChange: Dispatch<SetStateAction<string>>; options: { value: string; label: string; }[]; }' is not assignable to type 'IntrinsicAttributes & JxSelectProps'.\n  Property 'id' does not exist on type 'IntrinsicAttributes & JxSelectProps'."
+        },
+        {
+          "code": 2322,
+          "line": 82,
+          "message": "Type '{ id: string; label: string; checked: boolean; onCheckedChange: Dispatch<SetStateAction<boolean>>; }' is not assignable to type 'IntrinsicAttributes & Omit<InputHTMLAttributes<HTMLInputElement>, \"type\" | \"size\"> & { ref?: Ref<HTMLInputElement> | undefined; label?: ReactNode; wrapClassName?: string | undefined; }'.\n  Property 'onCheckedChange' does not exist on type 'IntrinsicAttributes & Omit<InputHTMLAttributes<HTMLInputElement>, \"type\" | \"size\"> & { ref?: Ref<HTMLInputElement> | undefined; label?: ReactNode; wrapClassName?: string | undefined; }'."
+        }
+      ],
+      "unknownComponents": [
+        "JxInput"
+      ],
+      "unknownProps": [
+        {
+          "component": "JxAlert",
+          "prop": "variant"
+        },
+        {
+          "component": "JxSelect",
+          "prop": "id"
+        },
+        {
+          "component": "JxSwitch",
+          "prop": "onCheckedChange"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 37,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 53,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxAlert",
+      "JxButton",
+      "JxInput",
+      "JxSelect",
+      "JxSwitch"
+    ],
+    "expectedCoverage": 0.8,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.38
+  }
+}

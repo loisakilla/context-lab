@@ -1,0 +1,90 @@
+{
+  "id": "tag-picker__docs-rules__claude-code__claude-sonnet-5__2",
+  "createdAt": "2026-09-23T17:11:24.418Z",
+  "repeat": 2,
+  "durationMs": 37936,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "docs+rules",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 23785,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.1",
+        "tokens": 22548,
+        "hash": "423dffab7907a1d0"
+      },
+      {
+        "kind": "rules",
+        "id": "jinx-ui",
+        "version": "0.1.1",
+        "tokens": 1083,
+        "hash": "29f6363615252e9b"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 49037,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 3569,
+    "cacheRead": 49037,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.1137535,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxTagInput } from '@jinx-ui/react';\n\ninterface ArticleTagInputProps {\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagInput({ defaultValue = [], onChange }: ArticleTagInputProps) {\n  const [tags, setTags] = useState<string[]>(defaultValue);\n\n  const handleValueChange = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-gap, 8px)' }}>\n      <span className=\"jx-label\">Теги статьи</span>\n      <JxTagInput\n        ariaLabel=\"Теги статьи\"\n        placeholder=\"Введите тег и нажмите Enter\"\n        value={tags}\n        onValueChange={handleValueChange}\n      />\n      <p className=\"jx-input-help\">\n        {tags.length > 0\n          ? `Добавлено тегов: ${tags.length}. Нажмите крестик на метке, чтобы удалить тег.`\n          : 'Пока нет тегов — введите слово и нажмите Enter.'}\n      </p>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxTagInput } from '@jinx-ui/react';\n\ninterface ArticleTagInputProps {\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagInput({ defaultValue = [], onChange }: ArticleTagInputProps) {\n  const [tags, setTags] = useState<string[]>(defaultValue);\n\n  const handleValueChange = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-gap, 8px)' }}>\n      <span className=\"jx-label\">Теги статьи</span>\n      <JxTagInput\n        ariaLabel=\"Теги статьи\"\n        placeholder=\"Введите тег и нажмите Enter\"\n        value={tags}\n        onValueChange={handleValueChange}\n      />\n      <p className=\"jx-input-help\">\n        {tags.length > 0\n          ? `Добавлено тегов: ${tags.length}. Нажмите крестик на метке, чтобы удалить тег.`\n          : 'Пока нет тегов — введите слово и нажмите Enter.'}\n      </p>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 18,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxTagInput"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

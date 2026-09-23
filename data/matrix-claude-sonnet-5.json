@@ -2,7 +2,7 @@
   "library": {
     "name": "jinx-ui",
     "package": "@jinx-ui/react",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "commit": ""
   },
   "driver": "claude-code",
@@ -70,16 +70,16 @@
         "appearance-settings__none__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 10182,
+      "medianTokens": 10197,
       "medianContextTokens": 154,
       "medianPromptTokens": 8648,
-      "medianCostUsd": 0.042683000000000006,
-      "medianTscErrors": 12,
+      "medianCostUsd": 0.043058000000000006,
+      "medianTscErrors": 18,
       "medianLintErrors": 0,
       "meanCoverage": 0.53,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 12.6
+      "medianSeconds": 13.2
     },
     {
       "taskId": "appearance-settings",
@@ -90,16 +90,16 @@
         "appearance-settings__readme__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 14209,
-      "medianContextTokens": 650,
-      "medianPromptTokens": 9370,
-      "medianCostUsd": 0.125669,
-      "medianTscErrors": 9,
+      "medianTokens": 12893,
+      "medianContextTokens": 798,
+      "medianPromptTokens": 9584,
+      "medianCostUsd": 0.08752599999999999,
+      "medianTscErrors": 5,
       "medianLintErrors": 0,
       "meanCoverage": 0.8,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 35.8
+      "medianSeconds": 29.2
     },
     {
       "taskId": "appearance-settings",
@@ -110,16 +110,16 @@
         "appearance-settings__docs__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 45985,
-      "medianContextTokens": 21573,
-      "medianPromptTokens": 44898,
-      "medianCostUsd": 0.051133,
+      "medianTokens": 48379,
+      "medianContextTokens": 22702,
+      "medianPromptTokens": 47401,
+      "medianCostUsd": 0.048159499999999994,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 9.5
+      "medianSeconds": 8.3
     },
     {
       "taskId": "appearance-settings",
@@ -130,16 +130,16 @@
         "appearance-settings__docs-rules__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 47811,
-      "medianContextTokens": 22656,
-      "medianPromptTokens": 46603,
-      "medianCostUsd": 0.0535105,
+      "medianTokens": 50265,
+      "medianContextTokens": 23785,
+      "medianPromptTokens": 49106,
+      "medianCostUsd": 0.053537,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 10.2
+      "medianSeconds": 9.4
     },
     {
       "taskId": "appearance-settings",
@@ -150,16 +150,16 @@
         "appearance-settings__mcp__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 54003,
+      "medianTokens": 56164,
       "medianContextTokens": 1587,
       "medianPromptTokens": 11248,
-      "medianCostUsd": 0.169522,
+      "medianCostUsd": 0.17145600000000003,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 3,
-      "medianToolCalls": 16,
-      "medianSeconds": 24
+      "medianToolCalls": 15,
+      "medianSeconds": 26.1
     },
     {
       "taskId": "confirm-delete",
@@ -173,13 +173,13 @@
       "medianTokens": 9122,
       "medianContextTokens": 154,
       "medianPromptTokens": 8605,
-      "medianCostUsd": 0.0176865,
+      "medianCostUsd": 0.0172365,
       "medianTscErrors": 7,
       "medianLintErrors": 0,
       "meanCoverage": 0,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 5.8
+      "medianSeconds": 5.6
     },
     {
       "taskId": "confirm-delete",
@@ -189,17 +189,17 @@
         "confirm-delete__readme__claude-code__claude-sonnet-5__2",
         "confirm-delete__readme__claude-code__claude-sonnet-5__3"
       ],
-      "passRate": 1,
-      "medianTokens": 9709,
-      "medianContextTokens": 650,
-      "medianPromptTokens": 9327,
-      "medianCostUsd": 0.015497499999999999,
+      "passRate": 0.67,
+      "medianTokens": 9975,
+      "medianContextTokens": 798,
+      "medianPromptTokens": 9541,
+      "medianCostUsd": 0.0187545,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 5.1
+      "medianSeconds": 6.3
     },
     {
       "taskId": "confirm-delete",
@@ -210,16 +210,16 @@
         "confirm-delete__docs__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 45220,
-      "medianContextTokens": 21573,
-      "medianPromptTokens": 44855,
-      "medianCostUsd": 0.0315615,
+      "medianTokens": 47738,
+      "medianContextTokens": 22702,
+      "medianPromptTokens": 47358,
+      "medianCostUsd": 0.033938,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 5.1
+      "medianSeconds": 4.8
     },
     {
       "taskId": "confirm-delete",
@@ -230,16 +230,16 @@
         "confirm-delete__docs-rules__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 46952,
-      "medianContextTokens": 22656,
-      "medianPromptTokens": 46560,
-      "medianCostUsd": 0.033089,
+      "medianTokens": 49459,
+      "medianContextTokens": 23785,
+      "medianPromptTokens": 49063,
+      "medianCostUsd": 0.0344405,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 6.7
+      "medianSeconds": 5.1
     },
     {
       "taskId": "confirm-delete",
@@ -250,16 +250,16 @@
         "confirm-delete__mcp__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 39641,
+      "medianTokens": 39272,
       "medianContextTokens": 1587,
       "medianPromptTokens": 11205,
-      "medianCostUsd": 0.07367749999999999,
+      "medianCostUsd": 0.05774825,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 3,
-      "medianToolCalls": 5,
-      "medianSeconds": 9.2
+      "medianToolCalls": 4,
+      "medianSeconds": 8.4
     },
     {
       "taskId": "date-range",
@@ -270,10 +270,10 @@
         "date-range__none__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 9509,
+      "medianTokens": 9506,
       "medianContextTokens": 154,
       "medianPromptTokens": 8598,
-      "medianCostUsd": 0.027083,
+      "medianCostUsd": 0.027007999999999997,
       "medianTscErrors": 4,
       "medianLintErrors": 0,
       "meanCoverage": 0,
@@ -290,16 +290,16 @@
         "date-range__readme__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 9937,
-      "medianContextTokens": 650,
-      "medianPromptTokens": 9320,
-      "medianCostUsd": 0.020718999999999998,
+      "medianTokens": 10191,
+      "medianContextTokens": 798,
+      "medianPromptTokens": 9534,
+      "medianCostUsd": 0.021201,
       "medianTscErrors": 1,
       "medianLintErrors": 0,
       "meanCoverage": 0.5,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 6.4
+      "medianSeconds": 7
     },
     {
       "taskId": "date-range",
@@ -310,16 +310,16 @@
         "date-range__docs__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 45602,
-      "medianContextTokens": 21573,
-      "medianPromptTokens": 44848,
-      "medianCostUsd": 0.041283,
+      "medianTokens": 48076,
+      "medianContextTokens": 22702,
+      "medianPromptTokens": 47351,
+      "medianCostUsd": 0.0431845,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 6.9
+      "medianSeconds": 7.4
     },
     {
       "taskId": "date-range",
@@ -330,16 +330,16 @@
         "date-range__docs-rules__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 47323,
-      "medianContextTokens": 22656,
-      "medianPromptTokens": 46553,
-      "medianCostUsd": 0.042535500000000004,
+      "medianTokens": 49822,
+      "medianContextTokens": 23785,
+      "medianPromptTokens": 49056,
+      "medianCostUsd": 0.046012,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 7
+      "medianSeconds": 7.6
     },
     {
       "taskId": "date-range",
@@ -350,16 +350,16 @@
         "date-range__mcp__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 80510,
+      "medianTokens": 63688,
       "medianContextTokens": 1587,
       "medianPromptTokens": 11198,
-      "medianCostUsd": 0.12807225,
+      "medianCostUsd": 0.11456275000000002,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 0.5,
-      "medianTurns": 5,
-      "medianToolCalls": 7,
-      "medianSeconds": 17.9
+      "medianTurns": 4,
+      "medianToolCalls": 6,
+      "medianSeconds": 20.1
     },
     {
       "taskId": "invite-form",
@@ -370,16 +370,16 @@
         "invite-form__none__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 9684,
+      "medianTokens": 9739,
       "medianContextTokens": 154,
       "medianPromptTokens": 8619,
-      "medianCostUsd": 0.0309435,
-      "medianTscErrors": 9,
+      "medianCostUsd": 0.0323185,
+      "medianTscErrors": 13,
       "medianLintErrors": 0,
       "meanCoverage": 0.53,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 9.3
+      "medianSeconds": 10.7
     },
     {
       "taskId": "invite-form",
@@ -390,16 +390,16 @@
         "invite-form__readme__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 10848,
-      "medianContextTokens": 650,
-      "medianPromptTokens": 9341,
-      "medianCostUsd": 0.0423545,
-      "medianTscErrors": 4,
+      "medianTokens": 13147,
+      "medianContextTokens": 798,
+      "medianPromptTokens": 9555,
+      "medianCostUsd": 0.09948999999999998,
+      "medianTscErrors": 3,
       "medianLintErrors": 0,
       "meanCoverage": 0.8,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 14
+      "medianSeconds": 30.9
     },
     {
       "taskId": "invite-form",
@@ -410,16 +410,16 @@
         "invite-form__docs__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0.67,
-      "medianTokens": 45859,
-      "medianContextTokens": 21573,
-      "medianPromptTokens": 44869,
-      "medianCostUsd": 0.0471935,
+      "medianTokens": 48219,
+      "medianContextTokens": 22702,
+      "medianPromptTokens": 47372,
+      "medianCostUsd": 0.04487,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 9.9
+      "medianSeconds": 8
     },
     {
       "taskId": "invite-form",
@@ -429,17 +429,17 @@
         "invite-form__docs-rules__claude-code__claude-sonnet-5__2",
         "invite-form__docs-rules__claude-code__claude-sonnet-5__3"
       ],
-      "passRate": 1,
-      "medianTokens": 47423,
-      "medianContextTokens": 22656,
-      "medianPromptTokens": 46574,
-      "medianCostUsd": 0.049171,
+      "passRate": 0.67,
+      "medianTokens": 49955,
+      "medianContextTokens": 23785,
+      "medianPromptTokens": 49077,
+      "medianCostUsd": 0.0502475,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 8.9
+      "medianSeconds": 8.7
     },
     {
       "taskId": "invite-form",
@@ -450,16 +450,16 @@
         "invite-form__mcp__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 47026,
+      "medianTokens": 47804,
       "medianContextTokens": 1587,
       "medianPromptTokens": 11219,
-      "medianCostUsd": 0.11196525,
+      "medianCostUsd": 0.11814975,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 0.87,
       "medianTurns": 3,
       "medianToolCalls": 10,
-      "medianSeconds": 17.8
+      "medianSeconds": 16.8
     },
     {
       "taskId": "settings-form",
@@ -470,16 +470,16 @@
         "settings-form__none__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 9567,
+      "medianTokens": 9501,
       "medianContextTokens": 154,
       "medianPromptTokens": 8604,
-      "medianCostUsd": 0.028385999999999998,
+      "medianCostUsd": 0.02724625,
       "medianTscErrors": 11,
       "medianLintErrors": 0,
-      "meanCoverage": 0.25,
+      "meanCoverage": 0.5,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 8.3
+      "medianSeconds": 7.7
     },
     {
       "taskId": "settings-form",
@@ -490,16 +490,16 @@
         "settings-form__readme__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 10209,
-      "medianContextTokens": 650,
-      "medianPromptTokens": 9326,
-      "medianCostUsd": 0.03230875,
-      "medianTscErrors": 8,
+      "medianTokens": 10222,
+      "medianContextTokens": 798,
+      "medianPromptTokens": 9540,
+      "medianCostUsd": 0.024404,
+      "medianTscErrors": 7,
       "medianLintErrors": 0,
       "meanCoverage": 0.75,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 8.7
+      "medianSeconds": 6.7
     },
     {
       "taskId": "settings-form",
@@ -510,16 +510,16 @@
         "settings-form__docs__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 45460,
-      "medianContextTokens": 21573,
-      "medianPromptTokens": 44854,
-      "medianCostUsd": 0.037811,
+      "medianTokens": 47967,
+      "medianContextTokens": 22702,
+      "medianPromptTokens": 47357,
+      "medianCostUsd": 0.0389375,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 6.1
+      "medianSeconds": 5.7
     },
     {
       "taskId": "settings-form",
@@ -530,16 +530,16 @@
         "settings-form__docs-rules__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 47175,
-      "medianContextTokens": 22656,
-      "medianPromptTokens": 46559,
-      "medianCostUsd": 0.0399635,
+      "medianTokens": 49717,
+      "medianContextTokens": 23785,
+      "medianPromptTokens": 49062,
+      "medianCostUsd": 0.040915,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 6
+      "medianSeconds": 6.6
     },
     {
       "taskId": "settings-form",
@@ -550,16 +550,16 @@
         "settings-form__mcp__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 45679,
+      "medianTokens": 64899,
       "medianContextTokens": 1587,
       "medianPromptTokens": 11204,
-      "medianCostUsd": 0.096547,
+      "medianCostUsd": 0.1124215,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
-      "medianTurns": 3,
-      "medianToolCalls": 9,
-      "medianSeconds": 15.6
+      "medianTurns": 4,
+      "medianToolCalls": 10,
+      "medianSeconds": 17.2
     },
     {
       "taskId": "side-nav",
@@ -570,16 +570,16 @@
         "side-nav__none__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 9281,
+      "medianTokens": 9226,
       "medianContextTokens": 154,
       "medianPromptTokens": 8609,
-      "medianCostUsd": 0.0211135,
+      "medianCostUsd": 0.0197385,
       "medianTscErrors": 9,
       "medianLintErrors": 0,
       "meanCoverage": 0,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 7.6
+      "medianSeconds": 7.3
     },
     {
       "taskId": "side-nav",
@@ -590,13 +590,13 @@
         "side-nav__readme__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 9880,
-      "medianContextTokens": 650,
-      "medianPromptTokens": 9331,
-      "medianCostUsd": 0.018624500000000002,
-      "medianTscErrors": 11,
+      "medianTokens": 10161,
+      "medianContextTokens": 798,
+      "medianPromptTokens": 9545,
+      "medianCostUsd": 0.020631499999999997,
+      "medianTscErrors": 1,
       "medianLintErrors": 0,
-      "meanCoverage": 1,
+      "meanCoverage": 0.78,
       "medianTurns": 1,
       "medianToolCalls": 0,
       "medianSeconds": 6.3
@@ -610,16 +610,16 @@
         "side-nav__docs__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 45263,
-      "medianContextTokens": 21573,
-      "medianPromptTokens": 44859,
-      "medianCostUsd": 0.032563499999999995,
+      "medianTokens": 47766,
+      "medianContextTokens": 22702,
+      "medianPromptTokens": 47362,
+      "medianCostUsd": 0.033815,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 4.6
+      "medianSeconds": 4.7
     },
     {
       "taskId": "side-nav",
@@ -630,16 +630,16 @@
         "side-nav__docs-rules__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 46973,
-      "medianContextTokens": 22656,
-      "medianPromptTokens": 46564,
-      "medianCostUsd": 0.033516,
+      "medianTokens": 49491,
+      "medianContextTokens": 23785,
+      "medianPromptTokens": 49067,
+      "medianCostUsd": 0.0355425,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 6
+      "medianSeconds": 4.8
     },
     {
       "taskId": "side-nav",
@@ -650,16 +650,16 @@
         "side-nav__mcp__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 44744,
+      "medianTokens": 41633,
       "medianContextTokens": 1587,
       "medianPromptTokens": 11209,
-      "medianCostUsd": 0.08549575,
+      "medianCostUsd": 0.071541,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 3,
       "medianToolCalls": 7,
-      "medianSeconds": 12.8
+      "medianSeconds": 10.5
     },
     {
       "taskId": "subscribe-toast",
@@ -670,16 +670,16 @@
         "subscribe-toast__none__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 9065,
+      "medianTokens": 9035,
       "medianContextTokens": 154,
       "medianPromptTokens": 8574,
-      "medianCostUsd": 0.017446,
-      "medianTscErrors": 4,
+      "medianCostUsd": 0.015820999999999998,
+      "medianTscErrors": 3,
       "medianLintErrors": 0,
-      "meanCoverage": 0.33,
+      "meanCoverage": 0.22,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 6.3
+      "medianSeconds": 6.4
     },
     {
       "taskId": "subscribe-toast",
@@ -690,16 +690,16 @@
         "subscribe-toast__readme__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 9747,
-      "medianContextTokens": 650,
-      "medianPromptTokens": 9296,
-      "medianCostUsd": 0.02202125,
+      "medianTokens": 11276,
+      "medianContextTokens": 798,
+      "medianPromptTokens": 9510,
+      "medianCostUsd": 0.049389,
       "medianTscErrors": 2,
       "medianLintErrors": 0,
       "meanCoverage": 0.33,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 5.3
+      "medianSeconds": 16.7
     },
     {
       "taskId": "subscribe-toast",
@@ -710,16 +710,16 @@
         "subscribe-toast__docs__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 45286,
-      "medianContextTokens": 21573,
-      "medianPromptTokens": 44824,
-      "medianCostUsd": 0.033971,
+      "medianTokens": 47754,
+      "medianContextTokens": 22702,
+      "medianPromptTokens": 47327,
+      "medianCostUsd": 0.0343475,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 6.5
+      "medianSeconds": 5
     },
     {
       "taskId": "subscribe-toast",
@@ -730,16 +730,16 @@
         "subscribe-toast__docs-rules__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 46966,
-      "medianContextTokens": 22656,
-      "medianPromptTokens": 46529,
-      "medianCostUsd": 0.034548499999999996,
+      "medianTokens": 49475,
+      "medianContextTokens": 23785,
+      "medianPromptTokens": 49032,
+      "medianCostUsd": 0.036025,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 5.2
+      "medianSeconds": 5.1
     },
     {
       "taskId": "subscribe-toast",
@@ -750,16 +750,16 @@
         "subscribe-toast__mcp__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 46763,
+      "medianTokens": 47411,
       "medianContextTokens": 1587,
       "medianPromptTokens": 11174,
-      "medianCostUsd": 0.095627,
+      "medianCostUsd": 0.09761025,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 3,
       "medianToolCalls": 8,
-      "medianSeconds": 11.8
+      "medianSeconds": 15.3
     },
     {
       "taskId": "tag-picker",
@@ -770,16 +770,16 @@
         "tag-picker__none__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 9399,
+      "medianTokens": 9428,
       "medianContextTokens": 154,
       "medianPromptTokens": 8581,
-      "medianCostUsd": 0.0247495,
-      "medianTscErrors": 3,
+      "medianCostUsd": 0.0258275,
+      "medianTscErrors": 4,
       "medianLintErrors": 0,
       "meanCoverage": 0,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 7.6
+      "medianSeconds": 8.2
     },
     {
       "taskId": "tag-picker",
@@ -789,17 +789,17 @@
         "tag-picker__readme__claude-code__claude-sonnet-5__2",
         "tag-picker__readme__claude-code__claude-sonnet-5__3"
       ],
-      "passRate": 0,
-      "medianTokens": 11051,
-      "medianContextTokens": 650,
-      "medianPromptTokens": 9303,
-      "medianCostUsd": 0.04836050000000001,
-      "medianTscErrors": 3,
+      "passRate": 0.67,
+      "medianTokens": 9861,
+      "medianContextTokens": 798,
+      "medianPromptTokens": 9517,
+      "medianCostUsd": 0.013467499999999999,
+      "medianTscErrors": 0,
       "medianLintErrors": 0,
-      "meanCoverage": 0,
+      "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 15.6
+      "medianSeconds": 4.5
     },
     {
       "taskId": "tag-picker",
@@ -810,16 +810,16 @@
         "tag-picker__docs__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 45315,
-      "medianContextTokens": 21573,
-      "medianPromptTokens": 44831,
-      "medianCostUsd": 0.0355995,
+      "medianTokens": 47822,
+      "medianContextTokens": 22702,
+      "medianPromptTokens": 47334,
+      "medianCostUsd": 0.036151,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 6.6
+      "medianSeconds": 6.3
     },
     {
       "taskId": "tag-picker",
@@ -830,16 +830,16 @@
         "tag-picker__docs-rules__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 47015,
-      "medianContextTokens": 22656,
-      "medianPromptTokens": 46536,
-      "medianCostUsd": 0.035252,
+      "medianTokens": 51576,
+      "medianContextTokens": 23785,
+      "medianPromptTokens": 49039,
+      "medianCostUsd": 0.1137535,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
-      "meanCoverage": 1,
+      "meanCoverage": 0.67,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 5.5
+      "medianSeconds": 21
     },
     {
       "taskId": "tag-picker",
@@ -850,16 +850,16 @@
         "tag-picker__mcp__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 65775,
+      "medianTokens": 86461,
       "medianContextTokens": 1587,
       "medianPromptTokens": 11181,
-      "medianCostUsd": 0.1391355,
+      "medianCostUsd": 0.17450950000000004,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 0.33,
-      "medianTurns": 4,
-      "medianToolCalls": 8,
-      "medianSeconds": 26.3
+      "medianTurns": 5,
+      "medianToolCalls": 9,
+      "medianSeconds": 43.6
     },
     {
       "taskId": "usage-dashboard",
@@ -870,16 +870,16 @@
         "usage-dashboard__none__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 10813,
+      "medianTokens": 10787,
       "medianContextTokens": 154,
       "medianPromptTokens": 8636,
-      "medianCostUsd": 0.059052,
-      "medianTscErrors": 12,
+      "medianCostUsd": 0.05810200000000001,
+      "medianTscErrors": 10,
       "medianLintErrors": 0,
-      "meanCoverage": 0,
+      "meanCoverage": 0.53,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 16.4
+      "medianSeconds": 17.5
     },
     {
       "taskId": "usage-dashboard",
@@ -890,16 +890,16 @@
         "usage-dashboard__readme__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 13582,
-      "medianContextTokens": 650,
-      "medianPromptTokens": 9358,
-      "medianCostUsd": 0.11028800000000001,
-      "medianTscErrors": 5,
+      "medianTokens": 18232,
+      "medianContextTokens": 798,
+      "medianPromptTokens": 9572,
+      "medianCostUsd": 0.221295,
+      "medianTscErrors": 4,
       "medianLintErrors": 0,
-      "meanCoverage": 0.93,
+      "meanCoverage": 0.73,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 38.3
+      "medianSeconds": 73.7
     },
     {
       "taskId": "usage-dashboard",
@@ -910,16 +910,16 @@
         "usage-dashboard__docs__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 46950,
-      "medianContextTokens": 21573,
-      "medianPromptTokens": 44886,
-      "medianCostUsd": 0.07465200000000001,
+      "medianTokens": 49400,
+      "medianContextTokens": 22702,
+      "medianPromptTokens": 47389,
+      "medianCostUsd": 0.0777285,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 16
+      "medianSeconds": 15.6
     },
     {
       "taskId": "usage-dashboard",
@@ -930,16 +930,16 @@
         "usage-dashboard__docs-rules__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 48690,
-      "medianContextTokens": 22656,
-      "medianPromptTokens": 46591,
-      "medianCostUsd": 0.07960450000000001,
+      "medianTokens": 51164,
+      "medianContextTokens": 23785,
+      "medianPromptTokens": 49094,
+      "medianCostUsd": 0.08085600000000001,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 18.1
+      "medianSeconds": 16.8
     },
     {
       "taskId": "usage-dashboard",
@@ -950,16 +950,16 @@
         "usage-dashboard__mcp__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 53543,
+      "medianTokens": 54060,
       "medianContextTokens": 1587,
       "medianPromptTokens": 11236,
-      "medianCostUsd": 0.18184324999999998,
+      "medianCostUsd": 0.19981999999999997,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 3,
-      "medianToolCalls": 13,
-      "medianSeconds": 34.9
+      "medianToolCalls": 12,
+      "medianSeconds": 34.2
     },
     {
       "taskId": "users-table",
@@ -970,16 +970,16 @@
         "users-table__none__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 9289,
+      "medianTokens": 9268,
       "medianContextTokens": 154,
       "medianPromptTokens": 8589,
-      "medianCostUsd": 0.021803499999999996,
+      "medianCostUsd": 0.0212785,
       "medianTscErrors": 8,
       "medianLintErrors": 0,
       "meanCoverage": 0,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 6.7
+      "medianSeconds": 6.8
     },
     {
       "taskId": "users-table",
@@ -989,17 +989,17 @@
         "users-table__readme__claude-code__claude-sonnet-5__2",
         "users-table__readme__claude-code__claude-sonnet-5__3"
       ],
-      "passRate": 0,
-      "medianTokens": 10029,
-      "medianContextTokens": 650,
-      "medianPromptTokens": 9311,
-      "medianCostUsd": 0.0226145,
-      "medianTscErrors": 24,
+      "passRate": 0.33,
+      "medianTokens": 11579,
+      "medianContextTokens": 798,
+      "medianPromptTokens": 9525,
+      "medianCostUsd": 0.0561215,
+      "medianTscErrors": 1,
       "medianLintErrors": 0,
-      "meanCoverage": 0.78,
+      "meanCoverage": 0.44,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 7.1
+      "medianSeconds": 18
     },
     {
       "taskId": "users-table",
@@ -1010,16 +1010,16 @@
         "users-table__docs__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 45341,
-      "medianContextTokens": 21573,
-      "medianPromptTokens": 44839,
-      "medianCostUsd": 0.034978499999999996,
+      "medianTokens": 47844,
+      "medianContextTokens": 22702,
+      "medianPromptTokens": 47342,
+      "medianCostUsd": 0.036355,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 5.4
+      "medianSeconds": 5.8
     },
     {
       "taskId": "users-table",
@@ -1030,16 +1030,16 @@
         "users-table__docs-rules__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 47154,
-      "medianContextTokens": 22656,
-      "medianPromptTokens": 46544,
-      "medianCostUsd": 0.038606,
+      "medianTokens": 49686,
+      "medianContextTokens": 23785,
+      "medianPromptTokens": 49047,
+      "medianCostUsd": 0.0405075,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 6.2
+      "medianSeconds": 6.1
     },
     {
       "taskId": "users-table",
@@ -1050,16 +1050,16 @@
         "users-table__mcp__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 41092,
+      "medianTokens": 40463,
       "medianContextTokens": 1587,
       "medianPromptTokens": 11189,
-      "medianCostUsd": 0.0791075,
+      "medianCostUsd": 0.06878975000000001,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 3,
-      "medianToolCalls": 7,
-      "medianSeconds": 12.1
+      "medianToolCalls": 6,
+      "medianSeconds": 10.9
     },
     {
       "taskId": "wizard",
@@ -1070,16 +1070,16 @@
         "wizard__none__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 0,
-      "medianTokens": 10502,
+      "medianTokens": 10450,
       "medianContextTokens": 154,
       "medianPromptTokens": 8607,
-      "medianCostUsd": 0.05381500000000001,
-      "medianTscErrors": 7,
+      "medianCostUsd": 0.052115,
+      "medianTscErrors": 6,
       "medianLintErrors": 0,
-      "meanCoverage": 0.56,
+      "meanCoverage": 0.67,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 14.8
+      "medianSeconds": 14.5
     },
     {
       "taskId": "wizard",
@@ -1089,17 +1089,17 @@
         "wizard__readme__claude-code__claude-sonnet-5__2",
         "wizard__readme__claude-code__claude-sonnet-5__3"
       ],
-      "passRate": 0,
-      "medianTokens": 13013,
-      "medianContextTokens": 650,
-      "medianPromptTokens": 9329,
-      "medianCostUsd": 0.0967735,
-      "medianTscErrors": 4,
+      "passRate": 0.67,
+      "medianTokens": 14919,
+      "medianContextTokens": 798,
+      "medianPromptTokens": 9543,
+      "medianCostUsd": 0.1391805,
+      "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 0.33,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 29
+      "medianSeconds": 43.8
     },
     {
       "taskId": "wizard",
@@ -1110,16 +1110,16 @@
         "wizard__docs__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 46524,
-      "medianContextTokens": 21573,
-      "medianPromptTokens": 44857,
-      "medianCostUsd": 0.0641125,
+      "medianTokens": 49238,
+      "medianContextTokens": 22702,
+      "medianPromptTokens": 47360,
+      "medianCostUsd": 0.07063900000000001,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 12.6
+      "medianSeconds": 14.1
     },
     {
       "taskId": "wizard",
@@ -1130,16 +1130,16 @@
         "wizard__docs-rules__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 48259,
-      "medianContextTokens": 22656,
-      "medianPromptTokens": 46562,
-      "medianCostUsd": 0.06839,
+      "medianTokens": 50828,
+      "medianContextTokens": 23785,
+      "medianPromptTokens": 49065,
+      "medianCostUsd": 0.06861650000000001,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
       "medianTurns": 1,
       "medianToolCalls": 0,
-      "medianSeconds": 13.6
+      "medianSeconds": 13.5
     },
     {
       "taskId": "wizard",
@@ -1150,30 +1150,30 @@
         "wizard__mcp__claude-code__claude-sonnet-5__3"
       ],
       "passRate": 1,
-      "medianTokens": 49815,
+      "medianTokens": 68980,
       "medianContextTokens": 1587,
       "medianPromptTokens": 11207,
-      "medianCostUsd": 0.14704975,
+      "medianCostUsd": 0.14716700000000002,
       "medianTscErrors": 0,
       "medianLintErrors": 0,
       "meanCoverage": 1,
-      "medianTurns": 3,
-      "medianToolCalls": 8,
-      "medianSeconds": 30.5
+      "medianTurns": 4,
+      "medianToolCalls": 9,
+      "medianSeconds": 27.9
     }
   ],
   "sourceRevisions": {
     "docs": [
       {
-        "hash": "666d3360d38750da",
-        "tokens": 21419,
+        "hash": "423dffab7907a1d0",
+        "tokens": 22548,
         "runs": 66
       }
     ],
     "readme": [
       {
-        "hash": "cf8d40f8d175d405",
-        "tokens": 496,
+        "hash": "482183a9074fe65d",
+        "tokens": 644,
         "runs": 33
       }
     ],

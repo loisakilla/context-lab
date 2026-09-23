@@ -1,0 +1,94 @@
+{
+  "id": "tag-picker__readme__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-23T16:56:40.770Z",
+  "repeat": 3,
+  "durationMs": 4429,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 9515,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 348,
+    "cacheRead": 9515,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.013467499999999999,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxTagInput } from '@jinx-ui/react';\n\ninterface ArticleTagPickerProps {\n  defaultTags?: string[];\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagPicker({\n  defaultTags = [],\n  onChange,\n}: ArticleTagPickerProps) {\n  const [tags, setTags] = useState<string[]>(defaultTags);\n\n  const handleValueChange = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  return (\n    <div className=\"jx-stack\" style={{ gap: 'var(--jx-space-2)' }}>\n      <label htmlFor=\"article-tags\" className=\"jx-label\">\n        Теги статьи\n      </label>\n      <JxTagInput\n        id=\"article-tags\"\n        value={tags}\n        onValueChange={handleValueChange}\n        placeholder=\"Введите тег и нажмите Enter\"\n      />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxTagInput } from '@jinx-ui/react';\n\ninterface ArticleTagPickerProps {\n  defaultTags?: string[];\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagPicker({\n  defaultTags = [],\n  onChange,\n}: ArticleTagPickerProps) {\n  const [tags, setTags] = useState<string[]>(defaultTags);\n\n  const handleValueChange = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  return (\n    <div className=\"jx-stack\" style={{ gap: 'var(--jx-space-2)' }}>\n      <label htmlFor=\"article-tags\" className=\"jx-label\">\n        Теги статьи\n      </label>\n      <JxTagInput\n        id=\"article-tags\"\n        value={tags}\n        onValueChange={handleValueChange}\n        placeholder=\"Введите тег и нажмите Enter\"\n      />\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2322,
+          "line": 26,
+          "message": "Type '{ id: string; value: string[]; onValueChange: (next: string[]) => void; placeholder: string; }' is not assignable to type 'IntrinsicAttributes & JxTagInputProps'.\n  Property 'id' does not exist on type 'IntrinsicAttributes & JxTagInputProps'."
+        }
+      ],
+      "unknownComponents": [],
+      "unknownProps": [
+        {
+          "component": "JxTagInput",
+          "prop": "id"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 21,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxTagInput"
+    ],
+    "expectedCoverage": 1,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.86
+  }
+}

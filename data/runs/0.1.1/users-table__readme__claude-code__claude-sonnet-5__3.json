@@ -1,0 +1,143 @@
+{
+  "id": "users-table__readme__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-23T16:54:10.656Z",
+  "repeat": 3,
+  "durationMs": 20490,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "users-table",
+    "title": "Таблица пользователей с пагинацией",
+    "prompt": "Сделай таблицу пользователей с колонками «Имя», «Роль» и «Статус». Список users передаётся пропсом, показывать по десять строк на страницу с постраничной навигацией под таблицей. Статус показывай цветной меткой: активен или отключён.",
+    "taskType": "ui",
+    "expects": [
+      "JxTable",
+      "JxPagination",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 9523,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2334,
+    "cacheRead": 9523,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.06312150000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\nimport {\n  JxTable,\n  JxTableHeader,\n  JxTableBody,\n  JxTableRow,\n  JxTableHead,\n  JxTableCell,\n  JxBadge,\n  JxPagination,\n} from '@jinx-ui/react';\n\nexport interface User {\n  id: string | number;\n  name: string;\n  role: string;\n  status: 'active' | 'disabled';\n}\n\ninterface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n\n  const pageUsers = useMemo(() => {\n    const start = (currentPage - 1) * PAGE_SIZE;\n    return users.slice(start, start + PAGE_SIZE);\n  }, [users, currentPage]);\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-4)' }}>\n      <JxTable>\n        <JxTableHeader>\n          <JxTableRow>\n            <JxTableHead>Имя</JxTableHead>\n            <JxTableHead>Роль</JxTableHead>\n            <JxTableHead>Статус</JxTableHead>\n          </JxTableRow>\n        </JxTableHeader>\n        <JxTableBody>\n          {pageUsers.map((user) => (\n            <JxTableRow key={user.id}>\n              <JxTableCell>{user.name}</JxTableCell>\n              <JxTableCell>{user.role}</JxTableCell>\n              <JxTableCell>\n                <JxBadge variant={user.status === 'active' ? 'success' : 'neutral'}>\n                  {user.status === 'active' ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </JxTableCell>\n            </JxTableRow>\n          ))}\n        </JxTableBody>\n      </JxTable>\n      <JxPagination page={currentPage} pageCount={pageCount} onPageChange={setPage} />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport {\n  JxTable,\n  JxTableHeader,\n  JxTableBody,\n  JxTableRow,\n  JxTableHead,\n  JxTableCell,\n  JxBadge,\n  JxPagination,\n} from '@jinx-ui/react';\n\nexport interface User {\n  id: string | number;\n  name: string;\n  role: string;\n  status: 'active' | 'disabled';\n}\n\ninterface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n\n  const pageUsers = useMemo(() => {\n    const start = (currentPage - 1) * PAGE_SIZE;\n    return users.slice(start, start + PAGE_SIZE);\n  }, [users, currentPage]);\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-4)' }}>\n      <JxTable>\n        <JxTableHeader>\n          <JxTableRow>\n            <JxTableHead>Имя</JxTableHead>\n            <JxTableHead>Роль</JxTableHead>\n            <JxTableHead>Статус</JxTableHead>\n          </JxTableRow>\n        </JxTableHeader>\n        <JxTableBody>\n          {pageUsers.map((user) => (\n            <JxTableRow key={user.id}>\n              <JxTableCell>{user.name}</JxTableCell>\n              <JxTableCell>{user.role}</JxTableCell>\n              <JxTableCell>\n                <JxBadge variant={user.status === 'active' ? 'success' : 'neutral'}>\n                  {user.status === 'active' ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </JxTableCell>\n            </JxTableRow>\n          ))}\n        </JxTableBody>\n      </JxTable>\n      <JxPagination page={currentPage} pageCount={pageCount} onPageChange={setPage} />\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 4,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxTableHeader'."
+        },
+        {
+          "code": 2305,
+          "line": 5,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxTableBody'."
+        },
+        {
+          "code": 2724,
+          "line": 6,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'JxTableRow'. Did you mean 'JxTable'?"
+        },
+        {
+          "code": 2305,
+          "line": 7,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxTableHead'."
+        },
+        {
+          "code": 2305,
+          "line": 8,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxTableCell'."
+        },
+        {
+          "code": 2322,
+          "line": 53,
+          "message": "Type '{ children: string; variant: string; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributes<HTMLSpanElement> & { ref?: Ref<HTMLSpanElement> | undefined; tone?: JxBadgeTone | undefined; dot?: boolean | undefined; children?: ReactNode; }'.\n  Property 'variant' does not exist on type 'IntrinsicAttributes & HTMLAttributes<HTMLSpanElement> & { ref?: Ref<HTMLSpanElement> | undefined; tone?: JxBadgeTone | undefined; dot?: boolean | undefined; children?: ReactNode; }'."
+        },
+        {
+          "code": 2322,
+          "line": 61,
+          "message": "Type '{ page: number; pageCount: number; onPageChange: Dispatch<SetStateAction<number>>; }' is not assignable to type 'IntrinsicAttributes & Omit<HTMLAttributes<HTMLElement>, \"onChange\"> & { ref?: Ref<HTMLElement> | undefined; ... 4 more ...; siblingCount?: number | undefined; }'.\n  Property 'pageCount' does not exist on type 'IntrinsicAttributes & Omit<HTMLAttributes<HTMLElement>, \"onChange\"> & { ref?: Ref<HTMLElement> | undefined; ... 4 more ...; siblingCount?: number | undefined; }'."
+        }
+      ],
+      "unknownComponents": [
+        "JxTableBody",
+        "JxTableCell",
+        "JxTableHead",
+        "JxTableHeader",
+        "JxTableRow"
+      ],
+      "unknownProps": [
+        {
+          "component": "JxBadge",
+          "prop": "variant"
+        },
+        {
+          "component": "JxPagination",
+          "prop": "pageCount"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 38,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxBadge",
+      "JxPagination",
+      "JxTable",
+      "JxTableBody",
+      "JxTableCell",
+      "JxTableHead",
+      "JxTableHeader",
+      "JxTableRow"
+    ],
+    "expectedCoverage": 1,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.3
+  }
+}

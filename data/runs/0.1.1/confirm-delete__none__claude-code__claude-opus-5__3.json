@@ -1,0 +1,106 @@
+{
+  "id": "confirm-delete__none__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T16:47:33.733Z",
+  "repeat": 3,
+  "durationMs": 21081,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "confirm-delete",
+    "title": "Подтверждение удаления",
+    "prompt": "Сделай компонент с кнопкой «Удалить проект». По клику открывается окно подтверждения с заголовком «Удалить проект?», текстом о том, что действие необратимо, и двумя кнопками: отмена и подтверждение удаления. Подтверждение вызывает переданный колбэк onConfirm.",
+    "taskType": "ui",
+    "expects": [
+      "JxModal",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8601,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1739,
+    "cacheRead": 8601,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0477855,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "// Note: API-имена Jinx UI (Modal.*, Button variant=\"danger\", Text) взяты по общепринятому соглашению —\n// сверься с версией @jinx-ui/react в проекте, если названия отличаются.\nimport { useCallback, useState } from 'react';\nimport { Button, Modal, Stack, Text } from '@jinx-ui/react';\n\ntype DeleteProjectDialogProps = {\n  onConfirm: () => void;\n  projectName?: string;\n};\n\nexport default function DeleteProjectDialog({ onConfirm, projectName }: DeleteProjectDialogProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const close = useCallback(() => setIsOpen(false), []);\n\n  const confirm = useCallback(() => {\n    setIsOpen(false);\n    onConfirm();\n  }, [onConfirm]);\n\n  return (\n    <>\n      <Button variant=\"danger\" onClick={() => setIsOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Modal open={isOpen} onClose={close} aria-labelledby=\"delete-project-title\">\n        <Modal.Header id=\"delete-project-title\">Удалить проект?</Modal.Header>\n\n        <Modal.Body>\n          <Stack direction=\"column\" gap=\"var(--jx-space-2)\">\n            <Text style={{ color: 'var(--jx-color-text-secondary)' }}>\n              {projectName\n                ? `Проект «${projectName}» и все его данные будут удалены безвозвратно.`\n                : 'Проект и все его данные будут удалены безвозвратно.'}\n            </Text>\n            <Text style={{ color: 'var(--jx-color-text-secondary)' }}>\n              Это действие необратимо — отменить его не получится.\n            </Text>\n          </Stack>\n        </Modal.Body>\n\n        <Modal.Footer>\n          <Stack direction=\"row\" gap=\"var(--jx-space-2)\" justify=\"flex-end\">\n            <Button variant=\"secondary\" onClick={close}>\n              Отмена\n            </Button>\n            <Button variant=\"danger\" onClick={confirm}>\n              Удалить проект\n            </Button>\n          </Stack>\n        </Modal.Footer>\n      </Modal>\n    </>\n  );\n}",
+    "text": "```tsx\n// Note: API-имена Jinx UI (Modal.*, Button variant=\"danger\", Text) взяты по общепринятому соглашению —\n// сверься с версией @jinx-ui/react в проекте, если названия отличаются.\nimport { useCallback, useState } from 'react';\nimport { Button, Modal, Stack, Text } from '@jinx-ui/react';\n\ntype DeleteProjectDialogProps = {\n  onConfirm: () => void;\n  projectName?: string;\n};\n\nexport default function DeleteProjectDialog({ onConfirm, projectName }: DeleteProjectDialogProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const close = useCallback(() => setIsOpen(false), []);\n\n  const confirm = useCallback(() => {\n    setIsOpen(false);\n    onConfirm();\n  }, [onConfirm]);\n\n  return (\n    <>\n      <Button variant=\"danger\" onClick={() => setIsOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Modal open={isOpen} onClose={close} aria-labelledby=\"delete-project-title\">\n        <Modal.Header id=\"delete-project-title\">Удалить проект?</Modal.Header>\n\n        <Modal.Body>\n          <Stack direction=\"column\" gap=\"var(--jx-space-2)\">\n            <Text style={{ color: 'var(--jx-color-text-secondary)' }}>\n              {projectName\n                ? `Проект «${projectName}» и все его данные будут удалены безвозвратно.`\n                : 'Проект и все его данные будут удалены безвозвратно.'}\n            </Text>\n            <Text style={{ color: 'var(--jx-color-text-secondary)' }}>\n              Это действие необратимо — отменить его не получится.\n            </Text>\n          </Stack>\n        </Modal.Body>\n\n        <Modal.Footer>\n          <Stack direction=\"row\" gap=\"var(--jx-space-2)\" justify=\"flex-end\">\n            <Button variant=\"secondary\" onClick={close}>\n              Отмена\n            </Button>\n            <Button variant=\"danger\" onClick={confirm}>\n              Удалить проект\n            </Button>\n          </Stack>\n        </Modal.Footer>\n      </Modal>\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 4,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2724,
+          "line": 4,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Modal'. Did you mean 'JxModal'?"
+        },
+        {
+          "code": 2305,
+          "line": 4,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 4,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Modal",
+        "Stack",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 32,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 37,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

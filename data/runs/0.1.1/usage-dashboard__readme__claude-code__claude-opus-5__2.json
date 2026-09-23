@@ -1,0 +1,183 @@
+{
+  "id": "usage-dashboard__readme__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T17:12:20.194Z",
+  "repeat": 2,
+  "durationMs": 75322,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "usage-dashboard",
+    "title": "Панель расхода с фильтрами",
+    "prompt": "Сделай панель расхода по проектам. Сверху чипы-фильтры по статусу, которые можно снимать. Под ними на каждый проект строка с названием, круговым индикатором заполненности квоты в процентах и меткой статуса. Список постраничный, по пять строк. Если после фильтрации ничего не осталось, вместо списка показывается пустое состояние с кнопкой сброса фильтров.",
+    "taskType": "ui",
+    "expects": [
+      "JxChip",
+      "JxProgressCircle",
+      "JxBadge",
+      "JxPagination",
+      "JxEmptyState"
+    ]
+  },
+  "context": {
+    "tokens": 798,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.1",
+        "tokens": 644,
+        "hash": "482183a9074fe65d"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 9568,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 7156,
+    "cacheRead": 9568,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.18369400000000002,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "// Из доступной документации @jinx-ui/react подтверждён только JxButton,\n// поэтому остальные элементы собраны на разметке + токенах var(--jx-*).\nimport { useMemo, useState } from 'react';\nimport { JxButton } from '@jinx-ui/react';\n\ntype Status = 'active' | 'paused' | 'over';\n\ntype Project = {\n  id: string;\n  name: string;\n  spent: number;\n  quota: number;\n  status: Status;\n};\n\nconst PAGE_SIZE = 5;\n\nconst ALL_STATUSES: Status[] = ['active', 'paused', 'over'];\n\nconst STATUS_LABEL: Record<Status, string> = {\n  active: 'Активен',\n  paused: 'На паузе',\n  over: 'Превышение',\n};\n\nconst STATUS_COLOR: Record<Status, string> = {\n  active: 'var(--jx-color-success)',\n  paused: 'var(--jx-color-text-muted)',\n  over: 'var(--jx-color-danger)',\n};\n\nconst PROJECTS: Project[] = [\n  { id: 'atlas', name: 'Atlas', spent: 18400, quota: 40000, status: 'active' },\n  { id: 'beacon', name: 'Beacon', spent: 39200, quota: 40000, status: 'active' },\n  { id: 'cinder', name: 'Cinder', spent: 6100, quota: 25000, status: 'paused' },\n  { id: 'delta', name: 'Delta Ingest', spent: 51000, quota: 45000, status: 'over' },\n  { id: 'ember', name: 'Ember', spent: 12750, quota: 30000, status: 'active' },\n  { id: 'forge', name: 'Forge', spent: 0, quota: 15000, status: 'paused' },\n  { id: 'gale', name: 'Gale Analytics', spent: 28900, quota: 30000, status: 'active' },\n  { id: 'harbor', name: 'Harbor', spent: 9400, quota: 20000, status: 'paused' },\n  { id: 'iris', name: 'Iris', spent: 61200, quota: 50000, status: 'over' },\n  { id: 'juno', name: 'Juno', spent: 4300, quota: 18000, status: 'active' },\n  { id: 'kilo', name: 'Kilo Search', spent: 22100, quota: 35000, status: 'active' },\n  { id: 'lumen', name: 'Lumen', spent: 16800, quota: 16000, status: 'over' },\n  { id: 'mistral', name: 'Mistral', spent: 3200, quota: 22000, status: 'paused' },\n];\n\nconst RADIUS = 18;\nconst CIRCUMFERENCE = 2 * Math.PI * RADIUS;\n\nconst money = new Intl.NumberFormat('ru-RU', {\n  style: 'currency',\n  currency: 'RUB',\n  maximumFractionDigits: 0,\n});\n\nexport default function ProjectSpendPanel() {\n  const [selected, setSelected] = useState<Status[]>(ALL_STATUSES);\n  const [page, setPage] = useState(0);\n\n  const filtered = useMemo(\n    () => PROJECTS.filter((project) => selected.includes(project.status)),\n    [selected],\n  );\n\n  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount - 1);\n  const rows = filtered.slice(currentPage * PAGE_SIZE, currentPage * PAGE_SIZE + PAGE_SIZE);\n\n  const toggleStatus = (status: Status) => {\n    setSelected((prev) =>\n      prev.includes(status) ? prev.filter((item) => item !== status) : [...prev, status],\n    );\n    setPage(0);\n  };\n\n  const resetFilters = () => {\n    setSelected(ALL_STATUSES);\n    setPage(0);\n  };\n\n  return (\n    <section\n      aria-label=\"Расход по проектам\"\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-4, 16px)',\n        padding: 'var(--jx-space-4, 16px)',\n        borderRadius: 'var(--jx-radius-lg, 12px)',\n        border: '1px solid var(--jx-color-border)',\n        background: 'var(--jx-color-surface)',\n        color: 'var(--jx-color-text)',\n      }}\n    >\n      <div\n        role=\"group\"\n        aria-label=\"Фильтр по статусу\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--jx-space-2, 8px)' }}\n      >\n        {ALL_STATUSES.map((status) => {\n          const isOn = selected.includes(status);\n          return (\n            <button\n              key={status}\n              type=\"button\"\n              aria-pressed={isOn}\n              onClick={() => toggleStatus(status)}\n              style={{\n                display: 'inline-flex',\n                alignItems: 'center',\n                gap: 'var(--jx-space-1, 6px)',\n                padding: 'var(--jx-space-1, 4px) var(--jx-space-3, 12px)',\n                borderRadius: 'var(--jx-radius-pill, 999px)',\n                border: '1px solid currentColor',\n                cursor: 'pointer',\n                font: 'inherit',\n                fontSize: 'var(--jx-font-size-sm, 0.875rem)',\n                color: isOn ? STATUS_COLOR[status] : 'var(--jx-color-text-muted)',\n                background: isOn ? 'var(--jx-color-surface-raised)' : 'transparent',\n                opacity: isOn ? 1 : 0.65,\n              }}\n            >\n              <span>{STATUS_LABEL[status]}</span>\n              <span aria-hidden=\"true\">{isOn ? '×' : '+'}</span>\n            </button>\n          );\n        })}\n      </div>\n\n      {filtered.length === 0 ? (\n        <div\n          style={{\n            display: 'flex',\n            flexDirection: 'column',\n            alignItems: 'center',\n            gap: 'var(--jx-space-3, 12px)',\n            padding: 'var(--jx-space-6, 32px) var(--jx-space-4, 16px)',\n            textAlign: 'center',\n            borderRadius: 'var(--jx-radius-md, 8px)',\n            border: '1px dashed var(--jx-color-border)',\n          }}\n        >\n          <p style={{ margin: 0, fontWeight: 600 }}>Нет проектов под выбранные фильтры</p>\n          <p style={{ margin: 0, color: 'var(--jx-color-text-muted)' }}>\n            Снятые статусы скрыли все строки.\n          </p>\n          <JxButton variant=\"primary\" onClick={resetFilters}>\n            Сбросить фильтры\n          </JxButton>\n        </div>\n      ) : (\n        <>\n          <ul\n            style={{\n              listStyle: 'none',\n              margin: 0,\n              padding: 0,\n              display: 'flex',\n              flexDirection: 'column',\n              gap: 'var(--jx-space-2, 8px)',\n            }}\n          >\n            {rows.map((project) => {\n              const percent = Math.round((project.spent / project.quota) * 100);\n              const dashOffset = CIRCUMFERENCE * (1 - Math.min(percent, 100) / 100);\n              return (\n                <li\n                  key={project.id}\n                  style={{\n                    display: 'flex',\n                    alignItems: 'center',\n                    gap: 'var(--jx-space-3, 12px)',\n                    padding: 'var(--jx-space-3, 12px)',\n                    borderRadius: 'var(--jx-radius-md, 8px)',\n                    border: '1px solid var(--jx-color-border)',\n                  }}\n                >\n                  <span\n                    role=\"img\"\n                    aria-label={`Квота израсходована на ${percent} процентов`}\n                    style={{\n                      position: 'relative',\n                      display: 'inline-flex',\n                      alignItems: 'center',\n                      justifyContent: 'center',\n                      color: STATUS_COLOR[project.status],\n                    }}\n                  >\n                    <svg width={44} height={44} viewBox=\"0 0 44 44\" aria-hidden=\"true\">\n                      <circle\n                        cx={22}\n                        cy={22}\n                        r={RADIUS}\n                        fill=\"none\"\n                        strokeWidth={4}\n                        stroke=\"var(--jx-color-border)\"\n                      />\n                      <circle\n                        cx={22}\n                        cy={22}\n                        r={RADIUS}\n                        fill=\"none\"\n                        strokeWidth={4}\n                        strokeLinecap=\"round\"\n                        stroke=\"currentColor\"\n                        strokeDasharray={CIRCUMFERENCE}\n                        strokeDashoffset={dashOffset}\n                        transform=\"rotate(-90 22 22)\"\n                      />\n                    </svg>\n                    <span\n                      aria-hidden=\"true\"\n                      style={{\n                        position: 'absolute',\n                        fontSize: 'var(--jx-font-size-xs, 0.6875rem)',\n                        fontWeight: 600,\n                      }}\n                    >\n                      {percent}%\n                    </span>\n                  </span>\n\n                  <span style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>\n                    <span\n                      style={{\n                        fontWeight: 600,\n                        overflow: 'hidden',\n                        textOverflow: 'ellipsis',\n                        whiteSpace: 'nowrap',\n                      }}\n                    >\n                      {project.name}\n                    </span>\n                    <span\n                      style={{\n                        color: 'var(--jx-color-text-muted)',\n                        fontSize: 'var(--jx-font-size-sm, 0.875rem)',\n                      }}\n                    >\n                      {money.format(project.spent)} из {money.format(project.quota)}\n                    </span>\n                  </span>\n\n                  <span\n                    style={{\n                      padding: 'var(--jx-space-1, 4px) var(--jx-space-2, 8px)',\n                      borderRadius: 'var(--jx-radius-pill, 999px)',\n                      border: '1px solid currentColor',\n                      color: STATUS_COLOR[project.status],\n                      fontSize: 'var(--jx-font-size-sm, 0.875rem)',\n                      whiteSpace: 'nowrap',\n                    }}\n                  >\n                    {STATUS_LABEL[project.status]}\n                  </span>\n                </li>\n              );\n            })}\n          </ul>\n\n          <div\n            style={{\n              display: 'flex',\n              alignItems: 'center',\n              justifyContent: 'space-between',\n              gap: 'var(--jx-space-3, 12px)',\n            }}\n          >\n            <span\n              aria-live=\"polite\"\n              style={{\n                color: 'var(--jx-color-text-muted)',\n                fontSize: 'var(--jx-font-size-sm, 0.875rem)',\n              }}\n            >\n              Страница {currentPage + 1} из {pageCount} · {filtered.length} проектов\n            </span>\n            <span style={{ display: 'flex', gap: 'var(--jx-space-2, 8px)' }}>\n              <JxButton\n                onClick={() => setPage(Math.max(0, currentPage - 1))}\n                disabled={currentPage === 0}\n              >\n                Назад\n              </JxButton>\n              <JxButton\n                onClick={() => setPage(Math.min(pageCount - 1, currentPage + 1))}\n                disabled={currentPage >= pageCount - 1}\n              >\n                Вперёд\n              </JxButton>\n            </span>\n          </div>\n        </>\n      )}\n    </section>\n  );\n}",
+    "text": "```tsx\n// Из доступной документации @jinx-ui/react подтверждён только JxButton,\n// поэтому остальные элементы собраны на разметке + токенах var(--jx-*).\nimport { useMemo, useState } from 'react';\nimport { JxButton } from '@jinx-ui/react';\n\ntype Status = 'active' | 'paused' | 'over';\n\ntype Project = {\n  id: string;\n  name: string;\n  spent: number;\n  quota: number;\n  status: Status;\n};\n\nconst PAGE_SIZE = 5;\n\nconst ALL_STATUSES: Status[] = ['active', 'paused', 'over'];\n\nconst STATUS_LABEL: Record<Status, string> = {\n  active: 'Активен',\n  paused: 'На паузе',\n  over: 'Превышение',\n};\n\nconst STATUS_COLOR: Record<Status, string> = {\n  active: 'var(--jx-color-success)',\n  paused: 'var(--jx-color-text-muted)',\n  over: 'var(--jx-color-danger)',\n};\n\nconst PROJECTS: Project[] = [\n  { id: 'atlas', name: 'Atlas', spent: 18400, quota: 40000, status: 'active' },\n  { id: 'beacon', name: 'Beacon', spent: 39200, quota: 40000, status: 'active' },\n  { id: 'cinder', name: 'Cinder', spent: 6100, quota: 25000, status: 'paused' },\n  { id: 'delta', name: 'Delta Ingest', spent: 51000, quota: 45000, status: 'over' },\n  { id: 'ember', name: 'Ember', spent: 12750, quota: 30000, status: 'active' },\n  { id: 'forge', name: 'Forge', spent: 0, quota: 15000, status: 'paused' },\n  { id: 'gale', name: 'Gale Analytics', spent: 28900, quota: 30000, status: 'active' },\n  { id: 'harbor', name: 'Harbor', spent: 9400, quota: 20000, status: 'paused' },\n  { id: 'iris', name: 'Iris', spent: 61200, quota: 50000, status: 'over' },\n  { id: 'juno', name: 'Juno', spent: 4300, quota: 18000, status: 'active' },\n  { id: 'kilo', name: 'Kilo Search', spent: 22100, quota: 35000, status: 'active' },\n  { id: 'lumen', name: 'Lumen', spent: 16800, quota: 16000, status: 'over' },\n  { id: 'mistral', name: 'Mistral', spent: 3200, quota: 22000, status: 'paused' },\n];\n\nconst RADIUS = 18;\nconst CIRCUMFERENCE = 2 * Math.PI * RADIUS;\n\nconst money = new Intl.NumberFormat('ru-RU', {\n  style: 'currency',\n  currency: 'RUB',\n  maximumFractionDigits: 0,\n});\n\nexport default function ProjectSpendPanel() {\n  const [selected, setSelected] = useState<Status[]>(ALL_STATUSES);\n  const [page, setPage] = useState(0);\n\n  const filtered = useMemo(\n    () => PROJECTS.filter((project) => selected.includes(project.status)),\n    [selected],\n  );\n\n  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount - 1);\n  const rows = filtered.slice(currentPage * PAGE_SIZE, currentPage * PAGE_SIZE + PAGE_SIZE);\n\n  const toggleStatus = (status: Status) => {\n    setSelected((prev) =>\n      prev.includes(status) ? prev.filter((item) => item !== status) : [...prev, status],\n    );\n    setPage(0);\n  };\n\n  const resetFilters = () => {\n    setSelected(ALL_STATUSES);\n    setPage(0);\n  };\n\n  return (\n    <section\n      aria-label=\"Расход по проектам\"\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-4, 16px)',\n        padding: 'var(--jx-space-4, 16px)',\n        borderRadius: 'var(--jx-radius-lg, 12px)',\n        border: '1px solid var(--jx-color-border)',\n        background: 'var(--jx-color-surface)',\n        color: 'var(--jx-color-text)',\n      }}\n    >\n      <div\n        role=\"group\"\n        aria-label=\"Фильтр по статусу\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--jx-space-2, 8px)' }}\n      >\n        {ALL_STATUSES.map((status) => {\n          const isOn = selected.includes(status);\n          return (\n            <button\n              key={status}\n              type=\"button\"\n              aria-pressed={isOn}\n              onClick={() => toggleStatus(status)}\n              style={{\n                display: 'inline-flex',\n                alignItems: 'center',\n                gap: 'var(--jx-space-1, 6px)',\n                padding: 'var(--jx-space-1, 4px) var(--jx-space-3, 12px)',\n                borderRadius: 'var(--jx-radius-pill, 999px)',\n                border: '1px solid currentColor',\n                cursor: 'pointer',\n                font: 'inherit',\n                fontSize: 'var(--jx-font-size-sm, 0.875rem)',\n                color: isOn ? STATUS_COLOR[status] : 'var(--jx-color-text-muted)',\n                background: isOn ? 'var(--jx-color-surface-raised)' : 'transparent',\n                opacity: isOn ? 1 : 0.65,\n              }}\n            >\n              <span>{STATUS_LABEL[status]}</span>\n              <span aria-hidden=\"true\">{isOn ? '×' : '+'}</span>\n            </button>\n          );\n        })}\n      </div>\n\n      {filtered.length === 0 ? (\n        <div\n          style={{\n            display: 'flex',\n            flexDirection: 'column',\n            alignItems: 'center',\n            gap: 'var(--jx-space-3, 12px)',\n            padding: 'var(--jx-space-6, 32px) var(--jx-space-4, 16px)',\n            textAlign: 'center',\n            borderRadius: 'var(--jx-radius-md, 8px)',\n            border: '1px dashed var(--jx-color-border)',\n          }}\n        >\n          <p style={{ margin: 0, fontWeight: 600 }}>Нет проектов под выбранные фильтры</p>\n          <p style={{ margin: 0, color: 'var(--jx-color-text-muted)' }}>\n            Снятые статусы скрыли все строки.\n          </p>\n          <JxButton variant=\"primary\" onClick={resetFilters}>\n            Сбросить фильтры\n          </JxButton>\n        </div>\n      ) : (\n        <>\n          <ul\n            style={{\n              listStyle: 'none',\n              margin: 0,\n              padding: 0,\n              display: 'flex',\n              flexDirection: 'column',\n              gap: 'var(--jx-space-2, 8px)',\n            }}\n          >\n            {rows.map((project) => {\n              const percent = Math.round((project.spent / project.quota) * 100);\n              const dashOffset = CIRCUMFERENCE * (1 - Math.min(percent, 100) / 100);\n              return (\n                <li\n                  key={project.id}\n                  style={{\n                    display: 'flex',\n                    alignItems: 'center',\n                    gap: 'var(--jx-space-3, 12px)',\n                    padding: 'var(--jx-space-3, 12px)',\n                    borderRadius: 'var(--jx-radius-md, 8px)',\n                    border: '1px solid var(--jx-color-border)',\n                  }}\n                >\n                  <span\n                    role=\"img\"\n                    aria-label={`Квота израсходована на ${percent} процентов`}\n                    style={{\n                      position: 'relative',\n                      display: 'inline-flex',\n                      alignItems: 'center',\n                      justifyContent: 'center',\n                      color: STATUS_COLOR[project.status],\n                    }}\n                  >\n                    <svg width={44} height={44} viewBox=\"0 0 44 44\" aria-hidden=\"true\">\n                      <circle\n                        cx={22}\n                        cy={22}\n                        r={RADIUS}\n                        fill=\"none\"\n                        strokeWidth={4}\n                        stroke=\"var(--jx-color-border)\"\n                      />\n                      <circle\n                        cx={22}\n                        cy={22}\n                        r={RADIUS}\n                        fill=\"none\"\n                        strokeWidth={4}\n                        strokeLinecap=\"round\"\n                        stroke=\"currentColor\"\n                        strokeDasharray={CIRCUMFERENCE}\n                        strokeDashoffset={dashOffset}\n                        transform=\"rotate(-90 22 22)\"\n                      />\n                    </svg>\n                    <span\n                      aria-hidden=\"true\"\n                      style={{\n                        position: 'absolute',\n                        fontSize: 'var(--jx-font-size-xs, 0.6875rem)',\n                        fontWeight: 600,\n                      }}\n                    >\n                      {percent}%\n                    </span>\n                  </span>\n\n                  <span style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>\n                    <span\n                      style={{\n                        fontWeight: 600,\n                        overflow: 'hidden',\n                        textOverflow: 'ellipsis',\n                        whiteSpace: 'nowrap',\n                      }}\n                    >\n                      {project.name}\n                    </span>\n                    <span\n                      style={{\n                        color: 'var(--jx-color-text-muted)',\n                        fontSize: 'var(--jx-font-size-sm, 0.875rem)',\n                      }}\n                    >\n                      {money.format(project.spent)} из {money.format(project.quota)}\n                    </span>\n                  </span>\n\n                  <span\n                    style={{\n                      padding: 'var(--jx-space-1, 4px) var(--jx-space-2, 8px)',\n                      borderRadius: 'var(--jx-radius-pill, 999px)',\n                      border: '1px solid currentColor',\n                      color: STATUS_COLOR[project.status],\n                      fontSize: 'var(--jx-font-size-sm, 0.875rem)',\n                      whiteSpace: 'nowrap',\n                    }}\n                  >\n                    {STATUS_LABEL[project.status]}\n                  </span>\n                </li>\n              );\n            })}\n          </ul>\n\n          <div\n            style={{\n              display: 'flex',\n              alignItems: 'center',\n              justifyContent: 'space-between',\n              gap: 'var(--jx-space-3, 12px)',\n            }}\n          >\n            <span\n              aria-live=\"polite\"\n              style={{\n                color: 'var(--jx-color-text-muted)',\n                fontSize: 'var(--jx-font-size-sm, 0.875rem)',\n              }}\n            >\n              Страница {currentPage + 1} из {pageCount} · {filtered.length} проектов\n            </span>\n            <span style={{ display: 'flex', gap: 'var(--jx-space-2, 8px)' }}>\n              <JxButton\n                onClick={() => setPage(Math.max(0, currentPage - 1))}\n                disabled={currentPage === 0}\n              >\n                Назад\n              </JxButton>\n              <JxButton\n                onClick={() => setPage(Math.min(pageCount - 1, currentPage + 1))}\n                disabled={currentPage >= pageCount - 1}\n              >\n                Вперёд\n              </JxButton>\n            </span>\n          </div>\n        </>\n      )}\n    </section>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 85,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 99,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 109,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 133,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 144,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 145,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 155,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 170,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 182,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 214,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 224,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 226,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 236,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 246,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 263,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 272,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 279,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton"
+    ],
+    "expectedCoverage": 0,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.7
+  }
+}

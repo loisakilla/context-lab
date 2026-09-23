@@ -1,0 +1,145 @@
+{
+  "id": "usage-dashboard__none__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-23T16:50:42.107Z",
+  "repeat": 3,
+  "durationMs": 16702,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.1",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "none",
+  "task": {
+    "id": "usage-dashboard",
+    "title": "Панель расхода с фильтрами",
+    "prompt": "Сделай панель расхода по проектам. Сверху чипы-фильтры по статусу, которые можно снимать. Под ними на каждый проект строка с названием, круговым индикатором заполненности квоты в процентах и меткой статуса. Список постраничный, по пять строк. Если после фильтрации ничего не осталось, вместо списка показывается пустое состояние с кнопкой сброса фильтров.",
+    "taskType": "ui",
+    "expects": [
+      "JxChip",
+      "JxProgressCircle",
+      "JxBadge",
+      "JxPagination",
+      "JxEmptyState"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 8634,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2151,
+    "cacheRead": 8634,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.05810200000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\nimport {\n  Card,\n  Chip,\n  ChipGroup,\n  CircularProgress,\n  Badge,\n  Pagination,\n  EmptyState,\n  Button,\n  Stack,\n  Text,\n} from '@jinx-ui/react';\n\ntype ProjectStatus = 'active' | 'warning' | 'exceeded' | 'archived';\n\ninterface ProjectBudget {\n  id: string;\n  name: string;\n  quotaPercent: number;\n  status: ProjectStatus;\n}\n\nconst PROJECTS: ProjectBudget[] = [\n  { id: 'p1', name: 'Атлас', quotaPercent: 42, status: 'active' },\n  { id: 'p2', name: 'Нептун', quotaPercent: 78, status: 'warning' },\n  { id: 'p3', name: 'Орион', quotaPercent: 104, status: 'exceeded' },\n  { id: 'p4', name: 'Вектор', quotaPercent: 15, status: 'active' },\n  { id: 'p5', name: 'Гринвуд', quotaPercent: 60, status: 'archived' },\n  { id: 'p6', name: 'Спектр', quotaPercent: 91, status: 'warning' },\n  { id: 'p7', name: 'Пульсар', quotaPercent: 33, status: 'active' },\n  { id: 'p8', name: 'Меридиан', quotaPercent: 120, status: 'exceeded' },\n  { id: 'p9', name: 'Форум', quotaPercent: 8, status: 'active' },\n  { id: 'p10', name: 'Каскад', quotaPercent: 55, status: 'archived' },\n  { id: 'p11', name: 'Эхо', quotaPercent: 70, status: 'warning' },\n  { id: 'p12', name: 'Портал', quotaPercent: 99, status: 'exceeded' },\n];\n\nconst STATUS_LABEL: Record<ProjectStatus, string> = {\n  active: 'В норме',\n  warning: 'Близко к лимиту',\n  exceeded: 'Превышена',\n  archived: 'Архив',\n};\n\nconst STATUS_TONE: Record<ProjectStatus, 'success' | 'warning' | 'danger' | 'neutral'> = {\n  active: 'success',\n  warning: 'warning',\n  exceeded: 'danger',\n  archived: 'neutral',\n};\n\nconst STATUS_ORDER: ProjectStatus[] = ['active', 'warning', 'exceeded', 'archived'];\n\nconst PAGE_SIZE = 5;\n\nexport default function ProjectBudgetPanel() {\n  const [activeStatuses, setActiveStatuses] = useState<ProjectStatus[]>([]);\n  const [page, setPage] = useState(1);\n\n  const toggleStatus = (status: ProjectStatus) => {\n    setActiveStatuses((prev) =>\n      prev.includes(status) ? prev.filter((s) => s !== status) : [...prev, status]\n    );\n    setPage(1);\n  };\n\n  const resetFilters = () => {\n    setActiveStatuses([]);\n    setPage(1);\n  };\n\n  const filteredProjects = useMemo(() => {\n    if (activeStatuses.length === 0) return PROJECTS;\n    return PROJECTS.filter((project) => activeStatuses.includes(project.status));\n  }, [activeStatuses]);\n\n  const totalPages = Math.max(1, Math.ceil(filteredProjects.length / PAGE_SIZE));\n  const currentPage = Math.min(page, totalPages);\n\n  const pageItems = useMemo(() => {\n    const start = (currentPage - 1) * PAGE_SIZE;\n    return filteredProjects.slice(start, start + PAGE_SIZE);\n  }, [filteredProjects, currentPage]);\n\n  return (\n    <Card className=\"jx-p-6\">\n      <Stack direction=\"column\" gap=\"4\">\n        <Stack direction=\"column\" gap=\"2\">\n          <Text as=\"h2\" className=\"jx-text-lg jx-font-semibold\" style={{ color: 'var(--jx-color-text-primary)' }}>\n            Расход по проектам\n          </Text>\n          <ChipGroup>\n            {STATUS_ORDER.map((status) => (\n              <Chip\n                key={status}\n                selected={activeStatuses.includes(status)}\n                onClick={() => toggleStatus(status)}\n                onRemove={activeStatuses.includes(status) ? () => toggleStatus(status) : undefined}\n                tone={STATUS_TONE[status]}\n              >\n                {STATUS_LABEL[status]}\n              </Chip>\n            ))}\n          </ChipGroup>\n        </Stack>\n\n        {filteredProjects.length === 0 ? (\n          <EmptyState\n            title=\"Ничего не найдено\"\n            description=\"По выбранным фильтрам нет проектов с расходами.\"\n            action={\n              <Button variant=\"secondary\" onClick={resetFilters}>\n                Сбросить фильтры\n              </Button>\n            }\n          />\n        ) : (\n          <>\n            <Stack direction=\"column\" gap=\"3\">\n              {pageItems.map((project) => (\n                <Card key={project.id} variant=\"outlined\" className=\"jx-p-4\">\n                  <Stack direction=\"row\" align=\"center\" justify=\"space-between\" gap=\"4\">\n                    <Text className=\"jx-font-medium\" style={{ color: 'var(--jx-color-text-primary)' }}>\n                      {project.name}\n                    </Text>\n                    <Stack direction=\"row\" align=\"center\" gap=\"4\">\n                      <CircularProgress\n                        value={Math.min(project.quotaPercent, 100)}\n                        size=\"sm\"\n                        tone={STATUS_TONE[project.status]}\n                        label={`${project.quotaPercent}%`}\n                      />\n                      <Badge tone={STATUS_TONE[project.status]}>\n                        {STATUS_LABEL[project.status]}\n                      </Badge>\n                    </Stack>\n                  </Stack>\n                </Card>\n              ))}\n            </Stack>\n\n            {totalPages > 1 && (\n              <Pagination\n                page={currentPage}\n                pageCount={totalPages}\n                onPageChange={setPage}\n              />\n            )}\n          </>\n        )}\n      </Stack>\n    </Card>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport {\n  Card,\n  Chip,\n  ChipGroup,\n  CircularProgress,\n  Badge,\n  Pagination,\n  EmptyState,\n  Button,\n  Stack,\n  Text,\n} from '@jinx-ui/react';\n\ntype ProjectStatus = 'active' | 'warning' | 'exceeded' | 'archived';\n\ninterface ProjectBudget {\n  id: string;\n  name: string;\n  quotaPercent: number;\n  status: ProjectStatus;\n}\n\nconst PROJECTS: ProjectBudget[] = [\n  { id: 'p1', name: 'Атлас', quotaPercent: 42, status: 'active' },\n  { id: 'p2', name: 'Нептун', quotaPercent: 78, status: 'warning' },\n  { id: 'p3', name: 'Орион', quotaPercent: 104, status: 'exceeded' },\n  { id: 'p4', name: 'Вектор', quotaPercent: 15, status: 'active' },\n  { id: 'p5', name: 'Гринвуд', quotaPercent: 60, status: 'archived' },\n  { id: 'p6', name: 'Спектр', quotaPercent: 91, status: 'warning' },\n  { id: 'p7', name: 'Пульсар', quotaPercent: 33, status: 'active' },\n  { id: 'p8', name: 'Меридиан', quotaPercent: 120, status: 'exceeded' },\n  { id: 'p9', name: 'Форум', quotaPercent: 8, status: 'active' },\n  { id: 'p10', name: 'Каскад', quotaPercent: 55, status: 'archived' },\n  { id: 'p11', name: 'Эхо', quotaPercent: 70, status: 'warning' },\n  { id: 'p12', name: 'Портал', quotaPercent: 99, status: 'exceeded' },\n];\n\nconst STATUS_LABEL: Record<ProjectStatus, string> = {\n  active: 'В норме',\n  warning: 'Близко к лимиту',\n  exceeded: 'Превышена',\n  archived: 'Архив',\n};\n\nconst STATUS_TONE: Record<ProjectStatus, 'success' | 'warning' | 'danger' | 'neutral'> = {\n  active: 'success',\n  warning: 'warning',\n  exceeded: 'danger',\n  archived: 'neutral',\n};\n\nconst STATUS_ORDER: ProjectStatus[] = ['active', 'warning', 'exceeded', 'archived'];\n\nconst PAGE_SIZE = 5;\n\nexport default function ProjectBudgetPanel() {\n  const [activeStatuses, setActiveStatuses] = useState<ProjectStatus[]>([]);\n  const [page, setPage] = useState(1);\n\n  const toggleStatus = (status: ProjectStatus) => {\n    setActiveStatuses((prev) =>\n      prev.includes(status) ? prev.filter((s) => s !== status) : [...prev, status]\n    );\n    setPage(1);\n  };\n\n  const resetFilters = () => {\n    setActiveStatuses([]);\n    setPage(1);\n  };\n\n  const filteredProjects = useMemo(() => {\n    if (activeStatuses.length === 0) return PROJECTS;\n    return PROJECTS.filter((project) => activeStatuses.includes(project.status));\n  }, [activeStatuses]);\n\n  const totalPages = Math.max(1, Math.ceil(filteredProjects.length / PAGE_SIZE));\n  const currentPage = Math.min(page, totalPages);\n\n  const pageItems = useMemo(() => {\n    const start = (currentPage - 1) * PAGE_SIZE;\n    return filteredProjects.slice(start, start + PAGE_SIZE);\n  }, [filteredProjects, currentPage]);\n\n  return (\n    <Card className=\"jx-p-6\">\n      <Stack direction=\"column\" gap=\"4\">\n        <Stack direction=\"column\" gap=\"2\">\n          <Text as=\"h2\" className=\"jx-text-lg jx-font-semibold\" style={{ color: 'var(--jx-color-text-primary)' }}>\n            Расход по проектам\n          </Text>\n          <ChipGroup>\n            {STATUS_ORDER.map((status) => (\n              <Chip\n                key={status}\n                selected={activeStatuses.includes(status)}\n                onClick={() => toggleStatus(status)}\n                onRemove={activeStatuses.includes(status) ? () => toggleStatus(status) : undefined}\n                tone={STATUS_TONE[status]}\n              >\n                {STATUS_LABEL[status]}\n              </Chip>\n            ))}\n          </ChipGroup>\n        </Stack>\n\n        {filteredProjects.length === 0 ? (\n          <EmptyState\n            title=\"Ничего не найдено\"\n            description=\"По выбранным фильтрам нет проектов с расходами.\"\n            action={\n              <Button variant=\"secondary\" onClick={resetFilters}>\n                Сбросить фильтры\n              </Button>\n            }\n          />\n        ) : (\n          <>\n            <Stack direction=\"column\" gap=\"3\">\n              {pageItems.map((project) => (\n                <Card key={project.id} variant=\"outlined\" className=\"jx-p-4\">\n                  <Stack direction=\"row\" align=\"center\" justify=\"space-between\" gap=\"4\">\n                    <Text className=\"jx-font-medium\" style={{ color: 'var(--jx-color-text-primary)' }}>\n                      {project.name}\n                    </Text>\n                    <Stack direction=\"row\" align=\"center\" gap=\"4\">\n                      <CircularProgress\n                        value={Math.min(project.quotaPercent, 100)}\n                        size=\"sm\"\n                        tone={STATUS_TONE[project.status]}\n                        label={`${project.quotaPercent}%`}\n                      />\n                      <Badge tone={STATUS_TONE[project.status]}>\n                        {STATUS_LABEL[project.status]}\n                      </Badge>\n                    </Stack>\n                  </Stack>\n                </Card>\n              ))}\n            </Stack>\n\n            {totalPages > 1 && (\n              <Pagination\n                page={currentPage}\n                pageCount={totalPages}\n                onPageChange={setPage}\n              />\n            )}\n          </>\n        )}\n      </Stack>\n    </Card>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Card'."
+        },
+        {
+          "code": 2305,
+          "line": 4,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Chip'."
+        },
+        {
+          "code": 2305,
+          "line": 5,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'ChipGroup'."
+        },
+        {
+          "code": 2305,
+          "line": 6,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'CircularProgress'."
+        },
+        {
+          "code": 2724,
+          "line": 7,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Badge'. Did you mean 'JxBadge'?"
+        },
+        {
+          "code": 2724,
+          "line": 8,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Pagination'. Did you mean 'JxPagination'?"
+        },
+        {
+          "code": 2724,
+          "line": 9,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'EmptyState'. Did you mean 'JxEmptyState'?"
+        },
+        {
+          "code": 2724,
+          "line": 10,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 11,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 12,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        }
+      ],
+      "unknownComponents": [
+        "Badge",
+        "Button",
+        "Card",
+        "Chip",
+        "ChipGroup",
+        "CircularProgress",
+        "EmptyState",
+        "Pagination",
+        "Stack",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 90,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 124,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}
