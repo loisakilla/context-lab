@@ -5,9 +5,9 @@ import { loadRun } from '@/lib/data';
 
 export const dynamic = 'force-dynamic';
 
-export default async function RunPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const record = loadRun(id);
+export default async function RunPage({ params }: { params: Promise<{ library: string; id: string }> }) {
+  const { library, id } = await params;
+  const record = loadRun(decodeURIComponent(library), id);
   if (!record) notFound();
   return (
     <>

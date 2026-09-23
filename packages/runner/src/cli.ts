@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { buildNodeTypeBundle, createChecker, runChecks } from '@context-lab/checks';
@@ -11,13 +11,14 @@ import { buildMatrix, libraryKey } from './matrix.ts';
 import { commandMcpServer, repoMcpServer } from './mcp-config.ts';
 import { runFileName, runTask, type CodeChecker } from './run.ts';
 import { agentSandbox } from './sandbox.ts';
+import { libraryFolders, readRunFolder, runsFolder } from './store.ts';
 import { CONTEXT_MODES, DRIVER_NAMES, type ContextMode, type Driver, type DriverName, type RunRecord, type Task } from './types.ts';
 
 const USAGE = `context-lab runner
 
 Команды:
-  run      Прогнать задачи через агента и записать результаты в data/runs
-  matrix   Собрать data/matrix.json из записанных прогонов
+  run      Прогнать задачи через агента и записать результаты в data/runs/<версия библиотеки>
+  matrix   Собрать data/matrix.json из прогонов одной версии библиотеки
   tasks    Показать список задач
 
 Опции run:
@@ -34,7 +35,7 @@ const USAGE = `context-lab runner
 Опции matrix:
   -d, --driver <name>          Учитывать только прогоны этого драйвера
       --model <model>          Учитывать только прогоны этой модели
-      --library <key>          Учитывать только прогоны этой версии библиотеки: 0.1.0 или 0.1.0@63b81b6
+      --library <key>          Версия библиотеки, по умолчанию текущая из индекса: 0.1.0 или 0.1.0@63b81b6
   -o, --out <file>             Куда записать матрицу, по умолчанию из конфига`;
 
 function fail(message: string): never {
@@ -107,12 +108,14 @@ async function commandRun(config: LabConfig, values: Record<string, string | boo
   const sources = loadSources(config, values.rules as string | undefined);
   const tasks = pickTasks(loadTasks(config), values.task as string | undefined);
   const modes = pickModes(values.mode as string | undefined);
-  const runsDir = resolveFrom(config, config.runs);
+  const runsDir = runsFolder(resolveFrom(config, config.runs), sources.index.library);
   mkdirSync(runsDir, { recursive: true });
 
   process.stderr.write(`Собираю бандл типов для проверок...\n`);
   const checker = buildChecker(config);
-  process.stderr.write(`Прогон: задач ${tasks.length}, режимов ${modes.length}, повторов ${repeats}, драйвер ${driverName}, модель ${model}.\n`);
+  process.stderr.write(
+    `Прогон: задач ${tasks.length}, режимов ${modes.length}, повторов ${repeats}, драйвер ${driverName}, модель ${model}, библиотека ${libraryKey(sources.index.library)}.\n`,
+  );
 
   let done = 0;
   let skipped = 0;
@@ -143,15 +146,15 @@ async function commandRun(config: LabConfig, values: Record<string, string | boo
 }
 
 function commandMatrix(config: LabConfig, values: Record<string, string | boolean | undefined>): void {
-  const runsDir = resolveFrom(config, config.runs);
-  if (!existsSync(runsDir)) fail(`Папки ${config.runs} нет: сначала выполните contextlab run`);
+  const runsRoot = resolveFrom(config, config.runs);
   const driver = values.driver as string | undefined;
   const model = values.model as string | undefined;
-  const library = values.library as string | undefined;
-  const runs = readdirSync(runsDir)
-    .filter((file) => file.endsWith('.json'))
-    .map((file) => JSON.parse(readFileSync(path.join(runsDir, file), 'utf8')) as RunRecord)
-    .filter((run) => (!driver || run.driver === driver) && (!model || run.model === model) && (!library || libraryKey(run.library) === library));
+  const library = (values.library as string | undefined) ?? libraryKey(loadIndex(resolveFrom(config, config.index)).library);
+  const available = libraryFolders(runsRoot);
+  if (!available.includes(library)) {
+    fail(`Прогонов против ${library} нет. Записаны версии: ${available.length > 0 ? available.join(', ') : 'никакие'}. Выберите версию через --library.`);
+  }
+  const runs = readRunFolder(path.join(runsRoot, library)).filter((run) => (!driver || run.driver === driver) && (!model || run.model === model));
   if (runs.length === 0) fail('Нет ни одной записи прогона под заданные фильтры');
   let matrix: ReturnType<typeof buildMatrix>;
   try {

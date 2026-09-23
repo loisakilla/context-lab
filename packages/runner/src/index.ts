@@ -9,6 +9,7 @@ export { DRIVER_LABELS, MODE_LABELS, SOURCE_LABELS } from './labels.ts';
 export { buildMatrix, libraryKey, median } from './matrix.ts';
 export { commandMcpServer, MCP_SERVER_NAME, MCP_TOOL_NAMES, repoMcpServer } from './mcp-config.ts';
 export { agentSandbox } from './sandbox.ts';
+export { libraryFolders, readRunFolder, runsFolder } from './store.ts';
 export type { Matrix, MatrixCell } from './matrix.ts';
 export { canonicalModel, knownModels, priceOf, PRICES_UPDATED_AT } from './price.ts';
 export type { ModelPrice } from './price.ts';

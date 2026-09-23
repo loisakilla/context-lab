@@ -1,3 +1,6 @@
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { lintCode, usedComponents } from '@context-lab/checks';
 import { sampleIndex } from '../../index-tools/test/helpers.ts';
@@ -7,6 +10,7 @@ import { extractCode } from '../src/extract-code.ts';
 import { buildMatrix, libraryKey, median } from '../src/matrix.ts';
 import { priceOf } from '../src/price.ts';
 import { runTask } from '../src/run.ts';
+import { libraryFolders, readRunFolder, runsFolder } from '../src/store.ts';
 import type { Driver, RunRecord, Task } from '../src/types.ts';
 
 const index = sampleIndex();
@@ -208,5 +212,27 @@ describe('матрица', () => {
     expect(libraryKey(published)).toBe('0.1.0');
     expect(() => buildMatrix([run('old', sourceBuild), run('new', published)])).toThrow(/0\.1\.0@63b81b6, 0\.1\.0/);
     expect(buildMatrix([run('a', published), run('b', published)]).library).toEqual(published);
+  });
+});
+
+describe('хранилище прогонов', () => {
+  it('раскладывает прогоны по папкам версий и читает только папку своей версии', () => {
+    const dir = mkdtempSync(path.join(tmpdir(), 'runs-'));
+    const oldBuild = { version: '0.1.0', commit: '63b81b611c5912463052a5eda0da76ddfd1eb931' };
+    const published = { version: '0.1.0', commit: '' };
+    expect(runsFolder(dir, oldBuild)).toBe(path.join(dir, '0.1.0@63b81b6'));
+    expect(runsFolder(dir, published)).toBe(path.join(dir, '0.1.0'));
+
+    mkdirSync(runsFolder(dir, oldBuild), { recursive: true });
+    mkdirSync(runsFolder(dir, published), { recursive: true });
+    writeFileSync(path.join(runsFolder(dir, oldBuild), 'b.json'), JSON.stringify({ id: 'b' }), 'utf8');
+    writeFileSync(path.join(runsFolder(dir, oldBuild), 'a.json'), JSON.stringify({ id: 'a' }), 'utf8');
+    writeFileSync(path.join(runsFolder(dir, published), 'a.json'), JSON.stringify({ id: 'new' }), 'utf8');
+
+    expect(libraryFolders(dir)).toEqual(['0.1.0', '0.1.0@63b81b6']);
+    expect(readRunFolder(runsFolder(dir, oldBuild)).map((run) => run.id)).toEqual(['a', 'b']);
+    expect(readRunFolder(runsFolder(dir, published)).map((run) => run.id)).toEqual(['new']);
+    expect(readRunFolder(path.join(dir, 'missing'))).toEqual([]);
+    rmSync(dir, { recursive: true, force: true });
   });
 });

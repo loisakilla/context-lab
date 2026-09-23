@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildNodeTypeBundle, createChecker, runChecks } from '@context-lab/checks';
 import { loadConfig, loadIndex, resolveFrom } from '@context-lab/docgen';
-import { buildContext, contextTokens, CONTEXT_MODES, extractCode, runFileName, scoreOf, type ContextMode, type ContextSources, type RunRecord, type Task } from '@context-lab/runner';
+import { buildContext, contextTokens, CONTEXT_MODES, extractCode, runFileName, runsFolder, scoreOf, type ContextMode, type ContextSources, type RunRecord, type Task } from '@context-lab/runner';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const config = loadConfig(path.join(root, 'context-lab.config.json'));
@@ -18,7 +18,7 @@ const sources: ContextSources = {
 };
 
 const outputsDir = path.join(root, 'data', 'outputs');
-const runsDir = resolveFrom(config, config.runs);
+const runsDir = runsFolder(resolveFrom(config, config.runs), index.library);
 mkdirSync(runsDir, { recursive: true });
 
 const model = process.env.CONTEXT_LAB_MODEL ?? 'claude-opus-5';

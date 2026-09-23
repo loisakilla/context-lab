@@ -3,7 +3,7 @@ import { CompareControls } from '@/components/CompareControls';
 import { RunPane } from '@/components/RunPane';
 import { TopBar } from '@/components/TopBar';
 import { MODE_LABELS } from '@/lib/labels';
-import { loadLabData, loadRun, loadRunIndex, pickRun } from '@/lib/data';
+import { loadLabData, loadRun, loadRunIndex, pickRun, publishedLibrary } from '@/lib/data';
 import { libraryKey } from '@context-lab/runner/browser';
 
 export const dynamic = 'force-dynamic';
@@ -15,7 +15,8 @@ function first(value: string | string[] | undefined, fallback: string): string {
 export default async function ComparePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const params = await searchParams;
   const data = loadLabData();
-  const runs = loadRunIndex();
+  const library = publishedLibrary(data);
+  const runs = loadRunIndex(library);
   const tasks = data.tasks.filter((task) => runs.some((run) => run.taskId === task.id)).map((task) => ({ id: task.id, title: task.title }));
   const modes = data.matrix?.modes ?? [...new Set(runs.map((run) => run.mode))];
 
@@ -25,15 +26,12 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
 
   const leftPick = pickRun(runs, task, left, data.matrix);
   const rightPick = pickRun(runs, task, right, data.matrix);
-  const leftRun = leftPick ? loadRun(leftPick.id) : null;
-  const rightRun = rightPick ? loadRun(rightPick.id) : null;
+  const leftRun = leftPick ? loadRun(library, leftPick.id) : null;
+  const rightRun = rightPick ? loadRun(library, rightPick.id) : null;
   const prompt = leftRun?.task.prompt ?? rightRun?.task.prompt ?? '';
   const mismatched = leftRun && rightRun && (leftRun.model !== rightRun.model || leftRun.driver !== rightRun.driver);
   const currentLibrary = libraryKey(data.index.library);
-  const leftLibrary = leftRun ? libraryKey(leftRun.library) : null;
-  const rightLibrary = rightRun ? libraryKey(rightRun.library) : null;
-  const splitLibrary = leftLibrary !== null && rightLibrary !== null && leftLibrary !== rightLibrary;
-  const staleLibrary = [leftLibrary, rightLibrary].find((key) => key !== null && key !== currentLibrary) ?? null;
+  const staleLibrary = (leftRun || rightRun) && library !== currentLibrary ? library : null;
 
   return (
     <>
@@ -67,14 +65,7 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
           </Note>
         )}
 
-        {splitLibrary && (
-          <Note title="Прогоны сделаны против разных версий библиотеки">
-            Слева jinx-ui {leftLibrary}, справа {rightLibrary}. У версий разный набор компонентов и пропсов, поэтому разница в вердикте может объясняться
-            библиотекой, а не контекстом.
-          </Note>
-        )}
-
-        {!splitLibrary && staleLibrary && (
+        {staleLibrary && (
           <Note title="Прогоны сделаны против другой версии библиотеки">
             Эти прогоны записаны против jinx-ui {staleLibrary}, а лаборатория сейчас собирает контекст из {currentLibrary}. Они показывают, как контекст работал
             на той версии; чтобы сравнивать на текущей, перезапишите прогоны.

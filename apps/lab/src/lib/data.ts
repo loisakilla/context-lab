@@ -4,7 +4,7 @@ import path from 'node:path';
 import { loadConfig, loadIndex, resolveFrom, type LabConfig } from '@context-lab/docgen';
 import type { LibraryIndex } from '@context-lab/index-tools';
 import { loadRegistry, resolveRules, type Resolution } from '@context-lab/rules';
-import type { Matrix, RunRecord, Task } from '@context-lab/runner/browser';
+import { libraryKey, type Matrix, type RunRecord, type Task } from '@context-lab/runner/browser';
 
 export interface LabData {
   index: LibraryIndex;
@@ -57,9 +57,21 @@ export function loadLabData(): LabData {
   };
 }
 
-export function loadRuns(): RunRecord[] {
+const LIBRARY_KEY = /^[\w+-][\w.+@-]*$/;
+const RUN_ID = /^[\w+-][\w.+-]*$/;
+
+function runsRoot(): string {
   const config = labConfig();
-  const dir = resolveFrom(config, config.runs);
+  return resolveFrom(config, config.runs);
+}
+
+export function publishedLibrary(data: Pick<LabData, 'index' | 'matrix'>): string {
+  return libraryKey(data.matrix?.library ?? data.index.library);
+}
+
+export function loadRuns(library: string): RunRecord[] {
+  if (!LIBRARY_KEY.test(library)) return [];
+  const dir = path.join(runsRoot(), library);
   if (!existsSync(dir)) return [];
   return readdirSync(dir)
     .filter((file) => file.endsWith('.json'))
@@ -67,15 +79,14 @@ export function loadRuns(): RunRecord[] {
     .sort((a, b) => a.id.localeCompare(b.id));
 }
 
-export function loadRun(id: string): RunRecord | null {
-  const config = labConfig();
-  const file = path.join(resolveFrom(config, config.runs), `${id}.json`);
-  if (!/^[\w.+-]+$/.test(id) || !existsSync(file)) return null;
-  return JSON.parse(readFileSync(file, 'utf8')) as RunRecord;
+export function loadRun(library: string, id: string): RunRecord | null {
+  if (!LIBRARY_KEY.test(library) || !RUN_ID.test(id)) return null;
+  const file = path.join(runsRoot(), library, `${id}.json`);
+  return existsSync(file) ? (JSON.parse(readFileSync(file, 'utf8')) as RunRecord) : null;
 }
 
-export function loadRunIndex(): RunSummary[] {
-  return loadRuns().map((run) => ({
+export function loadRunIndex(library: string): RunSummary[] {
+  return loadRuns(library).map((run) => ({
     id: run.id,
     taskId: run.task.id,
     taskTitle: run.task.title,

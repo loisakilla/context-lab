@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { JxBadge, JxTable } from '@jinx-ui/react';
-import type { Matrix } from '@context-lab/runner/browser';
+import { libraryKey, type Matrix } from '@context-lab/runner/browser';
 import { MODE_LABELS } from '@/lib/labels';
 import { formatCost } from './Report';
 
@@ -11,6 +11,7 @@ function tone(passRate: number): 'success' | 'danger' | 'warning' {
 }
 
 export function MatrixTable({ matrix }: { matrix: Matrix }) {
+  const library = matrix.library ? libraryKey(matrix.library) : null;
   return (
     <div className="overflow-x-auto">
       <JxTable>
@@ -59,8 +60,8 @@ export function MatrixTable({ matrix }: { matrix: Matrix }) {
                 );
                 return (
                   <td key={mode}>
-                    {first ? (
-                      <Link href={`/run/${first}`} className="cell" aria-label={`${task.title}, режим «${MODE_LABELS[mode] ?? mode}»: открыть прогон`}>
+                    {first && library ? (
+                      <Link href={`/run/${library}/${first}`} className="cell" aria-label={`${task.title}, режим «${MODE_LABELS[mode] ?? mode}»: открыть прогон`}>
                         {body}
                       </Link>
                     ) : (
