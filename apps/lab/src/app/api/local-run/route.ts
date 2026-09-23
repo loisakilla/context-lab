@@ -1,40 +1,37 @@
-import path from 'node:path';
 import { agentSandbox, claudeCodeDriver, CONTEXT_MODES, repoMcpServer, runTask, type ContextMode, type Task } from '@context-lab/runner';
 import { checkCode } from '@/lib/checker';
 import { labConfig, loadLabData } from '@/lib/data';
+import { readJsonObject, sameOrigin, sendsJson } from '@/lib/request-guard';
 
 export const runtime = 'nodejs';
 export const maxDuration = 600;
 
-interface LocalRunBody {
-  taskId?: string;
-  prompt?: string;
-  expects?: string[];
-  mode?: string;
-  model?: string;
+function text(value: unknown): string | undefined {
+  return typeof value === 'string' ? value : undefined;
 }
 
 export async function POST(request: Request): Promise<Response> {
   if (process.env.CONTEXT_LAB_LOCAL !== '1') return Response.json({ error: 'Локальный режим выключен' }, { status: 404 });
+  if (!sameOrigin(request)) return Response.json({ error: 'Локальный прогон доступен только со страниц лаборатории' }, { status: 403 });
+  if (!sendsJson(request)) return Response.json({ error: 'Ожидается Content-Type: application/json' }, { status: 415 });
 
-  let body: LocalRunBody;
-  try {
-    body = (await request.json()) as LocalRunBody;
-  } catch {
-    return Response.json({ error: 'Ожидается JSON' }, { status: 400 });
-  }
+  const body = await readJsonObject(request);
+  if (!body) return Response.json({ error: 'Ожидается JSON-объект' }, { status: 400 });
 
-  const mode = body.mode as ContextMode;
+  const mode = text(body.mode) as ContextMode;
   if (!CONTEXT_MODES.includes(mode)) return Response.json({ error: `Неизвестный режим ${String(body.mode)}` }, { status: 400 });
 
   const data = loadLabData();
   const root = labConfig().root;
-  const known = body.taskId ? data.tasks.find((task) => task.id === body.taskId) : undefined;
-  const prompt = (body.prompt ?? known?.prompt ?? '').trim();
+  const taskId = text(body.taskId);
+  const promptText = text(body.prompt);
+  const known = taskId ? data.tasks.find((task) => task.id === taskId) : undefined;
+  const prompt = (promptText ?? known?.prompt ?? '').trim();
   if (prompt.length === 0) return Response.json({ error: 'Нужна задача: taskId или prompt' }, { status: 400 });
 
-  const task: Task = known ?? { id: 'custom', title: 'Своя задача', prompt, taskType: 'ui', expects: body.expects ?? [] };
-  if (known && body.prompt && body.prompt.trim() !== known.prompt) task.prompt = body.prompt.trim();
+  const expects = Array.isArray(body.expects) ? body.expects.filter((item): item is string => typeof item === 'string') : [];
+  const task: Task = known ? { ...known } : { id: 'custom', title: 'Своя задача', prompt, taskType: 'ui', expects };
+  if (known && promptText && promptText.trim() !== known.prompt) task.prompt = promptText.trim();
 
   const sources = { index: data.index, readme: data.readme, docs: data.docs, ...(data.rules ? { rules: data.rules } : {}) };
   try {
@@ -43,8 +40,9 @@ export async function POST(request: Request): Promise<Response> {
       mode,
       task,
       sources,
-      model: body.model ?? 'claude-opus-5',
+      model: text(body.model) ?? 'claude-opus-5',
       checker: { check: (code, expects) => checkCode(code, expects) },
+      signal: request.signal,
     });
     return Response.json(record);
   } catch (error) {
