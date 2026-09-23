@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { Select } from './ui';
-import { MODE_LABELS } from './MatrixTable';
+import { MODE_LABELS } from '@/lib/labels';
 
 interface CompareControlsProps {
   tasks: { id: string; title: string }[];

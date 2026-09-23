@@ -4,8 +4,6 @@ import type { Matrix } from '@context-lab/runner/browser';
 import { MODE_LABELS } from '@/lib/labels';
 import { formatCost } from './Report';
 
-export { MODE_LABELS };
-
 function tone(passRate: number): 'success' | 'danger' | 'warning' {
   if (passRate === 1) return 'success';
   if (passRate === 0) return 'danger';

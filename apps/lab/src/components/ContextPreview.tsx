@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import { Note } from './ui';
+import { SOURCE_LABELS } from '@/lib/labels';
 import { buildContext, contextTokens, type ContextMode, type ContextSources, type Task } from '@/lib/runner-browser';
 
 interface ContextPreviewProps {
@@ -16,13 +17,6 @@ const MODE_NOTES: Record<string, string> = {
   docs: 'Сгенерированный llms-full.txt: все компоненты с пропсами, значениями union-типов и примерами.',
   'docs+rules': 'Та же документация плюс скомпилированный набор правил jinx-ui.',
   mcp: 'Только описания инструментов. API нужных компонентов агент запрашивает сам по ходу работы, поэтому контекст до задачи маленький.',
-};
-
-const SOURCE_LABELS: Record<string, string> = {
-  readme: 'README',
-  docs: 'документация',
-  rules: 'правила',
-  tools: 'инструменты',
 };
 
 const BODY_LIMIT = 4000;

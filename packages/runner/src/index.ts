@@ -5,6 +5,7 @@ export type { ApiDriverOptions } from './drivers/api.ts';
 export { buildClaudeArgs, claudeCodeDriver, composePrompt, NOT_LOGGED_IN_HINT, parseStreamJson } from './drivers/claude-code.ts';
 export type { ClaudeCodeDriverOptions, McpServerConfig, ParsedStream } from './drivers/claude-code.ts';
 export { extractCode } from './extract-code.ts';
+export { DRIVER_LABELS, MODE_LABELS, SOURCE_LABELS } from './labels.ts';
 export { buildMatrix, libraryKey, median } from './matrix.ts';
 export { commandMcpServer, MCP_SERVER_NAME, MCP_TOOL_NAMES, repoMcpServer } from './mcp-config.ts';
 export { agentSandbox } from './sandbox.ts';

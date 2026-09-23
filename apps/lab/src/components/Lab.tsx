@@ -6,7 +6,8 @@ import { CONTEXT_MODES, estimateContext, knownModels, type ContextMode, type Mat
 import { describeApiError, runInBrowser, runLocally } from '@/lib/browser-run';
 import { ContextPreview } from './ContextPreview';
 import { KeyForm } from './KeyForm';
-import { MatrixTable, MODE_LABELS } from './MatrixTable';
+import { MODE_LABELS } from '@/lib/labels';
+import { MatrixTable } from './MatrixTable';
 import { Preview, type RenderStatus } from './Preview';
 import { Report } from './Report';
 import { Button, CodeBlock, Note, Select, Tabs, Textarea } from './ui';

@@ -1,8 +1,8 @@
 import { Note } from '@/components/ui';
 import { CompareControls } from '@/components/CompareControls';
-import { MODE_LABELS } from '@/components/MatrixTable';
 import { RunPane } from '@/components/RunPane';
 import { TopBar } from '@/components/TopBar';
+import { MODE_LABELS } from '@/lib/labels';
 import { loadLabData, loadRun, loadRunIndex, pickRun } from '@/lib/data';
 import { libraryKey } from '@context-lab/runner/browser';
 

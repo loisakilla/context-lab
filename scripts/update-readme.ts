@@ -2,17 +2,9 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadConfig, resolveFrom } from '@context-lab/docgen';
-import type { Matrix, MatrixCell } from '@context-lab/runner';
+import { MODE_LABELS, type Matrix, type MatrixCell } from '@context-lab/runner';
 
-const MODE_LABELS: Record<string, string> = {
-  none: 'без контекста',
-  readme: 'README',
-  docs: 'доки',
-  'docs+rules': 'доки + правила',
-  mcp: 'MCP',
-};
-
-const DRIVER_LABELS: Record<string, string> = {
+const DRIVER_PHRASES: Record<string, string> = {
   'claude-code': 'Claude Code по подписке',
   api: 'Anthropic API',
   subagent: 'агенты-исполнители',
@@ -136,7 +128,7 @@ if (others.length > 0) {
 
 const runsPerCell = matrix.cells.length > 0 ? matrix.generatedFrom / matrix.cells.length : 0;
 const repeats = Number.isInteger(runsPerCell) && runsPerCell > 1 ? `, по ${runsPerCell} прогона на ячейку` : '';
-const driver = matrix.driver ? `, драйвер ${DRIVER_LABELS[matrix.driver] ?? matrix.driver}` : '';
+const driver = matrix.driver ? `, драйвер ${DRIVER_PHRASES[matrix.driver] ?? matrix.driver}` : '';
 
 const block = [
   START,
