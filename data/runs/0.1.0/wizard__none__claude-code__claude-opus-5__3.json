@@ -1,0 +1,125 @@
+{
+  "id": "wizard__none__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T15:24:54.477Z",
+  "repeat": 3,
+  "durationMs": 23912,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 8603,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2223,
+    "cacheRead": 8603,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.05988650000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "// Component names assumed from @jinx-ui/react: Stepper/Step, Card, Stack, Field, Input, Text, Button.\n// Adjust the imports if the actual export names in your version differ.\nimport { useCallback, useMemo, useState } from 'react';\nimport {\n  Button,\n  Card,\n  Field,\n  Input,\n  Stack,\n  Stepper,\n  Step,\n  Text,\n} from '@jinx-ui/react';\n\ntype RegistrationValues = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype RegistrationWizardProps = {\n  onSubmit: (values: RegistrationValues) => void;\n  initialValues?: Partial<RegistrationValues>;\n};\n\nconst EMPTY: RegistrationValues = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nfunction RegistrationWizard({ onSubmit, initialValues }: RegistrationWizardProps) {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<RegistrationValues>({ ...EMPTY, ...initialValues });\n\n  const setField = useCallback(\n    (field: keyof RegistrationValues) => (event: { target: { value: string } }) => {\n      setValues((prev) => ({ ...prev, [field]: event.target.value }));\n    },\n    [],\n  );\n\n  const isLast = step === STEPS.length - 1;\n\n  const summary = useMemo(\n    () => [\n      ['Имя', values.name],\n      ['E-mail', values.email],\n      ['Телефон', values.phone],\n      ['Страна', values.country],\n      ['Город', values.city],\n      ['Улица, дом', values.street],\n      ['Индекс', values.zip],\n    ],\n    [values],\n  );\n\n  return (\n    <Card className=\"jx-card jx-p-lg\" style={{ maxWidth: 'var(--jx-size-container-sm)' }}>\n      <Stack direction=\"vertical\" gap=\"lg\">\n        <Stepper activeStep={step} className=\"jx-stepper\">\n          {STEPS.map((label, index) => (\n            <Step key={label} index={index} label={label} />\n          ))}\n        </Stepper>\n\n        {step === 0 && (\n          <Stack direction=\"vertical\" gap=\"md\">\n            <Field label=\"Имя\" htmlFor=\"reg-name\">\n              <Input id=\"reg-name\" value={values.name} onChange={setField('name')} autoComplete=\"name\" />\n            </Field>\n            <Field label=\"E-mail\" htmlFor=\"reg-email\">\n              <Input id=\"reg-email\" type=\"email\" value={values.email} onChange={setField('email')} autoComplete=\"email\" />\n            </Field>\n            <Field label=\"Телефон\" htmlFor=\"reg-phone\">\n              <Input id=\"reg-phone\" type=\"tel\" value={values.phone} onChange={setField('phone')} autoComplete=\"tel\" />\n            </Field>\n          </Stack>\n        )}\n\n        {step === 1 && (\n          <Stack direction=\"vertical\" gap=\"md\">\n            <Field label=\"Страна\" htmlFor=\"reg-country\">\n              <Input id=\"reg-country\" value={values.country} onChange={setField('country')} autoComplete=\"country-name\" />\n            </Field>\n            <Field label=\"Город\" htmlFor=\"reg-city\">\n              <Input id=\"reg-city\" value={values.city} onChange={setField('city')} autoComplete=\"address-level2\" />\n            </Field>\n            <Field label=\"Улица, дом\" htmlFor=\"reg-street\">\n              <Input id=\"reg-street\" value={values.street} onChange={setField('street')} autoComplete=\"street-address\" />\n            </Field>\n            <Field label=\"Индекс\" htmlFor=\"reg-zip\">\n              <Input id=\"reg-zip\" value={values.zip} onChange={setField('zip')} autoComplete=\"postal-code\" />\n            </Field>\n          </Stack>\n        )}\n\n        {step === 2 && (\n          <Stack direction=\"vertical\" gap=\"sm\">\n            {summary.map(([label, value]) => (\n              <Stack key={label} direction=\"horizontal\" gap=\"md\" justify=\"space-between\">\n                <Text tone=\"muted\">{label}</Text>\n                <Text>{value || '—'}</Text>\n              </Stack>\n            ))}\n          </Stack>\n        )}\n\n        <Stack direction=\"horizontal\" gap=\"sm\" justify=\"space-between\">\n          <Button variant=\"secondary\" disabled={step === 0} onClick={() => setStep((s) => s - 1)}>\n            Назад\n          </Button>\n          {isLast ? (\n            <Button variant=\"primary\" onClick={() => onSubmit(values)}>\n              Отправить\n            </Button>\n          ) : (\n            <Button variant=\"primary\" onClick={() => setStep((s) => s + 1)}>\n              Дальше\n            </Button>\n          )}\n        </Stack>\n      </Stack>\n    </Card>\n  );\n}\n\nexport default RegistrationWizard;",
+    "text": "```tsx\n// Component names assumed from @jinx-ui/react: Stepper/Step, Card, Stack, Field, Input, Text, Button.\n// Adjust the imports if the actual export names in your version differ.\nimport { useCallback, useMemo, useState } from 'react';\nimport {\n  Button,\n  Card,\n  Field,\n  Input,\n  Stack,\n  Stepper,\n  Step,\n  Text,\n} from '@jinx-ui/react';\n\ntype RegistrationValues = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype RegistrationWizardProps = {\n  onSubmit: (values: RegistrationValues) => void;\n  initialValues?: Partial<RegistrationValues>;\n};\n\nconst EMPTY: RegistrationValues = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nfunction RegistrationWizard({ onSubmit, initialValues }: RegistrationWizardProps) {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<RegistrationValues>({ ...EMPTY, ...initialValues });\n\n  const setField = useCallback(\n    (field: keyof RegistrationValues) => (event: { target: { value: string } }) => {\n      setValues((prev) => ({ ...prev, [field]: event.target.value }));\n    },\n    [],\n  );\n\n  const isLast = step === STEPS.length - 1;\n\n  const summary = useMemo(\n    () => [\n      ['Имя', values.name],\n      ['E-mail', values.email],\n      ['Телефон', values.phone],\n      ['Страна', values.country],\n      ['Город', values.city],\n      ['Улица, дом', values.street],\n      ['Индекс', values.zip],\n    ],\n    [values],\n  );\n\n  return (\n    <Card className=\"jx-card jx-p-lg\" style={{ maxWidth: 'var(--jx-size-container-sm)' }}>\n      <Stack direction=\"vertical\" gap=\"lg\">\n        <Stepper activeStep={step} className=\"jx-stepper\">\n          {STEPS.map((label, index) => (\n            <Step key={label} index={index} label={label} />\n          ))}\n        </Stepper>\n\n        {step === 0 && (\n          <Stack direction=\"vertical\" gap=\"md\">\n            <Field label=\"Имя\" htmlFor=\"reg-name\">\n              <Input id=\"reg-name\" value={values.name} onChange={setField('name')} autoComplete=\"name\" />\n            </Field>\n            <Field label=\"E-mail\" htmlFor=\"reg-email\">\n              <Input id=\"reg-email\" type=\"email\" value={values.email} onChange={setField('email')} autoComplete=\"email\" />\n            </Field>\n            <Field label=\"Телефон\" htmlFor=\"reg-phone\">\n              <Input id=\"reg-phone\" type=\"tel\" value={values.phone} onChange={setField('phone')} autoComplete=\"tel\" />\n            </Field>\n          </Stack>\n        )}\n\n        {step === 1 && (\n          <Stack direction=\"vertical\" gap=\"md\">\n            <Field label=\"Страна\" htmlFor=\"reg-country\">\n              <Input id=\"reg-country\" value={values.country} onChange={setField('country')} autoComplete=\"country-name\" />\n            </Field>\n            <Field label=\"Город\" htmlFor=\"reg-city\">\n              <Input id=\"reg-city\" value={values.city} onChange={setField('city')} autoComplete=\"address-level2\" />\n            </Field>\n            <Field label=\"Улица, дом\" htmlFor=\"reg-street\">\n              <Input id=\"reg-street\" value={values.street} onChange={setField('street')} autoComplete=\"street-address\" />\n            </Field>\n            <Field label=\"Индекс\" htmlFor=\"reg-zip\">\n              <Input id=\"reg-zip\" value={values.zip} onChange={setField('zip')} autoComplete=\"postal-code\" />\n            </Field>\n          </Stack>\n        )}\n\n        {step === 2 && (\n          <Stack direction=\"vertical\" gap=\"sm\">\n            {summary.map(([label, value]) => (\n              <Stack key={label} direction=\"horizontal\" gap=\"md\" justify=\"space-between\">\n                <Text tone=\"muted\">{label}</Text>\n                <Text>{value || '—'}</Text>\n              </Stack>\n            ))}\n          </Stack>\n        )}\n\n        <Stack direction=\"horizontal\" gap=\"sm\" justify=\"space-between\">\n          <Button variant=\"secondary\" disabled={step === 0} onClick={() => setStep((s) => s - 1)}>\n            Назад\n          </Button>\n          {isLast ? (\n            <Button variant=\"primary\" onClick={() => onSubmit(values)}>\n              Отправить\n            </Button>\n          ) : (\n            <Button variant=\"primary\" onClick={() => setStep((s) => s + 1)}>\n              Дальше\n            </Button>\n          )}\n        </Stack>\n      </Stack>\n    </Card>\n  );\n}\n\nexport default RegistrationWizard;\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 5,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 6,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Card'."
+        },
+        {
+          "code": 2305,
+          "line": 7,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Field'."
+        },
+        {
+          "code": 2305,
+          "line": 8,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
+        },
+        {
+          "code": 2305,
+          "line": 9,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2724,
+          "line": 10,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Stepper'. Did you mean 'JxStepper'?"
+        },
+        {
+          "code": 2305,
+          "line": 11,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Step'."
+        },
+        {
+          "code": 2305,
+          "line": 12,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Card",
+        "Field",
+        "Input",
+        "Stack",
+        "Step",
+        "Stepper",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 69,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

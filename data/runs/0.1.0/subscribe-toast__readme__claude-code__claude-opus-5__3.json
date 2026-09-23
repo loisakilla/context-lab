@@ -1,0 +1,112 @@
+{
+  "id": "subscribe-toast__readme__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T15:36:12.911Z",
+  "repeat": 3,
+  "durationMs": 20607,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "subscribe-toast",
+    "title": "Подписка с уведомлением",
+    "prompt": "Сделай форму подписки на рассылку с полем для почты и кнопкой «Подписаться». После отправки поле очищается, а в углу экрана появляется уведомление «Готово» с текстом, что письмо отправлено.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxButton",
+      "JxToastViewport"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 9292,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1745,
+    "cacheRead": 9292,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.048281,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, type FormEvent } from 'react';\nimport { JxButton, JxField, JxInput, JxToast } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [toastOpen, setToastOpen] = useState(false);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!email.trim()) return;\n    setEmail('');\n    setToastOpen(true);\n  };\n\n  return (\n    <>\n      <form\n        className=\"jx-stack\"\n        style={{ gap: 'var(--jx-space-3)' }}\n        onSubmit={handleSubmit}\n        noValidate={false}\n      >\n        <JxField label=\"Электронная почта\" htmlFor=\"newsletter-email\">\n          <JxInput\n            id=\"newsletter-email\"\n            type=\"email\"\n            name=\"email\"\n            required\n            autoComplete=\"email\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onValueChange={setEmail}\n          />\n        </JxField>\n\n        <JxButton type=\"submit\" variant=\"primary\">\n          Подписаться\n        </JxButton>\n      </form>\n\n      <JxToast\n        open={toastOpen}\n        onOpenChange={setToastOpen}\n        position=\"bottom-right\"\n        duration={4000}\n        title=\"Готово\"\n        description=\"Письмо отправлено на указанный адрес.\"\n      />\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState, type FormEvent } from 'react';\nimport { JxButton, JxField, JxInput, JxToast } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [toastOpen, setToastOpen] = useState(false);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!email.trim()) return;\n    setEmail('');\n    setToastOpen(true);\n  };\n\n  return (\n    <>\n      <form\n        className=\"jx-stack\"\n        style={{ gap: 'var(--jx-space-3)' }}\n        onSubmit={handleSubmit}\n        noValidate={false}\n      >\n        <JxField label=\"Электронная почта\" htmlFor=\"newsletter-email\">\n          <JxInput\n            id=\"newsletter-email\"\n            type=\"email\"\n            name=\"email\"\n            required\n            autoComplete=\"email\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onValueChange={setEmail}\n          />\n        </JxField>\n\n        <JxButton type=\"submit\" variant=\"primary\">\n          Подписаться\n        </JxButton>\n      </form>\n\n      <JxToast\n        open={toastOpen}\n        onOpenChange={setToastOpen}\n        position=\"bottom-right\"\n        duration={4000}\n        title=\"Готово\"\n        description=\"Письмо отправлено на указанный адрес.\"\n      />\n    </>\n  );\n}\n```\n\nЗамечание вне формата, но важное: из README я знаю только конвенцию `Jx*` и контракт `value`/`onValueChange` + `open`/`onOpenChange`; конкретные имена `JxField`, `JxInput`, `JxToast` и пропсы `position`/`duration`/`title`/`description` я не проверял по типам пакета — сверься с d.ts перед использованием."
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxField'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxInput'."
+        },
+        {
+          "code": 2322,
+          "line": 42,
+          "message": "Type '{ open: boolean; onOpenChange: Dispatch<SetStateAction<boolean>>; position: string; duration: number; title: string; description: string; }' is not assignable to type 'IntrinsicAttributes & JxToastProps'.\n  Property 'open' does not exist on type 'IntrinsicAttributes & JxToastProps'."
+        }
+      ],
+      "unknownComponents": [
+        "JxField",
+        "JxInput"
+      ],
+      "unknownProps": [
+        {
+          "component": "JxToast",
+          "prop": "open"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 19,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxField",
+      "JxInput",
+      "JxToast"
+    ],
+    "expectedCoverage": 0.33,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.38
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "id": "date-range__readme__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-23T15:29:47.416Z",
+  "repeat": 3,
+  "durationMs": 6443,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "date-range",
+    "title": "Выбор периода",
+    "prompt": "Сделай выбор даты отчёта: календарь на месяц и над ним ряд быстрых вариантов «Сегодня», «Вчера», «Неделя назад», при нажатии на которые дата подставляется в календарь. Выбранная дата отдаётся наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxCalendar",
+      "JxChip"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 9318,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 642,
+    "cacheRead": 9318,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.020718999999999998,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxButton, JxCalendar } from '@jinx-ui/react';\n\nfunction startOfDay(date: Date): Date {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n}\n\nfunction addDays(date: Date, days: number): Date {\n  const result = new Date(date);\n  result.setDate(result.getDate() + days);\n  return result;\n}\n\ninterface ReportDatePickerProps {\n  onChange?: (date: Date) => void;\n}\n\nexport default function ReportDatePicker({ onChange }: ReportDatePickerProps) {\n  const [selectedDate, setSelectedDate] = useState<Date>(() => startOfDay(new Date()));\n\n  const handleChange = (date: Date) => {\n    const normalized = startOfDay(date);\n    setSelectedDate(normalized);\n    onChange?.(normalized);\n  };\n\n  const quickOptions = [\n    { label: 'Сегодня', getDate: () => startOfDay(new Date()) },\n    { label: 'Вчера', getDate: () => addDays(startOfDay(new Date()), -1) },\n    { label: 'Неделя назад', getDate: () => addDays(startOfDay(new Date()), -7) },\n  ];\n\n  return (\n    <div className=\"jx-stack\" style={{ gap: 'var(--jx-space-3)' }}>\n      <div className=\"jx-inline\" style={{ gap: 'var(--jx-space-2)' }}>\n        {quickOptions.map((option) => (\n          <JxButton\n            key={option.label}\n            variant=\"secondary\"\n            size=\"sm\"\n            onPress={() => handleChange(option.getDate())}\n          >\n            {option.label}\n          </JxButton>\n        ))}\n      </div>\n      <JxCalendar value={selectedDate} onValueChange={handleChange} />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxCalendar } from '@jinx-ui/react';\n\nfunction startOfDay(date: Date): Date {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n}\n\nfunction addDays(date: Date, days: number): Date {\n  const result = new Date(date);\n  result.setDate(result.getDate() + days);\n  return result;\n}\n\ninterface ReportDatePickerProps {\n  onChange?: (date: Date) => void;\n}\n\nexport default function ReportDatePicker({ onChange }: ReportDatePickerProps) {\n  const [selectedDate, setSelectedDate] = useState<Date>(() => startOfDay(new Date()));\n\n  const handleChange = (date: Date) => {\n    const normalized = startOfDay(date);\n    setSelectedDate(normalized);\n    onChange?.(normalized);\n  };\n\n  const quickOptions = [\n    { label: 'Сегодня', getDate: () => startOfDay(new Date()) },\n    { label: 'Вчера', getDate: () => addDays(startOfDay(new Date()), -1) },\n    { label: 'Неделя назад', getDate: () => addDays(startOfDay(new Date()), -7) },\n  ];\n\n  return (\n    <div className=\"jx-stack\" style={{ gap: 'var(--jx-space-3)' }}>\n      <div className=\"jx-inline\" style={{ gap: 'var(--jx-space-2)' }}>\n        {quickOptions.map((option) => (\n          <JxButton\n            key={option.label}\n            variant=\"secondary\"\n            size=\"sm\"\n            onPress={() => handleChange(option.getDate())}\n          >\n            {option.label}\n          </JxButton>\n        ))}\n      </div>\n      <JxCalendar value={selectedDate} onValueChange={handleChange} />\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2322,
+          "line": 43,
+          "message": "Type '{ children: string; key: string; variant: \"secondary\"; size: \"sm\"; onPress: () => void; }' is not assignable to type 'IntrinsicAttributes & ButtonHTMLAttributes<HTMLButtonElement> & { variant?: JxButtonVariant | undefined; size?: JxButtonSize | undefined; iconOnly?: boolean | undefined; }'.\n  Property 'onPress' does not exist on type 'IntrinsicAttributes & ButtonHTMLAttributes<HTMLButtonElement> & { variant?: JxButtonVariant | undefined; size?: JxButtonSize | undefined; iconOnly?: boolean | undefined; }'."
+        },
+        {
+          "code": 2322,
+          "line": 49,
+          "message": "Type '(date: Date) => void' is not assignable to type '(value: Date | null) => void'.\n  Types of parameters 'date' and 'value' are incompatible.\n    Type 'Date | null' is not assignable to type 'Date'.\n      Type 'null' is not assignable to type 'Date'."
+        }
+      ],
+      "unknownComponents": [],
+      "unknownProps": [
+        {
+          "component": "JxButton",
+          "prop": "onPress"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 36,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 37,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxCalendar"
+    ],
+    "expectedCoverage": 0.5,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.57
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "id": "date-range__readme__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-23T15:29:34.625Z",
+  "repeat": 1,
+  "durationMs": 6668,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "date-range",
+    "title": "Выбор периода",
+    "prompt": "Сделай выбор даты отчёта: календарь на месяц и над ним ряд быстрых вариантов «Сегодня», «Вчера», «Неделя назад», при нажатии на которые дата подставляется в календарь. Выбранная дата отдаётся наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxCalendar",
+      "JxChip"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 8235,
+        "cacheCreation": 1083
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 614,
+    "cacheRead": 8235,
+    "cacheCreation": 1083
+  },
+  "costUsd": 0.02624625,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxButton, JxCalendar } from '@jinx-ui/react';\n\ninterface ReportDatePickerProps {\n  onChange?: (date: Date) => void;\n}\n\nfunction startOfDay(date: Date): Date {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n}\n\nfunction addDays(date: Date, days: number): Date {\n  const result = new Date(date);\n  result.setDate(result.getDate() + days);\n  return result;\n}\n\nexport default function ReportDatePicker({ onChange }: ReportDatePickerProps) {\n  const [selected, setSelected] = useState<Date>(() => startOfDay(new Date()));\n\n  const handleSelect = (date: Date) => {\n    const normalized = startOfDay(date);\n    setSelected(normalized);\n    onChange?.(normalized);\n  };\n\n  const quickOptions = [\n    { label: 'Сегодня', getValue: () => startOfDay(new Date()) },\n    { label: 'Вчера', getValue: () => addDays(startOfDay(new Date()), -1) },\n    { label: 'Неделя назад', getValue: () => addDays(startOfDay(new Date()), -7) },\n  ];\n\n  return (\n    <div className=\"jx-stack jx-stack-gap-md\">\n      <div className=\"jx-inline jx-inline-gap-sm\">\n        {quickOptions.map((option) => (\n          <JxButton\n            key={option.label}\n            variant=\"secondary\"\n            size=\"sm\"\n            onClick={() => handleSelect(option.getValue())}\n          >\n            {option.label}\n          </JxButton>\n        ))}\n      </div>\n      <JxCalendar\n        value={selected}\n        onValueChange={handleSelect}\n      />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxCalendar } from '@jinx-ui/react';\n\ninterface ReportDatePickerProps {\n  onChange?: (date: Date) => void;\n}\n\nfunction startOfDay(date: Date): Date {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n}\n\nfunction addDays(date: Date, days: number): Date {\n  const result = new Date(date);\n  result.setDate(result.getDate() + days);\n  return result;\n}\n\nexport default function ReportDatePicker({ onChange }: ReportDatePickerProps) {\n  const [selected, setSelected] = useState<Date>(() => startOfDay(new Date()));\n\n  const handleSelect = (date: Date) => {\n    const normalized = startOfDay(date);\n    setSelected(normalized);\n    onChange?.(normalized);\n  };\n\n  const quickOptions = [\n    { label: 'Сегодня', getValue: () => startOfDay(new Date()) },\n    { label: 'Вчера', getValue: () => addDays(startOfDay(new Date()), -1) },\n    { label: 'Неделя назад', getValue: () => addDays(startOfDay(new Date()), -7) },\n  ];\n\n  return (\n    <div className=\"jx-stack jx-stack-gap-md\">\n      <div className=\"jx-inline jx-inline-gap-sm\">\n        {quickOptions.map((option) => (\n          <JxButton\n            key={option.label}\n            variant=\"secondary\"\n            size=\"sm\"\n            onClick={() => handleSelect(option.getValue())}\n          >\n            {option.label}\n          </JxButton>\n        ))}\n      </div>\n      <JxCalendar\n        value={selected}\n        onValueChange={handleSelect}\n      />\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2322,
+          "line": 51,
+          "message": "Type '(date: Date) => void' is not assignable to type '(value: Date | null) => void'.\n  Types of parameters 'date' and 'value' are incompatible.\n    Type 'Date | null' is not assignable to type 'Date'.\n      Type 'null' is not assignable to type 'Date'."
+        }
+      ],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [
+      "JxButton",
+      "JxCalendar"
+    ],
+    "expectedCoverage": 0.5,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.71
+  }
+}

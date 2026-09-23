@@ -1,0 +1,114 @@
+{
+  "id": "settings-form__none__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T15:21:23.033Z",
+  "repeat": 2,
+  "durationMs": 20952,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "settings-form",
+    "title": "Форма настроек",
+    "prompt": "Сделай форму настроек профиля: поле «Имя», выбор языка интерфейса из списка (русский, английский), переключатель «Уведомления на почту» и кнопка «Сохранить». Состояние полей храни в компоненте, при отправке вызывай переданный колбэк onSave с объектом настроек.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 8600,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1522,
+    "cacheRead": 8600,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.04236,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "// Jinx UI export/prop names below are assumed (TextField/Select/Switch/Button, value-based onChange) — verify against the installed @jinx-ui/react version.\nimport { useState } from 'react';\nimport { Button, Form, Select, Stack, Switch, TextField } from '@jinx-ui/react';\n\nexport type ProfileSettings = {\n  name: string;\n  language: 'ru' | 'en';\n  emailNotifications: boolean;\n};\n\ntype ProfileSettingsFormProps = {\n  initialSettings?: Partial<ProfileSettings>;\n  onSave: (settings: ProfileSettings) => void;\n};\n\nconst LANGUAGE_OPTIONS = [\n  { value: 'ru', label: 'Русский' },\n  { value: 'en', label: 'English' },\n];\n\nfunction ProfileSettingsForm({ initialSettings, onSave }: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialSettings?.name ?? '');\n  const [language, setLanguage] = useState<ProfileSettings['language']>(\n    initialSettings?.language ?? 'ru',\n  );\n  const [emailNotifications, setEmailNotifications] = useState(\n    initialSettings?.emailNotifications ?? false,\n  );\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    onSave({ name: name.trim(), language, emailNotifications });\n  };\n\n  return (\n    <Form onSubmit={handleSubmit}>\n      <Stack direction=\"column\" style={{ gap: 'var(--jx-space-4)' }}>\n        <TextField\n          id=\"profile-name\"\n          label=\"Имя\"\n          value={name}\n          onChange={setName}\n          autoComplete=\"name\"\n        />\n\n        <Select\n          id=\"profile-language\"\n          label=\"Язык интерфейса\"\n          value={language}\n          options={LANGUAGE_OPTIONS}\n          onChange={(value: string) => setLanguage(value as ProfileSettings['language'])}\n        />\n\n        <Switch\n          id=\"profile-email-notifications\"\n          label=\"Уведомления на почту\"\n          checked={emailNotifications}\n          onChange={setEmailNotifications}\n        />\n\n        <Button type=\"submit\" variant=\"primary\">\n          Сохранить\n        </Button>\n      </Stack>\n    </Form>\n  );\n}\n\nexport default ProfileSettingsForm;",
+    "text": "```tsx\n// Jinx UI export/prop names below are assumed (TextField/Select/Switch/Button, value-based onChange) — verify against the installed @jinx-ui/react version.\nimport { useState } from 'react';\nimport { Button, Form, Select, Stack, Switch, TextField } from '@jinx-ui/react';\n\nexport type ProfileSettings = {\n  name: string;\n  language: 'ru' | 'en';\n  emailNotifications: boolean;\n};\n\ntype ProfileSettingsFormProps = {\n  initialSettings?: Partial<ProfileSettings>;\n  onSave: (settings: ProfileSettings) => void;\n};\n\nconst LANGUAGE_OPTIONS = [\n  { value: 'ru', label: 'Русский' },\n  { value: 'en', label: 'English' },\n];\n\nfunction ProfileSettingsForm({ initialSettings, onSave }: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialSettings?.name ?? '');\n  const [language, setLanguage] = useState<ProfileSettings['language']>(\n    initialSettings?.language ?? 'ru',\n  );\n  const [emailNotifications, setEmailNotifications] = useState(\n    initialSettings?.emailNotifications ?? false,\n  );\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    onSave({ name: name.trim(), language, emailNotifications });\n  };\n\n  return (\n    <Form onSubmit={handleSubmit}>\n      <Stack direction=\"column\" style={{ gap: 'var(--jx-space-4)' }}>\n        <TextField\n          id=\"profile-name\"\n          label=\"Имя\"\n          value={name}\n          onChange={setName}\n          autoComplete=\"name\"\n        />\n\n        <Select\n          id=\"profile-language\"\n          label=\"Язык интерфейса\"\n          value={language}\n          options={LANGUAGE_OPTIONS}\n          onChange={(value: string) => setLanguage(value as ProfileSettings['language'])}\n        />\n\n        <Switch\n          id=\"profile-email-notifications\"\n          label=\"Уведомления на почту\"\n          checked={emailNotifications}\n          onChange={setEmailNotifications}\n        />\n\n        <Button type=\"submit\" variant=\"primary\">\n          Сохранить\n        </Button>\n      </Stack>\n    </Form>\n  );\n}\n\nexport default ProfileSettingsForm;\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 3,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Form'."
+        },
+        {
+          "code": 2724,
+          "line": 3,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Select'. Did you mean 'JxSelect'?"
+        },
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2724,
+          "line": 3,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Switch'. Did you mean 'JxSwitch'?"
+        },
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TextField'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Form",
+        "Select",
+        "Stack",
+        "Switch",
+        "TextField"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 37,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

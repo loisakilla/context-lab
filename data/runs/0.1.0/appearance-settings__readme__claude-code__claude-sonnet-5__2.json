@@ -1,0 +1,204 @@
+{
+  "id": "appearance-settings__readme__claude-code__claude-sonnet-5__2",
+  "createdAt": "2026-09-23T15:33:49.768Z",
+  "repeat": 2,
+  "durationMs": 35832,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "appearance-settings",
+    "title": "Настройки внешнего вида",
+    "prompt": "Сделай экран настроек внешнего вида: сегментированный переключатель темы на три варианта, ползунок масштаба интерфейса от 80 до 140 процентов с показом текущего значения, переключатель плотной вёрстки и раздел «Ещё» под разделителем с выбором шрифта. Справа от заголовка экрана метка с текущей темой. Состояние храни в компоненте и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxToggle",
+      "JxSlider",
+      "JxSwitch",
+      "JxDivider",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 9368,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 4839,
+    "cacheRead": 9368,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.125669,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport {\n  JxSegmentedControl,\n  JxSegmentedControlItem,\n  JxSlider,\n  JxSwitch,\n  JxSelect,\n  JxSelectOption,\n  JxDivider,\n  JxBadge,\n} from '@jinx-ui/react';\n\ntype Theme = 'light' | 'dark' | 'system';\ntype Font = 'system' | 'sans' | 'serif' | 'mono';\n\ninterface AppearanceSettings {\n  theme: Theme;\n  scale: number;\n  dense: boolean;\n  font: Font;\n}\n\ninterface AppearanceSettingsScreenProps {\n  defaultSettings?: AppearanceSettings;\n  onChange?: (settings: AppearanceSettings) => void;\n}\n\nconst THEME_LABELS: Record<Theme, string> = {\n  light: 'Светлая',\n  dark: 'Тёмная',\n  system: 'Системная',\n};\n\nconst FONT_LABELS: Record<Font, string> = {\n  system: 'Системный',\n  sans: 'Без засечек',\n  serif: 'С засечками',\n  mono: 'Моноширинный',\n};\n\nexport default function AppearanceSettingsScreen({\n  defaultSettings,\n  onChange,\n}: AppearanceSettingsScreenProps) {\n  const [settings, setSettings] = useState<AppearanceSettings>(\n    defaultSettings ?? { theme: 'system', scale: 100, dense: false, font: 'system' }\n  );\n\n  const update = (patch: Partial<AppearanceSettings>) => {\n    setSettings((prev) => {\n      const next = { ...prev, ...patch };\n      onChange?.(next);\n      return next;\n    });\n  };\n\n  return (\n    <section\n      className=\"jx-panel\"\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-6)',\n        padding: 'var(--jx-space-6)',\n      }}\n    >\n      <header\n        style={{\n          display: 'flex',\n          alignItems: 'center',\n          justifyContent: 'space-between',\n          gap: 'var(--jx-space-3)',\n        }}\n      >\n        <h2 className=\"jx-heading-md\">Внешний вид</h2>\n        <JxBadge variant=\"outline\">{THEME_LABELS[settings.theme]}</JxBadge>\n      </header>\n\n      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-2)' }}>\n        <span className=\"jx-label\">Тема</span>\n        <JxSegmentedControl\n          value={settings.theme}\n          onValueChange={(value) => update({ theme: value as Theme })}\n        >\n          <JxSegmentedControlItem value=\"light\">Светлая</JxSegmentedControlItem>\n          <JxSegmentedControlItem value=\"dark\">Тёмная</JxSegmentedControlItem>\n          <JxSegmentedControlItem value=\"system\">Системная</JxSegmentedControlItem>\n        </JxSegmentedControl>\n      </div>\n\n      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-2)' }}>\n        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>\n          <span className=\"jx-label\">Масштаб интерфейса</span>\n          <span className=\"jx-text-muted\">{settings.scale}%</span>\n        </div>\n        <JxSlider\n          min={80}\n          max={140}\n          step={5}\n          value={settings.scale}\n          onValueChange={(value) => update({ scale: Array.isArray(value) ? value[0] : value })}\n          aria-label=\"Масштаб интерфейса\"\n        />\n      </div>\n\n      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>\n        <div style={{ display: 'flex', flexDirection: 'column' }}>\n          <span className=\"jx-label\">Плотная вёрстка</span>\n          <span className=\"jx-text-muted\">Меньше отступов между элементами</span>\n        </div>\n        <JxSwitch\n          checked={settings.dense}\n          onCheckedChange={(checked) => update({ dense: checked })}\n          aria-label=\"Плотная вёрстка\"\n        />\n      </div>\n\n      <JxDivider />\n\n      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-3)' }}>\n        <h3 className=\"jx-heading-sm\">Ещё</h3>\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-2)' }}>\n          <span className=\"jx-label\">Шрифт</span>\n          <JxSelect\n            value={settings.font}\n            onValueChange={(value) => update({ font: value as Font })}\n          >\n            {(Object.keys(FONT_LABELS) as Font[]).map((font) => (\n              <JxSelectOption key={font} value={font}>\n                {FONT_LABELS[font]}\n              </JxSelectOption>\n            ))}\n          </JxSelect>\n        </div>\n      </div>\n    </section>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport {\n  JxSegmentedControl,\n  JxSegmentedControlItem,\n  JxSlider,\n  JxSwitch,\n  JxSelect,\n  JxSelectOption,\n  JxDivider,\n  JxBadge,\n} from '@jinx-ui/react';\n\ntype Theme = 'light' | 'dark' | 'system';\ntype Font = 'system' | 'sans' | 'serif' | 'mono';\n\ninterface AppearanceSettings {\n  theme: Theme;\n  scale: number;\n  dense: boolean;\n  font: Font;\n}\n\ninterface AppearanceSettingsScreenProps {\n  defaultSettings?: AppearanceSettings;\n  onChange?: (settings: AppearanceSettings) => void;\n}\n\nconst THEME_LABELS: Record<Theme, string> = {\n  light: 'Светлая',\n  dark: 'Тёмная',\n  system: 'Системная',\n};\n\nconst FONT_LABELS: Record<Font, string> = {\n  system: 'Системный',\n  sans: 'Без засечек',\n  serif: 'С засечками',\n  mono: 'Моноширинный',\n};\n\nexport default function AppearanceSettingsScreen({\n  defaultSettings,\n  onChange,\n}: AppearanceSettingsScreenProps) {\n  const [settings, setSettings] = useState<AppearanceSettings>(\n    defaultSettings ?? { theme: 'system', scale: 100, dense: false, font: 'system' }\n  );\n\n  const update = (patch: Partial<AppearanceSettings>) => {\n    setSettings((prev) => {\n      const next = { ...prev, ...patch };\n      onChange?.(next);\n      return next;\n    });\n  };\n\n  return (\n    <section\n      className=\"jx-panel\"\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-6)',\n        padding: 'var(--jx-space-6)',\n      }}\n    >\n      <header\n        style={{\n          display: 'flex',\n          alignItems: 'center',\n          justifyContent: 'space-between',\n          gap: 'var(--jx-space-3)',\n        }}\n      >\n        <h2 className=\"jx-heading-md\">Внешний вид</h2>\n        <JxBadge variant=\"outline\">{THEME_LABELS[settings.theme]}</JxBadge>\n      </header>\n\n      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-2)' }}>\n        <span className=\"jx-label\">Тема</span>\n        <JxSegmentedControl\n          value={settings.theme}\n          onValueChange={(value) => update({ theme: value as Theme })}\n        >\n          <JxSegmentedControlItem value=\"light\">Светлая</JxSegmentedControlItem>\n          <JxSegmentedControlItem value=\"dark\">Тёмная</JxSegmentedControlItem>\n          <JxSegmentedControlItem value=\"system\">Системная</JxSegmentedControlItem>\n        </JxSegmentedControl>\n      </div>\n\n      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-2)' }}>\n        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>\n          <span className=\"jx-label\">Масштаб интерфейса</span>\n          <span className=\"jx-text-muted\">{settings.scale}%</span>\n        </div>\n        <JxSlider\n          min={80}\n          max={140}\n          step={5}\n          value={settings.scale}\n          onValueChange={(value) => update({ scale: Array.isArray(value) ? value[0] : value })}\n          aria-label=\"Масштаб интерфейса\"\n        />\n      </div>\n\n      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>\n        <div style={{ display: 'flex', flexDirection: 'column' }}>\n          <span className=\"jx-label\">Плотная вёрстка</span>\n          <span className=\"jx-text-muted\">Меньше отступов между элементами</span>\n        </div>\n        <JxSwitch\n          checked={settings.dense}\n          onCheckedChange={(checked) => update({ dense: checked })}\n          aria-label=\"Плотная вёрстка\"\n        />\n      </div>\n\n      <JxDivider />\n\n      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-3)' }}>\n        <h3 className=\"jx-heading-sm\">Ещё</h3>\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-2)' }}>\n          <span className=\"jx-label\">Шрифт</span>\n          <JxSelect\n            value={settings.font}\n            onValueChange={(value) => update({ font: value as Font })}\n          >\n            {(Object.keys(FONT_LABELS) as Font[]).map((font) => (\n              <JxSelectOption key={font} value={font}>\n                {FONT_LABELS[font]}\n              </JxSelectOption>\n            ))}\n          </JxSelect>\n        </div>\n      </div>\n    </section>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxSegmentedControl'."
+        },
+        {
+          "code": 2305,
+          "line": 4,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxSegmentedControlItem'."
+        },
+        {
+          "code": 2322,
+          "line": 76,
+          "message": "Type '{ children: string; variant: string; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributes<HTMLSpanElement> & { tone?: JxBadgeTone | undefined; dot?: boolean | undefined; children?: ReactNode; }'.\n  Property 'variant' does not exist on type 'IntrinsicAttributes & HTMLAttributes<HTMLSpanElement> & { tone?: JxBadgeTone | undefined; dot?: boolean | undefined; children?: ReactNode; }'."
+        },
+        {
+          "code": 7006,
+          "line": 83,
+          "message": "Parameter 'value' implicitly has an 'any' type."
+        },
+        {
+          "code": 2322,
+          "line": 113,
+          "message": "Type '{ checked: boolean; onCheckedChange: (checked: any) => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Omit<InputHTMLAttributes<HTMLInputElement>, \"type\" | \"size\"> & { label?: ReactNode; wrapClassName?: string | undefined; }'.\n  Property 'onCheckedChange' does not exist on type 'IntrinsicAttributes & Omit<InputHTMLAttributes<HTMLInputElement>, \"type\" | \"size\"> & { label?: ReactNode; wrapClassName?: string | undefined; }'."
+        },
+        {
+          "code": 7006,
+          "line": 113,
+          "message": "Parameter 'checked' implicitly has an 'any' type."
+        },
+        {
+          "code": 2322,
+          "line": 124,
+          "message": "Type '{ children: Element[]; value: Font; onValueChange: (value: string) => void; }' is not assignable to type 'IntrinsicAttributes & JxSelectProps'.\n  Property 'children' does not exist on type 'IntrinsicAttributes & JxSelectProps'."
+        },
+        {
+          "code": 2693,
+          "line": 129,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 131,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        }
+      ],
+      "unknownComponents": [
+        "JxSegmentedControl",
+        "JxSegmentedControlItem"
+      ],
+      "unknownProps": [
+        {
+          "component": "JxBadge",
+          "prop": "variant"
+        },
+        {
+          "component": "JxSwitch",
+          "prop": "onCheckedChange"
+        },
+        {
+          "component": "JxSelect",
+          "prop": "children"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 60,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 68,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 79,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 91,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 92,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 106,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 107,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 120,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 122,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxBadge",
+      "JxDivider",
+      "JxSegmentedControl",
+      "JxSegmentedControlItem",
+      "JxSelect",
+      "JxSelectOption",
+      "JxSlider",
+      "JxSwitch"
+    ],
+    "expectedCoverage": 0.8,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.24
+  }
+}

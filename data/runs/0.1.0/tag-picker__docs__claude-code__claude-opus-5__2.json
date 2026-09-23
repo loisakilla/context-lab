@@ -1,0 +1,97 @@
+{
+  "id": "tag-picker__docs__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T15:51:10.156Z",
+  "repeat": 2,
+  "durationMs": 7498,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "docs",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 21573,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.0",
+        "tokens": 21419,
+        "hash": "666d3360d38750da"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 44827,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 642,
+    "cacheRead": 44827,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.038473499999999994,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxTagInput, JxChip, JxDivider } from '@jinx-ui/react';\n\ninterface ArticleTagsPickerProps {\n  label?: string;\n  defaultTags?: string[];\n  placeholder?: string;\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagsPicker({\n  label = 'Теги статьи',\n  defaultTags = [],\n  placeholder = 'Введите тег и нажмите Enter',\n  onChange,\n}: ArticleTagsPickerProps) {\n  const [tags, setTags] = useState<string[]>(defaultTags);\n\n  const update = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  const remove = (tag: string) => {\n    update(tags.filter((item) => item !== tag));\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n      <label className=\"jx-label\" htmlFor=\"article-tags\">\n        {label}\n      </label>\n      <JxTagInput\n        ariaLabel={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={update}\n      />\n      <JxDivider label=\"Выбранные теги\" />\n      {tags.length > 0 ? (\n        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>\n          {tags.map((tag) => (\n            <JxChip key={tag} active removable onRemove={() => remove(tag)}>\n              {tag}\n            </JxChip>\n          ))}\n        </div>\n      ) : (\n        <span style={{ color: 'var(--jx-text-3)', fontFamily: 'var(--jx-font-sans)' }}>\n          Пока ничего не выбрано\n        </span>\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxTagInput, JxChip, JxDivider } from '@jinx-ui/react';\n\ninterface ArticleTagsPickerProps {\n  label?: string;\n  defaultTags?: string[];\n  placeholder?: string;\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagsPicker({\n  label = 'Теги статьи',\n  defaultTags = [],\n  placeholder = 'Введите тег и нажмите Enter',\n  onChange,\n}: ArticleTagsPickerProps) {\n  const [tags, setTags] = useState<string[]>(defaultTags);\n\n  const update = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  const remove = (tag: string) => {\n    update(tags.filter((item) => item !== tag));\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n      <label className=\"jx-label\" htmlFor=\"article-tags\">\n        {label}\n      </label>\n      <JxTagInput\n        ariaLabel={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={update}\n      />\n      <JxDivider label=\"Выбранные теги\" />\n      {tags.length > 0 ? (\n        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>\n          {tags.map((tag) => (\n            <JxChip key={tag} active removable onRemove={() => remove(tag)}>\n              {tag}\n            </JxChip>\n          ))}\n        </div>\n      ) : (\n        <span style={{ color: 'var(--jx-text-3)', fontFamily: 'var(--jx-font-sans)' }}>\n          Пока ничего не выбрано\n        </span>\n      )}\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 29,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 41,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 49,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxChip",
+      "JxDivider",
+      "JxTagInput"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

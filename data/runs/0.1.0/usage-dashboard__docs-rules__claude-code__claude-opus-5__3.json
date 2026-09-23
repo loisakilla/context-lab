@@ -1,0 +1,136 @@
+{
+  "id": "usage-dashboard__docs-rules__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T15:59:55.180Z",
+  "repeat": 3,
+  "durationMs": 39194,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "docs+rules",
+  "task": {
+    "id": "usage-dashboard",
+    "title": "Панель расхода с фильтрами",
+    "prompt": "Сделай панель расхода по проектам. Сверху чипы-фильтры по статусу, которые можно снимать. Под ними на каждый проект строка с названием, круговым индикатором заполненности квоты в процентах и меткой статуса. Список постраничный, по пять строк. Если после фильтрации ничего не осталось, вместо списка показывается пустое состояние с кнопкой сброса фильтров.",
+    "taskType": "ui",
+    "expects": [
+      "JxChip",
+      "JxProgressCircle",
+      "JxBadge",
+      "JxPagination",
+      "JxEmptyState"
+    ]
+  },
+  "context": {
+    "tokens": 22656,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.0",
+        "tokens": 21419,
+        "hash": "666d3360d38750da"
+      },
+      {
+        "kind": "rules",
+        "id": "jinx-ui",
+        "version": "0.1.0",
+        "tokens": 1083,
+        "hash": "29f6363615252e9b"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 5,
+        "cacheRead": 46587,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 3635,
+    "cacheRead": 46587,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.11417850000000002,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\nimport {\n  JxBadge,\n  JxButton,\n  JxChip,\n  JxDivider,\n  JxEmptyState,\n  JxPagination,\n  JxProgressCircle,\n} from '@jinx-ui/react';\n\ntype StatusValue = 'active' | 'risk' | 'over' | 'archived';\n\ninterface SpendProject {\n  id: string;\n  name: string;\n  used: number;\n  quota: number;\n  status: StatusValue;\n}\n\ninterface ProjectSpendPanelProps {\n  projects?: SpendProject[];\n}\n\nconst STATUSES: Array<{\n  value: StatusValue;\n  label: string;\n  tone: 'success' | 'warning' | 'danger' | 'default';\n}> = [\n  { value: 'active', label: 'В норме', tone: 'success' },\n  { value: 'risk', label: 'Близко к лимиту', tone: 'warning' },\n  { value: 'over', label: 'Перерасход', tone: 'danger' },\n  { value: 'archived', label: 'Архив', tone: 'default' },\n];\n\nconst DEFAULT_PROJECTS: SpendProject[] = [\n  { id: 'p1', name: 'Контекстная лаборатория', used: 412, quota: 1000, status: 'active' },\n  { id: 'p2', name: 'Поисковый индекс документации', used: 870, quota: 1000, status: 'risk' },\n  { id: 'p3', name: 'Витрина отчётов для финансов', used: 1180, quota: 1000, status: 'over' },\n  { id: 'p4', name: 'Мобильный клиент', used: 240, quota: 800, status: 'active' },\n  { id: 'p5', name: 'Импорт из внешних CRM', used: 690, quota: 750, status: 'risk' },\n  { id: 'p6', name: 'Экспериментальный ранжировщик', used: 95, quota: 500, status: 'archived' },\n  { id: 'p7', name: 'Аналитика оттока пользователей', used: 530, quota: 900, status: 'active' },\n  { id: 'p8', name: 'Миграция биллинга', used: 1440, quota: 1200, status: 'over' },\n  { id: 'p9', name: 'Прогон регрессионных тестов', used: 310, quota: 400, status: 'risk' },\n  { id: 'p10', name: 'Старый портал партнёров', used: 60, quota: 600, status: 'archived' },\n  { id: 'p11', name: 'Синхронизация справочников', used: 355, quota: 700, status: 'active' },\n  { id: 'p12', name: 'Черновик нового онбординга', used: 20, quota: 300, status: 'archived' },\n];\n\nconst PAGE_SIZE = 5;\n\nexport default function ProjectSpendPanel({ projects = DEFAULT_PROJECTS }: ProjectSpendPanelProps) {\n  const [selected, setSelected] = useState<StatusValue[]>([]);\n  const [page, setPage] = useState(1);\n\n  const toggleStatus = (status: StatusValue) => {\n    setSelected((current) =>\n      current.includes(status) ? current.filter((item) => item !== status) : [...current, status],\n    );\n    setPage(1);\n  };\n\n  const resetFilters = () => {\n    setSelected([]);\n    setPage(1);\n  };\n\n  const filtered = useMemo(\n    () => (selected.length === 0 ? projects : projects.filter((project) => selected.includes(project.status))),\n    [projects, selected],\n  );\n\n  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n  const visible = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);\n\n  return (\n    <section\n      aria-label=\"Расход по проектам\"\n      style={{ display: 'flex', flexDirection: 'column', gap: '16px', fontFamily: 'var(--jx-font-sans)' }}\n    >\n      <div role=\"group\" aria-label=\"Фильтр по статусу\" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>\n        {STATUSES.map((status) => {\n          const isActive = selected.includes(status.value);\n          return (\n            <JxChip\n              key={status.value}\n              role=\"button\"\n              tabIndex={0}\n              aria-pressed={isActive}\n              active={isActive}\n              removable={isActive}\n              onRemove={() => toggleStatus(status.value)}\n              onClick={() => toggleStatus(status.value)}\n              onKeyDown={(event) => {\n                if (event.key === 'Enter' || event.key === ' ') {\n                  event.preventDefault();\n                  toggleStatus(status.value);\n                }\n              }}\n            >\n              {status.label}\n            </JxChip>\n          );\n        })}\n      </div>\n\n      <JxDivider />\n\n      {filtered.length === 0 ? (\n        <JxEmptyState\n          title=\"Под фильтры ничего не подошло\"\n          message=\"Ни один проект не попадает в выбранные статусы. Снимите фильтры, чтобы увидеть весь список.\"\n          action={\n            <JxButton variant=\"primary\" onClick={resetFilters}>\n              Сбросить фильтры\n            </JxButton>\n          }\n        />\n      ) : (\n        <>\n          <ul\n            style={{\n              display: 'flex',\n              flexDirection: 'column',\n              gap: '4px',\n              listStyle: 'none',\n              margin: 0,\n              padding: 0,\n            }}\n          >\n            {visible.map((project) => {\n              const status = STATUSES.find((item) => item.value === project.status);\n              const percent = Math.round((project.used / project.quota) * 100);\n              return (\n                <li\n                  key={project.id}\n                  style={{\n                    display: 'flex',\n                    alignItems: 'center',\n                    gap: '16px',\n                    padding: '12px',\n                    borderRadius: 'var(--jx-r)',\n                    background: 'var(--jx-surface)',\n                    border: '1px solid var(--jx-border)',\n                  }}\n                >\n                  <JxProgressCircle\n                    value={percent}\n                    max={100}\n                    showValue\n                    aria-label={`Квота проекта «${project.name}» заполнена на ${percent} процентов`}\n                  />\n                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0, flex: 1 }}>\n                    <span\n                      style={{\n                        color: 'var(--jx-text)',\n                        overflow: 'hidden',\n                        textOverflow: 'ellipsis',\n                        whiteSpace: 'nowrap',\n                      }}\n                    >\n                      {project.name}\n                    </span>\n                    <span style={{ color: 'var(--jx-text-2)', fontSize: '0.875rem' }}>\n                      {project.used} из {project.quota}\n                    </span>\n                  </div>\n                  <JxBadge tone={status?.tone ?? 'default'} dot>\n                    {status?.label ?? 'Без статуса'}\n                  </JxBadge>\n                </li>\n              );\n            })}\n          </ul>\n\n          <JxPagination\n            aria-label=\"Страницы списка проектов\"\n            total={pageCount}\n            page={currentPage}\n            onPageChange={setPage}\n          />\n        </>\n      )}\n    </section>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport {\n  JxBadge,\n  JxButton,\n  JxChip,\n  JxDivider,\n  JxEmptyState,\n  JxPagination,\n  JxProgressCircle,\n} from '@jinx-ui/react';\n\ntype StatusValue = 'active' | 'risk' | 'over' | 'archived';\n\ninterface SpendProject {\n  id: string;\n  name: string;\n  used: number;\n  quota: number;\n  status: StatusValue;\n}\n\ninterface ProjectSpendPanelProps {\n  projects?: SpendProject[];\n}\n\nconst STATUSES: Array<{\n  value: StatusValue;\n  label: string;\n  tone: 'success' | 'warning' | 'danger' | 'default';\n}> = [\n  { value: 'active', label: 'В норме', tone: 'success' },\n  { value: 'risk', label: 'Близко к лимиту', tone: 'warning' },\n  { value: 'over', label: 'Перерасход', tone: 'danger' },\n  { value: 'archived', label: 'Архив', tone: 'default' },\n];\n\nconst DEFAULT_PROJECTS: SpendProject[] = [\n  { id: 'p1', name: 'Контекстная лаборатория', used: 412, quota: 1000, status: 'active' },\n  { id: 'p2', name: 'Поисковый индекс документации', used: 870, quota: 1000, status: 'risk' },\n  { id: 'p3', name: 'Витрина отчётов для финансов', used: 1180, quota: 1000, status: 'over' },\n  { id: 'p4', name: 'Мобильный клиент', used: 240, quota: 800, status: 'active' },\n  { id: 'p5', name: 'Импорт из внешних CRM', used: 690, quota: 750, status: 'risk' },\n  { id: 'p6', name: 'Экспериментальный ранжировщик', used: 95, quota: 500, status: 'archived' },\n  { id: 'p7', name: 'Аналитика оттока пользователей', used: 530, quota: 900, status: 'active' },\n  { id: 'p8', name: 'Миграция биллинга', used: 1440, quota: 1200, status: 'over' },\n  { id: 'p9', name: 'Прогон регрессионных тестов', used: 310, quota: 400, status: 'risk' },\n  { id: 'p10', name: 'Старый портал партнёров', used: 60, quota: 600, status: 'archived' },\n  { id: 'p11', name: 'Синхронизация справочников', used: 355, quota: 700, status: 'active' },\n  { id: 'p12', name: 'Черновик нового онбординга', used: 20, quota: 300, status: 'archived' },\n];\n\nconst PAGE_SIZE = 5;\n\nexport default function ProjectSpendPanel({ projects = DEFAULT_PROJECTS }: ProjectSpendPanelProps) {\n  const [selected, setSelected] = useState<StatusValue[]>([]);\n  const [page, setPage] = useState(1);\n\n  const toggleStatus = (status: StatusValue) => {\n    setSelected((current) =>\n      current.includes(status) ? current.filter((item) => item !== status) : [...current, status],\n    );\n    setPage(1);\n  };\n\n  const resetFilters = () => {\n    setSelected([]);\n    setPage(1);\n  };\n\n  const filtered = useMemo(\n    () => (selected.length === 0 ? projects : projects.filter((project) => selected.includes(project.status))),\n    [projects, selected],\n  );\n\n  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n  const visible = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);\n\n  return (\n    <section\n      aria-label=\"Расход по проектам\"\n      style={{ display: 'flex', flexDirection: 'column', gap: '16px', fontFamily: 'var(--jx-font-sans)' }}\n    >\n      <div role=\"group\" aria-label=\"Фильтр по статусу\" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>\n        {STATUSES.map((status) => {\n          const isActive = selected.includes(status.value);\n          return (\n            <JxChip\n              key={status.value}\n              role=\"button\"\n              tabIndex={0}\n              aria-pressed={isActive}\n              active={isActive}\n              removable={isActive}\n              onRemove={() => toggleStatus(status.value)}\n              onClick={() => toggleStatus(status.value)}\n              onKeyDown={(event) => {\n                if (event.key === 'Enter' || event.key === ' ') {\n                  event.preventDefault();\n                  toggleStatus(status.value);\n                }\n              }}\n            >\n              {status.label}\n            </JxChip>\n          );\n        })}\n      </div>\n\n      <JxDivider />\n\n      {filtered.length === 0 ? (\n        <JxEmptyState\n          title=\"Под фильтры ничего не подошло\"\n          message=\"Ни один проект не попадает в выбранные статусы. Снимите фильтры, чтобы увидеть весь список.\"\n          action={\n            <JxButton variant=\"primary\" onClick={resetFilters}>\n              Сбросить фильтры\n            </JxButton>\n          }\n        />\n      ) : (\n        <>\n          <ul\n            style={{\n              display: 'flex',\n              flexDirection: 'column',\n              gap: '4px',\n              listStyle: 'none',\n              margin: 0,\n              padding: 0,\n            }}\n          >\n            {visible.map((project) => {\n              const status = STATUSES.find((item) => item.value === project.status);\n              const percent = Math.round((project.used / project.quota) * 100);\n              return (\n                <li\n                  key={project.id}\n                  style={{\n                    display: 'flex',\n                    alignItems: 'center',\n                    gap: '16px',\n                    padding: '12px',\n                    borderRadius: 'var(--jx-r)',\n                    background: 'var(--jx-surface)',\n                    border: '1px solid var(--jx-border)',\n                  }}\n                >\n                  <JxProgressCircle\n                    value={percent}\n                    max={100}\n                    showValue\n                    aria-label={`Квота проекта «${project.name}» заполнена на ${percent} процентов`}\n                  />\n                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0, flex: 1 }}>\n                    <span\n                      style={{\n                        color: 'var(--jx-text)',\n                        overflow: 'hidden',\n                        textOverflow: 'ellipsis',\n                        whiteSpace: 'nowrap',\n                      }}\n                    >\n                      {project.name}\n                    </span>\n                    <span style={{ color: 'var(--jx-text-2)', fontSize: '0.875rem' }}>\n                      {project.used} из {project.quota}\n                    </span>\n                  </div>\n                  <JxBadge tone={status?.tone ?? 'default'} dot>\n                    {status?.label ?? 'Без статуса'}\n                  </JxBadge>\n                </li>\n              );\n            })}\n          </ul>\n\n          <JxPagination\n            aria-label=\"Страницы списка проектов\"\n            total={pageCount}\n            page={currentPage}\n            onPageChange={setPage}\n          />\n        </>\n      )}\n    </section>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 82,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 84,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 125,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 140,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 156,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 158,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 167,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxBadge",
+      "JxButton",
+      "JxChip",
+      "JxDivider",
+      "JxEmptyState",
+      "JxPagination",
+      "JxProgressCircle"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

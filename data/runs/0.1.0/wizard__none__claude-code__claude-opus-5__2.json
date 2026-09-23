@@ -1,0 +1,107 @@
+{
+  "id": "wizard__none__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T15:24:30.564Z",
+  "repeat": 2,
+  "durationMs": 35510,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 8603,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 3591,
+    "cacheRead": 8603,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.09408649999999999,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, type ChangeEvent } from 'react';\nimport { Button, Card, Input, Stack, Text } from '@jinx-ui/react';\n\ntype RegistrationData = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype RegistrationWizardProps = {\n  onSubmit: (data: RegistrationData) => void;\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nconst EMPTY: RegistrationData = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst SUMMARY: ReadonlyArray<readonly [string, keyof RegistrationData]> = [\n  ['Имя', 'name'],\n  ['Email', 'email'],\n  ['Телефон', 'phone'],\n  ['Страна', 'country'],\n  ['Город', 'city'],\n  ['Улица', 'street'],\n  ['Индекс', 'zip'],\n];\n\nexport default function RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<RegistrationData>(EMPTY);\n\n  const isFirst = step === 0;\n  const isLast = step === STEPS.length - 1;\n\n  const update =\n    (field: keyof RegistrationData) => (event: ChangeEvent<HTMLInputElement>) =>\n      setData((prev) => ({ ...prev, [field]: event.target.value }));\n\n  const handleNext = () => {\n    if (isLast) {\n      onSubmit(data);\n      return;\n    }\n    setStep((prev) => prev + 1);\n  };\n\n  return (\n    <Card>\n      <Stack direction=\"column\" gap=\"lg\">\n        <Stack direction=\"row\" gap=\"md\" align=\"center\">\n          {STEPS.map((label, index) => (\n            <Stack\n              key={label}\n              direction=\"row\"\n              gap=\"xs\"\n              align=\"center\"\n              aria-current={index === step ? 'step' : undefined}\n            >\n              <span\n                aria-hidden=\"true\"\n                style={{\n                  display: 'inline-flex',\n                  alignItems: 'center',\n                  justifyContent: 'center',\n                  width: 'var(--jx-size-6)',\n                  height: 'var(--jx-size-6)',\n                  borderRadius: 'var(--jx-radius-full)',\n                  background:\n                    index <= step\n                      ? 'var(--jx-color-primary)'\n                      : 'var(--jx-color-surface-muted)',\n                  color:\n                    index <= step\n                      ? 'var(--jx-color-on-primary)'\n                      : 'var(--jx-color-text-muted)',\n                }}\n              >\n                {index + 1}\n              </span>\n              <Text tone={index === step ? 'default' : 'muted'}>{label}</Text>\n            </Stack>\n          ))}\n        </Stack>\n\n        {step === 0 && (\n          <Stack direction=\"column\" gap=\"md\">\n            <Input label=\"Имя\" value={data.name} onChange={update('name')} />\n            <Input\n              label=\"Email\"\n              type=\"email\"\n              value={data.email}\n              onChange={update('email')}\n            />\n            <Input\n              label=\"Телефон\"\n              type=\"tel\"\n              value={data.phone}\n              onChange={update('phone')}\n            />\n          </Stack>\n        )}\n\n        {step === 1 && (\n          <Stack direction=\"column\" gap=\"md\">\n            <Input label=\"Страна\" value={data.country} onChange={update('country')} />\n            <Input label=\"Город\" value={data.city} onChange={update('city')} />\n            <Input label=\"Улица\" value={data.street} onChange={update('street')} />\n            <Input label=\"Индекс\" value={data.zip} onChange={update('zip')} />\n          </Stack>\n        )}\n\n        {step === 2 && (\n          <Stack direction=\"column\" gap=\"sm\">\n            {SUMMARY.map(([label, field]) => (\n              <Stack key={field} direction=\"row\" gap=\"sm\" justify=\"space-between\">\n                <Text tone=\"muted\">{label}</Text>\n                <Text>{data[field] || '—'}</Text>\n              </Stack>\n            ))}\n          </Stack>\n        )}\n\n        <Stack direction=\"row\" gap=\"sm\" justify=\"flex-end\">\n          <Button variant=\"secondary\" disabled={isFirst} onClick={() => setStep((prev) => prev - 1)}>\n            Назад\n          </Button>\n          <Button variant=\"primary\" onClick={handleNext}>\n            {isLast ? 'Отправить' : 'Дальше'}\n          </Button>\n        </Stack>\n      </Stack>\n    </Card>\n  );\n}",
+    "text": "Note: I don't have the Jinx UI docs here, so the component/prop names below (`Card`, `Stack`, `Input`, `Button`, `Text` and the `--jx-*` tokens) are my best guess at the library's surface — verify them against the real API.\n\n```tsx\nimport { useState, type ChangeEvent } from 'react';\nimport { Button, Card, Input, Stack, Text } from '@jinx-ui/react';\n\ntype RegistrationData = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype RegistrationWizardProps = {\n  onSubmit: (data: RegistrationData) => void;\n};\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nconst EMPTY: RegistrationData = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst SUMMARY: ReadonlyArray<readonly [string, keyof RegistrationData]> = [\n  ['Имя', 'name'],\n  ['Email', 'email'],\n  ['Телефон', 'phone'],\n  ['Страна', 'country'],\n  ['Город', 'city'],\n  ['Улица', 'street'],\n  ['Индекс', 'zip'],\n];\n\nexport default function RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<RegistrationData>(EMPTY);\n\n  const isFirst = step === 0;\n  const isLast = step === STEPS.length - 1;\n\n  const update =\n    (field: keyof RegistrationData) => (event: ChangeEvent<HTMLInputElement>) =>\n      setData((prev) => ({ ...prev, [field]: event.target.value }));\n\n  const handleNext = () => {\n    if (isLast) {\n      onSubmit(data);\n      return;\n    }\n    setStep((prev) => prev + 1);\n  };\n\n  return (\n    <Card>\n      <Stack direction=\"column\" gap=\"lg\">\n        <Stack direction=\"row\" gap=\"md\" align=\"center\">\n          {STEPS.map((label, index) => (\n            <Stack\n              key={label}\n              direction=\"row\"\n              gap=\"xs\"\n              align=\"center\"\n              aria-current={index === step ? 'step' : undefined}\n            >\n              <span\n                aria-hidden=\"true\"\n                style={{\n                  display: 'inline-flex',\n                  alignItems: 'center',\n                  justifyContent: 'center',\n                  width: 'var(--jx-size-6)',\n                  height: 'var(--jx-size-6)',\n                  borderRadius: 'var(--jx-radius-full)',\n                  background:\n                    index <= step\n                      ? 'var(--jx-color-primary)'\n                      : 'var(--jx-color-surface-muted)',\n                  color:\n                    index <= step\n                      ? 'var(--jx-color-on-primary)'\n                      : 'var(--jx-color-text-muted)',\n                }}\n              >\n                {index + 1}\n              </span>\n              <Text tone={index === step ? 'default' : 'muted'}>{label}</Text>\n            </Stack>\n          ))}\n        </Stack>\n\n        {step === 0 && (\n          <Stack direction=\"column\" gap=\"md\">\n            <Input label=\"Имя\" value={data.name} onChange={update('name')} />\n            <Input\n              label=\"Email\"\n              type=\"email\"\n              value={data.email}\n              onChange={update('email')}\n            />\n            <Input\n              label=\"Телефон\"\n              type=\"tel\"\n              value={data.phone}\n              onChange={update('phone')}\n            />\n          </Stack>\n        )}\n\n        {step === 1 && (\n          <Stack direction=\"column\" gap=\"md\">\n            <Input label=\"Страна\" value={data.country} onChange={update('country')} />\n            <Input label=\"Город\" value={data.city} onChange={update('city')} />\n            <Input label=\"Улица\" value={data.street} onChange={update('street')} />\n            <Input label=\"Индекс\" value={data.zip} onChange={update('zip')} />\n          </Stack>\n        )}\n\n        {step === 2 && (\n          <Stack direction=\"column\" gap=\"sm\">\n            {SUMMARY.map(([label, field]) => (\n              <Stack key={field} direction=\"row\" gap=\"sm\" justify=\"space-between\">\n                <Text tone=\"muted\">{label}</Text>\n                <Text>{data[field] || '—'}</Text>\n              </Stack>\n            ))}\n          </Stack>\n        )}\n\n        <Stack direction=\"row\" gap=\"sm\" justify=\"flex-end\">\n          <Button variant=\"secondary\" disabled={isFirst} onClick={() => setStep((prev) => prev - 1)}>\n            Назад\n          </Button>\n          <Button variant=\"primary\" onClick={handleNext}>\n            {isLast ? 'Отправить' : 'Дальше'}\n          </Button>\n        </Stack>\n      </Stack>\n    </Card>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Card'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Card",
+        "Input",
+        "Stack",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 73,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

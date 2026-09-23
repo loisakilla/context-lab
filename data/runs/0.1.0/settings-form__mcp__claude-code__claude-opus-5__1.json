@@ -1,0 +1,195 @@
+{
+  "id": "settings-form__mcp__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-23T16:02:41.168Z",
+  "repeat": 1,
+  "durationMs": 20378,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "mcp",
+  "task": {
+    "id": "settings-form",
+    "title": "Форма настроек",
+    "prompt": "Сделай форму настроек профиля: поле «Имя», выбор языка интерфейса из списка (русский, английский), переключатель «Уведомления на почту» и кнопка «Сохранить». Состояние полей храни в компоненте, при отправке вызывай переданный колбэк onSave с объектом настроек.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 1587,
+    "sources": [
+      {
+        "kind": "tools",
+        "id": "search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules",
+        "version": "0.1.0",
+        "tokens": 1191,
+        "hash": "7b624df52b71eb9c"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 10654,
+        "cacheCreation": 478
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_rules",
+          "input": {
+            "task": "ui"
+          },
+          "resultTokens": 1247
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "текстовое поле ввода"
+          },
+          "resultTokens": 514
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "выбор из списка select"
+          },
+          "resultTokens": 560
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "переключатель toggle switch"
+          },
+          "resultTokens": 216
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "кнопка форма layout"
+          },
+          "resultTokens": 366
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 11132,
+        "cacheCreation": 5162
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxInputField"
+          },
+          "resultTokens": 455
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxSelect"
+          },
+          "resultTokens": 541
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxSwitch"
+          },
+          "resultTokens": 274
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxButton"
+          },
+          "resultTokens": 511
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 16294,
+        "cacheCreation": 3094
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__list_design_tokens",
+          "input": {
+            "maxTokens": 900
+          },
+          "resultTokens": 625
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 19388,
+        "cacheCreation": 1513
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 8,
+    "output": 1660,
+    "cacheRead": 57468,
+    "cacheCreation": 10247
+  },
+  "costUsd": 0.13431775,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxButton, JxInputField, JxSelect, JxSwitch } from '@jinx-ui/react';\n\nexport interface ProfileSettings {\n  name: string;\n  language: string;\n  emailNotifications: boolean;\n}\n\nexport interface ProfileSettingsFormProps {\n  initialSettings?: ProfileSettings;\n  onSave: (settings: ProfileSettings) => void;\n}\n\nconst LANGUAGE_OPTIONS = [\n  { value: 'ru', label: 'Русский' },\n  { value: 'en', label: 'English' },\n];\n\nfunction ProfileSettingsForm({ initialSettings, onSave }: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialSettings?.name ?? '');\n  const [language, setLanguage] = useState(initialSettings?.language ?? 'ru');\n  const [emailNotifications, setEmailNotifications] = useState(\n    initialSettings?.emailNotifications ?? false,\n  );\n  const [submitted, setSubmitted] = useState(false);\n\n  const trimmedName = name.trim();\n  const nameError = submitted && trimmedName.length === 0 ? 'Укажите имя' : undefined;\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    setSubmitted(true);\n    if (trimmedName.length === 0) return;\n    onSave({ name: trimmedName, language, emailNotifications });\n  };\n\n  return (\n    <form\n      onSubmit={handleSubmit}\n      noValidate\n      style={{ display: 'grid', gap: '20px', maxWidth: '420px' }}\n    >\n      <JxInputField\n        label=\"Имя\"\n        name=\"name\"\n        required\n        value={name}\n        placeholder=\"Как к вам обращаться\"\n        errorText={nameError}\n        onChange={(event) => setName(event.target.value)}\n      />\n\n      <JxSelect\n        label=\"Язык интерфейса\"\n        options={LANGUAGE_OPTIONS}\n        value={language}\n        onValueChange={setLanguage}\n      />\n\n      <JxSwitch\n        label=\"Уведомления на почту\"\n        name=\"emailNotifications\"\n        checked={emailNotifications}\n        onChange={(event) => setEmailNotifications(event.target.checked)}\n      />\n\n      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>\n        <JxButton type=\"submit\" variant=\"primary\">\n          Сохранить\n        </JxButton>\n      </div>\n    </form>\n  );\n}\n\nexport default ProfileSettingsForm;",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxInputField, JxSelect, JxSwitch } from '@jinx-ui/react';\n\nexport interface ProfileSettings {\n  name: string;\n  language: string;\n  emailNotifications: boolean;\n}\n\nexport interface ProfileSettingsFormProps {\n  initialSettings?: ProfileSettings;\n  onSave: (settings: ProfileSettings) => void;\n}\n\nconst LANGUAGE_OPTIONS = [\n  { value: 'ru', label: 'Русский' },\n  { value: 'en', label: 'English' },\n];\n\nfunction ProfileSettingsForm({ initialSettings, onSave }: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialSettings?.name ?? '');\n  const [language, setLanguage] = useState(initialSettings?.language ?? 'ru');\n  const [emailNotifications, setEmailNotifications] = useState(\n    initialSettings?.emailNotifications ?? false,\n  );\n  const [submitted, setSubmitted] = useState(false);\n\n  const trimmedName = name.trim();\n  const nameError = submitted && trimmedName.length === 0 ? 'Укажите имя' : undefined;\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    setSubmitted(true);\n    if (trimmedName.length === 0) return;\n    onSave({ name: trimmedName, language, emailNotifications });\n  };\n\n  return (\n    <form\n      onSubmit={handleSubmit}\n      noValidate\n      style={{ display: 'grid', gap: '20px', maxWidth: '420px' }}\n    >\n      <JxInputField\n        label=\"Имя\"\n        name=\"name\"\n        required\n        value={name}\n        placeholder=\"Как к вам обращаться\"\n        errorText={nameError}\n        onChange={(event) => setName(event.target.value)}\n      />\n\n      <JxSelect\n        label=\"Язык интерфейса\"\n        options={LANGUAGE_OPTIONS}\n        value={language}\n        onValueChange={setLanguage}\n      />\n\n      <JxSwitch\n        label=\"Уведомления на почту\"\n        name=\"emailNotifications\"\n        checked={emailNotifications}\n        onChange={(event) => setEmailNotifications(event.target.checked)}\n      />\n\n      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>\n        <JxButton type=\"submit\" variant=\"primary\">\n          Сохранить\n        </JxButton>\n      </div>\n    </form>\n  );\n}\n\nexport default ProfileSettingsForm;\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 42,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 68,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

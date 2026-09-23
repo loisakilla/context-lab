@@ -1,0 +1,125 @@
+{
+  "id": "invite-form__none__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T15:31:32.278Z",
+  "repeat": 2,
+  "durationMs": 23625,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "invite-form",
+    "title": "Приглашение в команду с валидацией",
+    "prompt": "Сделай форму приглашения в команду: поле почты с подсказкой под ним, выбор роли из списка, переключатель «отправить уведомление» и кнопка отправки. Пока почта не похожа на адрес, поле показывает ошибку и кнопка заблокирована. После отправки над формой появляется сообщение об успехе, которое можно закрыть.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxAlert",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 8615,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1977,
+    "cacheRead": 8615,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.053742500000000006,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "// Имена компонентов Jinx UI взяты по общепринятой конвенции пакета (@jinx-ui/react);\n// при расхождении с вашей версией достаточно поправить импорт.\nimport { useId, useState } from 'react';\nimport {\n  Alert,\n  Button,\n  Card,\n  Select,\n  SelectOption,\n  Stack,\n  Switch,\n  TextField,\n} from '@jinx-ui/react';\n\ntype Role = 'viewer' | 'editor' | 'admin';\n\nconst ROLES: { value: Role; label: string }[] = [\n  { value: 'viewer', label: 'Наблюдатель' },\n  { value: 'editor', label: 'Редактор' },\n  { value: 'admin', label: 'Администратор' },\n];\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nexport default function TeamInviteForm() {\n  const formId = useId();\n  const [email, setEmail] = useState('');\n  const [touched, setTouched] = useState(false);\n  const [role, setRole] = useState<Role>('viewer');\n  const [notify, setNotify] = useState(true);\n  const [invitedEmail, setInvitedEmail] = useState<string | null>(null);\n\n  const isValid = EMAIL_PATTERN.test(email.trim());\n  const showError = touched && !isValid;\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!isValid) {\n      setTouched(true);\n      return;\n    }\n    setInvitedEmail(email.trim());\n    setEmail('');\n    setTouched(false);\n    setRole('viewer');\n    setNotify(true);\n  };\n\n  return (\n    <Stack direction=\"column\" gap=\"var(--jx-space-4)\">\n      {invitedEmail && (\n        <Alert\n          status=\"success\"\n          title=\"Приглашение отправлено\"\n          closable\n          onClose={() => setInvitedEmail(null)}\n        >\n          Мы отправили приглашение на {invitedEmail}.\n        </Alert>\n      )}\n\n      <Card>\n        <form onSubmit={handleSubmit} noValidate>\n          <Stack direction=\"column\" gap=\"var(--jx-space-4)\">\n            <TextField\n              id={`${formId}-email`}\n              type=\"email\"\n              name=\"email\"\n              label=\"Электронная почта\"\n              placeholder=\"name@company.com\"\n              value={email}\n              onChange={(event) => setEmail(event.target.value)}\n              onBlur={() => setTouched(true)}\n              invalid={showError}\n              helperText={\n                showError\n                  ? 'Введите адрес в формате name@company.com'\n                  : 'Участник получит доступ к проектам команды.'\n              }\n              required\n            />\n\n            <Select\n              id={`${formId}-role`}\n              name=\"role\"\n              label=\"Роль\"\n              value={role}\n              onChange={(value: Role) => setRole(value)}\n            >\n              {ROLES.map((item) => (\n                <SelectOption key={item.value} value={item.value}>\n                  {item.label}\n                </SelectOption>\n              ))}\n            </Select>\n\n            <Switch\n              id={`${formId}-notify`}\n              name=\"notify\"\n              label=\"Отправить уведомление\"\n              checked={notify}\n              onChange={(checked: boolean) => setNotify(checked)}\n            />\n\n            <Button type=\"submit\" variant=\"primary\" disabled={!isValid}>\n              Отправить приглашение\n            </Button>\n          </Stack>\n        </form>\n      </Card>\n    </Stack>\n  );\n}",
+    "text": "```tsx\n// Имена компонентов Jinx UI взяты по общепринятой конвенции пакета (@jinx-ui/react);\n// при расхождении с вашей версией достаточно поправить импорт.\nimport { useId, useState } from 'react';\nimport {\n  Alert,\n  Button,\n  Card,\n  Select,\n  SelectOption,\n  Stack,\n  Switch,\n  TextField,\n} from '@jinx-ui/react';\n\ntype Role = 'viewer' | 'editor' | 'admin';\n\nconst ROLES: { value: Role; label: string }[] = [\n  { value: 'viewer', label: 'Наблюдатель' },\n  { value: 'editor', label: 'Редактор' },\n  { value: 'admin', label: 'Администратор' },\n];\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nexport default function TeamInviteForm() {\n  const formId = useId();\n  const [email, setEmail] = useState('');\n  const [touched, setTouched] = useState(false);\n  const [role, setRole] = useState<Role>('viewer');\n  const [notify, setNotify] = useState(true);\n  const [invitedEmail, setInvitedEmail] = useState<string | null>(null);\n\n  const isValid = EMAIL_PATTERN.test(email.trim());\n  const showError = touched && !isValid;\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!isValid) {\n      setTouched(true);\n      return;\n    }\n    setInvitedEmail(email.trim());\n    setEmail('');\n    setTouched(false);\n    setRole('viewer');\n    setNotify(true);\n  };\n\n  return (\n    <Stack direction=\"column\" gap=\"var(--jx-space-4)\">\n      {invitedEmail && (\n        <Alert\n          status=\"success\"\n          title=\"Приглашение отправлено\"\n          closable\n          onClose={() => setInvitedEmail(null)}\n        >\n          Мы отправили приглашение на {invitedEmail}.\n        </Alert>\n      )}\n\n      <Card>\n        <form onSubmit={handleSubmit} noValidate>\n          <Stack direction=\"column\" gap=\"var(--jx-space-4)\">\n            <TextField\n              id={`${formId}-email`}\n              type=\"email\"\n              name=\"email\"\n              label=\"Электронная почта\"\n              placeholder=\"name@company.com\"\n              value={email}\n              onChange={(event) => setEmail(event.target.value)}\n              onBlur={() => setTouched(true)}\n              invalid={showError}\n              helperText={\n                showError\n                  ? 'Введите адрес в формате name@company.com'\n                  : 'Участник получит доступ к проектам команды.'\n              }\n              required\n            />\n\n            <Select\n              id={`${formId}-role`}\n              name=\"role\"\n              label=\"Роль\"\n              value={role}\n              onChange={(value: Role) => setRole(value)}\n            >\n              {ROLES.map((item) => (\n                <SelectOption key={item.value} value={item.value}>\n                  {item.label}\n                </SelectOption>\n              ))}\n            </Select>\n\n            <Switch\n              id={`${formId}-notify`}\n              name=\"notify\"\n              label=\"Отправить уведомление\"\n              checked={notify}\n              onChange={(checked: boolean) => setNotify(checked)}\n            />\n\n            <Button type=\"submit\" variant=\"primary\" disabled={!isValid}>\n              Отправить приглашение\n            </Button>\n          </Stack>\n        </form>\n      </Card>\n    </Stack>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 5,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Alert'. Did you mean 'JxAlert'?"
+        },
+        {
+          "code": 2724,
+          "line": 6,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 7,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Card'."
+        },
+        {
+          "code": 2724,
+          "line": 8,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Select'. Did you mean 'JxSelect'?"
+        },
+        {
+          "code": 2724,
+          "line": 9,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'SelectOption'. Did you mean 'JxSelectOption'?"
+        },
+        {
+          "code": 2305,
+          "line": 10,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2724,
+          "line": 11,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Switch'. Did you mean 'JxSwitch'?"
+        },
+        {
+          "code": 2305,
+          "line": 12,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'TextField'."
+        },
+        {
+          "code": 7006,
+          "line": 72,
+          "message": "Parameter 'event' implicitly has an 'any' type."
+        }
+      ],
+      "unknownComponents": [
+        "Alert",
+        "Button",
+        "Card",
+        "Select",
+        "SelectOption",
+        "Stack",
+        "Switch",
+        "TextField"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

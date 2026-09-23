@@ -1,0 +1,111 @@
+{
+  "id": "tag-picker__none__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T15:25:40.944Z",
+  "repeat": 2,
+  "durationMs": 23460,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 8577,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2007,
+    "cacheRead": 8577,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.05447350000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, useCallback } from 'react';\nimport type { ChangeEvent, KeyboardEvent } from 'react';\nimport { Field, Input, Tag, Stack, Text } from '@jinx-ui/react';\n\nexport interface TagPickerProps {\n  label?: string;\n  placeholder?: string;\n  maxTags?: number;\n  initialTags?: string[];\n  onChange: (tags: string[]) => void;\n}\n\nconst normalize = (raw: string) => raw.trim().replace(/\\s+/g, ' ');\n\nexport default function TagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  maxTags = 10,\n  initialTags = [],\n  onChange,\n}: TagPickerProps) {\n  const [tags, setTags] = useState<string[]>(initialTags);\n  const [draft, setDraft] = useState('');\n\n  const commit = useCallback(\n    (next: string[]) => {\n      setTags(next);\n      onChange(next);\n    },\n    [onChange],\n  );\n\n  const addTag = useCallback(\n    (raw: string) => {\n      const tag = normalize(raw);\n      if (!tag || tags.length >= maxTags) return;\n      if (tags.some((t) => t.toLowerCase() === tag.toLowerCase())) return;\n      commit([...tags, tag]);\n    },\n    [tags, maxTags, commit],\n  );\n\n  const removeTag = useCallback(\n    (tag: string) => commit(tags.filter((t) => t !== tag)),\n    [tags, commit],\n  );\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag(draft);\n      setDraft('');\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const isFull = tags.length >= maxTags;\n\n  return (\n    <Stack direction=\"column\" style={{ gap: 'var(--jx-space-2)' }}>\n      <Field\n        label={label}\n        hint={`${tags.length} из ${maxTags}`}\n        state={isFull ? 'warning' : 'default'}\n      >\n        <Input\n          value={draft}\n          placeholder={isFull ? 'Достигнут лимит тегов' : placeholder}\n          disabled={isFull}\n          onKeyDown={handleKeyDown}\n          onBlur={() => {\n            addTag(draft);\n            setDraft('');\n          }}\n          onChange={(event: ChangeEvent<HTMLInputElement>) =>\n            setDraft(event.target.value)\n          }\n        />\n      </Field>\n\n      {tags.length > 0 ? (\n        <Stack\n          direction=\"row\"\n          wrap=\"wrap\"\n          style={{ gap: 'var(--jx-space-1)' }}\n        >\n          {tags.map((tag) => (\n            <Tag\n              key={tag.toLowerCase()}\n              onRemove={() => removeTag(tag)}\n              removeLabel={`Удалить тег ${tag}`}\n            >\n              {tag}\n            </Tag>\n          ))}\n        </Stack>\n      ) : (\n        <Text tone=\"muted\" size=\"sm\">\n          Пока не выбрано ни одного тега\n        </Text>\n      )}\n    </Stack>\n  );\n}",
+    "text": "```tsx\nimport { useState, useCallback } from 'react';\nimport type { ChangeEvent, KeyboardEvent } from 'react';\nimport { Field, Input, Tag, Stack, Text } from '@jinx-ui/react';\n\nexport interface TagPickerProps {\n  label?: string;\n  placeholder?: string;\n  maxTags?: number;\n  initialTags?: string[];\n  onChange: (tags: string[]) => void;\n}\n\nconst normalize = (raw: string) => raw.trim().replace(/\\s+/g, ' ');\n\nexport default function TagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  maxTags = 10,\n  initialTags = [],\n  onChange,\n}: TagPickerProps) {\n  const [tags, setTags] = useState<string[]>(initialTags);\n  const [draft, setDraft] = useState('');\n\n  const commit = useCallback(\n    (next: string[]) => {\n      setTags(next);\n      onChange(next);\n    },\n    [onChange],\n  );\n\n  const addTag = useCallback(\n    (raw: string) => {\n      const tag = normalize(raw);\n      if (!tag || tags.length >= maxTags) return;\n      if (tags.some((t) => t.toLowerCase() === tag.toLowerCase())) return;\n      commit([...tags, tag]);\n    },\n    [tags, maxTags, commit],\n  );\n\n  const removeTag = useCallback(\n    (tag: string) => commit(tags.filter((t) => t !== tag)),\n    [tags, commit],\n  );\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag(draft);\n      setDraft('');\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const isFull = tags.length >= maxTags;\n\n  return (\n    <Stack direction=\"column\" style={{ gap: 'var(--jx-space-2)' }}>\n      <Field\n        label={label}\n        hint={`${tags.length} из ${maxTags}`}\n        state={isFull ? 'warning' : 'default'}\n      >\n        <Input\n          value={draft}\n          placeholder={isFull ? 'Достигнут лимит тегов' : placeholder}\n          disabled={isFull}\n          onKeyDown={handleKeyDown}\n          onBlur={() => {\n            addTag(draft);\n            setDraft('');\n          }}\n          onChange={(event: ChangeEvent<HTMLInputElement>) =>\n            setDraft(event.target.value)\n          }\n        />\n      </Field>\n\n      {tags.length > 0 ? (\n        <Stack\n          direction=\"row\"\n          wrap=\"wrap\"\n          style={{ gap: 'var(--jx-space-1)' }}\n        >\n          {tags.map((tag) => (\n            <Tag\n              key={tag.toLowerCase()}\n              onRemove={() => removeTag(tag)}\n              removeLabel={`Удалить тег ${tag}`}\n            >\n              {tag}\n            </Tag>\n          ))}\n        </Stack>\n      ) : (\n        <Text tone=\"muted\" size=\"sm\">\n          Пока не выбрано ни одного тега\n        </Text>\n      )}\n    </Stack>\n  );\n}\n```\n\nОдно важное замечание вне формата: у меня нет доступа к документации или типам `@jinx-ui/react`, поэтому API компонентов (`Field`, `Input`, `Tag` с `onRemove`, `Stack` с `wrap`, `Text` с `tone`) — это предположение, а не проверенный факт. Сверьте имена и пропсы с реальными типами пакета."
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Field'."
+        },
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
+        },
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Tag'."
+        },
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        }
+      ],
+      "unknownComponents": [
+        "Field",
+        "Input",
+        "Stack",
+        "Tag",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 63,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 88,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

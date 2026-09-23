@@ -1,0 +1,151 @@
+{
+  "id": "usage-dashboard__readme__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-23T15:30:17.536Z",
+  "repeat": 1,
+  "durationMs": 30118,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "usage-dashboard",
+    "title": "Панель расхода с фильтрами",
+    "prompt": "Сделай панель расхода по проектам. Сверху чипы-фильтры по статусу, которые можно снимать. Под ними на каждый проект строка с названием, круговым индикатором заполненности квоты в процентах и меткой статуса. Список постраничный, по пять строк. Если после фильтрации ничего не осталось, вместо списка показывается пустое состояние с кнопкой сброса фильтров.",
+    "taskType": "ui",
+    "expects": [
+      "JxChip",
+      "JxProgressCircle",
+      "JxBadge",
+      "JxPagination",
+      "JxEmptyState"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8235,
+        "cacheCreation": 1121
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 3449,
+    "cacheRead": 8235,
+    "cacheCreation": 1121
+  },
+  "costUsd": 0.09735875,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\nimport {\n  JxChip,\n  JxProgressCircle,\n  JxBadge,\n  JxPagination,\n  JxEmptyState,\n  JxButton,\n} from '@jinx-ui/react';\n\ntype ProjectStatus = 'ok' | 'warning' | 'over';\n\ninterface Project {\n  id: string;\n  name: string;\n  quotaPercent: number;\n  status: ProjectStatus;\n}\n\nconst PROJECTS: Project[] = [\n  { id: 'p1', name: 'Marketing Site', quotaPercent: 42, status: 'ok' },\n  { id: 'p2', name: 'Analytics Pipeline', quotaPercent: 88, status: 'warning' },\n  { id: 'p3', name: 'Payments Gateway', quotaPercent: 112, status: 'over' },\n  { id: 'p4', name: 'Support Portal', quotaPercent: 15, status: 'ok' },\n  { id: 'p5', name: 'Mobile Backend', quotaPercent: 76, status: 'warning' },\n  { id: 'p6', name: 'Search Service', quotaPercent: 130, status: 'over' },\n  { id: 'p7', name: 'Docs Site', quotaPercent: 5, status: 'ok' },\n  { id: 'p8', name: 'Notification Hub', quotaPercent: 95, status: 'warning' },\n  { id: 'p9', name: 'Data Warehouse', quotaPercent: 60, status: 'ok' },\n  { id: 'p10', name: 'CDN Origin', quotaPercent: 104, status: 'over' },\n  { id: 'p11', name: 'Internal Tools', quotaPercent: 33, status: 'ok' },\n  { id: 'p12', name: 'Fraud Detection', quotaPercent: 81, status: 'warning' },\n];\n\nconst ALL_STATUSES: ProjectStatus[] = ['ok', 'warning', 'over'];\n\nconst STATUS_LABEL: Record<ProjectStatus, string> = {\n  ok: 'В рамках квоты',\n  warning: 'Приближается к лимиту',\n  over: 'Квота превышена',\n};\n\nconst STATUS_BADGE_VARIANT: Record<ProjectStatus, 'success' | 'warning' | 'danger'> = {\n  ok: 'success',\n  warning: 'warning',\n  over: 'danger',\n};\n\nconst PAGE_SIZE = 5;\n\nexport default function ProjectQuotaPanel() {\n  const [activeStatuses, setActiveStatuses] = useState<ProjectStatus[]>(ALL_STATUSES);\n  const [page, setPage] = useState(1);\n\n  const filteredProjects = useMemo(\n    () => PROJECTS.filter((project) => activeStatuses.includes(project.status)),\n    [activeStatuses]\n  );\n\n  const totalPages = Math.max(1, Math.ceil(filteredProjects.length / PAGE_SIZE));\n  const currentPage = Math.min(page, totalPages);\n\n  const pageProjects = filteredProjects.slice(\n    (currentPage - 1) * PAGE_SIZE,\n    currentPage * PAGE_SIZE\n  );\n\n  const handleRemoveStatus = (status: ProjectStatus) => {\n    setActiveStatuses((prev) => prev.filter((item) => item !== status));\n    setPage(1);\n  };\n\n  const handleResetFilters = () => {\n    setActiveStatuses(ALL_STATUSES);\n    setPage(1);\n  };\n\n  const handlePageChange = (nextPage: number) => {\n    setPage(nextPage);\n  };\n\n  return (\n    <div className=\"jx-stack jx-stack-lg\">\n      <div className=\"jx-cluster jx-cluster-sm\" role=\"group\" aria-label=\"Фильтры по статусу\">\n        {activeStatuses.length === 0 ? (\n          <span className=\"jx-text jx-text-muted\">Фильтры не выбраны</span>\n        ) : (\n          activeStatuses.map((status) => (\n            <JxChip\n              key={status}\n              variant={STATUS_BADGE_VARIANT[status]}\n              onRemove={() => handleRemoveStatus(status)}\n            >\n              {STATUS_LABEL[status]}\n            </JxChip>\n          ))\n        )}\n      </div>\n\n      {filteredProjects.length === 0 ? (\n        <JxEmptyState\n          title=\"Ничего не найдено\"\n          description=\"Под текущие фильтры не попадает ни один проект.\"\n        >\n          <JxButton variant=\"primary\" onClick={handleResetFilters}>\n            Сбросить фильтры\n          </JxButton>\n        </JxEmptyState>\n      ) : (\n        <>\n          <ul className=\"jx-list jx-stack jx-stack-sm\" style={{ listStyle: 'none', padding: 0, margin: 0 }}>\n            {pageProjects.map((project) => (\n              <li\n                key={project.id}\n                className=\"jx-cluster jx-cluster-md jx-panel\"\n                style={{\n                  alignItems: 'center',\n                  justifyContent: 'space-between',\n                  padding: 'var(--jx-space-md)',\n                  borderRadius: 'var(--jx-radius-md)',\n                  border: '1px solid var(--jx-color-border)',\n                }}\n              >\n                <span className=\"jx-text jx-text-strong\">{project.name}</span>\n\n                <div className=\"jx-cluster jx-cluster-sm\" style={{ alignItems: 'center' }}>\n                  <JxProgressCircle\n                    value={Math.min(project.quotaPercent, 100)}\n                    max={100}\n                    size=\"sm\"\n                    variant={STATUS_BADGE_VARIANT[project.status]}\n                    label={`${project.quotaPercent}%`}\n                  />\n                  <JxBadge variant={STATUS_BADGE_VARIANT[project.status]}>\n                    {STATUS_LABEL[project.status]}\n                  </JxBadge>\n                </div>\n              </li>\n            ))}\n          </ul>\n\n          <JxPagination\n            page={currentPage}\n            pageSize={PAGE_SIZE}\n            totalItems={filteredProjects.length}\n            onPageChange={handlePageChange}\n          />\n        </>\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport {\n  JxChip,\n  JxProgressCircle,\n  JxBadge,\n  JxPagination,\n  JxEmptyState,\n  JxButton,\n} from '@jinx-ui/react';\n\ntype ProjectStatus = 'ok' | 'warning' | 'over';\n\ninterface Project {\n  id: string;\n  name: string;\n  quotaPercent: number;\n  status: ProjectStatus;\n}\n\nconst PROJECTS: Project[] = [\n  { id: 'p1', name: 'Marketing Site', quotaPercent: 42, status: 'ok' },\n  { id: 'p2', name: 'Analytics Pipeline', quotaPercent: 88, status: 'warning' },\n  { id: 'p3', name: 'Payments Gateway', quotaPercent: 112, status: 'over' },\n  { id: 'p4', name: 'Support Portal', quotaPercent: 15, status: 'ok' },\n  { id: 'p5', name: 'Mobile Backend', quotaPercent: 76, status: 'warning' },\n  { id: 'p6', name: 'Search Service', quotaPercent: 130, status: 'over' },\n  { id: 'p7', name: 'Docs Site', quotaPercent: 5, status: 'ok' },\n  { id: 'p8', name: 'Notification Hub', quotaPercent: 95, status: 'warning' },\n  { id: 'p9', name: 'Data Warehouse', quotaPercent: 60, status: 'ok' },\n  { id: 'p10', name: 'CDN Origin', quotaPercent: 104, status: 'over' },\n  { id: 'p11', name: 'Internal Tools', quotaPercent: 33, status: 'ok' },\n  { id: 'p12', name: 'Fraud Detection', quotaPercent: 81, status: 'warning' },\n];\n\nconst ALL_STATUSES: ProjectStatus[] = ['ok', 'warning', 'over'];\n\nconst STATUS_LABEL: Record<ProjectStatus, string> = {\n  ok: 'В рамках квоты',\n  warning: 'Приближается к лимиту',\n  over: 'Квота превышена',\n};\n\nconst STATUS_BADGE_VARIANT: Record<ProjectStatus, 'success' | 'warning' | 'danger'> = {\n  ok: 'success',\n  warning: 'warning',\n  over: 'danger',\n};\n\nconst PAGE_SIZE = 5;\n\nexport default function ProjectQuotaPanel() {\n  const [activeStatuses, setActiveStatuses] = useState<ProjectStatus[]>(ALL_STATUSES);\n  const [page, setPage] = useState(1);\n\n  const filteredProjects = useMemo(\n    () => PROJECTS.filter((project) => activeStatuses.includes(project.status)),\n    [activeStatuses]\n  );\n\n  const totalPages = Math.max(1, Math.ceil(filteredProjects.length / PAGE_SIZE));\n  const currentPage = Math.min(page, totalPages);\n\n  const pageProjects = filteredProjects.slice(\n    (currentPage - 1) * PAGE_SIZE,\n    currentPage * PAGE_SIZE\n  );\n\n  const handleRemoveStatus = (status: ProjectStatus) => {\n    setActiveStatuses((prev) => prev.filter((item) => item !== status));\n    setPage(1);\n  };\n\n  const handleResetFilters = () => {\n    setActiveStatuses(ALL_STATUSES);\n    setPage(1);\n  };\n\n  const handlePageChange = (nextPage: number) => {\n    setPage(nextPage);\n  };\n\n  return (\n    <div className=\"jx-stack jx-stack-lg\">\n      <div className=\"jx-cluster jx-cluster-sm\" role=\"group\" aria-label=\"Фильтры по статусу\">\n        {activeStatuses.length === 0 ? (\n          <span className=\"jx-text jx-text-muted\">Фильтры не выбраны</span>\n        ) : (\n          activeStatuses.map((status) => (\n            <JxChip\n              key={status}\n              variant={STATUS_BADGE_VARIANT[status]}\n              onRemove={() => handleRemoveStatus(status)}\n            >\n              {STATUS_LABEL[status]}\n            </JxChip>\n          ))\n        )}\n      </div>\n\n      {filteredProjects.length === 0 ? (\n        <JxEmptyState\n          title=\"Ничего не найдено\"\n          description=\"Под текущие фильтры не попадает ни один проект.\"\n        >\n          <JxButton variant=\"primary\" onClick={handleResetFilters}>\n            Сбросить фильтры\n          </JxButton>\n        </JxEmptyState>\n      ) : (\n        <>\n          <ul className=\"jx-list jx-stack jx-stack-sm\" style={{ listStyle: 'none', padding: 0, margin: 0 }}>\n            {pageProjects.map((project) => (\n              <li\n                key={project.id}\n                className=\"jx-cluster jx-cluster-md jx-panel\"\n                style={{\n                  alignItems: 'center',\n                  justifyContent: 'space-between',\n                  padding: 'var(--jx-space-md)',\n                  borderRadius: 'var(--jx-radius-md)',\n                  border: '1px solid var(--jx-color-border)',\n                }}\n              >\n                <span className=\"jx-text jx-text-strong\">{project.name}</span>\n\n                <div className=\"jx-cluster jx-cluster-sm\" style={{ alignItems: 'center' }}>\n                  <JxProgressCircle\n                    value={Math.min(project.quotaPercent, 100)}\n                    max={100}\n                    size=\"sm\"\n                    variant={STATUS_BADGE_VARIANT[project.status]}\n                    label={`${project.quotaPercent}%`}\n                  />\n                  <JxBadge variant={STATUS_BADGE_VARIANT[project.status]}>\n                    {STATUS_LABEL[project.status]}\n                  </JxBadge>\n                </div>\n              </li>\n            ))}\n          </ul>\n\n          <JxPagination\n            page={currentPage}\n            pageSize={PAGE_SIZE}\n            totalItems={filteredProjects.length}\n            onPageChange={handlePageChange}\n          />\n        </>\n      )}\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2322,
+          "line": 91,
+          "message": "Type '{ children: string; key: ProjectStatus; variant: \"warning\" | \"success\" | \"danger\"; onRemove: () => void; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributes<HTMLSpanElement> & { active?: boolean | undefined; removable?: boolean | undefined; onRemove?: (() => void) | undefined; children?: ReactNode; }'.\n  Property 'variant' does not exist on type 'IntrinsicAttributes & HTMLAttributes<HTMLSpanElement> & { active?: boolean | undefined; removable?: boolean | undefined; onRemove?: (() => void) | undefined; children?: ReactNode; }'."
+        },
+        {
+          "code": 2322,
+          "line": 103,
+          "message": "Type '{ children: Element; title: string; description: string; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributes<HTMLDivElement> & { icon?: ReactNode; title: ReactNode; message?: ReactNode; action?: ReactNode; }'.\n  Property 'description' does not exist on type 'IntrinsicAttributes & HTMLAttributes<HTMLDivElement> & { icon?: ReactNode; title: ReactNode; message?: ReactNode; action?: ReactNode; }'."
+        },
+        {
+          "code": 2322,
+          "line": 130,
+          "message": "Type '{ value: number; max: number; size: string; variant: \"warning\" | \"success\" | \"danger\"; label: string; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributes<HTMLDivElement> & { value: number; max?: number | undefined; showValue?: boolean | undefined; }'.\n  Property 'size' does not exist on type 'IntrinsicAttributes & HTMLAttributes<HTMLDivElement> & { value: number; max?: number | undefined; showValue?: boolean | undefined; }'."
+        },
+        {
+          "code": 2322,
+          "line": 134,
+          "message": "Type '{ children: string; variant: \"warning\" | \"success\" | \"danger\"; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributes<HTMLSpanElement> & { tone?: JxBadgeTone | undefined; dot?: boolean | undefined; children?: ReactNode; }'.\n  Property 'variant' does not exist on type 'IntrinsicAttributes & HTMLAttributes<HTMLSpanElement> & { tone?: JxBadgeTone | undefined; dot?: boolean | undefined; children?: ReactNode; }'."
+        },
+        {
+          "code": 2322,
+          "line": 144,
+          "message": "Type '{ page: number; pageSize: number; totalItems: number; onPageChange: (nextPage: number) => void; }' is not assignable to type 'IntrinsicAttributes & Omit<HTMLAttributes<HTMLElement>, \"onChange\"> & { total: number; page?: number | undefined; defaultPage?: number | undefined; onPageChange?: ((page: number) => void) | undefined; siblingCount?: number | undefined; }'.\n  Property 'pageSize' does not exist on type 'IntrinsicAttributes & Omit<HTMLAttributes<HTMLElement>, \"onChange\"> & { total: number; page?: number | undefined; defaultPage?: number | undefined; onPageChange?: ((page: number) => void) | undefined; siblingCount?: number | undefined; }'."
+        }
+      ],
+      "unknownComponents": [],
+      "unknownProps": [
+        {
+          "component": "JxChip",
+          "prop": "variant"
+        },
+        {
+          "component": "JxEmptyState",
+          "prop": "description"
+        },
+        {
+          "component": "JxProgressCircle",
+          "prop": "size"
+        },
+        {
+          "component": "JxBadge",
+          "prop": "variant"
+        },
+        {
+          "component": "JxPagination",
+          "prop": "pageSize"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 111,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 116,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 126,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxBadge",
+      "JxButton",
+      "JxChip",
+      "JxEmptyState",
+      "JxPagination",
+      "JxProgressCircle"
+    ],
+    "expectedCoverage": 1,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.3
+  }
+}

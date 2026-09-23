@@ -1,0 +1,259 @@
+{
+  "id": "users-table__readme__claude-code__claude-sonnet-5__2",
+  "createdAt": "2026-09-23T15:26:52.211Z",
+  "repeat": 2,
+  "durationMs": 7315,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "users-table",
+    "title": "Таблица пользователей с пагинацией",
+    "prompt": "Сделай таблицу пользователей с колонками «Имя», «Роль» и «Статус». Список users передаётся пропсом, показывать по десять строк на страницу с постраничной навигацией под таблицей. Статус показывай цветной меткой: активен или отключён.",
+    "taskType": "ui",
+    "expects": [
+      "JxTable",
+      "JxPagination",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 9309,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 718,
+    "cacheRead": 9309,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0226145,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\nimport { JxTable, JxBadge, JxPagination } from '@jinx-ui/react';\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  status: 'active' | 'disabled';\n}\n\ninterface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n\n  const pageUsers = useMemo(() => {\n    const start = (page - 1) * PAGE_SIZE;\n    return users.slice(start, start + PAGE_SIZE);\n  }, [users, page]);\n\n  return (\n    <div className=\"jx-stack\">\n      <JxTable.Root>\n        <JxTable.Header>\n          <JxTable.Row>\n            <JxTable.HeadCell>Имя</JxTable.HeadCell>\n            <JxTable.HeadCell>Роль</JxTable.HeadCell>\n            <JxTable.HeadCell>Статус</JxTable.HeadCell>\n          </JxTable.Row>\n        </JxTable.Header>\n        <JxTable.Body>\n          {pageUsers.map((user) => (\n            <JxTable.Row key={user.id}>\n              <JxTable.Cell>{user.name}</JxTable.Cell>\n              <JxTable.Cell>{user.role}</JxTable.Cell>\n              <JxTable.Cell>\n                <JxBadge tone={user.status === 'active' ? 'success' : 'neutral'}>\n                  {user.status === 'active' ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </JxTable.Cell>\n            </JxTable.Row>\n          ))}\n        </JxTable.Body>\n      </JxTable.Root>\n\n      <JxPagination\n        page={page}\n        pageCount={pageCount}\n        onPageChange={setPage}\n      />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport { JxTable, JxBadge, JxPagination } from '@jinx-ui/react';\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  status: 'active' | 'disabled';\n}\n\ninterface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n\n  const pageUsers = useMemo(() => {\n    const start = (page - 1) * PAGE_SIZE;\n    return users.slice(start, start + PAGE_SIZE);\n  }, [users, page]);\n\n  return (\n    <div className=\"jx-stack\">\n      <JxTable.Root>\n        <JxTable.Header>\n          <JxTable.Row>\n            <JxTable.HeadCell>Имя</JxTable.HeadCell>\n            <JxTable.HeadCell>Роль</JxTable.HeadCell>\n            <JxTable.HeadCell>Статус</JxTable.HeadCell>\n          </JxTable.Row>\n        </JxTable.Header>\n        <JxTable.Body>\n          {pageUsers.map((user) => (\n            <JxTable.Row key={user.id}>\n              <JxTable.Cell>{user.name}</JxTable.Cell>\n              <JxTable.Cell>{user.role}</JxTable.Cell>\n              <JxTable.Cell>\n                <JxBadge tone={user.status === 'active' ? 'success' : 'neutral'}>\n                  {user.status === 'active' ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </JxTable.Cell>\n            </JxTable.Row>\n          ))}\n        </JxTable.Body>\n      </JxTable.Root>\n\n      <JxPagination\n        page={page}\n        pageCount={pageCount}\n        onPageChange={setPage}\n      />\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2339,
+          "line": 29,
+          "message": "Property 'Root' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 30,
+          "message": "Property 'Header' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 31,
+          "message": "Property 'Row' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 32,
+          "message": "Property 'HeadCell' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 32,
+          "message": "Property 'HeadCell' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 33,
+          "message": "Property 'HeadCell' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 33,
+          "message": "Property 'HeadCell' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 34,
+          "message": "Property 'HeadCell' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 34,
+          "message": "Property 'HeadCell' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 35,
+          "message": "Property 'Row' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 36,
+          "message": "Property 'Header' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 37,
+          "message": "Property 'Body' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 39,
+          "message": "Property 'Row' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 40,
+          "message": "Property 'Cell' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 40,
+          "message": "Property 'Cell' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 41,
+          "message": "Property 'Cell' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 41,
+          "message": "Property 'Cell' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 42,
+          "message": "Property 'Cell' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2322,
+          "line": 43,
+          "message": "Type '\"success\" | \"neutral\"' is not assignable to type 'JxBadgeTone | undefined'.\n  Type '\"neutral\"' is not assignable to type 'JxBadgeTone | undefined'."
+        },
+        {
+          "code": 2339,
+          "line": 46,
+          "message": "Property 'Cell' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 47,
+          "message": "Property 'Row' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 49,
+          "message": "Property 'Body' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 50,
+          "message": "Property 'Root' does not exist on type '({ className, ...rest }: JxTableProps) => Element'."
+        },
+        {
+          "code": 2322,
+          "line": 54,
+          "message": "Type '{ page: number; pageCount: number; onPageChange: Dispatch<SetStateAction<number>>; }' is not assignable to type 'IntrinsicAttributes & Omit<HTMLAttributes<HTMLElement>, \"onChange\"> & { total: number; page?: number | undefined; defaultPage?: number | undefined; onPageChange?: ((page: number) => void) | undefined; siblingCount?: number | undefined; }'.\n  Property 'pageCount' does not exist on type 'IntrinsicAttributes & Omit<HTMLAttributes<HTMLElement>, \"onChange\"> & { total: number; page?: number | undefined; defaultPage?: number | undefined; onPageChange?: ((page: number) => void) | undefined; siblingCount?: number | undefined; }'."
+        }
+      ],
+      "unknownComponents": [],
+      "unknownProps": [
+        {
+          "component": "JxTable.Root",
+          "prop": "Root"
+        },
+        {
+          "component": "JxTable.Header",
+          "prop": "Header"
+        },
+        {
+          "component": "JxTable.Row",
+          "prop": "Row"
+        },
+        {
+          "component": "JxTable.HeadCell",
+          "prop": "HeadCell"
+        },
+        {
+          "component": "JxTable",
+          "prop": "HeadCell"
+        },
+        {
+          "component": "JxTable",
+          "prop": "Row"
+        },
+        {
+          "component": "JxTable",
+          "prop": "Header"
+        },
+        {
+          "component": "JxTable.Body",
+          "prop": "Body"
+        },
+        {
+          "component": "JxTable.Cell",
+          "prop": "Cell"
+        },
+        {
+          "component": "JxTable",
+          "prop": "Cell"
+        },
+        {
+          "component": "JxTable",
+          "prop": "Body"
+        },
+        {
+          "component": "JxTable",
+          "prop": "Root"
+        },
+        {
+          "component": "JxPagination",
+          "prop": "pageCount"
+        }
+      ]
+    },
+    "lint": [],
+    "usedComponents": [
+      "JxBadge",
+      "JxPagination",
+      "JxTable.Body",
+      "JxTable.Cell",
+      "JxTable.HeadCell",
+      "JxTable.Header",
+      "JxTable.Root",
+      "JxTable.Row"
+    ],
+    "expectedCoverage": 0.67,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.2
+  }
+}

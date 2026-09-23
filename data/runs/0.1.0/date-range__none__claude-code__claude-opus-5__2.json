@@ -1,0 +1,100 @@
+{
+  "id": "date-range__none__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T15:27:54.606Z",
+  "repeat": 2,
+  "durationMs": 32435,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "date-range",
+    "title": "Выбор периода",
+    "prompt": "Сделай выбор даты отчёта: календарь на месяц и над ним ряд быстрых вариантов «Сегодня», «Вчера», «Неделя назад», при нажатии на которые дата подставляется в календарь. Выбранная дата отдаётся наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxCalendar",
+      "JxChip"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 8594,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 3072,
+    "cacheRead": 8594,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.081107,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\nimport { Button, Card, Stack, Text } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date;\n  onChange: (date: Date) => void;\n};\n\nconst WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];\nconst MONTHS = [\n  'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',\n  'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь',\n];\n\nconst startOfDay = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate());\n\nconst addDays = (d: Date, amount: number) => {\n  const next = startOfDay(d);\n  next.setDate(next.getDate() + amount);\n  return next;\n};\n\nconst isSameDay = (a: Date, b: Date) =>\n  a.getFullYear() === b.getFullYear() &&\n  a.getMonth() === b.getMonth() &&\n  a.getDate() === b.getDate();\n\nfunction buildMonthCells(year: number, month: number): Array<Date | null> {\n  const leadingBlanks = (new Date(year, month, 1).getDay() + 6) % 7;\n  const daysInMonth = new Date(year, month + 1, 0).getDate();\n  const cells: Array<Date | null> = new Array(leadingBlanks).fill(null);\n  for (let day = 1; day <= daysInMonth; day += 1) {\n    cells.push(new Date(year, month, day));\n  }\n  while (cells.length % 7 !== 0) {\n    cells.push(null);\n  }\n  return cells;\n}\n\nexport default function ReportDatePicker({ value, onChange }: ReportDatePickerProps) {\n  const today = useMemo(() => startOfDay(new Date()), []);\n  const [selected, setSelected] = useState<Date>(() => (value ? startOfDay(value) : today));\n  const current = value ? startOfDay(value) : selected;\n  const [viewDate, setViewDate] = useState<Date>(() => new Date(current.getFullYear(), current.getMonth(), 1));\n\n  const cells = useMemo(\n    () => buildMonthCells(viewDate.getFullYear(), viewDate.getMonth()),\n    [viewDate],\n  );\n\n  const quickOptions = useMemo(\n    () => [\n      { label: 'Сегодня', date: today },\n      { label: 'Вчера', date: addDays(today, -1) },\n      { label: 'Неделя назад', date: addDays(today, -7) },\n    ],\n    [today],\n  );\n\n  const pick = (date: Date) => {\n    setSelected(date);\n    setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));\n    onChange(date);\n  };\n\n  const shiftMonth = (delta: number) =>\n    setViewDate((prev) => new Date(prev.getFullYear(), prev.getMonth() + delta, 1));\n\n  return (\n    <Card>\n      <Stack direction=\"vertical\" gap=\"md\">\n        <Stack direction=\"horizontal\" gap=\"sm\" wrap>\n          {quickOptions.map((option) => (\n            <Button\n              key={option.label}\n              size=\"sm\"\n              variant={isSameDay(current, option.date) ? 'primary' : 'secondary'}\n              onClick={() => pick(option.date)}\n            >\n              {option.label}\n            </Button>\n          ))}\n        </Stack>\n\n        <Stack direction=\"horizontal\" gap=\"sm\" align=\"center\" justify=\"space-between\">\n          <Button size=\"sm\" variant=\"ghost\" aria-label=\"Предыдущий месяц\" onClick={() => shiftMonth(-1)}>\n            ←\n          </Button>\n          <Text weight=\"medium\">\n            {`${MONTHS[viewDate.getMonth()]} ${viewDate.getFullYear()}`}\n          </Text>\n          <Button size=\"sm\" variant=\"ghost\" aria-label=\"Следующий месяц\" onClick={() => shiftMonth(1)}>\n            →\n          </Button>\n        </Stack>\n\n        <div\n          role=\"grid\"\n          style={{\n            display: 'grid',\n            gridTemplateColumns: 'repeat(7, 1fr)',\n            gap: 'var(--jx-space-xs)',\n          }}\n        >\n          {WEEKDAYS.map((weekday) => (\n            <Text key={weekday} size=\"sm\" tone=\"muted\" align=\"center\">\n              {weekday}\n            </Text>\n          ))}\n\n          {cells.map((date, index) => {\n            if (!date) {\n              return <span key={`blank-${index}`} aria-hidden=\"true\" />;\n            }\n            const isSelected = isSameDay(date, current);\n            return (\n              <Button\n                key={date.toISOString()}\n                size=\"sm\"\n                fullWidth\n                variant={isSelected ? 'primary' : 'ghost'}\n                aria-pressed={isSelected}\n                onClick={() => pick(date)}\n              >\n                {date.getDate()}\n              </Button>\n            );\n          })}\n        </div>\n      </Stack>\n    </Card>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport { Button, Card, Stack, Text } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date;\n  onChange: (date: Date) => void;\n};\n\nconst WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];\nconst MONTHS = [\n  'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',\n  'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь',\n];\n\nconst startOfDay = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate());\n\nconst addDays = (d: Date, amount: number) => {\n  const next = startOfDay(d);\n  next.setDate(next.getDate() + amount);\n  return next;\n};\n\nconst isSameDay = (a: Date, b: Date) =>\n  a.getFullYear() === b.getFullYear() &&\n  a.getMonth() === b.getMonth() &&\n  a.getDate() === b.getDate();\n\nfunction buildMonthCells(year: number, month: number): Array<Date | null> {\n  const leadingBlanks = (new Date(year, month, 1).getDay() + 6) % 7;\n  const daysInMonth = new Date(year, month + 1, 0).getDate();\n  const cells: Array<Date | null> = new Array(leadingBlanks).fill(null);\n  for (let day = 1; day <= daysInMonth; day += 1) {\n    cells.push(new Date(year, month, day));\n  }\n  while (cells.length % 7 !== 0) {\n    cells.push(null);\n  }\n  return cells;\n}\n\nexport default function ReportDatePicker({ value, onChange }: ReportDatePickerProps) {\n  const today = useMemo(() => startOfDay(new Date()), []);\n  const [selected, setSelected] = useState<Date>(() => (value ? startOfDay(value) : today));\n  const current = value ? startOfDay(value) : selected;\n  const [viewDate, setViewDate] = useState<Date>(() => new Date(current.getFullYear(), current.getMonth(), 1));\n\n  const cells = useMemo(\n    () => buildMonthCells(viewDate.getFullYear(), viewDate.getMonth()),\n    [viewDate],\n  );\n\n  const quickOptions = useMemo(\n    () => [\n      { label: 'Сегодня', date: today },\n      { label: 'Вчера', date: addDays(today, -1) },\n      { label: 'Неделя назад', date: addDays(today, -7) },\n    ],\n    [today],\n  );\n\n  const pick = (date: Date) => {\n    setSelected(date);\n    setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));\n    onChange(date);\n  };\n\n  const shiftMonth = (delta: number) =>\n    setViewDate((prev) => new Date(prev.getFullYear(), prev.getMonth() + delta, 1));\n\n  return (\n    <Card>\n      <Stack direction=\"vertical\" gap=\"md\">\n        <Stack direction=\"horizontal\" gap=\"sm\" wrap>\n          {quickOptions.map((option) => (\n            <Button\n              key={option.label}\n              size=\"sm\"\n              variant={isSameDay(current, option.date) ? 'primary' : 'secondary'}\n              onClick={() => pick(option.date)}\n            >\n              {option.label}\n            </Button>\n          ))}\n        </Stack>\n\n        <Stack direction=\"horizontal\" gap=\"sm\" align=\"center\" justify=\"space-between\">\n          <Button size=\"sm\" variant=\"ghost\" aria-label=\"Предыдущий месяц\" onClick={() => shiftMonth(-1)}>\n            ←\n          </Button>\n          <Text weight=\"medium\">\n            {`${MONTHS[viewDate.getMonth()]} ${viewDate.getFullYear()}`}\n          </Text>\n          <Button size=\"sm\" variant=\"ghost\" aria-label=\"Следующий месяц\" onClick={() => shiftMonth(1)}>\n            →\n          </Button>\n        </Stack>\n\n        <div\n          role=\"grid\"\n          style={{\n            display: 'grid',\n            gridTemplateColumns: 'repeat(7, 1fr)',\n            gap: 'var(--jx-space-xs)',\n          }}\n        >\n          {WEEKDAYS.map((weekday) => (\n            <Text key={weekday} size=\"sm\" tone=\"muted\" align=\"center\">\n              {weekday}\n            </Text>\n          ))}\n\n          {cells.map((date, index) => {\n            if (!date) {\n              return <span key={`blank-${index}`} aria-hidden=\"true\" />;\n            }\n            const isSelected = isSameDay(date, current);\n            return (\n              <Button\n                key={date.toISOString()}\n                size=\"sm\"\n                fullWidth\n                variant={isSelected ? 'primary' : 'ghost'}\n                aria-pressed={isSelected}\n                onClick={() => pick(date)}\n              >\n                {date.getDate()}\n              </Button>\n            );\n          })}\n        </div>\n      </Stack>\n    </Card>\n  );\n}\n```\n\nОдно уточнение вне формата, потому что иначе код может ввести в заблуждение: у меня нет доступа к документации `@jinx-ui/react`, поэтому имена компонентов (`Card`, `Stack`, `Button`, `Text`) и их пропсы (`variant`, `tone`, `gap`, `fullWidth`) взяты по типовым соглашениям и почти наверняка потребуют сверки с реальным API библиотеки."
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Card'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Card",
+        "Stack",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 100,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

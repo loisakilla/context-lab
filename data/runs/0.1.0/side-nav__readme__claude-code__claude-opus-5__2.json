@@ -1,0 +1,99 @@
+{
+  "id": "side-nav__readme__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T15:41:25.669Z",
+  "repeat": 2,
+  "durationMs": 14703,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "side-nav",
+    "title": "Боковая панель навигации",
+    "prompt": "Сделай кнопку «Меню», по которой слева выезжает панель с навигацией: пункты «Проекты», «Команда», «Настройки», разделитель и пункт «Выйти», выделенный как опасный. Выбор пункта вызывает переданный колбэк onNavigate с ключом пункта и закрывает панель.",
+    "taskType": "ui",
+    "expects": [
+      "JxDrawer",
+      "JxMenu",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 9327,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1212,
+    "cacheRead": 9327,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0349735,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxButton, JxDrawer, JxDivider } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\nconst ITEMS: { key: NavKey; label: string }[] = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport interface NavMenuProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function NavMenu({ onNavigate }: NavMenuProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = (key: NavKey) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <JxButton variant=\"primary\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n\n      <JxDrawer open={open} onOpenChange={setOpen} side=\"left\" title=\"Навигация\">\n        <nav\n          aria-label=\"Основная навигация\"\n          style={{\n            display: 'flex',\n            flexDirection: 'column',\n            gap: 'var(--jx-space-2)',\n            padding: 'var(--jx-space-3)',\n          }}\n        >\n          {ITEMS.map((item) => (\n            <JxButton\n              key={item.key}\n              variant=\"ghost\"\n              style={{ justifyContent: 'flex-start', width: '100%' }}\n              onClick={() => select(item.key)}\n            >\n              {item.label}\n            </JxButton>\n          ))}\n\n          <JxDivider />\n\n          <JxButton\n            variant=\"danger\"\n            style={{ justifyContent: 'flex-start', width: '100%' }}\n            onClick={() => select('logout')}\n          >\n            Выйти\n          </JxButton>\n        </nav>\n      </JxDrawer>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxDrawer, JxDivider } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\nconst ITEMS: { key: NavKey; label: string }[] = [\n  { key: 'projects', label: 'Проекты' },\n  { key: 'team', label: 'Команда' },\n  { key: 'settings', label: 'Настройки' },\n];\n\nexport interface NavMenuProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function NavMenu({ onNavigate }: NavMenuProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = (key: NavKey) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <JxButton variant=\"primary\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n\n      <JxDrawer open={open} onOpenChange={setOpen} side=\"left\" title=\"Навигация\">\n        <nav\n          aria-label=\"Основная навигация\"\n          style={{\n            display: 'flex',\n            flexDirection: 'column',\n            gap: 'var(--jx-space-2)',\n            padding: 'var(--jx-space-3)',\n          }}\n        >\n          {ITEMS.map((item) => (\n            <JxButton\n              key={item.key}\n              variant=\"ghost\"\n              style={{ justifyContent: 'flex-start', width: '100%' }}\n              onClick={() => select(item.key)}\n            >\n              {item.label}\n            </JxButton>\n          ))}\n\n          <JxDivider />\n\n          <JxButton\n            variant=\"danger\"\n            style={{ justifyContent: 'flex-start', width: '100%' }}\n            onClick={() => select('logout')}\n          >\n            Выйти\n          </JxButton>\n        </nav>\n      </JxDrawer>\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 33,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 44,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 55,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxDivider",
+      "JxDrawer"
+    ],
+    "expectedCoverage": 0.67,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.9
+  }
+}

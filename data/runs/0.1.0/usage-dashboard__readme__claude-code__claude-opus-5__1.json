@@ -1,0 +1,135 @@
+{
+  "id": "usage-dashboard__readme__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-23T15:43:52.156Z",
+  "repeat": 1,
+  "durationMs": 61740,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "usage-dashboard",
+    "title": "Панель расхода с фильтрами",
+    "prompt": "Сделай панель расхода по проектам. Сверху чипы-фильтры по статусу, которые можно снимать. Под ними на каждый проект строка с названием, круговым индикатором заполненности квоты в процентах и меткой статуса. Список постраничный, по пять строк. Если после фильтрации ничего не осталось, вместо списка показывается пустое состояние с кнопкой сброса фильтров.",
+    "taskType": "ui",
+    "expects": [
+      "JxChip",
+      "JxProgressCircle",
+      "JxBadge",
+      "JxPagination",
+      "JxEmptyState"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 8233,
+        "cacheCreation": 1121
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 5476,
+    "cacheRead": 8233,
+    "cacheCreation": 1121
+  },
+  "costUsd": 0.14803275,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\nimport { JxButton } from '@jinx-ui/react';\n\ntype ProjectStatus = 'active' | 'paused' | 'over' | 'archived';\n\ntype Project = {\n  id: string;\n  name: string;\n  used: number;\n  quota: number;\n  status: ProjectStatus;\n};\n\ntype ProjectSpendPanelProps = {\n  projects?: Project[];\n};\n\nconst STATUS_LABEL: Record<ProjectStatus, string> = {\n  active: 'Активен',\n  paused: 'На паузе',\n  over: 'Превышение',\n  archived: 'В архиве',\n};\n\nconst STATUS_TONE: Record<ProjectStatus, string> = {\n  active: 'success',\n  paused: 'neutral',\n  over: 'danger',\n  archived: 'muted',\n};\n\nconst STATUSES = Object.keys(STATUS_LABEL) as ProjectStatus[];\n\nconst PAGE_SIZE = 5;\nconst RING_RADIUS = 18;\nconst RING_LENGTH = 2 * Math.PI * RING_RADIUS;\n\nconst DEFAULT_PROJECTS: Project[] = [\n  { id: 'atlas', name: 'Atlas Ingest', used: 8200, quota: 10000, status: 'active' },\n  { id: 'beacon', name: 'Beacon Search', used: 11400, quota: 9000, status: 'over' },\n  { id: 'cobalt', name: 'Cobalt Billing', used: 1500, quota: 6000, status: 'paused' },\n  { id: 'delta', name: 'Delta Reports', used: 4300, quota: 5000, status: 'active' },\n  { id: 'echo', name: 'Echo Notifications', used: 900, quota: 4000, status: 'paused' },\n  { id: 'forge', name: 'Forge Pipelines', used: 7600, quota: 8000, status: 'active' },\n  { id: 'gamma', name: 'Gamma Sandbox', used: 15200, quota: 12000, status: 'over' },\n  { id: 'harbor', name: 'Harbor Storage', used: 2400, quota: 7000, status: 'active' },\n];\n\nexport default function ProjectSpendPanel({ projects = DEFAULT_PROJECTS }: ProjectSpendPanelProps) {\n  const [activeStatuses, setActiveStatuses] = useState<ProjectStatus[]>(STATUSES);\n  const [requestedPage, setRequestedPage] = useState(0);\n\n  const visible = useMemo(\n    () => projects.filter((project) => activeStatuses.includes(project.status)),\n    [projects, activeStatuses],\n  );\n\n  const pageCount = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));\n  const page = Math.min(requestedPage, pageCount - 1);\n  const rows = visible.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);\n\n  const toggleStatus = (status: ProjectStatus) => {\n    setActiveStatuses((current) =>\n      current.includes(status) ? current.filter((item) => item !== status) : [...current, status],\n    );\n    setRequestedPage(0);\n  };\n\n  const resetFilters = () => {\n    setActiveStatuses(STATUSES);\n    setRequestedPage(0);\n  };\n\n  return (\n    <section className=\"jx-card jx-stack\" style={{ gap: 'var(--jx-space-5)' }}>\n      <header className=\"jx-stack\" style={{ gap: 'var(--jx-space-2)' }}>\n        <h2 className=\"jx-heading\">Расход по проектам</h2>\n        <p className=\"jx-text jx-text--muted\">Заполненность квоты за текущий период</p>\n      </header>\n\n      <div\n        className=\"jx-cluster\"\n        role=\"group\"\n        aria-label=\"Фильтр по статусу\"\n        style={{ gap: 'var(--jx-space-2)', flexWrap: 'wrap' }}\n      >\n        {STATUSES.map((status) => {\n          const selected = activeStatuses.includes(status);\n          return (\n            <button\n              key={status}\n              type=\"button\"\n              className={`jx-chip${selected ? ' jx-chip--selected' : ''}`}\n              aria-pressed={selected}\n              onClick={() => toggleStatus(status)}\n            >\n              <span className=\"jx-chip__label\">{STATUS_LABEL[status]}</span>\n              {selected ? (\n                <span className=\"jx-chip__remove\" aria-hidden=\"true\">\n                  ×\n                </span>\n              ) : null}\n            </button>\n          );\n        })}\n      </div>\n\n      {rows.length === 0 ? (\n        <div className=\"jx-empty-state jx-stack\" style={{ gap: 'var(--jx-space-3)' }}>\n          <p className=\"jx-text\">Под выбранные фильтры не подошёл ни один проект.</p>\n          <JxButton variant=\"primary\" onClick={resetFilters}>\n            Сбросить фильтры\n          </JxButton>\n        </div>\n      ) : (\n        <ul className=\"jx-list\" style={{ listStyle: 'none', margin: 0, padding: 0 }}>\n          {rows.map((project) => {\n            const percent = Math.round((project.used / project.quota) * 100);\n            const filled = Math.min(100, Math.max(0, percent));\n            const tone = STATUS_TONE[project.status];\n            return (\n              <li\n                key={project.id}\n                className=\"jx-list__item jx-cluster\"\n                style={{\n                  gap: 'var(--jx-space-4)',\n                  alignItems: 'center',\n                  justifyContent: 'space-between',\n                }}\n              >\n                <span className=\"jx-text jx-text--strong\">{project.name}</span>\n\n                <span\n                  className={`jx-cluster jx-tone--${tone}`}\n                  style={{ gap: 'var(--jx-space-3)', alignItems: 'center' }}\n                >\n                  <svg\n                    width={44}\n                    height={44}\n                    viewBox=\"0 0 44 44\"\n                    role=\"progressbar\"\n                    aria-valuemin={0}\n                    aria-valuemax={100}\n                    aria-valuenow={filled}\n                    aria-label={`Квота проекта ${project.name}: ${percent}%`}\n                  >\n                    <circle\n                      cx={22}\n                      cy={22}\n                      r={RING_RADIUS}\n                      fill=\"none\"\n                      stroke=\"var(--jx-color-border)\"\n                      strokeWidth={4}\n                    />\n                    <circle\n                      cx={22}\n                      cy={22}\n                      r={RING_RADIUS}\n                      fill=\"none\"\n                      stroke=\"currentColor\"\n                      strokeWidth={4}\n                      strokeLinecap=\"round\"\n                      strokeDasharray={RING_LENGTH}\n                      strokeDashoffset={RING_LENGTH * (1 - filled / 100)}\n                      transform=\"rotate(-90 22 22)\"\n                    />\n                    <text\n                      x={22}\n                      y={22}\n                      textAnchor=\"middle\"\n                      dominantBaseline=\"central\"\n                      fill=\"var(--jx-color-fg)\"\n                      fontSize=\"var(--jx-font-size-xs)\"\n                    >\n                      {percent}%\n                    </text>\n                  </svg>\n\n                  <span className={`jx-badge jx-badge--${tone}`}>{STATUS_LABEL[project.status]}</span>\n                </span>\n              </li>\n            );\n          })}\n        </ul>\n      )}\n\n      {rows.length > 0 ? (\n        <footer\n          className=\"jx-cluster\"\n          style={{ gap: 'var(--jx-space-3)', alignItems: 'center', justifyContent: 'space-between' }}\n        >\n          <span className=\"jx-text jx-text--muted\">\n            Страница {page + 1} из {pageCount}\n          </span>\n          <span className=\"jx-cluster\" style={{ gap: 'var(--jx-space-2)' }}>\n            <JxButton\n              variant=\"secondary\"\n              disabled={page === 0}\n              onClick={() => setRequestedPage(page - 1)}\n            >\n              Назад\n            </JxButton>\n            <JxButton\n              variant=\"secondary\"\n              disabled={page >= pageCount - 1}\n              onClick={() => setRequestedPage(page + 1)}\n            >\n              Вперёд\n            </JxButton>\n          </span>\n        </footer>\n      ) : null}\n    </section>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport { JxButton } from '@jinx-ui/react';\n\ntype ProjectStatus = 'active' | 'paused' | 'over' | 'archived';\n\ntype Project = {\n  id: string;\n  name: string;\n  used: number;\n  quota: number;\n  status: ProjectStatus;\n};\n\ntype ProjectSpendPanelProps = {\n  projects?: Project[];\n};\n\nconst STATUS_LABEL: Record<ProjectStatus, string> = {\n  active: 'Активен',\n  paused: 'На паузе',\n  over: 'Превышение',\n  archived: 'В архиве',\n};\n\nconst STATUS_TONE: Record<ProjectStatus, string> = {\n  active: 'success',\n  paused: 'neutral',\n  over: 'danger',\n  archived: 'muted',\n};\n\nconst STATUSES = Object.keys(STATUS_LABEL) as ProjectStatus[];\n\nconst PAGE_SIZE = 5;\nconst RING_RADIUS = 18;\nconst RING_LENGTH = 2 * Math.PI * RING_RADIUS;\n\nconst DEFAULT_PROJECTS: Project[] = [\n  { id: 'atlas', name: 'Atlas Ingest', used: 8200, quota: 10000, status: 'active' },\n  { id: 'beacon', name: 'Beacon Search', used: 11400, quota: 9000, status: 'over' },\n  { id: 'cobalt', name: 'Cobalt Billing', used: 1500, quota: 6000, status: 'paused' },\n  { id: 'delta', name: 'Delta Reports', used: 4300, quota: 5000, status: 'active' },\n  { id: 'echo', name: 'Echo Notifications', used: 900, quota: 4000, status: 'paused' },\n  { id: 'forge', name: 'Forge Pipelines', used: 7600, quota: 8000, status: 'active' },\n  { id: 'gamma', name: 'Gamma Sandbox', used: 15200, quota: 12000, status: 'over' },\n  { id: 'harbor', name: 'Harbor Storage', used: 2400, quota: 7000, status: 'active' },\n];\n\nexport default function ProjectSpendPanel({ projects = DEFAULT_PROJECTS }: ProjectSpendPanelProps) {\n  const [activeStatuses, setActiveStatuses] = useState<ProjectStatus[]>(STATUSES);\n  const [requestedPage, setRequestedPage] = useState(0);\n\n  const visible = useMemo(\n    () => projects.filter((project) => activeStatuses.includes(project.status)),\n    [projects, activeStatuses],\n  );\n\n  const pageCount = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));\n  const page = Math.min(requestedPage, pageCount - 1);\n  const rows = visible.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);\n\n  const toggleStatus = (status: ProjectStatus) => {\n    setActiveStatuses((current) =>\n      current.includes(status) ? current.filter((item) => item !== status) : [...current, status],\n    );\n    setRequestedPage(0);\n  };\n\n  const resetFilters = () => {\n    setActiveStatuses(STATUSES);\n    setRequestedPage(0);\n  };\n\n  return (\n    <section className=\"jx-card jx-stack\" style={{ gap: 'var(--jx-space-5)' }}>\n      <header className=\"jx-stack\" style={{ gap: 'var(--jx-space-2)' }}>\n        <h2 className=\"jx-heading\">Расход по проектам</h2>\n        <p className=\"jx-text jx-text--muted\">Заполненность квоты за текущий период</p>\n      </header>\n\n      <div\n        className=\"jx-cluster\"\n        role=\"group\"\n        aria-label=\"Фильтр по статусу\"\n        style={{ gap: 'var(--jx-space-2)', flexWrap: 'wrap' }}\n      >\n        {STATUSES.map((status) => {\n          const selected = activeStatuses.includes(status);\n          return (\n            <button\n              key={status}\n              type=\"button\"\n              className={`jx-chip${selected ? ' jx-chip--selected' : ''}`}\n              aria-pressed={selected}\n              onClick={() => toggleStatus(status)}\n            >\n              <span className=\"jx-chip__label\">{STATUS_LABEL[status]}</span>\n              {selected ? (\n                <span className=\"jx-chip__remove\" aria-hidden=\"true\">\n                  ×\n                </span>\n              ) : null}\n            </button>\n          );\n        })}\n      </div>\n\n      {rows.length === 0 ? (\n        <div className=\"jx-empty-state jx-stack\" style={{ gap: 'var(--jx-space-3)' }}>\n          <p className=\"jx-text\">Под выбранные фильтры не подошёл ни один проект.</p>\n          <JxButton variant=\"primary\" onClick={resetFilters}>\n            Сбросить фильтры\n          </JxButton>\n        </div>\n      ) : (\n        <ul className=\"jx-list\" style={{ listStyle: 'none', margin: 0, padding: 0 }}>\n          {rows.map((project) => {\n            const percent = Math.round((project.used / project.quota) * 100);\n            const filled = Math.min(100, Math.max(0, percent));\n            const tone = STATUS_TONE[project.status];\n            return (\n              <li\n                key={project.id}\n                className=\"jx-list__item jx-cluster\"\n                style={{\n                  gap: 'var(--jx-space-4)',\n                  alignItems: 'center',\n                  justifyContent: 'space-between',\n                }}\n              >\n                <span className=\"jx-text jx-text--strong\">{project.name}</span>\n\n                <span\n                  className={`jx-cluster jx-tone--${tone}`}\n                  style={{ gap: 'var(--jx-space-3)', alignItems: 'center' }}\n                >\n                  <svg\n                    width={44}\n                    height={44}\n                    viewBox=\"0 0 44 44\"\n                    role=\"progressbar\"\n                    aria-valuemin={0}\n                    aria-valuemax={100}\n                    aria-valuenow={filled}\n                    aria-label={`Квота проекта ${project.name}: ${percent}%`}\n                  >\n                    <circle\n                      cx={22}\n                      cy={22}\n                      r={RING_RADIUS}\n                      fill=\"none\"\n                      stroke=\"var(--jx-color-border)\"\n                      strokeWidth={4}\n                    />\n                    <circle\n                      cx={22}\n                      cy={22}\n                      r={RING_RADIUS}\n                      fill=\"none\"\n                      stroke=\"currentColor\"\n                      strokeWidth={4}\n                      strokeLinecap=\"round\"\n                      strokeDasharray={RING_LENGTH}\n                      strokeDashoffset={RING_LENGTH * (1 - filled / 100)}\n                      transform=\"rotate(-90 22 22)\"\n                    />\n                    <text\n                      x={22}\n                      y={22}\n                      textAnchor=\"middle\"\n                      dominantBaseline=\"central\"\n                      fill=\"var(--jx-color-fg)\"\n                      fontSize=\"var(--jx-font-size-xs)\"\n                    >\n                      {percent}%\n                    </text>\n                  </svg>\n\n                  <span className={`jx-badge jx-badge--${tone}`}>{STATUS_LABEL[project.status]}</span>\n                </span>\n              </li>\n            );\n          })}\n        </ul>\n      )}\n\n      {rows.length > 0 ? (\n        <footer\n          className=\"jx-cluster\"\n          style={{ gap: 'var(--jx-space-3)', alignItems: 'center', justifyContent: 'space-between' }}\n        >\n          <span className=\"jx-text jx-text--muted\">\n            Страница {page + 1} из {pageCount}\n          </span>\n          <span className=\"jx-cluster\" style={{ gap: 'var(--jx-space-2)' }}>\n            <JxButton\n              variant=\"secondary\"\n              disabled={page === 0}\n              onClick={() => setRequestedPage(page - 1)}\n            >\n              Назад\n            </JxButton>\n            <JxButton\n              variant=\"secondary\"\n              disabled={page >= pageCount - 1}\n              onClick={() => setRequestedPage(page + 1)}\n            >\n              Вперёд\n            </JxButton>\n          </span>\n        </footer>\n      ) : null}\n    </section>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 75,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 76,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 85,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 109,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 116,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 125,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 135,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 190,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 195,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton"
+    ],
+    "expectedCoverage": 0,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.7
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "id": "usage-dashboard__none__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-23T15:23:35.038Z",
+  "repeat": 1,
+  "durationMs": 16392,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "none",
+  "task": {
+    "id": "usage-dashboard",
+    "title": "Панель расхода с фильтрами",
+    "prompt": "Сделай панель расхода по проектам. Сверху чипы-фильтры по статусу, которые можно снимать. Под ними на каждый проект строка с названием, круговым индикатором заполненности квоты в процентах и меткой статуса. Список постраничный, по пять строк. Если после фильтрации ничего не осталось, вместо списка показывается пустое состояние с кнопкой сброса фильтров.",
+    "taskType": "ui",
+    "expects": [
+      "JxChip",
+      "JxProgressCircle",
+      "JxBadge",
+      "JxPagination",
+      "JxEmptyState"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 8235,
+        "cacheCreation": 399
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2177,
+    "cacheRead": 8235,
+    "cacheCreation": 399
+  },
+  "costUsd": 0.06104625000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import React, { useMemo, useState } from 'react';\nimport {\n  Chip,\n  ChipGroup,\n  Card,\n  CardBody,\n  Stack,\n  Inline,\n  Text,\n  ProgressCircle,\n  Badge,\n  Pagination,\n  EmptyState,\n  Button,\n} from '@jinx-ui/react';\n\ntype ProjectStatus = 'active' | 'paused' | 'over-quota' | 'completed';\n\ninterface Project {\n  id: string;\n  name: string;\n  quotaUsedPercent: number;\n  status: ProjectStatus;\n}\n\nconst PROJECTS: Project[] = [\n  { id: 'p1', name: 'Атлас', quotaUsedPercent: 42, status: 'active' },\n  { id: 'p2', name: 'Орион', quotaUsedPercent: 98, status: 'over-quota' },\n  { id: 'p3', name: 'Вектор', quotaUsedPercent: 15, status: 'paused' },\n  { id: 'p4', name: 'Меридиан', quotaUsedPercent: 100, status: 'completed' },\n  { id: 'p5', name: 'Кристалл', quotaUsedPercent: 67, status: 'active' },\n  { id: 'p6', name: 'Гелиос', quotaUsedPercent: 30, status: 'paused' },\n  { id: 'p7', name: 'Немо', quotaUsedPercent: 12, status: 'active' },\n  { id: 'p8', name: 'Титан', quotaUsedPercent: 110, status: 'over-quota' },\n  { id: 'p9', name: 'Ирис', quotaUsedPercent: 55, status: 'active' },\n  { id: 'p10', name: 'Аврора', quotaUsedPercent: 100, status: 'completed' },\n  { id: 'p11', name: 'Феникс', quotaUsedPercent: 8, status: 'paused' },\n  { id: 'p12', name: 'Нептун', quotaUsedPercent: 73, status: 'active' },\n];\n\nconst STATUS_META: Record<\n  ProjectStatus,\n  { label: string; tone: 'success' | 'warning' | 'danger' | 'neutral' }\n> = {\n  active: { label: 'Активен', tone: 'success' },\n  paused: { label: 'На паузе', tone: 'neutral' },\n  'over-quota': { label: 'Превышение квоты', tone: 'danger' },\n  completed: { label: 'Завершён', tone: 'warning' },\n};\n\nconst PAGE_SIZE = 5;\n\nexport default function ProjectQuotaPanel() {\n  const [activeStatuses, setActiveStatuses] = useState<ProjectStatus[]>([]);\n  const [page, setPage] = useState(1);\n\n  const toggleStatus = (status: ProjectStatus) => {\n    setActiveStatuses((prev) =>\n      prev.includes(status) ? prev.filter((s) => s !== status) : [...prev, status]\n    );\n    setPage(1);\n  };\n\n  const resetFilters = () => {\n    setActiveStatuses([]);\n    setPage(1);\n  };\n\n  const filteredProjects = useMemo(() => {\n    if (activeStatuses.length === 0) return PROJECTS;\n    return PROJECTS.filter((p) => activeStatuses.includes(p.status));\n  }, [activeStatuses]);\n\n  const pageCount = Math.max(1, Math.ceil(filteredProjects.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n\n  const pageItems = useMemo(() => {\n    const start = (currentPage - 1) * PAGE_SIZE;\n    return filteredProjects.slice(start, start + PAGE_SIZE);\n  }, [filteredProjects, currentPage]);\n\n  const allStatuses = Object.keys(STATUS_META) as ProjectStatus[];\n\n  return (\n    <Card className=\"jx-p-4\">\n      <CardBody>\n        <Stack gap=\"4\">\n          <Stack gap=\"2\">\n            <Text size=\"sm\" tone=\"secondary\">\n              Фильтр по статусу\n            </Text>\n            <ChipGroup>\n              {allStatuses.map((status) => {\n                const meta = STATUS_META[status];\n                const selected = activeStatuses.includes(status);\n                return (\n                  <Chip\n                    key={status}\n                    selected={selected}\n                    onClick={() => toggleStatus(status)}\n                    onRemove={selected ? () => toggleStatus(status) : undefined}\n                    removable={selected}\n                    tone={meta.tone}\n                  >\n                    {meta.label}\n                  </Chip>\n                );\n              })}\n            </ChipGroup>\n          </Stack>\n\n          {pageItems.length === 0 ? (\n            <EmptyState\n              title=\"Ничего не найдено\"\n              description=\"Под выбранные фильтры не попал ни один проект.\"\n              action={\n                <Button variant=\"secondary\" onClick={resetFilters}>\n                  Сбросить фильтры\n                </Button>\n              }\n            />\n          ) : (\n            <Stack gap=\"0\" style={{ borderTop: '1px solid var(--jx-color-border-subtle)' }}>\n              {pageItems.map((project) => {\n                const meta = STATUS_META[project.status];\n                return (\n                  <Inline\n                    key={project.id}\n                    align=\"center\"\n                    justify=\"between\"\n                    gap=\"4\"\n                    className=\"jx-py-3\"\n                    style={{ borderBottom: '1px solid var(--jx-color-border-subtle)' }}\n                  >\n                    <Text weight=\"medium\">{project.name}</Text>\n                    <Inline align=\"center\" gap=\"3\">\n                      <ProgressCircle\n                        value={Math.min(project.quotaUsedPercent, 100)}\n                        size=\"sm\"\n                        tone={meta.tone}\n                        label={`${project.quotaUsedPercent}%`}\n                      />\n                      <Badge tone={meta.tone}>{meta.label}</Badge>\n                    </Inline>\n                  </Inline>\n                );\n              })}\n            </Stack>\n          )}\n\n          {pageItems.length > 0 && pageCount > 1 && (\n            <Pagination\n              page={currentPage}\n              pageCount={pageCount}\n              onPageChange={setPage}\n            />\n          )}\n        </Stack>\n      </CardBody>\n    </Card>\n  );\n}",
+    "text": "```tsx\nimport React, { useMemo, useState } from 'react';\nimport {\n  Chip,\n  ChipGroup,\n  Card,\n  CardBody,\n  Stack,\n  Inline,\n  Text,\n  ProgressCircle,\n  Badge,\n  Pagination,\n  EmptyState,\n  Button,\n} from '@jinx-ui/react';\n\ntype ProjectStatus = 'active' | 'paused' | 'over-quota' | 'completed';\n\ninterface Project {\n  id: string;\n  name: string;\n  quotaUsedPercent: number;\n  status: ProjectStatus;\n}\n\nconst PROJECTS: Project[] = [\n  { id: 'p1', name: 'Атлас', quotaUsedPercent: 42, status: 'active' },\n  { id: 'p2', name: 'Орион', quotaUsedPercent: 98, status: 'over-quota' },\n  { id: 'p3', name: 'Вектор', quotaUsedPercent: 15, status: 'paused' },\n  { id: 'p4', name: 'Меридиан', quotaUsedPercent: 100, status: 'completed' },\n  { id: 'p5', name: 'Кристалл', quotaUsedPercent: 67, status: 'active' },\n  { id: 'p6', name: 'Гелиос', quotaUsedPercent: 30, status: 'paused' },\n  { id: 'p7', name: 'Немо', quotaUsedPercent: 12, status: 'active' },\n  { id: 'p8', name: 'Титан', quotaUsedPercent: 110, status: 'over-quota' },\n  { id: 'p9', name: 'Ирис', quotaUsedPercent: 55, status: 'active' },\n  { id: 'p10', name: 'Аврора', quotaUsedPercent: 100, status: 'completed' },\n  { id: 'p11', name: 'Феникс', quotaUsedPercent: 8, status: 'paused' },\n  { id: 'p12', name: 'Нептун', quotaUsedPercent: 73, status: 'active' },\n];\n\nconst STATUS_META: Record<\n  ProjectStatus,\n  { label: string; tone: 'success' | 'warning' | 'danger' | 'neutral' }\n> = {\n  active: { label: 'Активен', tone: 'success' },\n  paused: { label: 'На паузе', tone: 'neutral' },\n  'over-quota': { label: 'Превышение квоты', tone: 'danger' },\n  completed: { label: 'Завершён', tone: 'warning' },\n};\n\nconst PAGE_SIZE = 5;\n\nexport default function ProjectQuotaPanel() {\n  const [activeStatuses, setActiveStatuses] = useState<ProjectStatus[]>([]);\n  const [page, setPage] = useState(1);\n\n  const toggleStatus = (status: ProjectStatus) => {\n    setActiveStatuses((prev) =>\n      prev.includes(status) ? prev.filter((s) => s !== status) : [...prev, status]\n    );\n    setPage(1);\n  };\n\n  const resetFilters = () => {\n    setActiveStatuses([]);\n    setPage(1);\n  };\n\n  const filteredProjects = useMemo(() => {\n    if (activeStatuses.length === 0) return PROJECTS;\n    return PROJECTS.filter((p) => activeStatuses.includes(p.status));\n  }, [activeStatuses]);\n\n  const pageCount = Math.max(1, Math.ceil(filteredProjects.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n\n  const pageItems = useMemo(() => {\n    const start = (currentPage - 1) * PAGE_SIZE;\n    return filteredProjects.slice(start, start + PAGE_SIZE);\n  }, [filteredProjects, currentPage]);\n\n  const allStatuses = Object.keys(STATUS_META) as ProjectStatus[];\n\n  return (\n    <Card className=\"jx-p-4\">\n      <CardBody>\n        <Stack gap=\"4\">\n          <Stack gap=\"2\">\n            <Text size=\"sm\" tone=\"secondary\">\n              Фильтр по статусу\n            </Text>\n            <ChipGroup>\n              {allStatuses.map((status) => {\n                const meta = STATUS_META[status];\n                const selected = activeStatuses.includes(status);\n                return (\n                  <Chip\n                    key={status}\n                    selected={selected}\n                    onClick={() => toggleStatus(status)}\n                    onRemove={selected ? () => toggleStatus(status) : undefined}\n                    removable={selected}\n                    tone={meta.tone}\n                  >\n                    {meta.label}\n                  </Chip>\n                );\n              })}\n            </ChipGroup>\n          </Stack>\n\n          {pageItems.length === 0 ? (\n            <EmptyState\n              title=\"Ничего не найдено\"\n              description=\"Под выбранные фильтры не попал ни один проект.\"\n              action={\n                <Button variant=\"secondary\" onClick={resetFilters}>\n                  Сбросить фильтры\n                </Button>\n              }\n            />\n          ) : (\n            <Stack gap=\"0\" style={{ borderTop: '1px solid var(--jx-color-border-subtle)' }}>\n              {pageItems.map((project) => {\n                const meta = STATUS_META[project.status];\n                return (\n                  <Inline\n                    key={project.id}\n                    align=\"center\"\n                    justify=\"between\"\n                    gap=\"4\"\n                    className=\"jx-py-3\"\n                    style={{ borderBottom: '1px solid var(--jx-color-border-subtle)' }}\n                  >\n                    <Text weight=\"medium\">{project.name}</Text>\n                    <Inline align=\"center\" gap=\"3\">\n                      <ProgressCircle\n                        value={Math.min(project.quotaUsedPercent, 100)}\n                        size=\"sm\"\n                        tone={meta.tone}\n                        label={`${project.quotaUsedPercent}%`}\n                      />\n                      <Badge tone={meta.tone}>{meta.label}</Badge>\n                    </Inline>\n                  </Inline>\n                );\n              })}\n            </Stack>\n          )}\n\n          {pageItems.length > 0 && pageCount > 1 && (\n            <Pagination\n              page={currentPage}\n              pageCount={pageCount}\n              onPageChange={setPage}\n            />\n          )}\n        </Stack>\n      </CardBody>\n    </Card>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Chip'."
+        },
+        {
+          "code": 2305,
+          "line": 4,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'ChipGroup'."
+        },
+        {
+          "code": 2305,
+          "line": 5,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Card'."
+        },
+        {
+          "code": 2305,
+          "line": 6,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'CardBody'."
+        },
+        {
+          "code": 2305,
+          "line": 7,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 8,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Inline'."
+        },
+        {
+          "code": 2305,
+          "line": 9,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        },
+        {
+          "code": 2724,
+          "line": 10,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'ProgressCircle'. Did you mean 'JxProgressCircle'?"
+        },
+        {
+          "code": 2724,
+          "line": 11,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Badge'. Did you mean 'JxBadge'?"
+        },
+        {
+          "code": 2724,
+          "line": 12,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Pagination'. Did you mean 'JxPagination'?"
+        },
+        {
+          "code": 2724,
+          "line": 13,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'EmptyState'. Did you mean 'JxEmptyState'?"
+        },
+        {
+          "code": 2724,
+          "line": 14,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        }
+      ],
+      "unknownComponents": [
+        "Badge",
+        "Button",
+        "Card",
+        "CardBody",
+        "Chip",
+        "ChipGroup",
+        "EmptyState",
+        "Inline",
+        "Pagination",
+        "ProgressCircle",
+        "Stack",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 123,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 133,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

@@ -1,0 +1,219 @@
+{
+  "id": "wizard__mcp__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T16:08:10.028Z",
+  "repeat": 3,
+  "durationMs": 51684,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "mcp",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 1587,
+    "sources": [
+      {
+        "kind": "tools",
+        "id": "search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules",
+        "version": "0.1.0",
+        "tokens": 1191,
+        "hash": "7b624df52b71eb9c"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 11135,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_rules",
+          "input": {
+            "task": "ui"
+          },
+          "resultTokens": 1247
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "индикатор шагов степпер"
+          },
+          "resultTokens": 352
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "текстовое поле ввода"
+          },
+          "resultTokens": 514
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "кнопка"
+          },
+          "resultTokens": 413
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 5,
+        "cacheRead": 11135,
+        "cacheCreation": 4525
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxStepper",
+            "detail": "full"
+          },
+          "resultTokens": 323
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxInputField",
+            "detail": "full"
+          },
+          "resultTokens": 455
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxButton",
+            "detail": "full"
+          },
+          "resultTokens": 511
+        },
+        {
+          "name": "mcp__context-lab__get_component_examples",
+          "input": {
+            "name": "JxStepper"
+          },
+          "resultTokens": 154
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 15660,
+        "cacheCreation": 2752
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__list_design_tokens",
+          "input": {
+            "maxTokens": 1500
+          },
+          "resultTokens": 625
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 18412,
+        "cacheCreation": 1478
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 8,
+    "output": 4555,
+    "cacheRead": 56342,
+    "cacheCreation": 8755
+  },
+  "costUsd": 0.19680475,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useEffect, useRef, useState, type FormEvent } from 'react';\nimport { JxStepper, JxInputField, JxButton } from '@jinx-ui/react';\n\ntype SignupValues = {\n  name: string;\n  email: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype SignupWizardProps = {\n  onSubmit: (values: SignupValues) => void;\n};\n\nconst STEPS = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nconst LAST_STEP = STEPS.length - 1;\n\nconst EMPTY_VALUES: SignupValues = { name: '', email: '', city: '', street: '', zip: '' };\n\nfunction validateStep(step: number, values: SignupValues) {\n  const errors: Partial<Record<keyof SignupValues, string>> = {};\n  if (step === 0) {\n    if (!values.name.trim()) errors.name = 'Укажите имя, оно попадёт в письма';\n    if (!values.email.includes('@')) errors.email = 'Укажите адрес с символом @';\n  }\n  if (step === 1) {\n    if (!values.city.trim()) errors.city = 'Укажите город';\n    if (!values.street.trim()) errors.street = 'Укажите улицу и номер дома';\n  }\n  return errors;\n}\n\nexport default function SignupWizard({ onSubmit }: SignupWizardProps) {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<SignupValues>(EMPTY_VALUES);\n  const [showErrors, setShowErrors] = useState(false);\n  const panelRef = useRef<HTMLDivElement>(null);\n\n  useEffect(() => {\n    panelRef.current?.focus();\n  }, [step]);\n\n  const errors = showErrors ? validateStep(step, values) : {};\n\n  const setField = (field: keyof SignupValues) => (event: { target: { value: string } }) =>\n    setValues((previous) => ({ ...previous, [field]: event.target.value }));\n\n  const goBack = () => {\n    setShowErrors(false);\n    setStep((previous) => Math.max(previous - 1, 0));\n  };\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (Object.keys(validateStep(step, values)).length > 0) {\n      setShowErrors(true);\n      return;\n    }\n    setShowErrors(false);\n    if (step < LAST_STEP) {\n      setStep(step + 1);\n      return;\n    }\n    onSubmit(values);\n  };\n\n  const review: Array<{ term: string; value: string }> = [\n    { term: 'Имя', value: values.name },\n    { term: 'Почта', value: values.email },\n    { term: 'Город', value: values.city },\n    { term: 'Улица и дом', value: values.street },\n    { term: 'Индекс', value: values.zip.trim() || 'не указан' },\n  ];\n\n  return (\n    <form\n      noValidate\n      onSubmit={handleSubmit}\n      style={{ display: 'flex', flexDirection: 'column', gap: '24px', fontFamily: 'var(--jx-font-sans)' }}\n    >\n      <JxStepper steps={STEPS} current={step} />\n\n      <div\n        ref={panelRef}\n        tabIndex={-1}\n        role=\"group\"\n        aria-label={`Шаг ${step + 1} из ${STEPS.length}: ${STEPS[step].label}`}\n        style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}\n      >\n        {step === 0 && (\n          <>\n            <JxInputField\n              label=\"Имя\"\n              name=\"name\"\n              autoComplete=\"given-name\"\n              required\n              value={values.name}\n              onChange={setField('name')}\n              errorText={errors.name}\n            />\n            <JxInputField\n              label=\"Электронная почта\"\n              name=\"email\"\n              type=\"email\"\n              autoComplete=\"email\"\n              required\n              value={values.email}\n              onChange={setField('email')}\n              errorText={errors.email}\n              helperText=\"На этот адрес придёт письмо для подтверждения\"\n            />\n          </>\n        )}\n\n        {step === 1 && (\n          <>\n            <JxInputField\n              label=\"Город\"\n              name=\"city\"\n              autoComplete=\"address-level2\"\n              required\n              value={values.city}\n              onChange={setField('city')}\n              errorText={errors.city}\n            />\n            <JxInputField\n              label=\"Улица и дом\"\n              name=\"street\"\n              autoComplete=\"street-address\"\n              required\n              value={values.street}\n              onChange={setField('street')}\n              errorText={errors.street}\n            />\n            <JxInputField\n              label=\"Почтовый индекс\"\n              name=\"zip\"\n              inputMode=\"numeric\"\n              autoComplete=\"postal-code\"\n              value={values.zip}\n              onChange={setField('zip')}\n              helperText=\"Необязательно, ускоряет доставку\"\n            />\n          </>\n        )}\n\n        {step === 2 && (\n          <dl\n            style={{\n              display: 'grid',\n              gridTemplateColumns: 'minmax(120px, auto) 1fr',\n              gap: '12px 16px',\n              margin: 0,\n              padding: '16px',\n              background: 'var(--jx-surface)',\n              border: '1px solid var(--jx-border)',\n              borderRadius: 'var(--jx-r)',\n            }}\n          >\n            {review.map((row) => (\n              <div key={row.term} style={{ display: 'contents' }}>\n                <dt style={{ color: 'var(--jx-text-2)' }}>{row.term}</dt>\n                <dd style={{ margin: 0, color: 'var(--jx-text)', overflowWrap: 'anywhere' }}>{row.value}</dd>\n              </div>\n            ))}\n          </dl>\n        )}\n      </div>\n\n      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>\n        <JxButton variant=\"ghost\" type=\"button\" disabled={step === 0} onClick={goBack}>\n          Назад\n        </JxButton>\n        <JxButton variant=\"primary\" type=\"submit\">\n          {step === LAST_STEP ? 'Отправить' : 'Дальше'}\n        </JxButton>\n      </div>\n    </form>\n  );\n}",
+    "text": "```tsx\nimport { useEffect, useRef, useState, type FormEvent } from 'react';\nimport { JxStepper, JxInputField, JxButton } from '@jinx-ui/react';\n\ntype SignupValues = {\n  name: string;\n  email: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype SignupWizardProps = {\n  onSubmit: (values: SignupValues) => void;\n};\n\nconst STEPS = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nconst LAST_STEP = STEPS.length - 1;\n\nconst EMPTY_VALUES: SignupValues = { name: '', email: '', city: '', street: '', zip: '' };\n\nfunction validateStep(step: number, values: SignupValues) {\n  const errors: Partial<Record<keyof SignupValues, string>> = {};\n  if (step === 0) {\n    if (!values.name.trim()) errors.name = 'Укажите имя, оно попадёт в письма';\n    if (!values.email.includes('@')) errors.email = 'Укажите адрес с символом @';\n  }\n  if (step === 1) {\n    if (!values.city.trim()) errors.city = 'Укажите город';\n    if (!values.street.trim()) errors.street = 'Укажите улицу и номер дома';\n  }\n  return errors;\n}\n\nexport default function SignupWizard({ onSubmit }: SignupWizardProps) {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<SignupValues>(EMPTY_VALUES);\n  const [showErrors, setShowErrors] = useState(false);\n  const panelRef = useRef<HTMLDivElement>(null);\n\n  useEffect(() => {\n    panelRef.current?.focus();\n  }, [step]);\n\n  const errors = showErrors ? validateStep(step, values) : {};\n\n  const setField = (field: keyof SignupValues) => (event: { target: { value: string } }) =>\n    setValues((previous) => ({ ...previous, [field]: event.target.value }));\n\n  const goBack = () => {\n    setShowErrors(false);\n    setStep((previous) => Math.max(previous - 1, 0));\n  };\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (Object.keys(validateStep(step, values)).length > 0) {\n      setShowErrors(true);\n      return;\n    }\n    setShowErrors(false);\n    if (step < LAST_STEP) {\n      setStep(step + 1);\n      return;\n    }\n    onSubmit(values);\n  };\n\n  const review: Array<{ term: string; value: string }> = [\n    { term: 'Имя', value: values.name },\n    { term: 'Почта', value: values.email },\n    { term: 'Город', value: values.city },\n    { term: 'Улица и дом', value: values.street },\n    { term: 'Индекс', value: values.zip.trim() || 'не указан' },\n  ];\n\n  return (\n    <form\n      noValidate\n      onSubmit={handleSubmit}\n      style={{ display: 'flex', flexDirection: 'column', gap: '24px', fontFamily: 'var(--jx-font-sans)' }}\n    >\n      <JxStepper steps={STEPS} current={step} />\n\n      <div\n        ref={panelRef}\n        tabIndex={-1}\n        role=\"group\"\n        aria-label={`Шаг ${step + 1} из ${STEPS.length}: ${STEPS[step].label}`}\n        style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}\n      >\n        {step === 0 && (\n          <>\n            <JxInputField\n              label=\"Имя\"\n              name=\"name\"\n              autoComplete=\"given-name\"\n              required\n              value={values.name}\n              onChange={setField('name')}\n              errorText={errors.name}\n            />\n            <JxInputField\n              label=\"Электронная почта\"\n              name=\"email\"\n              type=\"email\"\n              autoComplete=\"email\"\n              required\n              value={values.email}\n              onChange={setField('email')}\n              errorText={errors.email}\n              helperText=\"На этот адрес придёт письмо для подтверждения\"\n            />\n          </>\n        )}\n\n        {step === 1 && (\n          <>\n            <JxInputField\n              label=\"Город\"\n              name=\"city\"\n              autoComplete=\"address-level2\"\n              required\n              value={values.city}\n              onChange={setField('city')}\n              errorText={errors.city}\n            />\n            <JxInputField\n              label=\"Улица и дом\"\n              name=\"street\"\n              autoComplete=\"street-address\"\n              required\n              value={values.street}\n              onChange={setField('street')}\n              errorText={errors.street}\n            />\n            <JxInputField\n              label=\"Почтовый индекс\"\n              name=\"zip\"\n              inputMode=\"numeric\"\n              autoComplete=\"postal-code\"\n              value={values.zip}\n              onChange={setField('zip')}\n              helperText=\"Необязательно, ускоряет доставку\"\n            />\n          </>\n        )}\n\n        {step === 2 && (\n          <dl\n            style={{\n              display: 'grid',\n              gridTemplateColumns: 'minmax(120px, auto) 1fr',\n              gap: '12px 16px',\n              margin: 0,\n              padding: '16px',\n              background: 'var(--jx-surface)',\n              border: '1px solid var(--jx-border)',\n              borderRadius: 'var(--jx-r)',\n            }}\n          >\n            {review.map((row) => (\n              <div key={row.term} style={{ display: 'contents' }}>\n                <dt style={{ color: 'var(--jx-text-2)' }}>{row.term}</dt>\n                <dd style={{ margin: 0, color: 'var(--jx-text)', overflowWrap: 'anywhere' }}>{row.value}</dd>\n              </div>\n            ))}\n          </dl>\n        )}\n      </div>\n\n      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>\n        <JxButton variant=\"ghost\" type=\"button\" disabled={step === 0} onClick={goBack}>\n          Назад\n        </JxButton>\n        <JxButton variant=\"primary\" type=\"submit\">\n          {step === LAST_STEP ? 'Отправить' : 'Дальше'}\n        </JxButton>\n      </div>\n    </form>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 81,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 90,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 151,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 163,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 164,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 165,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 172,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxInputField",
+      "JxStepper"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "id": "settings-form__docs__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T15:49:15.884Z",
+  "repeat": 3,
+  "durationMs": 12522,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "docs",
+  "task": {
+    "id": "settings-form",
+    "title": "Форма настроек",
+    "prompt": "Сделай форму настроек профиля: поле «Имя», выбор языка интерфейса из списка (русский, английский), переключатель «Уведомления на почту» и кнопка «Сохранить». Состояние полей храни в компоненте, при отправке вызывай переданный колбэк onSave с объектом настроек.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 21573,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.0",
+        "tokens": 21419,
+        "hash": "666d3360d38750da"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 44850,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 870,
+    "cacheRead": 44850,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.044185,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, type FormEvent } from 'react';\nimport { JxButton, JxInputField, JxSelect, JxSwitch } from '@jinx-ui/react';\n\nexport interface ProfileSettings {\n  name: string;\n  language: string;\n  emailNotifications: boolean;\n}\n\ninterface ProfileSettingsFormProps {\n  initialValue?: ProfileSettings;\n  onSave: (settings: ProfileSettings) => void;\n}\n\nexport default function ProfileSettingsForm({ initialValue, onSave }: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialValue?.name ?? '');\n  const [language, setLanguage] = useState(initialValue?.language ?? 'ru');\n  const [emailNotifications, setEmailNotifications] = useState(initialValue?.emailNotifications ?? true);\n\n  const trimmedName = name.trim();\n  const nameError = name.length > 0 && trimmedName.length === 0 ? 'Введите имя' : undefined;\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (trimmedName.length === 0) return;\n    onSave({ name: trimmedName, language, emailNotifications });\n  };\n\n  return (\n    <form\n      onSubmit={submit}\n      style={{ display: 'flex', flexDirection: 'column', gap: '16px', fontFamily: 'var(--jx-font-sans)', color: 'var(--jx-text)' }}\n    >\n      <JxInputField\n        label=\"Имя\"\n        name=\"name\"\n        required\n        placeholder=\"Как к вам обращаться\"\n        value={name}\n        onChange={(event) => setName(event.target.value)}\n        errorText={nameError}\n      />\n\n      <JxSelect\n        label=\"Язык интерфейса\"\n        options={[\n          { value: 'ru', label: 'Русский' },\n          { value: 'en', label: 'English' },\n        ]}\n        value={language}\n        onValueChange={setLanguage}\n      />\n\n      <JxSwitch\n        name=\"emailNotifications\"\n        label=\"Уведомления на почту\"\n        checked={emailNotifications}\n        onChange={(event) => setEmailNotifications(event.target.checked)}\n      />\n\n      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>\n        <JxButton type=\"submit\" variant=\"primary\" disabled={trimmedName.length === 0}>\n          Сохранить\n        </JxButton>\n      </div>\n    </form>\n  );\n}",
+    "text": "```tsx\nimport { useState, type FormEvent } from 'react';\nimport { JxButton, JxInputField, JxSelect, JxSwitch } from '@jinx-ui/react';\n\nexport interface ProfileSettings {\n  name: string;\n  language: string;\n  emailNotifications: boolean;\n}\n\ninterface ProfileSettingsFormProps {\n  initialValue?: ProfileSettings;\n  onSave: (settings: ProfileSettings) => void;\n}\n\nexport default function ProfileSettingsForm({ initialValue, onSave }: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialValue?.name ?? '');\n  const [language, setLanguage] = useState(initialValue?.language ?? 'ru');\n  const [emailNotifications, setEmailNotifications] = useState(initialValue?.emailNotifications ?? true);\n\n  const trimmedName = name.trim();\n  const nameError = name.length > 0 && trimmedName.length === 0 ? 'Введите имя' : undefined;\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (trimmedName.length === 0) return;\n    onSave({ name: trimmedName, language, emailNotifications });\n  };\n\n  return (\n    <form\n      onSubmit={submit}\n      style={{ display: 'flex', flexDirection: 'column', gap: '16px', fontFamily: 'var(--jx-font-sans)', color: 'var(--jx-text)' }}\n    >\n      <JxInputField\n        label=\"Имя\"\n        name=\"name\"\n        required\n        placeholder=\"Как к вам обращаться\"\n        value={name}\n        onChange={(event) => setName(event.target.value)}\n        errorText={nameError}\n      />\n\n      <JxSelect\n        label=\"Язык интерфейса\"\n        options={[\n          { value: 'ru', label: 'Русский' },\n          { value: 'en', label: 'English' },\n        ]}\n        value={language}\n        onValueChange={setLanguage}\n      />\n\n      <JxSwitch\n        name=\"emailNotifications\"\n        label=\"Уведомления на почту\"\n        checked={emailNotifications}\n        onChange={(event) => setEmailNotifications(event.target.checked)}\n      />\n\n      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>\n        <JxButton type=\"submit\" variant=\"primary\" disabled={trimmedName.length === 0}>\n          Сохранить\n        </JxButton>\n      </div>\n    </form>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 32,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 61,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

@@ -1,0 +1,192 @@
+{
+  "id": "appearance-settings__readme__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T15:48:25.744Z",
+  "repeat": 3,
+  "durationMs": 29111,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "appearance-settings",
+    "title": "Настройки внешнего вида",
+    "prompt": "Сделай экран настроек внешнего вида: сегментированный переключатель темы на три варианта, ползунок масштаба интерфейса от 80 до 140 процентов с показом текущего значения, переключатель плотной вёрстки и раздел «Ещё» под разделителем с выбором шрифта. Справа от заголовка экрана метка с текущей темой. Состояние храни в компоненте и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxToggle",
+      "JxSlider",
+      "JxSwitch",
+      "JxDivider",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 9366,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2816,
+    "cacheRead": 9366,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.075093,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "// NOTE: the README only documents JxButton, JxModal, JxDrawer, JxTabs, JxSelect,\n// JxCombobox, JxCalendar, JxDateRangePicker and the value/onValueChange contract.\n// JxCard, JxBadge, JxSlider, JxSwitch, JxDivider, JxTabList/JxTab, JxOption below\n// follow the same naming convention but are NOT confirmed by the docs — verify the\n// exact export names and prop shapes against @jinx-ui/react before shipping.\n\nimport { useCallback, useState } from 'react';\nimport {\n  JxBadge,\n  JxCard,\n  JxDivider,\n  JxOption,\n  JxSelect,\n  JxSlider,\n  JxSwitch,\n  JxTab,\n  JxTabList,\n  JxTabs,\n} from '@jinx-ui/react';\n\nexport type ThemeMode = 'light' | 'dark' | 'system';\nexport type FontFamily = 'system' | 'inter' | 'mono';\n\nexport interface AppearanceSettings {\n  theme: ThemeMode;\n  scale: number;\n  dense: boolean;\n  fontFamily: FontFamily;\n}\n\nexport interface AppearanceSettingsProps {\n  defaultValue?: Partial<AppearanceSettings>;\n  onChange?: (settings: AppearanceSettings) => void;\n}\n\nconst THEME_LABELS: Record<ThemeMode, string> = {\n  light: 'Светлая',\n  dark: 'Тёмная',\n  system: 'Системная',\n};\n\nconst FALLBACK: AppearanceSettings = {\n  theme: 'system',\n  scale: 100,\n  dense: false,\n  fontFamily: 'system',\n};\n\nexport default function AppearanceSettingsScreen({\n  defaultValue,\n  onChange,\n}: AppearanceSettingsProps) {\n  const [settings, setSettings] = useState<AppearanceSettings>({\n    ...FALLBACK,\n    ...defaultValue,\n  });\n\n  const patch = useCallback(\n    (next: Partial<AppearanceSettings>) => {\n      setSettings((prev) => {\n        const merged = { ...prev, ...next };\n        onChange?.(merged);\n        return merged;\n      });\n    },\n    [onChange],\n  );\n\n  return (\n    <JxCard>\n      <header\n        style={{\n          display: 'flex',\n          alignItems: 'center',\n          justifyContent: 'space-between',\n          gap: 'var(--jx-space-3)',\n          marginBottom: 'var(--jx-space-5)',\n        }}\n      >\n        <h2 style={{ margin: 0 }}>Внешний вид</h2>\n        <JxBadge>{THEME_LABELS[settings.theme]}</JxBadge>\n      </header>\n\n      <section style={{ marginBottom: 'var(--jx-space-5)' }}>\n        <label htmlFor=\"appearance-theme\">Тема</label>\n        <JxTabs\n          id=\"appearance-theme\"\n          value={settings.theme}\n          onValueChange={(value: string) => patch({ theme: value as ThemeMode })}\n        >\n          <JxTabList aria-label=\"Тема оформления\">\n            <JxTab value=\"light\">{THEME_LABELS.light}</JxTab>\n            <JxTab value=\"dark\">{THEME_LABELS.dark}</JxTab>\n            <JxTab value=\"system\">{THEME_LABELS.system}</JxTab>\n          </JxTabList>\n        </JxTabs>\n      </section>\n\n      <section style={{ marginBottom: 'var(--jx-space-5)' }}>\n        <div\n          style={{\n            display: 'flex',\n            alignItems: 'center',\n            justifyContent: 'space-between',\n            gap: 'var(--jx-space-3)',\n          }}\n        >\n          <label htmlFor=\"appearance-scale\">Масштаб интерфейса</label>\n          <span aria-live=\"polite\">{settings.scale}%</span>\n        </div>\n        <JxSlider\n          id=\"appearance-scale\"\n          min={80}\n          max={140}\n          step={5}\n          value={settings.scale}\n          onValueChange={(value: number) => patch({ scale: value })}\n        />\n      </section>\n\n      <section style={{ marginBottom: 'var(--jx-space-5)' }}>\n        <JxSwitch\n          checked={settings.dense}\n          onCheckedChange={(checked: boolean) => patch({ dense: checked })}\n        >\n          Плотная вёрстка\n        </JxSwitch>\n      </section>\n\n      <JxDivider />\n\n      <section style={{ marginTop: 'var(--jx-space-5)' }}>\n        <h3 style={{ marginTop: 0, marginBottom: 'var(--jx-space-3)' }}>Ещё</h3>\n        <label htmlFor=\"appearance-font\">Шрифт</label>\n        <JxSelect\n          id=\"appearance-font\"\n          value={settings.fontFamily}\n          onValueChange={(value: string) =>\n            patch({ fontFamily: value as FontFamily })\n          }\n        >\n          <JxOption value=\"system\">Системный</JxOption>\n          <JxOption value=\"inter\">Inter</JxOption>\n          <JxOption value=\"mono\">Моноширинный</JxOption>\n        </JxSelect>\n      </section>\n    </JxCard>\n  );\n}",
+    "text": "```tsx\n// NOTE: the README only documents JxButton, JxModal, JxDrawer, JxTabs, JxSelect,\n// JxCombobox, JxCalendar, JxDateRangePicker and the value/onValueChange contract.\n// JxCard, JxBadge, JxSlider, JxSwitch, JxDivider, JxTabList/JxTab, JxOption below\n// follow the same naming convention but are NOT confirmed by the docs — verify the\n// exact export names and prop shapes against @jinx-ui/react before shipping.\n\nimport { useCallback, useState } from 'react';\nimport {\n  JxBadge,\n  JxCard,\n  JxDivider,\n  JxOption,\n  JxSelect,\n  JxSlider,\n  JxSwitch,\n  JxTab,\n  JxTabList,\n  JxTabs,\n} from '@jinx-ui/react';\n\nexport type ThemeMode = 'light' | 'dark' | 'system';\nexport type FontFamily = 'system' | 'inter' | 'mono';\n\nexport interface AppearanceSettings {\n  theme: ThemeMode;\n  scale: number;\n  dense: boolean;\n  fontFamily: FontFamily;\n}\n\nexport interface AppearanceSettingsProps {\n  defaultValue?: Partial<AppearanceSettings>;\n  onChange?: (settings: AppearanceSettings) => void;\n}\n\nconst THEME_LABELS: Record<ThemeMode, string> = {\n  light: 'Светлая',\n  dark: 'Тёмная',\n  system: 'Системная',\n};\n\nconst FALLBACK: AppearanceSettings = {\n  theme: 'system',\n  scale: 100,\n  dense: false,\n  fontFamily: 'system',\n};\n\nexport default function AppearanceSettingsScreen({\n  defaultValue,\n  onChange,\n}: AppearanceSettingsProps) {\n  const [settings, setSettings] = useState<AppearanceSettings>({\n    ...FALLBACK,\n    ...defaultValue,\n  });\n\n  const patch = useCallback(\n    (next: Partial<AppearanceSettings>) => {\n      setSettings((prev) => {\n        const merged = { ...prev, ...next };\n        onChange?.(merged);\n        return merged;\n      });\n    },\n    [onChange],\n  );\n\n  return (\n    <JxCard>\n      <header\n        style={{\n          display: 'flex',\n          alignItems: 'center',\n          justifyContent: 'space-between',\n          gap: 'var(--jx-space-3)',\n          marginBottom: 'var(--jx-space-5)',\n        }}\n      >\n        <h2 style={{ margin: 0 }}>Внешний вид</h2>\n        <JxBadge>{THEME_LABELS[settings.theme]}</JxBadge>\n      </header>\n\n      <section style={{ marginBottom: 'var(--jx-space-5)' }}>\n        <label htmlFor=\"appearance-theme\">Тема</label>\n        <JxTabs\n          id=\"appearance-theme\"\n          value={settings.theme}\n          onValueChange={(value: string) => patch({ theme: value as ThemeMode })}\n        >\n          <JxTabList aria-label=\"Тема оформления\">\n            <JxTab value=\"light\">{THEME_LABELS.light}</JxTab>\n            <JxTab value=\"dark\">{THEME_LABELS.dark}</JxTab>\n            <JxTab value=\"system\">{THEME_LABELS.system}</JxTab>\n          </JxTabList>\n        </JxTabs>\n      </section>\n\n      <section style={{ marginBottom: 'var(--jx-space-5)' }}>\n        <div\n          style={{\n            display: 'flex',\n            alignItems: 'center',\n            justifyContent: 'space-between',\n            gap: 'var(--jx-space-3)',\n          }}\n        >\n          <label htmlFor=\"appearance-scale\">Масштаб интерфейса</label>\n          <span aria-live=\"polite\">{settings.scale}%</span>\n        </div>\n        <JxSlider\n          id=\"appearance-scale\"\n          min={80}\n          max={140}\n          step={5}\n          value={settings.scale}\n          onValueChange={(value: number) => patch({ scale: value })}\n        />\n      </section>\n\n      <section style={{ marginBottom: 'var(--jx-space-5)' }}>\n        <JxSwitch\n          checked={settings.dense}\n          onCheckedChange={(checked: boolean) => patch({ dense: checked })}\n        >\n          Плотная вёрстка\n        </JxSwitch>\n      </section>\n\n      <JxDivider />\n\n      <section style={{ marginTop: 'var(--jx-space-5)' }}>\n        <h3 style={{ marginTop: 0, marginBottom: 'var(--jx-space-3)' }}>Ещё</h3>\n        <label htmlFor=\"appearance-font\">Шрифт</label>\n        <JxSelect\n          id=\"appearance-font\"\n          value={settings.fontFamily}\n          onValueChange={(value: string) =>\n            patch({ fontFamily: value as FontFamily })\n          }\n        >\n          <JxOption value=\"system\">Системный</JxOption>\n          <JxOption value=\"inter\">Inter</JxOption>\n          <JxOption value=\"mono\">Моноширинный</JxOption>\n        </JxSelect>\n      </section>\n    </JxCard>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 10,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxCard'."
+        },
+        {
+          "code": 2305,
+          "line": 12,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxOption'."
+        },
+        {
+          "code": 2724,
+          "line": 16,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'JxTab'. Did you mean 'JxTabs'?"
+        },
+        {
+          "code": 2724,
+          "line": 17,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'JxTabList'. Did you mean 'JxTabs'?"
+        },
+        {
+          "code": 2322,
+          "line": 86,
+          "message": "Type '{ children: Element; id: string; value: ThemeMode; onValueChange: (value: string) => void; }' is not assignable to type 'IntrinsicAttributes & JxTabsProps'.\n  Property 'children' does not exist on type 'IntrinsicAttributes & JxTabsProps'."
+        },
+        {
+          "code": 2322,
+          "line": 124,
+          "message": "Type '{ children: string; checked: boolean; onCheckedChange: (checked: boolean) => void; }' is not assignable to type 'IntrinsicAttributes & Omit<InputHTMLAttributes<HTMLInputElement>, \"type\" | \"size\"> & { label?: ReactNode; wrapClassName?: string | undefined; }'.\n  Property 'onCheckedChange' does not exist on type 'IntrinsicAttributes & Omit<InputHTMLAttributes<HTMLInputElement>, \"type\" | \"size\"> & { label?: ReactNode; wrapClassName?: string | undefined; }'."
+        },
+        {
+          "code": 2322,
+          "line": 135,
+          "message": "Type '{ children: Element[]; id: string; value: FontFamily; onValueChange: (value: string) => void; }' is not assignable to type 'IntrinsicAttributes & JxSelectProps'.\n  Property 'children' does not exist on type 'IntrinsicAttributes & JxSelectProps'."
+        }
+      ],
+      "unknownComponents": [
+        "JxCard",
+        "JxOption",
+        "JxTab",
+        "JxTabList"
+      ],
+      "unknownProps": [
+        {
+          "component": "JxTabs",
+          "prop": "children"
+        },
+        {
+          "component": "JxSwitch",
+          "prop": "onCheckedChange"
+        },
+        {
+          "component": "JxSelect",
+          "prop": "children"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 72,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 80,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 84,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 99,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 101,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 121,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 132,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 133,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxBadge",
+      "JxCard",
+      "JxDivider",
+      "JxOption",
+      "JxSelect",
+      "JxSlider",
+      "JxSwitch",
+      "JxTab",
+      "JxTabList",
+      "JxTabs"
+    ],
+    "expectedCoverage": 0.8,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.24
+  }
+}

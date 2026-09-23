@@ -1,0 +1,197 @@
+{
+  "id": "wizard__mcp__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-23T15:46:27.723Z",
+  "repeat": 1,
+  "durationMs": 23001,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "mcp",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 1587,
+    "sources": [
+      {
+        "kind": "tools",
+        "id": "search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules",
+        "version": "0.1.0",
+        "tokens": 1191,
+        "hash": "7b624df52b71eb9c"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 10724,
+        "cacheCreation": 481
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "степпер индикатор шагов"
+          },
+          "resultTokens": 352
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "инпут текстовое поле"
+          },
+          "resultTokens": 515
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "кнопка button"
+          },
+          "resultTokens": 423
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "форма form field"
+          },
+          "resultTokens": 432
+        },
+        {
+          "name": "mcp__context-lab__get_rules",
+          "input": {
+            "task": "ui"
+          },
+          "resultTokens": 1247
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 11205,
+        "cacheCreation": 5307
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxStepper",
+            "detail": "full"
+          },
+          "resultTokens": 323
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxInputField",
+            "detail": "full"
+          },
+          "resultTokens": 455
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxButton",
+            "detail": "full"
+          },
+          "resultTokens": 511
+        },
+        {
+          "name": "mcp__context-lab__get_component_examples",
+          "input": {
+            "name": "JxStepper"
+          },
+          "resultTokens": 154
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 16512,
+        "cacheCreation": 2712
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 6,
+    "output": 2273,
+    "cacheRead": 38441,
+    "cacheCreation": 8500
+  },
+  "costUsd": 0.1292005,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxStepper, JxInputField, JxButton } from '@jinx-ui/react';\n\ntype RegistrationData = {\n  name: string;\n  email: string;\n  address: string;\n  city: string;\n};\n\ntype RegistrationFormProps = {\n  onSubmit: (data: RegistrationData) => void;\n};\n\nconst STEPS = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nexport default function RegistrationForm({ onSubmit }: RegistrationFormProps) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<RegistrationData>({\n    name: '',\n    email: '',\n    address: '',\n    city: '',\n  });\n\n  const emailError =\n    data.email.length > 0 && !data.email.includes('@') ? 'Укажите адрес с символом @' : undefined;\n\n  const isLastStep = step === STEPS.length - 1;\n  const canGoNext = step === 0 ? data.name.trim().length > 0 && !emailError && data.email.length > 0 : true;\n\n  const goBack = () => setStep((current) => Math.max(current - 1, 0));\n  const goNext = () => setStep((current) => Math.min(current + 1, STEPS.length - 1));\n\n  const handleSubmit = (event: React.FormEvent) => {\n    event.preventDefault();\n    if (isLastStep) {\n      onSubmit(data);\n    } else {\n      goNext();\n    }\n  };\n\n  return (\n    <form\n      onSubmit={handleSubmit}\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-lg, 24px)',\n        maxWidth: 480,\n      }}\n    >\n      <JxStepper steps={STEPS} current={step} />\n\n      {step === 0 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-md, 16px)' }}>\n          <JxInputField\n            label=\"Имя\"\n            required\n            value={data.name}\n            onChange={(event) => setData((prev) => ({ ...prev, name: event.target.value }))}\n          />\n          <JxInputField\n            label=\"Электронная почта\"\n            type=\"email\"\n            required\n            value={data.email}\n            onChange={(event) => setData((prev) => ({ ...prev, email: event.target.value }))}\n            errorText={emailError}\n          />\n        </div>\n      )}\n\n      {step === 1 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-md, 16px)' }}>\n          <JxInputField\n            label=\"Адрес\"\n            required\n            value={data.address}\n            onChange={(event) => setData((prev) => ({ ...prev, address: event.target.value }))}\n          />\n          <JxInputField\n            label=\"Город\"\n            required\n            value={data.city}\n            onChange={(event) => setData((prev) => ({ ...prev, city: event.target.value }))}\n          />\n        </div>\n      )}\n\n      {step === 2 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-sm, 8px)' }}>\n          <p>\n            <strong>Имя:</strong> {data.name || '—'}\n          </p>\n          <p>\n            <strong>Email:</strong> {data.email || '—'}\n          </p>\n          <p>\n            <strong>Адрес:</strong> {data.address || '—'}\n          </p>\n          <p>\n            <strong>Город:</strong> {data.city || '—'}\n          </p>\n        </div>\n      )}\n\n      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--jx-space-sm, 8px)' }}>\n        <JxButton type=\"button\" variant=\"ghost\" disabled={step === 0} onClick={goBack}>\n          Назад\n        </JxButton>\n        <JxButton type=\"submit\" variant=\"primary\" disabled={!canGoNext}>\n          {isLastStep ? 'Отправить' : 'Дальше'}\n        </JxButton>\n      </div>\n    </form>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxStepper, JxInputField, JxButton } from '@jinx-ui/react';\n\ntype RegistrationData = {\n  name: string;\n  email: string;\n  address: string;\n  city: string;\n};\n\ntype RegistrationFormProps = {\n  onSubmit: (data: RegistrationData) => void;\n};\n\nconst STEPS = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nexport default function RegistrationForm({ onSubmit }: RegistrationFormProps) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<RegistrationData>({\n    name: '',\n    email: '',\n    address: '',\n    city: '',\n  });\n\n  const emailError =\n    data.email.length > 0 && !data.email.includes('@') ? 'Укажите адрес с символом @' : undefined;\n\n  const isLastStep = step === STEPS.length - 1;\n  const canGoNext = step === 0 ? data.name.trim().length > 0 && !emailError && data.email.length > 0 : true;\n\n  const goBack = () => setStep((current) => Math.max(current - 1, 0));\n  const goNext = () => setStep((current) => Math.min(current + 1, STEPS.length - 1));\n\n  const handleSubmit = (event: React.FormEvent) => {\n    event.preventDefault();\n    if (isLastStep) {\n      onSubmit(data);\n    } else {\n      goNext();\n    }\n  };\n\n  return (\n    <form\n      onSubmit={handleSubmit}\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-lg, 24px)',\n        maxWidth: 480,\n      }}\n    >\n      <JxStepper steps={STEPS} current={step} />\n\n      {step === 0 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-md, 16px)' }}>\n          <JxInputField\n            label=\"Имя\"\n            required\n            value={data.name}\n            onChange={(event) => setData((prev) => ({ ...prev, name: event.target.value }))}\n          />\n          <JxInputField\n            label=\"Электронная почта\"\n            type=\"email\"\n            required\n            value={data.email}\n            onChange={(event) => setData((prev) => ({ ...prev, email: event.target.value }))}\n            errorText={emailError}\n          />\n        </div>\n      )}\n\n      {step === 1 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-md, 16px)' }}>\n          <JxInputField\n            label=\"Адрес\"\n            required\n            value={data.address}\n            onChange={(event) => setData((prev) => ({ ...prev, address: event.target.value }))}\n          />\n          <JxInputField\n            label=\"Город\"\n            required\n            value={data.city}\n            onChange={(event) => setData((prev) => ({ ...prev, city: event.target.value }))}\n          />\n        </div>\n      )}\n\n      {step === 2 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-sm, 8px)' }}>\n          <p>\n            <strong>Имя:</strong> {data.name || '—'}\n          </p>\n          <p>\n            <strong>Email:</strong> {data.email || '—'}\n          </p>\n          <p>\n            <strong>Адрес:</strong> {data.address || '—'}\n          </p>\n          <p>\n            <strong>Город:</strong> {data.city || '—'}\n          </p>\n        </div>\n      )}\n\n      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--jx-space-sm, 8px)' }}>\n        <JxButton type=\"button\" variant=\"ghost\" disabled={step === 0} onClick={goBack}>\n          Назад\n        </JxButton>\n        <JxButton type=\"submit\" variant=\"primary\" disabled={!canGoNext}>\n          {isLastStep ? 'Отправить' : 'Дальше'}\n        </JxButton>\n      </div>\n    </form>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 47,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 57,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 76,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 93,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 109,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxInputField",
+      "JxStepper"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "id": "settings-form__readme__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-23T15:25:35.096Z",
+  "repeat": 1,
+  "durationMs": 7447,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "settings-form",
+    "title": "Форма настроек",
+    "prompt": "Сделай форму настроек профиля: поле «Имя», выбор языка интерфейса из списка (русский, английский), переключатель «Уведомления на почту» и кнопка «Сохранить». Состояние полей храни в компоненте, при отправке вызывай переданный колбэк onSave с объектом настроек.",
+    "taskType": "ui",
+    "expects": [
+      "JxInputField",
+      "JxSelect",
+      "JxSwitch",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 8235,
+        "cacheCreation": 1089
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 855,
+    "cacheRead": 8235,
+    "cacheCreation": 1089
+  },
+  "costUsd": 0.03230875,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import React, { useState, FormEvent } from 'react';\nimport {\n  JxTextField,\n  JxSelect,\n  JxSelectOption,\n  JxSwitch,\n  JxButton,\n  JxFormField,\n} from '@jinx-ui/react';\n\ntype Language = 'ru' | 'en';\n\ninterface ProfileSettings {\n  name: string;\n  language: Language;\n  emailNotifications: boolean;\n}\n\ninterface ProfileSettingsFormProps {\n  onSave: (settings: ProfileSettings) => void;\n  initialName?: string;\n  initialLanguage?: Language;\n  initialEmailNotifications?: boolean;\n}\n\nexport default function ProfileSettingsForm({\n  onSave,\n  initialName = '',\n  initialLanguage = 'ru',\n  initialEmailNotifications = true,\n}: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialName);\n  const [language, setLanguage] = useState<Language>(initialLanguage);\n  const [emailNotifications, setEmailNotifications] = useState(initialEmailNotifications);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    onSave({ name, language, emailNotifications });\n  };\n\n  return (\n    <form className=\"jx-stack jx-gap-lg\" onSubmit={handleSubmit}>\n      <JxFormField label=\"Имя\" htmlFor=\"profile-name\">\n        <JxTextField\n          id=\"profile-name\"\n          value={name}\n          onValueChange={setName}\n          placeholder=\"Введите имя\"\n        />\n      </JxFormField>\n\n      <JxFormField label=\"Язык интерфейса\" htmlFor=\"profile-language\">\n        <JxSelect\n          id=\"profile-language\"\n          value={language}\n          onValueChange={(value) => setLanguage(value as Language)}\n        >\n          <JxSelectOption value=\"ru\">Русский</JxSelectOption>\n          <JxSelectOption value=\"en\">Английский</JxSelectOption>\n        </JxSelect>\n      </JxFormField>\n\n      <JxFormField label=\"Уведомления на почту\" htmlFor=\"profile-email-notifications\">\n        <JxSwitch\n          id=\"profile-email-notifications\"\n          checked={emailNotifications}\n          onCheckedChange={setEmailNotifications}\n        />\n      </JxFormField>\n\n      <JxButton type=\"submit\" variant=\"primary\">\n        Сохранить\n      </JxButton>\n    </form>\n  );\n}",
+    "text": "```tsx\nimport React, { useState, FormEvent } from 'react';\nimport {\n  JxTextField,\n  JxSelect,\n  JxSelectOption,\n  JxSwitch,\n  JxButton,\n  JxFormField,\n} from '@jinx-ui/react';\n\ntype Language = 'ru' | 'en';\n\ninterface ProfileSettings {\n  name: string;\n  language: Language;\n  emailNotifications: boolean;\n}\n\ninterface ProfileSettingsFormProps {\n  onSave: (settings: ProfileSettings) => void;\n  initialName?: string;\n  initialLanguage?: Language;\n  initialEmailNotifications?: boolean;\n}\n\nexport default function ProfileSettingsForm({\n  onSave,\n  initialName = '',\n  initialLanguage = 'ru',\n  initialEmailNotifications = true,\n}: ProfileSettingsFormProps) {\n  const [name, setName] = useState(initialName);\n  const [language, setLanguage] = useState<Language>(initialLanguage);\n  const [emailNotifications, setEmailNotifications] = useState(initialEmailNotifications);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    onSave({ name, language, emailNotifications });\n  };\n\n  return (\n    <form className=\"jx-stack jx-gap-lg\" onSubmit={handleSubmit}>\n      <JxFormField label=\"Имя\" htmlFor=\"profile-name\">\n        <JxTextField\n          id=\"profile-name\"\n          value={name}\n          onValueChange={setName}\n          placeholder=\"Введите имя\"\n        />\n      </JxFormField>\n\n      <JxFormField label=\"Язык интерфейса\" htmlFor=\"profile-language\">\n        <JxSelect\n          id=\"profile-language\"\n          value={language}\n          onValueChange={(value) => setLanguage(value as Language)}\n        >\n          <JxSelectOption value=\"ru\">Русский</JxSelectOption>\n          <JxSelectOption value=\"en\">Английский</JxSelectOption>\n        </JxSelect>\n      </JxFormField>\n\n      <JxFormField label=\"Уведомления на почту\" htmlFor=\"profile-email-notifications\">\n        <JxSwitch\n          id=\"profile-email-notifications\"\n          checked={emailNotifications}\n          onCheckedChange={setEmailNotifications}\n        />\n      </JxFormField>\n\n      <JxButton type=\"submit\" variant=\"primary\">\n        Сохранить\n      </JxButton>\n    </form>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxTextField'."
+        },
+        {
+          "code": 2305,
+          "line": 8,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxFormField'."
+        },
+        {
+          "code": 2322,
+          "line": 53,
+          "message": "Type '{ children: Element[]; id: string; value: Language; onValueChange: (value: string) => void; }' is not assignable to type 'IntrinsicAttributes & JxSelectProps'.\n  Property 'children' does not exist on type 'IntrinsicAttributes & JxSelectProps'."
+        },
+        {
+          "code": 2693,
+          "line": 58,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 58,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 59,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 59,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2322,
+          "line": 67,
+          "message": "Type '{ id: string; checked: boolean; onCheckedChange: Dispatch<SetStateAction<boolean>>; }' is not assignable to type 'IntrinsicAttributes & Omit<InputHTMLAttributes<HTMLInputElement>, \"type\" | \"size\"> & { label?: ReactNode; wrapClassName?: string | undefined; }'.\n  Property 'onCheckedChange' does not exist on type 'IntrinsicAttributes & Omit<InputHTMLAttributes<HTMLInputElement>, \"type\" | \"size\"> & { label?: ReactNode; wrapClassName?: string | undefined; }'."
+        }
+      ],
+      "unknownComponents": [
+        "JxFormField",
+        "JxTextField"
+      ],
+      "unknownProps": [
+        {
+          "component": "JxSelect",
+          "prop": "children"
+        },
+        {
+          "component": "JxSwitch",
+          "prop": "onCheckedChange"
+        }
+      ]
+    },
+    "lint": [],
+    "usedComponents": [
+      "JxButton",
+      "JxFormField",
+      "JxSelect",
+      "JxSelectOption",
+      "JxSwitch",
+      "JxTextField"
+    ],
+    "expectedCoverage": 0.75,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.22
+  }
+}

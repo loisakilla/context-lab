@@ -1,0 +1,91 @@
+{
+  "id": "date-range__readme__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T15:42:50.415Z",
+  "repeat": 3,
+  "durationMs": 17780,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "date-range",
+    "title": "Выбор периода",
+    "prompt": "Сделай выбор даты отчёта: календарь на месяц и над ним ряд быстрых вариантов «Сегодня», «Вчера», «Неделя назад», при нажатии на которые дата подставляется в календарь. Выбранная дата отдаётся наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxCalendar",
+      "JxChip"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 9316,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1599,
+    "cacheRead": 9316,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.044643,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useCallback, useMemo, useState } from 'react';\nimport { JxButton, JxCalendar } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  defaultDate?: Date;\n  onChange?: (date: Date) => void;\n};\n\nconst startOfDay = (date: Date): Date =>\n  new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst addDays = (date: Date, amount: number): Date => {\n  const next = startOfDay(date);\n  next.setDate(next.getDate() + amount);\n  return next;\n};\n\nconst isSameDay = (a: Date | null, b: Date | null): boolean =>\n  a != null && b != null && startOfDay(a).getTime() === startOfDay(b).getTime();\n\nexport default function ReportDatePicker({ defaultDate, onChange }: ReportDatePickerProps) {\n  const [value, setValue] = useState<Date>(() => startOfDay(defaultDate ?? new Date()));\n\n  const presets = useMemo(() => {\n    const today = startOfDay(new Date());\n    return [\n      { id: 'today', label: 'Сегодня', date: today },\n      { id: 'yesterday', label: 'Вчера', date: addDays(today, -1) },\n      { id: 'week-ago', label: 'Неделя назад', date: addDays(today, -7) },\n    ];\n  }, []);\n\n  const select = useCallback(\n    (next: Date) => {\n      const normalized = startOfDay(next);\n      setValue(normalized);\n      onChange?.(normalized);\n    },\n    [onChange],\n  );\n\n  return (\n    <div\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-4)',\n        padding: 'var(--jx-space-4)',\n      }}\n    >\n      <div\n        role=\"group\"\n        aria-label=\"Быстрый выбор даты отчёта\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--jx-space-2)' }}\n      >\n        {presets.map((preset) => {\n          const active = isSameDay(value, preset.date);\n          return (\n            <JxButton\n              key={preset.id}\n              type=\"button\"\n              size=\"sm\"\n              variant={active ? 'primary' : 'secondary'}\n              aria-pressed={active}\n              onClick={() => select(preset.date)}\n            >\n              {preset.label}\n            </JxButton>\n          );\n        })}\n      </div>\n\n      <JxCalendar\n        aria-label=\"Дата отчёта\"\n        value={value}\n        onValueChange={(next: Date | null) => {\n          if (next) {\n            select(next);\n          }\n        }}\n      />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useMemo, useState } from 'react';\nimport { JxButton, JxCalendar } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  defaultDate?: Date;\n  onChange?: (date: Date) => void;\n};\n\nconst startOfDay = (date: Date): Date =>\n  new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst addDays = (date: Date, amount: number): Date => {\n  const next = startOfDay(date);\n  next.setDate(next.getDate() + amount);\n  return next;\n};\n\nconst isSameDay = (a: Date | null, b: Date | null): boolean =>\n  a != null && b != null && startOfDay(a).getTime() === startOfDay(b).getTime();\n\nexport default function ReportDatePicker({ defaultDate, onChange }: ReportDatePickerProps) {\n  const [value, setValue] = useState<Date>(() => startOfDay(defaultDate ?? new Date()));\n\n  const presets = useMemo(() => {\n    const today = startOfDay(new Date());\n    return [\n      { id: 'today', label: 'Сегодня', date: today },\n      { id: 'yesterday', label: 'Вчера', date: addDays(today, -1) },\n      { id: 'week-ago', label: 'Неделя назад', date: addDays(today, -7) },\n    ];\n  }, []);\n\n  const select = useCallback(\n    (next: Date) => {\n      const normalized = startOfDay(next);\n      setValue(normalized);\n      onChange?.(normalized);\n    },\n    [onChange],\n  );\n\n  return (\n    <div\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 'var(--jx-space-4)',\n        padding: 'var(--jx-space-4)',\n      }}\n    >\n      <div\n        role=\"group\"\n        aria-label=\"Быстрый выбор даты отчёта\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--jx-space-2)' }}\n      >\n        {presets.map((preset) => {\n          const active = isSameDay(value, preset.date);\n          return (\n            <JxButton\n              key={preset.id}\n              type=\"button\"\n              size=\"sm\"\n              variant={active ? 'primary' : 'secondary'}\n              aria-pressed={active}\n              onClick={() => select(preset.date)}\n            >\n              {preset.label}\n            </JxButton>\n          );\n        })}\n      </div>\n\n      <JxCalendar\n        aria-label=\"Дата отчёта\"\n        value={value}\n        onValueChange={(next: Date | null) => {\n          if (next) {\n            select(next);\n          }\n        }}\n      />\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 44,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 54,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxCalendar"
+    ],
+    "expectedCoverage": 0.5,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.85
+  }
+}

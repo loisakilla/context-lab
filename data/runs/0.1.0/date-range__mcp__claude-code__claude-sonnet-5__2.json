@@ -1,0 +1,172 @@
+{
+  "id": "date-range__mcp__claude-code__claude-sonnet-5__2",
+  "createdAt": "2026-09-23T15:50:07.973Z",
+  "repeat": 2,
+  "durationMs": 17936,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "mcp",
+  "task": {
+    "id": "date-range",
+    "title": "Выбор периода",
+    "prompt": "Сделай выбор даты отчёта: календарь на месяц и над ним ряд быстрых вариантов «Сегодня», «Вчера», «Неделя назад», при нажатии на которые дата подставляется в календарь. Выбранная дата отдаётся наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxCalendar",
+      "JxChip"
+    ]
+  },
+  "context": {
+    "tokens": 1587,
+    "sources": [
+      {
+        "kind": "tools",
+        "id": "search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules",
+        "version": "0.1.0",
+        "tokens": 1191,
+        "hash": "7b624df52b71eb9c"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 11196,
+        "cacheCreation": 0
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "календарь выбор даты"
+          },
+          "resultTokens": 459
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "кнопка"
+          },
+          "resultTokens": 413
+        },
+        {
+          "name": "mcp__context-lab__get_rules",
+          "input": {
+            "task": "ui"
+          },
+          "resultTokens": 1247
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 11196,
+        "cacheCreation": 3819
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxCalendar",
+            "detail": "full"
+          },
+          "resultTokens": 508
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxButton",
+            "detail": "full"
+          },
+          "resultTokens": 511
+        },
+        {
+          "name": "mcp__context-lab__get_component_examples",
+          "input": {
+            "name": "JxCalendar"
+          },
+          "resultTokens": 70
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 8,
+        "cacheRead": 15015,
+        "cacheCreation": 2113
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__list_design_tokens",
+          "input": {
+            "group": "spacing"
+          },
+          "resultTokens": 22
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 6,
+        "cacheRead": 17128,
+        "cacheCreation": 264
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 8,
+    "output": 1857,
+    "cacheRead": 54535,
+    "cacheCreation": 6196
+  },
+  "costUsd": 0.11245749999999999,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, useMemo, useCallback } from 'react';\nimport { JxCalendar, JxButton } from '@jinx-ui/react';\n\ntype QuickOption = {\n  label: string;\n  getDate: () => Date;\n};\n\nfunction startOfDay(date: Date): Date {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n}\n\nfunction isSameDay(a: Date | null, b: Date): boolean {\n  if (!a) return false;\n  return (\n    a.getFullYear() === b.getFullYear() &&\n    a.getMonth() === b.getMonth() &&\n    a.getDate() === b.getDate()\n  );\n}\n\nconst quickOptions: QuickOption[] = [\n  {\n    label: 'Сегодня',\n    getDate: () => startOfDay(new Date()),\n  },\n  {\n    label: 'Вчера',\n    getDate: () => {\n      const d = startOfDay(new Date());\n      d.setDate(d.getDate() - 1);\n      return d;\n    },\n  },\n  {\n    label: 'Неделя назад',\n    getDate: () => {\n      const d = startOfDay(new Date());\n      d.setDate(d.getDate() - 7);\n      return d;\n    },\n  },\n];\n\nexport interface ReportDatePickerProps {\n  value?: Date | null;\n  defaultValue?: Date | null;\n  onChange?: (value: Date | null) => void;\n}\n\nexport default function ReportDatePicker({\n  value,\n  defaultValue = null,\n  onChange,\n}: ReportDatePickerProps) {\n  const [internalValue, setInternalValue] = useState<Date | null>(defaultValue);\n  const isControlled = value !== undefined;\n  const currentValue = isControlled ? value : internalValue;\n\n  const handleChange = useCallback(\n    (next: Date | null) => {\n      if (!isControlled) {\n        setInternalValue(next);\n      }\n      onChange?.(next);\n    },\n    [isControlled, onChange]\n  );\n\n  const quickDates = useMemo(\n    () => quickOptions.map((option) => ({ label: option.label, date: option.getDate() })),\n    []\n  );\n\n  return (\n    <div\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 12,\n        fontFamily: 'var(--jx-font-family-base)',\n      }}\n    >\n      <div\n        role=\"group\"\n        aria-label=\"Быстрый выбор даты\"\n        style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}\n      >\n        {quickDates.map(({ label, date }) => {\n          const active = isSameDay(currentValue, date);\n          return (\n            <JxButton\n              key={label}\n              type=\"button\"\n              size=\"sm\"\n              variant={active ? 'primary' : 'outline'}\n              aria-pressed={active}\n              onClick={() => handleChange(date)}\n            >\n              {label}\n            </JxButton>\n          );\n        })}\n      </div>\n      <JxCalendar locale=\"ru-RU\" value={currentValue} onValueChange={handleChange} />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState, useMemo, useCallback } from 'react';\nimport { JxCalendar, JxButton } from '@jinx-ui/react';\n\ntype QuickOption = {\n  label: string;\n  getDate: () => Date;\n};\n\nfunction startOfDay(date: Date): Date {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n}\n\nfunction isSameDay(a: Date | null, b: Date): boolean {\n  if (!a) return false;\n  return (\n    a.getFullYear() === b.getFullYear() &&\n    a.getMonth() === b.getMonth() &&\n    a.getDate() === b.getDate()\n  );\n}\n\nconst quickOptions: QuickOption[] = [\n  {\n    label: 'Сегодня',\n    getDate: () => startOfDay(new Date()),\n  },\n  {\n    label: 'Вчера',\n    getDate: () => {\n      const d = startOfDay(new Date());\n      d.setDate(d.getDate() - 1);\n      return d;\n    },\n  },\n  {\n    label: 'Неделя назад',\n    getDate: () => {\n      const d = startOfDay(new Date());\n      d.setDate(d.getDate() - 7);\n      return d;\n    },\n  },\n];\n\nexport interface ReportDatePickerProps {\n  value?: Date | null;\n  defaultValue?: Date | null;\n  onChange?: (value: Date | null) => void;\n}\n\nexport default function ReportDatePicker({\n  value,\n  defaultValue = null,\n  onChange,\n}: ReportDatePickerProps) {\n  const [internalValue, setInternalValue] = useState<Date | null>(defaultValue);\n  const isControlled = value !== undefined;\n  const currentValue = isControlled ? value : internalValue;\n\n  const handleChange = useCallback(\n    (next: Date | null) => {\n      if (!isControlled) {\n        setInternalValue(next);\n      }\n      onChange?.(next);\n    },\n    [isControlled, onChange]\n  );\n\n  const quickDates = useMemo(\n    () => quickOptions.map((option) => ({ label: option.label, date: option.getDate() })),\n    []\n  );\n\n  return (\n    <div\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 12,\n        fontFamily: 'var(--jx-font-family-base)',\n      }}\n    >\n      <div\n        role=\"group\"\n        aria-label=\"Быстрый выбор даты\"\n        style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}\n      >\n        {quickDates.map(({ label, date }) => {\n          const active = isSameDay(currentValue, date);\n          return (\n            <JxButton\n              key={label}\n              type=\"button\"\n              size=\"sm\"\n              variant={active ? 'primary' : 'outline'}\n              aria-pressed={active}\n              onClick={() => handleChange(date)}\n            >\n              {label}\n            </JxButton>\n          );\n        })}\n      </div>\n      <JxCalendar locale=\"ru-RU\" value={currentValue} onValueChange={handleChange} />\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 79,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 89,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxCalendar"
+    ],
+    "expectedCoverage": 0.5,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.85
+  }
+}

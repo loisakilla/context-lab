@@ -1,0 +1,93 @@
+{
+  "id": "confirm-delete__none__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T15:20:18.648Z",
+  "repeat": 2,
+  "durationMs": 18386,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "confirm-delete",
+    "title": "Подтверждение удаления",
+    "prompt": "Сделай компонент с кнопкой «Удалить проект». По клику открывается окно подтверждения с заголовком «Удалить проект?», текстом о том, что действие необратимо, и двумя кнопками: отмена и подтверждение удаления. Подтверждение вызывает переданный колбэк onConfirm.",
+    "taskType": "ui",
+    "expects": [
+      "JxModal",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 8601,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1381,
+    "cacheRead": 8601,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0388355,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "// API Jinx UI предполагается по конвенции (Modal с open/onClose/title, Button с variant); при расхождении с реальными экспортами @jinx-ui/react имена нужно сверить с докой.\nimport { useCallback, useState } from 'react';\nimport { Button, Modal, Stack, Text } from '@jinx-ui/react';\n\ntype DeleteProjectButtonProps = {\n  onConfirm: () => void;\n  projectName?: string;\n};\n\nexport default function DeleteProjectButton({ onConfirm, projectName }: DeleteProjectButtonProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const close = useCallback(() => setIsOpen(false), []);\n\n  const handleConfirm = useCallback(() => {\n    setIsOpen(false);\n    onConfirm();\n  }, [onConfirm]);\n\n  return (\n    <>\n      <Button variant=\"danger\" onClick={() => setIsOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Modal open={isOpen} onClose={close} title=\"Удалить проект?\">\n        <Stack direction=\"column\" gap=\"var(--jx-space-4)\">\n          <Text>\n            {projectName\n              ? `Проект «${projectName}» будет удалён безвозвратно.`\n              : 'Проект будет удалён безвозвратно.'}{' '}\n            Это действие необратимо: восстановить данные будет невозможно.\n          </Text>\n\n          <Stack direction=\"row\" gap=\"var(--jx-space-2)\" justify=\"end\">\n            <Button variant=\"secondary\" onClick={close}>\n              Отмена\n            </Button>\n            <Button variant=\"danger\" onClick={handleConfirm}>\n              Удалить\n            </Button>\n          </Stack>\n        </Stack>\n      </Modal>\n    </>\n  );\n}",
+    "text": "```tsx\n// API Jinx UI предполагается по конвенции (Modal с open/onClose/title, Button с variant); при расхождении с реальными экспортами @jinx-ui/react имена нужно сверить с докой.\nimport { useCallback, useState } from 'react';\nimport { Button, Modal, Stack, Text } from '@jinx-ui/react';\n\ntype DeleteProjectButtonProps = {\n  onConfirm: () => void;\n  projectName?: string;\n};\n\nexport default function DeleteProjectButton({ onConfirm, projectName }: DeleteProjectButtonProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const close = useCallback(() => setIsOpen(false), []);\n\n  const handleConfirm = useCallback(() => {\n    setIsOpen(false);\n    onConfirm();\n  }, [onConfirm]);\n\n  return (\n    <>\n      <Button variant=\"danger\" onClick={() => setIsOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Modal open={isOpen} onClose={close} title=\"Удалить проект?\">\n        <Stack direction=\"column\" gap=\"var(--jx-space-4)\">\n          <Text>\n            {projectName\n              ? `Проект «${projectName}» будет удалён безвозвратно.`\n              : 'Проект будет удалён безвозвратно.'}{' '}\n            Это действие необратимо: восстановить данные будет невозможно.\n          </Text>\n\n          <Stack direction=\"row\" gap=\"var(--jx-space-2)\" justify=\"end\">\n            <Button variant=\"secondary\" onClick={close}>\n              Отмена\n            </Button>\n            <Button variant=\"danger\" onClick={handleConfirm}>\n              Удалить\n            </Button>\n          </Stack>\n        </Stack>\n      </Modal>\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 3,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2724,
+          "line": 3,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Modal'. Did you mean 'JxModal'?"
+        },
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Modal",
+        "Stack",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

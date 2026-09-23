@@ -1,0 +1,170 @@
+{
+  "id": "appearance-settings__readme__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-23T15:34:19.758Z",
+  "repeat": 3,
+  "durationMs": 29988,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "appearance-settings",
+    "title": "Настройки внешнего вида",
+    "prompt": "Сделай экран настроек внешнего вида: сегментированный переключатель темы на три варианта, ползунок масштаба интерфейса от 80 до 140 процентов с показом текущего значения, переключатель плотной вёрстки и раздел «Ещё» под разделителем с выбором шрифта. Справа от заголовка экрана метка с текущей темой. Состояние храни в компоненте и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxToggle",
+      "JxSlider",
+      "JxSwitch",
+      "JxDivider",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 9368,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 4227,
+    "cacheRead": 9368,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.11036899999999998,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useCallback, useState } from 'react';\nimport {\n  JxStack,\n  JxCard,\n  JxHeading,\n  JxText,\n  JxBadge,\n  JxSegmentedControl,\n  JxSlider,\n  JxSwitch,\n  JxDivider,\n  JxSelect,\n} from '@jinx-ui/react';\n\ntype Theme = 'light' | 'dark' | 'system';\ntype Font = 'system' | 'inter' | 'mono';\n\nexport interface AppearanceSettings {\n  theme: Theme;\n  scale: number;\n  dense: boolean;\n  font: Font;\n}\n\ninterface AppearanceSettingsScreenProps {\n  onChange?: (settings: AppearanceSettings) => void;\n}\n\nconst themeLabels: Record<Theme, string> = {\n  light: 'Светлая',\n  dark: 'Тёмная',\n  system: 'Системная',\n};\n\nconst fontOptions: { value: Font; label: string }[] = [\n  { value: 'system', label: 'Системный' },\n  { value: 'inter', label: 'Inter' },\n  { value: 'mono', label: 'Моноширинный' },\n];\n\nexport default function AppearanceSettingsScreen({ onChange }: AppearanceSettingsScreenProps) {\n  const [theme, setTheme] = useState<Theme>('system');\n  const [scale, setScale] = useState(100);\n  const [dense, setDense] = useState(false);\n  const [font, setFont] = useState<Font>('system');\n\n  const emit = useCallback(\n    (next: Partial<AppearanceSettings>) => {\n      onChange?.({ theme, scale, dense, font, ...next });\n    },\n    [theme, scale, dense, font, onChange]\n  );\n\n  const handleThemeChange = (value: Theme) => {\n    setTheme(value);\n    emit({ theme: value });\n  };\n\n  const handleScaleChange = (value: number) => {\n    setScale(value);\n    emit({ scale: value });\n  };\n\n  const handleDenseChange = (value: boolean) => {\n    setDense(value);\n    emit({ dense: value });\n  };\n\n  const handleFontChange = (value: Font) => {\n    setFont(value);\n    emit({ font: value });\n  };\n\n  return (\n    <JxCard className=\"jx-p-6\">\n      <JxStack direction=\"column\" gap=\"6\">\n        <JxStack direction=\"row\" align=\"center\" justify=\"between\">\n          <JxHeading level={2}>Внешний вид</JxHeading>\n          <JxBadge variant=\"neutral\">{themeLabels[theme]}</JxBadge>\n        </JxStack>\n\n        <JxStack direction=\"column\" gap=\"2\">\n          <JxText size=\"sm\" weight=\"medium\">\n            Тема\n          </JxText>\n          <JxSegmentedControl\n            value={theme}\n            onValueChange={(value) => handleThemeChange(value as Theme)}\n            aria-label=\"Тема оформления\"\n          >\n            <JxSegmentedControl.Item value=\"light\">Светлая</JxSegmentedControl.Item>\n            <JxSegmentedControl.Item value=\"dark\">Тёмная</JxSegmentedControl.Item>\n            <JxSegmentedControl.Item value=\"system\">Системная</JxSegmentedControl.Item>\n          </JxSegmentedControl>\n        </JxStack>\n\n        <JxStack direction=\"column\" gap=\"2\">\n          <JxStack direction=\"row\" align=\"center\" justify=\"between\">\n            <JxText size=\"sm\" weight=\"medium\">\n              Масштаб интерфейса\n            </JxText>\n            <JxText size=\"sm\" tone=\"muted\">\n              {scale}%\n            </JxText>\n          </JxStack>\n          <JxSlider\n            value={scale}\n            onValueChange={handleScaleChange}\n            min={80}\n            max={140}\n            step={5}\n            aria-label=\"Масштаб интерфейса\"\n          />\n        </JxStack>\n\n        <JxStack direction=\"row\" align=\"center\" justify=\"between\">\n          <JxStack direction=\"column\" gap=\"1\">\n            <JxText size=\"sm\" weight=\"medium\">\n              Плотная вёрстка\n            </JxText>\n            <JxText size=\"sm\" tone=\"muted\">\n              Сократить отступы между элементами\n            </JxText>\n          </JxStack>\n          <JxSwitch value={dense} onValueChange={handleDenseChange} aria-label=\"Плотная вёрстка\" />\n        </JxStack>\n\n        <JxDivider />\n\n        <JxStack direction=\"column\" gap=\"3\">\n          <JxText size=\"sm\" weight=\"medium\" tone=\"muted\">\n            Ещё\n          </JxText>\n          <JxStack direction=\"column\" gap=\"2\">\n            <JxText size=\"sm\" weight=\"medium\">\n              Шрифт\n            </JxText>\n            <JxSelect\n              value={font}\n              onValueChange={(value) => handleFontChange(value as Font)}\n              aria-label=\"Шрифт интерфейса\"\n            >\n              {fontOptions.map((option) => (\n                <JxSelect.Option key={option.value} value={option.value}>\n                  {option.label}\n                </JxSelect.Option>\n              ))}\n            </JxSelect>\n          </JxStack>\n        </JxStack>\n      </JxStack>\n    </JxCard>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useState } from 'react';\nimport {\n  JxStack,\n  JxCard,\n  JxHeading,\n  JxText,\n  JxBadge,\n  JxSegmentedControl,\n  JxSlider,\n  JxSwitch,\n  JxDivider,\n  JxSelect,\n} from '@jinx-ui/react';\n\ntype Theme = 'light' | 'dark' | 'system';\ntype Font = 'system' | 'inter' | 'mono';\n\nexport interface AppearanceSettings {\n  theme: Theme;\n  scale: number;\n  dense: boolean;\n  font: Font;\n}\n\ninterface AppearanceSettingsScreenProps {\n  onChange?: (settings: AppearanceSettings) => void;\n}\n\nconst themeLabels: Record<Theme, string> = {\n  light: 'Светлая',\n  dark: 'Тёмная',\n  system: 'Системная',\n};\n\nconst fontOptions: { value: Font; label: string }[] = [\n  { value: 'system', label: 'Системный' },\n  { value: 'inter', label: 'Inter' },\n  { value: 'mono', label: 'Моноширинный' },\n];\n\nexport default function AppearanceSettingsScreen({ onChange }: AppearanceSettingsScreenProps) {\n  const [theme, setTheme] = useState<Theme>('system');\n  const [scale, setScale] = useState(100);\n  const [dense, setDense] = useState(false);\n  const [font, setFont] = useState<Font>('system');\n\n  const emit = useCallback(\n    (next: Partial<AppearanceSettings>) => {\n      onChange?.({ theme, scale, dense, font, ...next });\n    },\n    [theme, scale, dense, font, onChange]\n  );\n\n  const handleThemeChange = (value: Theme) => {\n    setTheme(value);\n    emit({ theme: value });\n  };\n\n  const handleScaleChange = (value: number) => {\n    setScale(value);\n    emit({ scale: value });\n  };\n\n  const handleDenseChange = (value: boolean) => {\n    setDense(value);\n    emit({ dense: value });\n  };\n\n  const handleFontChange = (value: Font) => {\n    setFont(value);\n    emit({ font: value });\n  };\n\n  return (\n    <JxCard className=\"jx-p-6\">\n      <JxStack direction=\"column\" gap=\"6\">\n        <JxStack direction=\"row\" align=\"center\" justify=\"between\">\n          <JxHeading level={2}>Внешний вид</JxHeading>\n          <JxBadge variant=\"neutral\">{themeLabels[theme]}</JxBadge>\n        </JxStack>\n\n        <JxStack direction=\"column\" gap=\"2\">\n          <JxText size=\"sm\" weight=\"medium\">\n            Тема\n          </JxText>\n          <JxSegmentedControl\n            value={theme}\n            onValueChange={(value) => handleThemeChange(value as Theme)}\n            aria-label=\"Тема оформления\"\n          >\n            <JxSegmentedControl.Item value=\"light\">Светлая</JxSegmentedControl.Item>\n            <JxSegmentedControl.Item value=\"dark\">Тёмная</JxSegmentedControl.Item>\n            <JxSegmentedControl.Item value=\"system\">Системная</JxSegmentedControl.Item>\n          </JxSegmentedControl>\n        </JxStack>\n\n        <JxStack direction=\"column\" gap=\"2\">\n          <JxStack direction=\"row\" align=\"center\" justify=\"between\">\n            <JxText size=\"sm\" weight=\"medium\">\n              Масштаб интерфейса\n            </JxText>\n            <JxText size=\"sm\" tone=\"muted\">\n              {scale}%\n            </JxText>\n          </JxStack>\n          <JxSlider\n            value={scale}\n            onValueChange={handleScaleChange}\n            min={80}\n            max={140}\n            step={5}\n            aria-label=\"Масштаб интерфейса\"\n          />\n        </JxStack>\n\n        <JxStack direction=\"row\" align=\"center\" justify=\"between\">\n          <JxStack direction=\"column\" gap=\"1\">\n            <JxText size=\"sm\" weight=\"medium\">\n              Плотная вёрстка\n            </JxText>\n            <JxText size=\"sm\" tone=\"muted\">\n              Сократить отступы между элементами\n            </JxText>\n          </JxStack>\n          <JxSwitch value={dense} onValueChange={handleDenseChange} aria-label=\"Плотная вёрстка\" />\n        </JxStack>\n\n        <JxDivider />\n\n        <JxStack direction=\"column\" gap=\"3\">\n          <JxText size=\"sm\" weight=\"medium\" tone=\"muted\">\n            Ещё\n          </JxText>\n          <JxStack direction=\"column\" gap=\"2\">\n            <JxText size=\"sm\" weight=\"medium\">\n              Шрифт\n            </JxText>\n            <JxSelect\n              value={font}\n              onValueChange={(value) => handleFontChange(value as Font)}\n              aria-label=\"Шрифт интерфейса\"\n            >\n              {fontOptions.map((option) => (\n                <JxSelect.Option key={option.value} value={option.value}>\n                  {option.label}\n                </JxSelect.Option>\n              ))}\n            </JxSelect>\n          </JxStack>\n        </JxStack>\n      </JxStack>\n    </JxCard>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxStack'."
+        },
+        {
+          "code": 2305,
+          "line": 4,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxCard'."
+        },
+        {
+          "code": 2305,
+          "line": 5,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxHeading'."
+        },
+        {
+          "code": 2305,
+          "line": 6,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxText'."
+        },
+        {
+          "code": 2305,
+          "line": 8,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxSegmentedControl'."
+        },
+        {
+          "code": 2322,
+          "line": 79,
+          "message": "Type '{ children: string; variant: string; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributes<HTMLSpanElement> & { tone?: JxBadgeTone | undefined; dot?: boolean | undefined; children?: ReactNode; }'.\n  Property 'variant' does not exist on type 'IntrinsicAttributes & HTMLAttributes<HTMLSpanElement> & { tone?: JxBadgeTone | undefined; dot?: boolean | undefined; children?: ReactNode; }'."
+        },
+        {
+          "code": 7006,
+          "line": 88,
+          "message": "Parameter 'value' implicitly has an 'any' type."
+        },
+        {
+          "code": 2322,
+          "line": 125,
+          "message": "Type 'boolean' is not assignable to type 'string | number | readonly string[] | undefined'."
+        },
+        {
+          "code": 2322,
+          "line": 138,
+          "message": "Type '{ children: Element[]; value: Font; onValueChange: (value: string) => void; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & JxSelectProps'.\n  Property 'children' does not exist on type 'IntrinsicAttributes & JxSelectProps'."
+        },
+        {
+          "code": 2339,
+          "line": 144,
+          "message": "Property 'Option' does not exist on type '({ options, value, defaultValue, onValueChange, placeholder, className, label }: JxSelectProps) => Element'."
+        },
+        {
+          "code": 2339,
+          "line": 146,
+          "message": "Property 'Option' does not exist on type '({ options, value, defaultValue, onValueChange, placeholder, className, label }: JxSelectProps) => Element'."
+        }
+      ],
+      "unknownComponents": [
+        "JxCard",
+        "JxHeading",
+        "JxSegmentedControl",
+        "JxStack",
+        "JxText"
+      ],
+      "unknownProps": [
+        {
+          "component": "JxBadge",
+          "prop": "variant"
+        },
+        {
+          "component": "JxSelect",
+          "prop": "children"
+        },
+        {
+          "component": "JxSelect.Option",
+          "prop": "Option"
+        },
+        {
+          "component": "JxSelect",
+          "prop": "Option"
+        }
+      ]
+    },
+    "lint": [],
+    "usedComponents": [
+      "JxBadge",
+      "JxCard",
+      "JxDivider",
+      "JxHeading",
+      "JxSegmentedControl",
+      "JxSegmentedControl.Item",
+      "JxSelect",
+      "JxSelect.Option",
+      "JxSlider",
+      "JxStack",
+      "JxSwitch",
+      "JxText"
+    ],
+    "expectedCoverage": 0.8,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.24
+  }
+}

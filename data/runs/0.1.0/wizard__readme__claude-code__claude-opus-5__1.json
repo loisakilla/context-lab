@@ -1,0 +1,133 @@
+{
+  "id": "wizard__readme__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-23T15:38:11.060Z",
+  "repeat": 1,
+  "durationMs": 41584,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8233,
+        "cacheCreation": 1092
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 3604,
+    "cacheRead": 8233,
+    "cacheCreation": 1092
+  },
+  "costUsd": 0.10105149999999999,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "// JxButton is the only library component used here — the rest is plain markup on the\n// jx-* CSS contract, so nothing depends on component APIs I haven't confirmed.\nimport { useState, type FormEvent } from 'react';\nimport { JxButton } from '@jinx-ui/react';\n\nexport type RegistrationValues = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype Field = {\n  key: keyof RegistrationValues;\n  label: string;\n  type: string;\n  autoComplete: string;\n};\n\ntype Step = {\n  title: string;\n  fields: Field[];\n};\n\nconst STEPS: Step[] = [\n  {\n    title: 'Контакты',\n    fields: [\n      { key: 'name', label: 'Имя и фамилия', type: 'text', autoComplete: 'name' },\n      { key: 'email', label: 'Email', type: 'email', autoComplete: 'email' },\n      { key: 'phone', label: 'Телефон', type: 'tel', autoComplete: 'tel' },\n    ],\n  },\n  {\n    title: 'Адрес',\n    fields: [\n      { key: 'country', label: 'Страна', type: 'text', autoComplete: 'country-name' },\n      { key: 'city', label: 'Город', type: 'text', autoComplete: 'address-level2' },\n      { key: 'street', label: 'Улица, дом, квартира', type: 'text', autoComplete: 'street-address' },\n      { key: 'zip', label: 'Почтовый индекс', type: 'text', autoComplete: 'postal-code' },\n    ],\n  },\n  { title: 'Проверка', fields: [] },\n];\n\nconst EMPTY: RegistrationValues = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst ALL_FIELDS = STEPS.flatMap((step) => step.fields);\n\nexport type RegistrationWizardProps = {\n  onSubmit: (values: RegistrationValues) => void;\n};\n\nexport default function RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [stepIndex, setStepIndex] = useState(0);\n  const [values, setValues] = useState<RegistrationValues>(EMPTY);\n\n  const step = STEPS[stepIndex];\n  const isFirst = stepIndex === 0;\n  const isLast = stepIndex === STEPS.length - 1;\n\n  const setValue = (key: keyof RegistrationValues, next: string) =>\n    setValues((prev) => ({ ...prev, [key]: next }));\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (isLast) {\n      onSubmit(values);\n      return;\n    }\n    setStepIndex((prev) => prev + 1);\n  };\n\n  return (\n    <form\n      className=\"jx-stack\"\n      onSubmit={handleSubmit}\n      style={{ display: 'grid', gap: 'var(--jx-space-5, 20px)' }}\n    >\n      <ol\n        className=\"jx-steps\"\n        aria-label=\"Шаги регистрации\"\n        style={{\n          display: 'flex',\n          gap: 'var(--jx-space-3, 12px)',\n          listStyle: 'none',\n          margin: 0,\n          padding: 0,\n        }}\n      >\n        {STEPS.map((item, index) => (\n          <li\n            key={item.title}\n            className=\"jx-steps__item\"\n            aria-current={index === stepIndex ? 'step' : undefined}\n            style={{\n              display: 'flex',\n              alignItems: 'center',\n              gap: 'var(--jx-space-2, 8px)',\n              color:\n                index === stepIndex\n                  ? 'var(--jx-color-text, inherit)'\n                  : 'var(--jx-color-text-muted, inherit)',\n            }}\n          >\n            <span className=\"jx-badge\" aria-hidden=\"true\">\n              {index + 1}\n            </span>\n            <span>{item.title}</span>\n          </li>\n        ))}\n      </ol>\n\n      <fieldset\n        className=\"jx-fieldset\"\n        style={{ border: 0, margin: 0, padding: 0, display: 'grid', gap: 'var(--jx-space-4, 16px)' }}\n      >\n        <legend className=\"jx-heading\">{step.title}</legend>\n\n        {step.fields.map((field) => (\n          <div\n            key={field.key}\n            className=\"jx-field\"\n            style={{ display: 'grid', gap: 'var(--jx-space-2, 8px)' }}\n          >\n            <label className=\"jx-label\" htmlFor={`reg-${field.key}`}>\n              {field.label}\n            </label>\n            <input\n              id={`reg-${field.key}`}\n              className=\"jx-input\"\n              type={field.type}\n              autoComplete={field.autoComplete}\n              value={values[field.key]}\n              onChange={(event) => setValue(field.key, event.target.value)}\n            />\n          </div>\n        ))}\n\n        {isLast && (\n          <dl\n            className=\"jx-list\"\n            style={{ display: 'grid', gap: 'var(--jx-space-2, 8px)', margin: 0 }}\n          >\n            {ALL_FIELDS.map((field) => (\n              <div\n                key={field.key}\n                style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--jx-space-3, 12px)' }}\n              >\n                <dt className=\"jx-text-muted\">{field.label}</dt>\n                <dd style={{ margin: 0 }}>{values[field.key] || '—'}</dd>\n              </div>\n            ))}\n          </dl>\n        )}\n      </fieldset>\n\n      <div\n        className=\"jx-actions\"\n        style={{ display: 'flex', gap: 'var(--jx-space-3, 12px)', justifyContent: 'flex-end' }}\n      >\n        <JxButton\n          type=\"button\"\n          disabled={isFirst}\n          onClick={() => setStepIndex((prev) => Math.max(0, prev - 1))}\n        >\n          Назад\n        </JxButton>\n        <JxButton type=\"submit\" variant=\"primary\">\n          {isLast ? 'Отправить' : 'Дальше'}\n        </JxButton>\n      </div>\n    </form>\n  );\n}",
+    "text": "```tsx\n// JxButton is the only library component used here — the rest is plain markup on the\n// jx-* CSS contract, so nothing depends on component APIs I haven't confirmed.\nimport { useState, type FormEvent } from 'react';\nimport { JxButton } from '@jinx-ui/react';\n\nexport type RegistrationValues = {\n  name: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype Field = {\n  key: keyof RegistrationValues;\n  label: string;\n  type: string;\n  autoComplete: string;\n};\n\ntype Step = {\n  title: string;\n  fields: Field[];\n};\n\nconst STEPS: Step[] = [\n  {\n    title: 'Контакты',\n    fields: [\n      { key: 'name', label: 'Имя и фамилия', type: 'text', autoComplete: 'name' },\n      { key: 'email', label: 'Email', type: 'email', autoComplete: 'email' },\n      { key: 'phone', label: 'Телефон', type: 'tel', autoComplete: 'tel' },\n    ],\n  },\n  {\n    title: 'Адрес',\n    fields: [\n      { key: 'country', label: 'Страна', type: 'text', autoComplete: 'country-name' },\n      { key: 'city', label: 'Город', type: 'text', autoComplete: 'address-level2' },\n      { key: 'street', label: 'Улица, дом, квартира', type: 'text', autoComplete: 'street-address' },\n      { key: 'zip', label: 'Почтовый индекс', type: 'text', autoComplete: 'postal-code' },\n    ],\n  },\n  { title: 'Проверка', fields: [] },\n];\n\nconst EMPTY: RegistrationValues = {\n  name: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nconst ALL_FIELDS = STEPS.flatMap((step) => step.fields);\n\nexport type RegistrationWizardProps = {\n  onSubmit: (values: RegistrationValues) => void;\n};\n\nexport default function RegistrationWizard({ onSubmit }: RegistrationWizardProps) {\n  const [stepIndex, setStepIndex] = useState(0);\n  const [values, setValues] = useState<RegistrationValues>(EMPTY);\n\n  const step = STEPS[stepIndex];\n  const isFirst = stepIndex === 0;\n  const isLast = stepIndex === STEPS.length - 1;\n\n  const setValue = (key: keyof RegistrationValues, next: string) =>\n    setValues((prev) => ({ ...prev, [key]: next }));\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (isLast) {\n      onSubmit(values);\n      return;\n    }\n    setStepIndex((prev) => prev + 1);\n  };\n\n  return (\n    <form\n      className=\"jx-stack\"\n      onSubmit={handleSubmit}\n      style={{ display: 'grid', gap: 'var(--jx-space-5, 20px)' }}\n    >\n      <ol\n        className=\"jx-steps\"\n        aria-label=\"Шаги регистрации\"\n        style={{\n          display: 'flex',\n          gap: 'var(--jx-space-3, 12px)',\n          listStyle: 'none',\n          margin: 0,\n          padding: 0,\n        }}\n      >\n        {STEPS.map((item, index) => (\n          <li\n            key={item.title}\n            className=\"jx-steps__item\"\n            aria-current={index === stepIndex ? 'step' : undefined}\n            style={{\n              display: 'flex',\n              alignItems: 'center',\n              gap: 'var(--jx-space-2, 8px)',\n              color:\n                index === stepIndex\n                  ? 'var(--jx-color-text, inherit)'\n                  : 'var(--jx-color-text-muted, inherit)',\n            }}\n          >\n            <span className=\"jx-badge\" aria-hidden=\"true\">\n              {index + 1}\n            </span>\n            <span>{item.title}</span>\n          </li>\n        ))}\n      </ol>\n\n      <fieldset\n        className=\"jx-fieldset\"\n        style={{ border: 0, margin: 0, padding: 0, display: 'grid', gap: 'var(--jx-space-4, 16px)' }}\n      >\n        <legend className=\"jx-heading\">{step.title}</legend>\n\n        {step.fields.map((field) => (\n          <div\n            key={field.key}\n            className=\"jx-field\"\n            style={{ display: 'grid', gap: 'var(--jx-space-2, 8px)' }}\n          >\n            <label className=\"jx-label\" htmlFor={`reg-${field.key}`}>\n              {field.label}\n            </label>\n            <input\n              id={`reg-${field.key}`}\n              className=\"jx-input\"\n              type={field.type}\n              autoComplete={field.autoComplete}\n              value={values[field.key]}\n              onChange={(event) => setValue(field.key, event.target.value)}\n            />\n          </div>\n        ))}\n\n        {isLast && (\n          <dl\n            className=\"jx-list\"\n            style={{ display: 'grid', gap: 'var(--jx-space-2, 8px)', margin: 0 }}\n          >\n            {ALL_FIELDS.map((field) => (\n              <div\n                key={field.key}\n                style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--jx-space-3, 12px)' }}\n              >\n                <dt className=\"jx-text-muted\">{field.label}</dt>\n                <dd style={{ margin: 0 }}>{values[field.key] || '—'}</dd>\n              </div>\n            ))}\n          </dl>\n        )}\n      </fieldset>\n\n      <div\n        className=\"jx-actions\"\n        style={{ display: 'flex', gap: 'var(--jx-space-3, 12px)', justifyContent: 'flex-end' }}\n      >\n        <JxButton\n          type=\"button\"\n          disabled={isFirst}\n          onClick={() => setStepIndex((prev) => Math.max(0, prev - 1))}\n        >\n          Назад\n        </JxButton>\n        <JxButton type=\"submit\" variant=\"primary\">\n          {isLast ? 'Отправить' : 'Дальше'}\n        </JxButton>\n      </div>\n    </form>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 89,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 94,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 107,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 127,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 135,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 154,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 159,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 162,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 171,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton"
+    ],
+    "expectedCoverage": 0.33,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 0.8
+  }
+}

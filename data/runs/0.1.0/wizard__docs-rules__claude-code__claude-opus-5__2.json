@@ -1,0 +1,193 @@
+{
+  "id": "wizard__docs-rules__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T15:56:39.715Z",
+  "repeat": 2,
+  "durationMs": 20338,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "docs+rules",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 22656,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.0",
+        "tokens": 21419,
+        "hash": "666d3360d38750da"
+      },
+      {
+        "kind": "rules",
+        "id": "jinx-ui",
+        "version": "0.1.0",
+        "tokens": 1083,
+        "hash": "29f6363615252e9b"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 46558,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2274,
+    "cacheRead": 46558,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.080139,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport {\n  JxStepper,\n  JxInputField,\n  JxTextareaField,\n  JxButton,\n  JxDivider,\n  JxAlert,\n} from '@jinx-ui/react';\n\ninterface RegistrationData {\n  name: string;\n  email: string;\n  city: string;\n  street: string;\n  comment: string;\n}\n\nconst steps = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nconst emptyData: RegistrationData = {\n  name: '',\n  email: '',\n  city: '',\n  street: '',\n  comment: '',\n};\n\nexport default function RegistrationWizard({\n  onSubmit,\n}: {\n  onSubmit: (data: RegistrationData) => void;\n}) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<RegistrationData>(emptyData);\n  const [touched, setTouched] = useState(false);\n\n  const set = <K extends keyof RegistrationData>(key: K, value: RegistrationData[K]) =>\n    setData((prev) => ({ ...prev, [key]: value }));\n\n  const nameError = !data.name.trim() ? 'Укажите имя' : undefined;\n  const emailError = !data.email.includes('@') ? 'Укажите адрес с символом @' : undefined;\n  const cityError = !data.city.trim() ? 'Укажите город' : undefined;\n  const streetError = !data.street.trim() ? 'Укажите улицу и дом' : undefined;\n\n  const stepErrors = step === 0 ? [nameError, emailError] : step === 1 ? [cityError, streetError] : [];\n  const stepValid = stepErrors.every((error) => !error);\n  const isLast = step === steps.length - 1;\n\n  const goNext = () => {\n    if (!stepValid) {\n      setTouched(true);\n      return;\n    }\n    setTouched(false);\n    setStep((current) => Math.min(current + 1, steps.length - 1));\n  };\n\n  const goBack = () => {\n    setTouched(false);\n    setStep((current) => Math.max(current - 1, 0));\n  };\n\n  const submit = () => onSubmit(data);\n\n  return (\n    <form\n      onSubmit={(event) => {\n        event.preventDefault();\n        if (isLast) submit();\n        else goNext();\n      }}\n      style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}\n    >\n      <JxStepper steps={steps} current={step} />\n\n      {step === 0 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n          <JxInputField\n            label=\"Имя\"\n            required\n            autoComplete=\"name\"\n            value={data.name}\n            onChange={(event) => set('name', event.target.value)}\n            errorText={touched ? nameError : undefined}\n          />\n          <JxInputField\n            label=\"Электронная почта\"\n            type=\"email\"\n            required\n            autoComplete=\"email\"\n            helperText=\"Сюда придёт подтверждение регистрации\"\n            value={data.email}\n            onChange={(event) => set('email', event.target.value)}\n            errorText={touched ? emailError : undefined}\n          />\n        </div>\n      )}\n\n      {step === 1 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n          <JxInputField\n            label=\"Город\"\n            required\n            autoComplete=\"address-level2\"\n            value={data.city}\n            onChange={(event) => set('city', event.target.value)}\n            errorText={touched ? cityError : undefined}\n          />\n          <JxInputField\n            label=\"Улица и дом\"\n            required\n            autoComplete=\"street-address\"\n            value={data.street}\n            onChange={(event) => set('street', event.target.value)}\n            errorText={touched ? streetError : undefined}\n          />\n          <JxTextareaField\n            label=\"Комментарий к доставке\"\n            rows={3}\n            maxLength={300}\n            value={data.comment}\n            onChange={(event) => set('comment', event.target.value)}\n            helperText={`${data.comment.length}/300`}\n          />\n        </div>\n      )}\n\n      {step === 2 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n          <JxAlert intent=\"info\" title=\"Проверьте данные\">\n            После отправки изменить анкету можно будет только через поддержку.\n          </JxAlert>\n          <JxDivider label=\"Контакты\" />\n          <dl style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 12rem) minmax(0, 1fr)', gap: '8px 16px', margin: 0 }}>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Имя</dt>\n            <dd style={{ margin: 0, wordBreak: 'break-word' }}>{data.name}</dd>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Почта</dt>\n            <dd style={{ margin: 0, wordBreak: 'break-word' }}>{data.email}</dd>\n          </dl>\n          <JxDivider label=\"Адрес\" />\n          <dl style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 12rem) minmax(0, 1fr)', gap: '8px 16px', margin: 0 }}>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Город</dt>\n            <dd style={{ margin: 0, wordBreak: 'break-word' }}>{data.city}</dd>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Улица и дом</dt>\n            <dd style={{ margin: 0, wordBreak: 'break-word' }}>{data.street}</dd>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Комментарий</dt>\n            <dd style={{ margin: 0, wordBreak: 'break-word' }}>\n              {data.comment.trim() ? data.comment : '—'}\n            </dd>\n          </dl>\n        </div>\n      )}\n\n      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>\n        <JxButton type=\"button\" variant=\"ghost\" disabled={step === 0} onClick={goBack}>\n          Назад\n        </JxButton>\n        {isLast ? (\n          <JxButton type=\"submit\" variant=\"primary\">\n            Отправить\n          </JxButton>\n        ) : (\n          <JxButton type=\"submit\" variant=\"primary\">\n            Дальше\n          </JxButton>\n        )}\n      </div>\n    </form>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport {\n  JxStepper,\n  JxInputField,\n  JxTextareaField,\n  JxButton,\n  JxDivider,\n  JxAlert,\n} from '@jinx-ui/react';\n\ninterface RegistrationData {\n  name: string;\n  email: string;\n  city: string;\n  street: string;\n  comment: string;\n}\n\nconst steps = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nconst emptyData: RegistrationData = {\n  name: '',\n  email: '',\n  city: '',\n  street: '',\n  comment: '',\n};\n\nexport default function RegistrationWizard({\n  onSubmit,\n}: {\n  onSubmit: (data: RegistrationData) => void;\n}) {\n  const [step, setStep] = useState(0);\n  const [data, setData] = useState<RegistrationData>(emptyData);\n  const [touched, setTouched] = useState(false);\n\n  const set = <K extends keyof RegistrationData>(key: K, value: RegistrationData[K]) =>\n    setData((prev) => ({ ...prev, [key]: value }));\n\n  const nameError = !data.name.trim() ? 'Укажите имя' : undefined;\n  const emailError = !data.email.includes('@') ? 'Укажите адрес с символом @' : undefined;\n  const cityError = !data.city.trim() ? 'Укажите город' : undefined;\n  const streetError = !data.street.trim() ? 'Укажите улицу и дом' : undefined;\n\n  const stepErrors = step === 0 ? [nameError, emailError] : step === 1 ? [cityError, streetError] : [];\n  const stepValid = stepErrors.every((error) => !error);\n  const isLast = step === steps.length - 1;\n\n  const goNext = () => {\n    if (!stepValid) {\n      setTouched(true);\n      return;\n    }\n    setTouched(false);\n    setStep((current) => Math.min(current + 1, steps.length - 1));\n  };\n\n  const goBack = () => {\n    setTouched(false);\n    setStep((current) => Math.max(current - 1, 0));\n  };\n\n  const submit = () => onSubmit(data);\n\n  return (\n    <form\n      onSubmit={(event) => {\n        event.preventDefault();\n        if (isLast) submit();\n        else goNext();\n      }}\n      style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}\n    >\n      <JxStepper steps={steps} current={step} />\n\n      {step === 0 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n          <JxInputField\n            label=\"Имя\"\n            required\n            autoComplete=\"name\"\n            value={data.name}\n            onChange={(event) => set('name', event.target.value)}\n            errorText={touched ? nameError : undefined}\n          />\n          <JxInputField\n            label=\"Электронная почта\"\n            type=\"email\"\n            required\n            autoComplete=\"email\"\n            helperText=\"Сюда придёт подтверждение регистрации\"\n            value={data.email}\n            onChange={(event) => set('email', event.target.value)}\n            errorText={touched ? emailError : undefined}\n          />\n        </div>\n      )}\n\n      {step === 1 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n          <JxInputField\n            label=\"Город\"\n            required\n            autoComplete=\"address-level2\"\n            value={data.city}\n            onChange={(event) => set('city', event.target.value)}\n            errorText={touched ? cityError : undefined}\n          />\n          <JxInputField\n            label=\"Улица и дом\"\n            required\n            autoComplete=\"street-address\"\n            value={data.street}\n            onChange={(event) => set('street', event.target.value)}\n            errorText={touched ? streetError : undefined}\n          />\n          <JxTextareaField\n            label=\"Комментарий к доставке\"\n            rows={3}\n            maxLength={300}\n            value={data.comment}\n            onChange={(event) => set('comment', event.target.value)}\n            helperText={`${data.comment.length}/300`}\n          />\n        </div>\n      )}\n\n      {step === 2 && (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n          <JxAlert intent=\"info\" title=\"Проверьте данные\">\n            После отправки изменить анкету можно будет только через поддержку.\n          </JxAlert>\n          <JxDivider label=\"Контакты\" />\n          <dl style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 12rem) minmax(0, 1fr)', gap: '8px 16px', margin: 0 }}>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Имя</dt>\n            <dd style={{ margin: 0, wordBreak: 'break-word' }}>{data.name}</dd>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Почта</dt>\n            <dd style={{ margin: 0, wordBreak: 'break-word' }}>{data.email}</dd>\n          </dl>\n          <JxDivider label=\"Адрес\" />\n          <dl style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 12rem) minmax(0, 1fr)', gap: '8px 16px', margin: 0 }}>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Город</dt>\n            <dd style={{ margin: 0, wordBreak: 'break-word' }}>{data.city}</dd>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Улица и дом</dt>\n            <dd style={{ margin: 0, wordBreak: 'break-word' }}>{data.street}</dd>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Комментарий</dt>\n            <dd style={{ margin: 0, wordBreak: 'break-word' }}>\n              {data.comment.trim() ? data.comment : '—'}\n            </dd>\n          </dl>\n        </div>\n      )}\n\n      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>\n        <JxButton type=\"button\" variant=\"ghost\" disabled={step === 0} onClick={goBack}>\n          Назад\n        </JxButton>\n        {isLast ? (\n          <JxButton type=\"submit\" variant=\"primary\">\n            Отправить\n          </JxButton>\n        ) : (\n          <JxButton type=\"submit\" variant=\"primary\">\n            Дальше\n          </JxButton>\n        )}\n      </div>\n    </form>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 73,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 78,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 101,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 130,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 135,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 136,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 137,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 138,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 139,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 142,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 143,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 144,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 145,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 146,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 147,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 148,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 155,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxAlert",
+      "JxButton",
+      "JxDivider",
+      "JxInputField",
+      "JxStepper",
+      "JxTextareaField"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

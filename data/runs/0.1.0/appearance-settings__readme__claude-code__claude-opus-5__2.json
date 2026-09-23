@@ -1,0 +1,135 @@
+{
+  "id": "appearance-settings__readme__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T15:47:56.631Z",
+  "repeat": 2,
+  "durationMs": 41619,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "appearance-settings",
+    "title": "Настройки внешнего вида",
+    "prompt": "Сделай экран настроек внешнего вида: сегментированный переключатель темы на три варианта, ползунок масштаба интерфейса от 80 до 140 процентов с показом текущего значения, переключатель плотной вёрстки и раздел «Ещё» под разделителем с выбором шрифта. Справа от заголовка экрана метка с текущей темой. Состояние храни в компоненте и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxToggle",
+      "JxSlider",
+      "JxSwitch",
+      "JxDivider",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 9366,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 3641,
+    "cacheRead": 9366,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.095718,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "// Проверены по README: JxButton, JxModal, JxDrawer, JxTabs, JxSelect, JxCombobox,\n// JxCalendar, JxDateRangePicker + контракт value/onValueChange. Имена JxCard,\n// JxSegmented, JxSlider, JxSwitch, JxDivider, JxBadge, JxStack выведены по\n// соглашению пакета — сверь их с d.ts перед вмерживанием.\nimport { useState } from 'react';\nimport {\n  JxBadge,\n  JxCard,\n  JxDivider,\n  JxSegmented,\n  JxSelect,\n  JxSlider,\n  JxStack,\n  JxSwitch,\n} from '@jinx-ui/react';\n\nexport type ThemeMode = 'light' | 'dark' | 'system';\nexport type FontFamily = 'system' | 'inter' | 'mono';\n\nexport type AppearanceSettings = {\n  theme: ThemeMode;\n  scale: number;\n  dense: boolean;\n  fontFamily: FontFamily;\n};\n\ntype AppearanceSettingsScreenProps = {\n  defaultValue?: AppearanceSettings;\n  onChange?: (settings: AppearanceSettings) => void;\n};\n\nconst DEFAULTS: AppearanceSettings = {\n  theme: 'system',\n  scale: 100,\n  dense: false,\n  fontFamily: 'system',\n};\n\nconst THEME_OPTIONS: { value: ThemeMode; label: string }[] = [\n  { value: 'light', label: 'Светлая' },\n  { value: 'dark', label: 'Тёмная' },\n  { value: 'system', label: 'Системная' },\n];\n\nconst FONT_OPTIONS: { value: FontFamily; label: string }[] = [\n  { value: 'system', label: 'Системный' },\n  { value: 'inter', label: 'Inter' },\n  { value: 'mono', label: 'Моноширинный' },\n];\n\nexport default function AppearanceSettingsScreen({\n  defaultValue = DEFAULTS,\n  onChange,\n}: AppearanceSettingsScreenProps) {\n  const [settings, setSettings] = useState<AppearanceSettings>(defaultValue);\n\n  const update = (patch: Partial<AppearanceSettings>) => {\n    const next = { ...settings, ...patch };\n    setSettings(next);\n    onChange?.(next);\n  };\n\n  const themeLabel =\n    THEME_OPTIONS.find((option) => option.value === settings.theme)?.label ?? '';\n\n  return (\n    <JxCard>\n      <JxStack gap=\"var(--jx-space-6)\">\n        <JxStack\n          direction=\"row\"\n          align=\"center\"\n          justify=\"space-between\"\n          gap=\"var(--jx-space-3)\"\n        >\n          <h1 style={{ margin: 0, font: 'var(--jx-font-heading-lg)' }}>\n            Внешний вид\n          </h1>\n          <JxBadge>{themeLabel}</JxBadge>\n        </JxStack>\n\n        <JxStack gap=\"var(--jx-space-2)\">\n          <label id=\"appearance-theme-label\">Тема</label>\n          <JxSegmented\n            aria-labelledby=\"appearance-theme-label\"\n            options={THEME_OPTIONS}\n            value={settings.theme}\n            onValueChange={(theme: ThemeMode) => update({ theme })}\n          />\n        </JxStack>\n\n        <JxStack gap=\"var(--jx-space-2)\">\n          <JxStack direction=\"row\" align=\"center\" justify=\"space-between\">\n            <label id=\"appearance-scale-label\">Масштаб интерфейса</label>\n            <span aria-live=\"polite\">{settings.scale}%</span>\n          </JxStack>\n          <JxSlider\n            aria-labelledby=\"appearance-scale-label\"\n            min={80}\n            max={140}\n            step={5}\n            value={settings.scale}\n            onValueChange={(scale: number) => update({ scale })}\n          />\n        </JxStack>\n\n        <JxStack direction=\"row\" align=\"center\" justify=\"space-between\" gap=\"var(--jx-space-4)\">\n          <label htmlFor=\"appearance-dense\">Плотная вёрстка</label>\n          <JxSwitch\n            id=\"appearance-dense\"\n            checked={settings.dense}\n            onCheckedChange={(dense: boolean) => update({ dense })}\n          />\n        </JxStack>\n\n        <JxDivider />\n\n        <JxStack gap=\"var(--jx-space-3)\">\n          <h2 style={{ margin: 0, font: 'var(--jx-font-heading-sm)' }}>Ещё</h2>\n          <JxStack gap=\"var(--jx-space-2)\">\n            <label htmlFor=\"appearance-font\">Шрифт</label>\n            <JxSelect\n              id=\"appearance-font\"\n              options={FONT_OPTIONS}\n              value={settings.fontFamily}\n              onValueChange={(fontFamily: FontFamily) => update({ fontFamily })}\n            />\n          </JxStack>\n        </JxStack>\n      </JxStack>\n    </JxCard>\n  );\n}",
+    "text": "```tsx\n// Проверены по README: JxButton, JxModal, JxDrawer, JxTabs, JxSelect, JxCombobox,\n// JxCalendar, JxDateRangePicker + контракт value/onValueChange. Имена JxCard,\n// JxSegmented, JxSlider, JxSwitch, JxDivider, JxBadge, JxStack выведены по\n// соглашению пакета — сверь их с d.ts перед вмерживанием.\nimport { useState } from 'react';\nimport {\n  JxBadge,\n  JxCard,\n  JxDivider,\n  JxSegmented,\n  JxSelect,\n  JxSlider,\n  JxStack,\n  JxSwitch,\n} from '@jinx-ui/react';\n\nexport type ThemeMode = 'light' | 'dark' | 'system';\nexport type FontFamily = 'system' | 'inter' | 'mono';\n\nexport type AppearanceSettings = {\n  theme: ThemeMode;\n  scale: number;\n  dense: boolean;\n  fontFamily: FontFamily;\n};\n\ntype AppearanceSettingsScreenProps = {\n  defaultValue?: AppearanceSettings;\n  onChange?: (settings: AppearanceSettings) => void;\n};\n\nconst DEFAULTS: AppearanceSettings = {\n  theme: 'system',\n  scale: 100,\n  dense: false,\n  fontFamily: 'system',\n};\n\nconst THEME_OPTIONS: { value: ThemeMode; label: string }[] = [\n  { value: 'light', label: 'Светлая' },\n  { value: 'dark', label: 'Тёмная' },\n  { value: 'system', label: 'Системная' },\n];\n\nconst FONT_OPTIONS: { value: FontFamily; label: string }[] = [\n  { value: 'system', label: 'Системный' },\n  { value: 'inter', label: 'Inter' },\n  { value: 'mono', label: 'Моноширинный' },\n];\n\nexport default function AppearanceSettingsScreen({\n  defaultValue = DEFAULTS,\n  onChange,\n}: AppearanceSettingsScreenProps) {\n  const [settings, setSettings] = useState<AppearanceSettings>(defaultValue);\n\n  const update = (patch: Partial<AppearanceSettings>) => {\n    const next = { ...settings, ...patch };\n    setSettings(next);\n    onChange?.(next);\n  };\n\n  const themeLabel =\n    THEME_OPTIONS.find((option) => option.value === settings.theme)?.label ?? '';\n\n  return (\n    <JxCard>\n      <JxStack gap=\"var(--jx-space-6)\">\n        <JxStack\n          direction=\"row\"\n          align=\"center\"\n          justify=\"space-between\"\n          gap=\"var(--jx-space-3)\"\n        >\n          <h1 style={{ margin: 0, font: 'var(--jx-font-heading-lg)' }}>\n            Внешний вид\n          </h1>\n          <JxBadge>{themeLabel}</JxBadge>\n        </JxStack>\n\n        <JxStack gap=\"var(--jx-space-2)\">\n          <label id=\"appearance-theme-label\">Тема</label>\n          <JxSegmented\n            aria-labelledby=\"appearance-theme-label\"\n            options={THEME_OPTIONS}\n            value={settings.theme}\n            onValueChange={(theme: ThemeMode) => update({ theme })}\n          />\n        </JxStack>\n\n        <JxStack gap=\"var(--jx-space-2)\">\n          <JxStack direction=\"row\" align=\"center\" justify=\"space-between\">\n            <label id=\"appearance-scale-label\">Масштаб интерфейса</label>\n            <span aria-live=\"polite\">{settings.scale}%</span>\n          </JxStack>\n          <JxSlider\n            aria-labelledby=\"appearance-scale-label\"\n            min={80}\n            max={140}\n            step={5}\n            value={settings.scale}\n            onValueChange={(scale: number) => update({ scale })}\n          />\n        </JxStack>\n\n        <JxStack direction=\"row\" align=\"center\" justify=\"space-between\" gap=\"var(--jx-space-4)\">\n          <label htmlFor=\"appearance-dense\">Плотная вёрстка</label>\n          <JxSwitch\n            id=\"appearance-dense\"\n            checked={settings.dense}\n            onCheckedChange={(dense: boolean) => update({ dense })}\n          />\n        </JxStack>\n\n        <JxDivider />\n\n        <JxStack gap=\"var(--jx-space-3)\">\n          <h2 style={{ margin: 0, font: 'var(--jx-font-heading-sm)' }}>Ещё</h2>\n          <JxStack gap=\"var(--jx-space-2)\">\n            <label htmlFor=\"appearance-font\">Шрифт</label>\n            <JxSelect\n              id=\"appearance-font\"\n              options={FONT_OPTIONS}\n              value={settings.fontFamily}\n              onValueChange={(fontFamily: FontFamily) => update({ fontFamily })}\n            />\n          </JxStack>\n        </JxStack>\n      </JxStack>\n    </JxCard>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 8,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxCard'."
+        },
+        {
+          "code": 2305,
+          "line": 10,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxSegmented'."
+        },
+        {
+          "code": 2305,
+          "line": 13,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxStack'."
+        },
+        {
+          "code": 2322,
+          "line": 111,
+          "message": "Type '{ id: string; checked: boolean; onCheckedChange: (dense: boolean) => void; }' is not assignable to type 'IntrinsicAttributes & Omit<InputHTMLAttributes<HTMLInputElement>, \"type\" | \"size\"> & { label?: ReactNode; wrapClassName?: string | undefined; }'.\n  Property 'onCheckedChange' does not exist on type 'IntrinsicAttributes & Omit<InputHTMLAttributes<HTMLInputElement>, \"type\" | \"size\"> & { label?: ReactNode; wrapClassName?: string | undefined; }'."
+        },
+        {
+          "code": 2322,
+          "line": 125,
+          "message": "Type '(fontFamily: FontFamily) => void' is not assignable to type '(value: string) => void'.\n  Types of parameters 'fontFamily' and 'value' are incompatible.\n    Type 'string' is not assignable to type 'FontFamily'."
+        }
+      ],
+      "unknownComponents": [
+        "JxCard",
+        "JxSegmented",
+        "JxStack"
+      ],
+      "unknownProps": [
+        {
+          "component": "JxSwitch",
+          "prop": "onCheckedChange"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 75,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 118,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxBadge",
+      "JxCard",
+      "JxDivider",
+      "JxSegmented",
+      "JxSelect",
+      "JxSlider",
+      "JxStack",
+      "JxSwitch"
+    ],
+    "expectedCoverage": 0.8,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.24
+  }
+}

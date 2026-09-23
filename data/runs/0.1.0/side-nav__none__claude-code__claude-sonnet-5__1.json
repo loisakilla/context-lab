@@ -1,0 +1,136 @@
+{
+  "id": "side-nav__none__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-23T15:22:40.592Z",
+  "repeat": 1,
+  "durationMs": 8874,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "none",
+  "task": {
+    "id": "side-nav",
+    "title": "Боковая панель навигации",
+    "prompt": "Сделай кнопку «Меню», по которой слева выезжает панель с навигацией: пункты «Проекты», «Команда», «Настройки», разделитель и пункт «Выйти», выделенный как опасный. Выбор пункта вызывает переданный колбэк onNavigate с ключом пункта и закрывает панель.",
+    "taskType": "ui",
+    "expects": [
+      "JxDrawer",
+      "JxMenu",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 8235,
+        "cacheCreation": 372
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 718,
+    "cacheRead": 8235,
+    "cacheCreation": 372
+  },
+  "costUsd": 0.0244025,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport {\n  Button,\n  Drawer,\n  DrawerHeader,\n  DrawerTitle,\n  DrawerCloseButton,\n  DrawerBody,\n  Nav,\n  NavItem,\n  NavDivider,\n  IconMenu,\n  IconLogOut,\n} from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface NavigationDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function NavigationDrawer({ onNavigate }: NavigationDrawerProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const handleSelect = (key: NavKey) => {\n    onNavigate(key);\n    setIsOpen(false);\n  };\n\n  return (\n    <>\n      <Button\n        variant=\"secondary\"\n        iconStart={<IconMenu />}\n        onClick={() => setIsOpen(true)}\n      >\n        Меню\n      </Button>\n\n      <Drawer\n        placement=\"left\"\n        isOpen={isOpen}\n        onClose={() => setIsOpen(false)}\n      >\n        <DrawerHeader>\n          <DrawerTitle>Навигация</DrawerTitle>\n          <DrawerCloseButton onClick={() => setIsOpen(false)} />\n        </DrawerHeader>\n        <DrawerBody>\n          <Nav>\n            <NavItem onSelect={() => handleSelect('projects')}>\n              Проекты\n            </NavItem>\n            <NavItem onSelect={() => handleSelect('team')}>\n              Команда\n            </NavItem>\n            <NavItem onSelect={() => handleSelect('settings')}>\n              Настройки\n            </NavItem>\n            <NavDivider />\n            <NavItem\n              danger\n              iconStart={<IconLogOut />}\n              onSelect={() => handleSelect('logout')}\n            >\n              Выйти\n            </NavItem>\n          </Nav>\n        </DrawerBody>\n      </Drawer>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport {\n  Button,\n  Drawer,\n  DrawerHeader,\n  DrawerTitle,\n  DrawerCloseButton,\n  DrawerBody,\n  Nav,\n  NavItem,\n  NavDivider,\n  IconMenu,\n  IconLogOut,\n} from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface NavigationDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function NavigationDrawer({ onNavigate }: NavigationDrawerProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const handleSelect = (key: NavKey) => {\n    onNavigate(key);\n    setIsOpen(false);\n  };\n\n  return (\n    <>\n      <Button\n        variant=\"secondary\"\n        iconStart={<IconMenu />}\n        onClick={() => setIsOpen(true)}\n      >\n        Меню\n      </Button>\n\n      <Drawer\n        placement=\"left\"\n        isOpen={isOpen}\n        onClose={() => setIsOpen(false)}\n      >\n        <DrawerHeader>\n          <DrawerTitle>Навигация</DrawerTitle>\n          <DrawerCloseButton onClick={() => setIsOpen(false)} />\n        </DrawerHeader>\n        <DrawerBody>\n          <Nav>\n            <NavItem onSelect={() => handleSelect('projects')}>\n              Проекты\n            </NavItem>\n            <NavItem onSelect={() => handleSelect('team')}>\n              Команда\n            </NavItem>\n            <NavItem onSelect={() => handleSelect('settings')}>\n              Настройки\n            </NavItem>\n            <NavDivider />\n            <NavItem\n              danger\n              iconStart={<IconLogOut />}\n              onSelect={() => handleSelect('logout')}\n            >\n              Выйти\n            </NavItem>\n          </Nav>\n        </DrawerBody>\n      </Drawer>\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 3,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2724,
+          "line": 4,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Drawer'. Did you mean 'JxDrawer'?"
+        },
+        {
+          "code": 2305,
+          "line": 5,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'DrawerHeader'."
+        },
+        {
+          "code": 2305,
+          "line": 6,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'DrawerTitle'."
+        },
+        {
+          "code": 2305,
+          "line": 7,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'DrawerCloseButton'."
+        },
+        {
+          "code": 2305,
+          "line": 8,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'DrawerBody'."
+        },
+        {
+          "code": 2305,
+          "line": 9,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Nav'."
+        },
+        {
+          "code": 2305,
+          "line": 10,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'NavItem'."
+        },
+        {
+          "code": 2305,
+          "line": 11,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'NavDivider'."
+        },
+        {
+          "code": 2305,
+          "line": 12,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'IconMenu'."
+        },
+        {
+          "code": 2305,
+          "line": 13,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'IconLogOut'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Drawer",
+        "DrawerBody",
+        "DrawerCloseButton",
+        "DrawerHeader",
+        "DrawerTitle",
+        "IconLogOut",
+        "IconMenu",
+        "Nav",
+        "NavDivider",
+        "NavItem"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

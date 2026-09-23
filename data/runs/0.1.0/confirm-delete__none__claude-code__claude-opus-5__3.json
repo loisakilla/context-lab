@@ -1,0 +1,100 @@
+{
+  "id": "confirm-delete__none__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T15:20:41.529Z",
+  "repeat": 3,
+  "durationMs": 22879,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "none",
+  "task": {
+    "id": "confirm-delete",
+    "title": "Подтверждение удаления",
+    "prompt": "Сделай компонент с кнопкой «Удалить проект». По клику открывается окно подтверждения с заголовком «Удалить проект?», текстом о том, что действие необратимо, и двумя кнопками: отмена и подтверждение удаления. Подтверждение вызывает переданный колбэк onConfirm.",
+    "taskType": "ui",
+    "expects": [
+      "JxModal",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8601,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1928,
+    "cacheRead": 8601,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0525105,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, useCallback } from 'react';\nimport { Button, Modal, Stack, Text } from '@jinx-ui/react';\n\nexport interface DeleteProjectButtonProps {\n  projectName?: string;\n  onConfirm: () => void;\n}\n\nexport default function DeleteProjectButton({ projectName, onConfirm }: DeleteProjectButtonProps) {\n  const [open, setOpen] = useState(false);\n\n  const close = useCallback(() => setOpen(false), []);\n\n  const confirm = useCallback(() => {\n    setOpen(false);\n    onConfirm();\n  }, [onConfirm]);\n\n  return (\n    <>\n      <Button variant=\"danger\" onClick={() => setOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Modal open={open} onClose={close} aria-labelledby=\"delete-project-title\">\n        <Modal.Header id=\"delete-project-title\">Удалить проект?</Modal.Header>\n\n        <Modal.Body>\n          <Text style={{ color: 'var(--jx-color-text-secondary)' }}>\n            {projectName\n              ? `Проект «${projectName}» будет удалён вместе со всеми его данными. `\n              : 'Проект будет удалён вместе со всеми его данными. '}\n            Действие необратимо — восстановить данные после удаления не получится.\n          </Text>\n        </Modal.Body>\n\n        <Modal.Footer>\n          <Stack direction=\"row\" gap=\"var(--jx-space-2)\" justify=\"flex-end\">\n            <Button variant=\"secondary\" onClick={close}>\n              Отмена\n            </Button>\n            <Button variant=\"danger\" onClick={confirm} autoFocus>\n              Удалить\n            </Button>\n          </Stack>\n        </Modal.Footer>\n      </Modal>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState, useCallback } from 'react';\nimport { Button, Modal, Stack, Text } from '@jinx-ui/react';\n\nexport interface DeleteProjectButtonProps {\n  projectName?: string;\n  onConfirm: () => void;\n}\n\nexport default function DeleteProjectButton({ projectName, onConfirm }: DeleteProjectButtonProps) {\n  const [open, setOpen] = useState(false);\n\n  const close = useCallback(() => setOpen(false), []);\n\n  const confirm = useCallback(() => {\n    setOpen(false);\n    onConfirm();\n  }, [onConfirm]);\n\n  return (\n    <>\n      <Button variant=\"danger\" onClick={() => setOpen(true)}>\n        Удалить проект\n      </Button>\n\n      <Modal open={open} onClose={close} aria-labelledby=\"delete-project-title\">\n        <Modal.Header id=\"delete-project-title\">Удалить проект?</Modal.Header>\n\n        <Modal.Body>\n          <Text style={{ color: 'var(--jx-color-text-secondary)' }}>\n            {projectName\n              ? `Проект «${projectName}» будет удалён вместе со всеми его данными. `\n              : 'Проект будет удалён вместе со всеми его данными. '}\n            Действие необратимо — восстановить данные после удаления не получится.\n          </Text>\n        </Modal.Body>\n\n        <Modal.Footer>\n          <Stack direction=\"row\" gap=\"var(--jx-space-2)\" justify=\"flex-end\">\n            <Button variant=\"secondary\" onClick={close}>\n              Отмена\n            </Button>\n            <Button variant=\"danger\" onClick={confirm} autoFocus>\n              Удалить\n            </Button>\n          </Stack>\n        </Modal.Footer>\n      </Modal>\n    </>\n  );\n}\n```\n\nОдно уточнение вне формата, потому что иначе оно выглядело бы как проверенный код: у меня нет документации `@jinx-ui/react`, поэтому имена (`Modal` и его слоты, `variant=\"danger\"`, токены `--jx-space-2`, `--jx-color-text-secondary`) — предположение по типовым конвенциям. Сверьте их с реальным API библиотеки."
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2724,
+          "line": 2,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Modal'. Did you mean 'JxModal'?"
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Text'."
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Modal",
+        "Stack",
+        "Text"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 29,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

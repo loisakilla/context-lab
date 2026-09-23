@@ -1,0 +1,218 @@
+{
+  "id": "appearance-settings__none__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-23T15:25:12.238Z",
+  "repeat": 3,
+  "durationMs": 12631,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "none",
+  "task": {
+    "id": "appearance-settings",
+    "title": "Настройки внешнего вида",
+    "prompt": "Сделай экран настроек внешнего вида: сегментированный переключатель темы на три варианта, ползунок масштаба интерфейса от 80 до 140 процентов с показом текущего значения, переключатель плотной вёрстки и раздел «Ещё» под разделителем с выбором шрифта. Справа от заголовка экрана метка с текущей темой. Состояние храни в компоненте и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxToggle",
+      "JxSlider",
+      "JxSwitch",
+      "JxDivider",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 8646,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1534,
+    "cacheRead": 8646,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.042683000000000006,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport {\n  JxStack,\n  JxCluster,\n  JxHeading,\n  JxBadge,\n  JxDivider,\n  JxSegmentedControl,\n  JxSegmentedItem,\n  JxSlider,\n  JxLabel,\n  JxSwitch,\n  JxSelect,\n  JxSelectOption,\n  JxCard,\n  JxText,\n} from '@jinx-ui/react';\n\ntype Theme = 'light' | 'dark' | 'system';\ntype Font = 'system' | 'inter' | 'mono';\n\ninterface AppearanceSettings {\n  theme: Theme;\n  scale: number;\n  dense: boolean;\n  font: Font;\n}\n\ninterface AppearanceScreenProps {\n  onChange?: (settings: AppearanceSettings) => void;\n}\n\nconst themeLabels: Record<Theme, string> = {\n  light: 'Светлая',\n  dark: 'Тёмная',\n  system: 'Системная',\n};\n\nexport default function AppearanceScreen({ onChange }: AppearanceScreenProps) {\n  const [theme, setTheme] = useState<Theme>('system');\n  const [scale, setScale] = useState(100);\n  const [dense, setDense] = useState(false);\n  const [font, setFont] = useState<Font>('system');\n\n  const emit = (next: Partial<AppearanceSettings>) => {\n    const settings: AppearanceSettings = { theme, scale, dense, font, ...next };\n    onChange?.(settings);\n  };\n\n  return (\n    <JxCard className=\"jx-p-lg\">\n      <JxStack gap=\"lg\">\n        <JxCluster justify=\"space-between\" align=\"center\">\n          <JxHeading level={2}>Внешний вид</JxHeading>\n          <JxBadge variant=\"neutral\">{themeLabels[theme]}</JxBadge>\n        </JxCluster>\n\n        <JxStack gap=\"sm\">\n          <JxLabel>Тема</JxLabel>\n          <JxSegmentedControl\n            value={theme}\n            onChange={(value) => {\n              const next = value as Theme;\n              setTheme(next);\n              emit({ theme: next });\n            }}\n          >\n            <JxSegmentedItem value=\"light\">Светлая</JxSegmentedItem>\n            <JxSegmentedItem value=\"dark\">Тёмная</JxSegmentedItem>\n            <JxSegmentedItem value=\"system\">Системная</JxSegmentedItem>\n          </JxSegmentedControl>\n        </JxStack>\n\n        <JxStack gap=\"sm\">\n          <JxCluster justify=\"space-between\" align=\"center\">\n            <JxLabel htmlFor=\"ui-scale\">Масштаб интерфейса</JxLabel>\n            <JxText tone=\"muted\">{scale}%</JxText>\n          </JxCluster>\n          <JxSlider\n            id=\"ui-scale\"\n            min={80}\n            max={140}\n            step={5}\n            value={scale}\n            onChange={(value) => {\n              const next = Array.isArray(value) ? value[0] : value;\n              setScale(next);\n              emit({ scale: next });\n            }}\n          />\n        </JxStack>\n\n        <JxCluster justify=\"space-between\" align=\"center\">\n          <JxStack gap=\"xs\">\n            <JxLabel htmlFor=\"dense-layout\">Плотная вёрстка</JxLabel>\n            <JxText tone=\"muted\">Уменьшает отступы в списках и таблицах</JxText>\n          </JxStack>\n          <JxSwitch\n            id=\"dense-layout\"\n            checked={dense}\n            onChange={(checked) => {\n              setDense(checked);\n              emit({ dense: checked });\n            }}\n          />\n        </JxCluster>\n\n        <JxDivider />\n\n        <JxStack gap=\"sm\">\n          <JxHeading level={3}>Ещё</JxHeading>\n          <JxStack gap=\"sm\">\n            <JxLabel htmlFor=\"font-select\">Шрифт</JxLabel>\n            <JxSelect\n              id=\"font-select\"\n              value={font}\n              onChange={(value) => {\n                const next = value as Font;\n                setFont(next);\n                emit({ font: next });\n              }}\n            >\n              <JxSelectOption value=\"system\">Системный</JxSelectOption>\n              <JxSelectOption value=\"inter\">Inter</JxSelectOption>\n              <JxSelectOption value=\"mono\">Моноширинный</JxSelectOption>\n            </JxSelect>\n          </JxStack>\n        </JxStack>\n      </JxStack>\n    </JxCard>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport {\n  JxStack,\n  JxCluster,\n  JxHeading,\n  JxBadge,\n  JxDivider,\n  JxSegmentedControl,\n  JxSegmentedItem,\n  JxSlider,\n  JxLabel,\n  JxSwitch,\n  JxSelect,\n  JxSelectOption,\n  JxCard,\n  JxText,\n} from '@jinx-ui/react';\n\ntype Theme = 'light' | 'dark' | 'system';\ntype Font = 'system' | 'inter' | 'mono';\n\ninterface AppearanceSettings {\n  theme: Theme;\n  scale: number;\n  dense: boolean;\n  font: Font;\n}\n\ninterface AppearanceScreenProps {\n  onChange?: (settings: AppearanceSettings) => void;\n}\n\nconst themeLabels: Record<Theme, string> = {\n  light: 'Светлая',\n  dark: 'Тёмная',\n  system: 'Системная',\n};\n\nexport default function AppearanceScreen({ onChange }: AppearanceScreenProps) {\n  const [theme, setTheme] = useState<Theme>('system');\n  const [scale, setScale] = useState(100);\n  const [dense, setDense] = useState(false);\n  const [font, setFont] = useState<Font>('system');\n\n  const emit = (next: Partial<AppearanceSettings>) => {\n    const settings: AppearanceSettings = { theme, scale, dense, font, ...next };\n    onChange?.(settings);\n  };\n\n  return (\n    <JxCard className=\"jx-p-lg\">\n      <JxStack gap=\"lg\">\n        <JxCluster justify=\"space-between\" align=\"center\">\n          <JxHeading level={2}>Внешний вид</JxHeading>\n          <JxBadge variant=\"neutral\">{themeLabels[theme]}</JxBadge>\n        </JxCluster>\n\n        <JxStack gap=\"sm\">\n          <JxLabel>Тема</JxLabel>\n          <JxSegmentedControl\n            value={theme}\n            onChange={(value) => {\n              const next = value as Theme;\n              setTheme(next);\n              emit({ theme: next });\n            }}\n          >\n            <JxSegmentedItem value=\"light\">Светлая</JxSegmentedItem>\n            <JxSegmentedItem value=\"dark\">Тёмная</JxSegmentedItem>\n            <JxSegmentedItem value=\"system\">Системная</JxSegmentedItem>\n          </JxSegmentedControl>\n        </JxStack>\n\n        <JxStack gap=\"sm\">\n          <JxCluster justify=\"space-between\" align=\"center\">\n            <JxLabel htmlFor=\"ui-scale\">Масштаб интерфейса</JxLabel>\n            <JxText tone=\"muted\">{scale}%</JxText>\n          </JxCluster>\n          <JxSlider\n            id=\"ui-scale\"\n            min={80}\n            max={140}\n            step={5}\n            value={scale}\n            onChange={(value) => {\n              const next = Array.isArray(value) ? value[0] : value;\n              setScale(next);\n              emit({ scale: next });\n            }}\n          />\n        </JxStack>\n\n        <JxCluster justify=\"space-between\" align=\"center\">\n          <JxStack gap=\"xs\">\n            <JxLabel htmlFor=\"dense-layout\">Плотная вёрстка</JxLabel>\n            <JxText tone=\"muted\">Уменьшает отступы в списках и таблицах</JxText>\n          </JxStack>\n          <JxSwitch\n            id=\"dense-layout\"\n            checked={dense}\n            onChange={(checked) => {\n              setDense(checked);\n              emit({ dense: checked });\n            }}\n          />\n        </JxCluster>\n\n        <JxDivider />\n\n        <JxStack gap=\"sm\">\n          <JxHeading level={3}>Ещё</JxHeading>\n          <JxStack gap=\"sm\">\n            <JxLabel htmlFor=\"font-select\">Шрифт</JxLabel>\n            <JxSelect\n              id=\"font-select\"\n              value={font}\n              onChange={(value) => {\n                const next = value as Font;\n                setFont(next);\n                emit({ font: next });\n              }}\n            >\n              <JxSelectOption value=\"system\">Системный</JxSelectOption>\n              <JxSelectOption value=\"inter\">Inter</JxSelectOption>\n              <JxSelectOption value=\"mono\">Моноширинный</JxSelectOption>\n            </JxSelect>\n          </JxStack>\n        </JxStack>\n      </JxStack>\n    </JxCard>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 3,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxStack'."
+        },
+        {
+          "code": 2305,
+          "line": 4,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxCluster'."
+        },
+        {
+          "code": 2305,
+          "line": 5,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxHeading'."
+        },
+        {
+          "code": 2305,
+          "line": 8,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxSegmentedControl'."
+        },
+        {
+          "code": 2305,
+          "line": 9,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxSegmentedItem'."
+        },
+        {
+          "code": 2305,
+          "line": 11,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxLabel'."
+        },
+        {
+          "code": 2305,
+          "line": 15,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxCard'."
+        },
+        {
+          "code": 2305,
+          "line": 16,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxText'."
+        },
+        {
+          "code": 2322,
+          "line": 55,
+          "message": "Type '{ children: string; variant: string; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributes<HTMLSpanElement> & { tone?: JxBadgeTone | undefined; dot?: boolean | undefined; children?: ReactNode; }'.\n  Property 'variant' does not exist on type 'IntrinsicAttributes & HTMLAttributes<HTMLSpanElement> & { tone?: JxBadgeTone | undefined; dot?: boolean | undefined; children?: ReactNode; }'."
+        },
+        {
+          "code": 7006,
+          "line": 62,
+          "message": "Parameter 'value' implicitly has an 'any' type."
+        },
+        {
+          "code": 2322,
+          "line": 85,
+          "message": "Type '{ id: string; min: number; max: number; step: number; value: number; onChange: (value: any) => void; }' is not assignable to type 'IntrinsicAttributes & Omit<InputHTMLAttributes<HTMLInputElement>, \"onChange\" | \"type\" | \"value\" | \"defaultValue\"> & { ...; }'.\n  Property 'onChange' does not exist on type 'IntrinsicAttributes & Omit<InputHTMLAttributes<HTMLInputElement>, \"onChange\" | \"type\" | \"value\" | \"defaultValue\"> & { ...; }'."
+        },
+        {
+          "code": 7006,
+          "line": 85,
+          "message": "Parameter 'value' implicitly has an 'any' type."
+        },
+        {
+          "code": 2345,
+          "line": 102,
+          "message": "Argument of type 'ChangeEvent<HTMLInputElement, HTMLInputElement>' is not assignable to parameter of type 'SetStateAction<boolean>'."
+        },
+        {
+          "code": 2322,
+          "line": 103,
+          "message": "Type 'ChangeEvent<HTMLInputElement, HTMLInputElement>' is not assignable to type 'boolean | undefined'."
+        },
+        {
+          "code": 2322,
+          "line": 114,
+          "message": "Type '{ children: Element[]; id: string; value: Font; onChange: (value: any) => void; }' is not assignable to type 'IntrinsicAttributes & JxSelectProps'.\n  Property 'children' does not exist on type 'IntrinsicAttributes & JxSelectProps'."
+        },
+        {
+          "code": 7006,
+          "line": 117,
+          "message": "Parameter 'value' implicitly has an 'any' type."
+        },
+        {
+          "code": 2693,
+          "line": 123,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 123,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 124,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 124,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 125,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        },
+        {
+          "code": 2693,
+          "line": 125,
+          "message": "'JxSelectOption' only refers to a type, but is being used as a value here."
+        }
+      ],
+      "unknownComponents": [
+        "JxCard",
+        "JxCluster",
+        "JxHeading",
+        "JxLabel",
+        "JxSegmentedControl",
+        "JxSegmentedItem",
+        "JxStack",
+        "JxText"
+      ],
+      "unknownProps": [
+        {
+          "component": "JxBadge",
+          "prop": "variant"
+        },
+        {
+          "component": "JxSlider",
+          "prop": "onChange"
+        },
+        {
+          "component": "JxSelect",
+          "prop": "children"
+        }
+      ]
+    },
+    "lint": [],
+    "usedComponents": [
+      "JxBadge",
+      "JxCard",
+      "JxCluster",
+      "JxDivider",
+      "JxHeading",
+      "JxLabel",
+      "JxSegmentedControl",
+      "JxSegmentedItem",
+      "JxSelect",
+      "JxSelectOption",
+      "JxSlider",
+      "JxStack",
+      "JxSwitch",
+      "JxText"
+    ],
+    "expectedCoverage": 0.8,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.24
+  }
+}

@@ -1,0 +1,220 @@
+{
+  "id": "wizard__readme__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-23T15:28:26.110Z",
+  "repeat": 3,
+  "durationMs": 28982,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "wizard",
+    "title": "Пошаговая форма",
+    "prompt": "Сделай трёхшаговую форму регистрации: шаги «Контакты», «Адрес», «Проверка». Сверху показывай индикатор текущего шага, снизу кнопки «Назад» и «Дальше», на последнем шаге кнопка «Отправить» вызывает переданный колбэк onSubmit.",
+    "taskType": "ui",
+    "expects": [
+      "JxStepper",
+      "JxButton",
+      "JxInputField"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 9327,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 3684,
+    "cacheRead": 9327,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0967735,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxButton, JxInput } from '@jinx-ui/react';\n\ninterface RegistrationData {\n  fullName: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n}\n\ninterface RegistrationStepperProps {\n  onSubmit: (data: RegistrationData) => void;\n}\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nconst INITIAL_DATA: RegistrationData = {\n  fullName: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nexport default function RegistrationStepper({ onSubmit }: RegistrationStepperProps) {\n  const [stepIndex, setStepIndex] = useState(0);\n  const [data, setData] = useState<RegistrationData>(INITIAL_DATA);\n\n  const isLastStep = stepIndex === STEPS.length - 1;\n\n  const setField = (field: keyof RegistrationData) => (value: string) => {\n    setData((prev) => ({ ...prev, [field]: value }));\n  };\n\n  const goBack = () => setStepIndex((i) => Math.max(0, i - 1));\n  const goNext = () => setStepIndex((i) => Math.min(STEPS.length - 1, i + 1));\n\n  const handlePrimaryAction = () => {\n    if (isLastStep) {\n      onSubmit(data);\n    } else {\n      goNext();\n    }\n  };\n\n  return (\n    <div\n      style={{\n        maxWidth: 480,\n        margin: '0 auto',\n        padding: 'var(--jx-space-6)',\n        borderRadius: 'var(--jx-radius-lg)',\n        backgroundColor: 'var(--jx-color-surface)',\n        border: '1px solid var(--jx-color-border)',\n      }}\n    >\n      <ol\n        style={{\n          display: 'flex',\n          justifyContent: 'space-between',\n          listStyle: 'none',\n          margin: 0,\n          padding: 0,\n          marginBottom: 'var(--jx-space-6)',\n        }}\n      >\n        {STEPS.map((label, index) => {\n          const isActive = index === stepIndex;\n          const isDone = index < stepIndex;\n          return (\n            <li\n              key={label}\n              style={{\n                display: 'flex',\n                flexDirection: 'column',\n                alignItems: 'center',\n                gap: 'var(--jx-space-2)',\n                flex: 1,\n                textAlign: 'center',\n              }}\n            >\n              <span\n                style={{\n                  display: 'flex',\n                  alignItems: 'center',\n                  justifyContent: 'center',\n                  width: 28,\n                  height: 28,\n                  borderRadius: 'var(--jx-radius-full)',\n                  fontSize: 'var(--jx-font-size-sm)',\n                  fontWeight: 'var(--jx-font-weight-medium)',\n                  color: isActive || isDone ? 'var(--jx-color-primary-contrast)' : 'var(--jx-color-text-muted)',\n                  backgroundColor: isActive || isDone ? 'var(--jx-color-primary)' : 'var(--jx-color-surface-muted)',\n                  border: '1px solid var(--jx-color-border)',\n                }}\n              >\n                {index + 1}\n              </span>\n              <span\n                style={{\n                  fontSize: 'var(--jx-font-size-sm)',\n                  color: isActive ? 'var(--jx-color-text)' : 'var(--jx-color-text-muted)',\n                  fontWeight: isActive ? 'var(--jx-font-weight-medium)' : 'var(--jx-font-weight-regular)',\n                }}\n              >\n                {label}\n              </span>\n            </li>\n          );\n        })}\n      </ol>\n\n      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-4)', minHeight: 220 }}>\n        {stepIndex === 0 && (\n          <>\n            <JxInput\n              label=\"Полное имя\"\n              value={data.fullName}\n              onValueChange={setField('fullName')}\n              placeholder=\"Иван Иванов\"\n            />\n            <JxInput\n              label=\"Email\"\n              type=\"email\"\n              value={data.email}\n              onValueChange={setField('email')}\n              placeholder=\"you@example.com\"\n            />\n            <JxInput\n              label=\"Телефон\"\n              type=\"tel\"\n              value={data.phone}\n              onValueChange={setField('phone')}\n              placeholder=\"+7 900 000-00-00\"\n            />\n          </>\n        )}\n\n        {stepIndex === 1 && (\n          <>\n            <JxInput\n              label=\"Страна\"\n              value={data.country}\n              onValueChange={setField('country')}\n              placeholder=\"Россия\"\n            />\n            <JxInput\n              label=\"Город\"\n              value={data.city}\n              onValueChange={setField('city')}\n              placeholder=\"Москва\"\n            />\n            <JxInput\n              label=\"Улица и дом\"\n              value={data.street}\n              onValueChange={setField('street')}\n              placeholder=\"ул. Ленина, д. 1\"\n            />\n            <JxInput\n              label=\"Почтовый индекс\"\n              value={data.zip}\n              onValueChange={setField('zip')}\n              placeholder=\"101000\"\n            />\n          </>\n        )}\n\n        {stepIndex === 2 && (\n          <dl\n            style={{\n              display: 'grid',\n              gridTemplateColumns: '1fr 1fr',\n              rowGap: 'var(--jx-space-3)',\n              columnGap: 'var(--jx-space-2)',\n              margin: 0,\n            }}\n          >\n            <dt style={{ color: 'var(--jx-color-text-muted)' }}>Имя</dt>\n            <dd style={{ margin: 0 }}>{data.fullName || '—'}</dd>\n\n            <dt style={{ color: 'var(--jx-color-text-muted)' }}>Email</dt>\n            <dd style={{ margin: 0 }}>{data.email || '—'}</dd>\n\n            <dt style={{ color: 'var(--jx-color-text-muted)' }}>Телефон</dt>\n            <dd style={{ margin: 0 }}>{data.phone || '—'}</dd>\n\n            <dt style={{ color: 'var(--jx-color-text-muted)' }}>Страна</dt>\n            <dd style={{ margin: 0 }}>{data.country || '—'}</dd>\n\n            <dt style={{ color: 'var(--jx-color-text-muted)' }}>Город</dt>\n            <dd style={{ margin: 0 }}>{data.city || '—'}</dd>\n\n            <dt style={{ color: 'var(--jx-color-text-muted)' }}>Адрес</dt>\n            <dd style={{ margin: 0 }}>{data.street || '—'}</dd>\n\n            <dt style={{ color: 'var(--jx-color-text-muted)' }}>Индекс</dt>\n            <dd style={{ margin: 0 }}>{data.zip || '—'}</dd>\n          </dl>\n        )}\n      </div>\n\n      <div\n        style={{\n          display: 'flex',\n          justifyContent: 'space-between',\n          marginTop: 'var(--jx-space-6)',\n          gap: 'var(--jx-space-3)',\n        }}\n      >\n        <JxButton variant=\"secondary\" onClick={goBack} disabled={stepIndex === 0}>\n          Назад\n        </JxButton>\n        <JxButton variant=\"primary\" onClick={handlePrimaryAction}>\n          {isLastStep ? 'Отправить' : 'Дальше'}\n        </JxButton>\n      </div>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxInput } from '@jinx-ui/react';\n\ninterface RegistrationData {\n  fullName: string;\n  email: string;\n  phone: string;\n  country: string;\n  city: string;\n  street: string;\n  zip: string;\n}\n\ninterface RegistrationStepperProps {\n  onSubmit: (data: RegistrationData) => void;\n}\n\nconst STEPS = ['Контакты', 'Адрес', 'Проверка'] as const;\n\nconst INITIAL_DATA: RegistrationData = {\n  fullName: '',\n  email: '',\n  phone: '',\n  country: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nexport default function RegistrationStepper({ onSubmit }: RegistrationStepperProps) {\n  const [stepIndex, setStepIndex] = useState(0);\n  const [data, setData] = useState<RegistrationData>(INITIAL_DATA);\n\n  const isLastStep = stepIndex === STEPS.length - 1;\n\n  const setField = (field: keyof RegistrationData) => (value: string) => {\n    setData((prev) => ({ ...prev, [field]: value }));\n  };\n\n  const goBack = () => setStepIndex((i) => Math.max(0, i - 1));\n  const goNext = () => setStepIndex((i) => Math.min(STEPS.length - 1, i + 1));\n\n  const handlePrimaryAction = () => {\n    if (isLastStep) {\n      onSubmit(data);\n    } else {\n      goNext();\n    }\n  };\n\n  return (\n    <div\n      style={{\n        maxWidth: 480,\n        margin: '0 auto',\n        padding: 'var(--jx-space-6)',\n        borderRadius: 'var(--jx-radius-lg)',\n        backgroundColor: 'var(--jx-color-surface)',\n        border: '1px solid var(--jx-color-border)',\n      }}\n    >\n      <ol\n        style={{\n          display: 'flex',\n          justifyContent: 'space-between',\n          listStyle: 'none',\n          margin: 0,\n          padding: 0,\n          marginBottom: 'var(--jx-space-6)',\n        }}\n      >\n        {STEPS.map((label, index) => {\n          const isActive = index === stepIndex;\n          const isDone = index < stepIndex;\n          return (\n            <li\n              key={label}\n              style={{\n                display: 'flex',\n                flexDirection: 'column',\n                alignItems: 'center',\n                gap: 'var(--jx-space-2)',\n                flex: 1,\n                textAlign: 'center',\n              }}\n            >\n              <span\n                style={{\n                  display: 'flex',\n                  alignItems: 'center',\n                  justifyContent: 'center',\n                  width: 28,\n                  height: 28,\n                  borderRadius: 'var(--jx-radius-full)',\n                  fontSize: 'var(--jx-font-size-sm)',\n                  fontWeight: 'var(--jx-font-weight-medium)',\n                  color: isActive || isDone ? 'var(--jx-color-primary-contrast)' : 'var(--jx-color-text-muted)',\n                  backgroundColor: isActive || isDone ? 'var(--jx-color-primary)' : 'var(--jx-color-surface-muted)',\n                  border: '1px solid var(--jx-color-border)',\n                }}\n              >\n                {index + 1}\n              </span>\n              <span\n                style={{\n                  fontSize: 'var(--jx-font-size-sm)',\n                  color: isActive ? 'var(--jx-color-text)' : 'var(--jx-color-text-muted)',\n                  fontWeight: isActive ? 'var(--jx-font-weight-medium)' : 'var(--jx-font-weight-regular)',\n                }}\n              >\n                {label}\n              </span>\n            </li>\n          );\n        })}\n      </ol>\n\n      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-4)', minHeight: 220 }}>\n        {stepIndex === 0 && (\n          <>\n            <JxInput\n              label=\"Полное имя\"\n              value={data.fullName}\n              onValueChange={setField('fullName')}\n              placeholder=\"Иван Иванов\"\n            />\n            <JxInput\n              label=\"Email\"\n              type=\"email\"\n              value={data.email}\n              onValueChange={setField('email')}\n              placeholder=\"you@example.com\"\n            />\n            <JxInput\n              label=\"Телефон\"\n              type=\"tel\"\n              value={data.phone}\n              onValueChange={setField('phone')}\n              placeholder=\"+7 900 000-00-00\"\n            />\n          </>\n        )}\n\n        {stepIndex === 1 && (\n          <>\n            <JxInput\n              label=\"Страна\"\n              value={data.country}\n              onValueChange={setField('country')}\n              placeholder=\"Россия\"\n            />\n            <JxInput\n              label=\"Город\"\n              value={data.city}\n              onValueChange={setField('city')}\n              placeholder=\"Москва\"\n            />\n            <JxInput\n              label=\"Улица и дом\"\n              value={data.street}\n              onValueChange={setField('street')}\n              placeholder=\"ул. Ленина, д. 1\"\n            />\n            <JxInput\n              label=\"Почтовый индекс\"\n              value={data.zip}\n              onValueChange={setField('zip')}\n              placeholder=\"101000\"\n            />\n          </>\n        )}\n\n        {stepIndex === 2 && (\n          <dl\n            style={{\n              display: 'grid',\n              gridTemplateColumns: '1fr 1fr',\n              rowGap: 'var(--jx-space-3)',\n              columnGap: 'var(--jx-space-2)',\n              margin: 0,\n            }}\n          >\n            <dt style={{ color: 'var(--jx-color-text-muted)' }}>Имя</dt>\n            <dd style={{ margin: 0 }}>{data.fullName || '—'}</dd>\n\n            <dt style={{ color: 'var(--jx-color-text-muted)' }}>Email</dt>\n            <dd style={{ margin: 0 }}>{data.email || '—'}</dd>\n\n            <dt style={{ color: 'var(--jx-color-text-muted)' }}>Телефон</dt>\n            <dd style={{ margin: 0 }}>{data.phone || '—'}</dd>\n\n            <dt style={{ color: 'var(--jx-color-text-muted)' }}>Страна</dt>\n            <dd style={{ margin: 0 }}>{data.country || '—'}</dd>\n\n            <dt style={{ color: 'var(--jx-color-text-muted)' }}>Город</dt>\n            <dd style={{ margin: 0 }}>{data.city || '—'}</dd>\n\n            <dt style={{ color: 'var(--jx-color-text-muted)' }}>Адрес</dt>\n            <dd style={{ margin: 0 }}>{data.street || '—'}</dd>\n\n            <dt style={{ color: 'var(--jx-color-text-muted)' }}>Индекс</dt>\n            <dd style={{ margin: 0 }}>{data.zip || '—'}</dd>\n          </dl>\n        )}\n      </div>\n\n      <div\n        style={{\n          display: 'flex',\n          justifyContent: 'space-between',\n          marginTop: 'var(--jx-space-6)',\n          gap: 'var(--jx-space-3)',\n        }}\n      >\n        <JxButton variant=\"secondary\" onClick={goBack} disabled={stepIndex === 0}>\n          Назад\n        </JxButton>\n        <JxButton variant=\"primary\" onClick={handlePrimaryAction}>\n          {isLastStep ? 'Отправить' : 'Дальше'}\n        </JxButton>\n      </div>\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxInput'."
+        }
+      ],
+      "unknownComponents": [
+        "JxInput"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 53,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 63,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 78,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 88,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 105,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 118,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 175,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 183,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 184,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 186,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 187,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 189,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 190,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 192,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 193,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 195,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 196,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 198,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 199,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 201,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 202,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 208,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxInput"
+    ],
+    "expectedCoverage": 0.33,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.66
+  }
+}

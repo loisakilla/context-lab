@@ -1,0 +1,104 @@
+{
+  "id": "tag-picker__readme__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-23T15:39:53.921Z",
+  "repeat": 1,
+  "durationMs": 32476,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 8233,
+        "cacheCreation": 1066
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 2718,
+    "cacheRead": 8233,
+    "cacheCreation": 1066
+  },
+  "costUsd": 0.07873899999999999,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useCallback, useId, useRef, useState, type KeyboardEvent } from 'react';\nimport { JxInput, JxTag } from '@jinx-ui/react';\n\n// NOTE: из README подтверждён только экспорт JxButton/JxModal. Имена JxInput/JxTag\n// и проп onRemove у тега — предположение по конвенции jx-*; сверьте с d.ts пакета.\n\nexport interface TagPickerProps {\n  label?: string;\n  placeholder?: string;\n  defaultValue?: string[];\n  maxTags?: number;\n  onChange?: (tags: string[]) => void;\n}\n\nconst SEPARATORS = [',', ';'];\n\nfunction TagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  defaultValue = [],\n  maxTags,\n  onChange,\n}: TagPickerProps) {\n  const [tags, setTags] = useState<string[]>(defaultValue);\n  const [draft, setDraft] = useState('');\n  const listId = useId();\n  const inputRef = useRef<HTMLInputElement>(null);\n\n  const commit = useCallback(\n    (next: string[]) => {\n      setTags(next);\n      onChange?.(next);\n    },\n    [onChange],\n  );\n\n  const addTag = useCallback(\n    (raw: string) => {\n      const tag = raw.trim().replace(/\\s+/g, ' ');\n      if (!tag) return;\n      if (maxTags !== undefined && tags.length >= maxTags) return;\n      if (tags.some((t) => t.toLowerCase() === tag.toLowerCase())) {\n        setDraft('');\n        return;\n      }\n      commit([...tags, tag]);\n      setDraft('');\n    },\n    [commit, maxTags, tags],\n  );\n\n  const removeTag = useCallback(\n    (tag: string) => {\n      commit(tags.filter((t) => t !== tag));\n      inputRef.current?.focus();\n    },\n    [commit, tags],\n  );\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || SEPARATORS.includes(event.key)) {\n      event.preventDefault();\n      addTag(draft);\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      event.preventDefault();\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const atLimit = maxTags !== undefined && tags.length >= maxTags;\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-2)' }}>\n      <JxInput\n        ref={inputRef}\n        label={label}\n        placeholder={atLimit ? 'Достигнут лимит тегов' : placeholder}\n        value={draft}\n        disabled={atLimit}\n        aria-describedby={listId}\n        onValueChange={setDraft}\n        onKeyDown={handleKeyDown}\n        onBlur={() => addTag(draft)}\n      />\n\n      <ul\n        id={listId}\n        aria-label=\"Выбранные теги\"\n        style={{\n          display: 'flex',\n          flexWrap: 'wrap',\n          gap: 'var(--jx-space-2)',\n          margin: 0,\n          padding: 0,\n          listStyle: 'none',\n        }}\n      >\n        {tags.map((tag) => (\n          <li key={tag.toLowerCase()}>\n            <JxTag onRemove={() => removeTag(tag)} aria-label={`Тег ${tag}`}>\n              {tag}\n            </JxTag>\n          </li>\n        ))}\n      </ul>\n    </div>\n  );\n}\n\nexport default TagPicker;",
+    "text": "```tsx\nimport { useCallback, useId, useRef, useState, type KeyboardEvent } from 'react';\nimport { JxInput, JxTag } from '@jinx-ui/react';\n\n// NOTE: из README подтверждён только экспорт JxButton/JxModal. Имена JxInput/JxTag\n// и проп onRemove у тега — предположение по конвенции jx-*; сверьте с d.ts пакета.\n\nexport interface TagPickerProps {\n  label?: string;\n  placeholder?: string;\n  defaultValue?: string[];\n  maxTags?: number;\n  onChange?: (tags: string[]) => void;\n}\n\nconst SEPARATORS = [',', ';'];\n\nfunction TagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  defaultValue = [],\n  maxTags,\n  onChange,\n}: TagPickerProps) {\n  const [tags, setTags] = useState<string[]>(defaultValue);\n  const [draft, setDraft] = useState('');\n  const listId = useId();\n  const inputRef = useRef<HTMLInputElement>(null);\n\n  const commit = useCallback(\n    (next: string[]) => {\n      setTags(next);\n      onChange?.(next);\n    },\n    [onChange],\n  );\n\n  const addTag = useCallback(\n    (raw: string) => {\n      const tag = raw.trim().replace(/\\s+/g, ' ');\n      if (!tag) return;\n      if (maxTags !== undefined && tags.length >= maxTags) return;\n      if (tags.some((t) => t.toLowerCase() === tag.toLowerCase())) {\n        setDraft('');\n        return;\n      }\n      commit([...tags, tag]);\n      setDraft('');\n    },\n    [commit, maxTags, tags],\n  );\n\n  const removeTag = useCallback(\n    (tag: string) => {\n      commit(tags.filter((t) => t !== tag));\n      inputRef.current?.focus();\n    },\n    [commit, tags],\n  );\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || SEPARATORS.includes(event.key)) {\n      event.preventDefault();\n      addTag(draft);\n      return;\n    }\n    if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      event.preventDefault();\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const atLimit = maxTags !== undefined && tags.length >= maxTags;\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-2)' }}>\n      <JxInput\n        ref={inputRef}\n        label={label}\n        placeholder={atLimit ? 'Достигнут лимит тегов' : placeholder}\n        value={draft}\n        disabled={atLimit}\n        aria-describedby={listId}\n        onValueChange={setDraft}\n        onKeyDown={handleKeyDown}\n        onBlur={() => addTag(draft)}\n      />\n\n      <ul\n        id={listId}\n        aria-label=\"Выбранные теги\"\n        style={{\n          display: 'flex',\n          flexWrap: 'wrap',\n          gap: 'var(--jx-space-2)',\n          margin: 0,\n          padding: 0,\n          listStyle: 'none',\n        }}\n      >\n        {tags.map((tag) => (\n          <li key={tag.toLowerCase()}>\n            <JxTag onRemove={() => removeTag(tag)} aria-label={`Тег ${tag}`}>\n              {tag}\n            </JxTag>\n          </li>\n        ))}\n      </ul>\n    </div>\n  );\n}\n\nexport default TagPicker;\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxInput'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxTag'."
+        }
+      ],
+      "unknownComponents": [
+        "JxInput",
+        "JxTag"
+      ],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 75,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 91,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxInput",
+      "JxTag"
+    ],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.42
+  }
+}

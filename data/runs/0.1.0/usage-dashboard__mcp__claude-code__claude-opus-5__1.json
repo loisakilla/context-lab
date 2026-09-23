@@ -1,0 +1,267 @@
+{
+  "id": "usage-dashboard__mcp__claude-code__claude-opus-5__1",
+  "createdAt": "2026-09-23T16:12:35.453Z",
+  "repeat": 1,
+  "durationMs": 35347,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "mcp",
+  "task": {
+    "id": "usage-dashboard",
+    "title": "Панель расхода с фильтрами",
+    "prompt": "Сделай панель расхода по проектам. Сверху чипы-фильтры по статусу, которые можно снимать. Под ними на каждый проект строка с названием, круговым индикатором заполненности квоты в процентах и меткой статуса. Список постраничный, по пять строк. Если после фильтрации ничего не осталось, вместо списка показывается пустое состояние с кнопкой сброса фильтров.",
+    "taskType": "ui",
+    "expects": [
+      "JxChip",
+      "JxProgressCircle",
+      "JxBadge",
+      "JxPagination",
+      "JxEmptyState"
+    ]
+  },
+  "context": {
+    "tokens": 1587,
+    "sources": [
+      {
+        "kind": "tools",
+        "id": "search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules",
+        "version": "0.1.0",
+        "tokens": 1191,
+        "hash": "7b624df52b71eb9c"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 10654,
+        "cacheCreation": 510
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_rules",
+          "input": {
+            "task": "ui"
+          },
+          "resultTokens": 1247
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "чип фильтр удаляемый"
+          },
+          "resultTokens": 430
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "круговой индикатор прогресса в процентах"
+          },
+          "resultTokens": 320
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "пагинация постраничный список"
+          },
+          "resultTokens": 373
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "пустое состояние empty state"
+          },
+          "resultTokens": 447
+        },
+        {
+          "name": "mcp__context-lab__search_components",
+          "input": {
+            "query": "метка статуса badge"
+          },
+          "resultTokens": 435
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 11164,
+        "cacheCreation": 5868
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxChip"
+          },
+          "resultTokens": 352
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxProgressCircle"
+          },
+          "resultTokens": 209
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxPagination"
+          },
+          "resultTokens": 443
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxEmptyState"
+          },
+          "resultTokens": 267
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxBadge"
+          },
+          "resultTokens": 266
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxButton"
+          },
+          "resultTokens": 511
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 17032,
+        "cacheCreation": 3797
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__list_design_tokens",
+          "input": {
+            "maxTokens": 1500
+          },
+          "resultTokens": 625
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 20829,
+        "cacheCreation": 1449
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 8,
+    "output": 3626,
+    "cacheRead": 59679,
+    "cacheCreation": 11624
+  },
+  "costUsd": 0.1931795,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useMemo, useState } from 'react';\nimport {\n  JxBadge,\n  JxButton,\n  JxChip,\n  JxEmptyState,\n  JxPagination,\n  JxProgressCircle,\n} from '@jinx-ui/react';\n\ntype SpendStatus = 'active' | 'warning' | 'over' | 'archived';\n\ntype Project = {\n  id: string;\n  name: string;\n  quotaUsedPercent: number;\n  status: SpendStatus;\n};\n\nconst PAGE_SIZE = 5;\n\nconst STATUS_META: Record<SpendStatus, { label: string; tone: 'success' | 'warning' | 'danger' | 'default' }> = {\n  active: { label: 'В норме', tone: 'success' },\n  warning: { label: 'Близко к лимиту', tone: 'warning' },\n  over: { label: 'Превышение', tone: 'danger' },\n  archived: { label: 'В архиве', tone: 'default' },\n};\n\nconst STATUS_ORDER: SpendStatus[] = ['active', 'warning', 'over', 'archived'];\n\nconst PROJECTS: Project[] = [\n  { id: 'p-01', name: 'Витрина маркетплейса', quotaUsedPercent: 42, status: 'active' },\n  { id: 'p-02', name: 'Платёжный шлюз', quotaUsedPercent: 88, status: 'warning' },\n  { id: 'p-03', name: 'Аналитика оттока пользователей', quotaUsedPercent: 117, status: 'over' },\n  { id: 'p-04', name: 'Мобильное приложение курьера', quotaUsedPercent: 23, status: 'active' },\n  { id: 'p-05', name: 'Поиск по каталогу', quotaUsedPercent: 76, status: 'warning' },\n  { id: 'p-06', name: 'Экспорт отчётности в 1С', quotaUsedPercent: 9, status: 'archived' },\n  { id: 'p-07', name: 'Рекомендательная лента', quotaUsedPercent: 64, status: 'active' },\n  { id: 'p-08', name: 'Сервис нотификаций', quotaUsedPercent: 103, status: 'over' },\n  { id: 'p-09', name: 'Кабинет партнёра', quotaUsedPercent: 51, status: 'active' },\n  { id: 'p-10', name: 'Медиахранилище', quotaUsedPercent: 94, status: 'warning' },\n  { id: 'p-11', name: 'Легаси-биллинг', quotaUsedPercent: 4, status: 'archived' },\n  { id: 'p-12', name: 'A/B-платформа экспериментов', quotaUsedPercent: 37, status: 'active' },\n];\n\nexport default function ProjectSpendPanel() {\n  const [activeStatuses, setActiveStatuses] = useState<SpendStatus[]>(['active', 'warning', 'over']);\n  const [page, setPage] = useState(1);\n\n  const filtered = useMemo(\n    () => (activeStatuses.length === 0 ? [] : PROJECTS.filter((p) => activeStatuses.includes(p.status))),\n    [activeStatuses],\n  );\n\n  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n  const visible = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);\n\n  const toggleStatus = (status: SpendStatus) => {\n    setActiveStatuses((prev) =>\n      prev.includes(status) ? prev.filter((s) => s !== status) : [...prev, status],\n    );\n    setPage(1);\n  };\n\n  const resetFilters = () => {\n    setActiveStatuses(STATUS_ORDER);\n    setPage(1);\n  };\n\n  return (\n    <section\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: '20px',\n        padding: '20px',\n        background: 'var(--jx-surface)',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n        fontFamily: 'var(--jx-font-sans)',\n        color: 'var(--jx-text)',\n      }}\n    >\n      <header style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>\n        <h2 style={{ margin: 0, fontFamily: 'var(--jx-font-display)', fontSize: '20px' }}>\n          Расход по проектам\n        </h2>\n        <p style={{ margin: 0, color: 'var(--jx-text-2)', fontSize: '14px' }}>\n          Заполненность квоты за текущий расчётный период.\n        </p>\n      </header>\n\n      <div\n        role=\"group\"\n        aria-label=\"Фильтры по статусу\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}\n      >\n        {STATUS_ORDER.map((status) => {\n          const selected = activeStatuses.includes(status);\n          return (\n            <JxChip\n              key={status}\n              active={selected}\n              removable={selected}\n              onRemove={() => toggleStatus(status)}\n              onClick={() => toggleStatus(status)}\n              onKeyDown={(event) => {\n                if (event.key === 'Enter' || event.key === ' ') {\n                  event.preventDefault();\n                  toggleStatus(status);\n                }\n              }}\n              role=\"button\"\n              tabIndex={0}\n              aria-pressed={selected}\n            >\n              {STATUS_META[status].label}\n            </JxChip>\n          );\n        })}\n      </div>\n\n      {filtered.length === 0 ? (\n        <JxEmptyState\n          title=\"Под фильтры ничего не попало\"\n          message=\"Все статусы сняты или в них нет проектов. Верните фильтры, чтобы увидеть расход.\"\n          action={\n            <JxButton variant=\"primary\" onClick={resetFilters}>\n              Сбросить фильтры\n            </JxButton>\n          }\n        />\n      ) : (\n        <>\n          <ul\n            style={{\n              listStyle: 'none',\n              margin: 0,\n              padding: 0,\n              display: 'flex',\n              flexDirection: 'column',\n              gap: '8px',\n            }}\n          >\n            {visible.map((project) => (\n              <li\n                key={project.id}\n                style={{\n                  display: 'flex',\n                  alignItems: 'center',\n                  gap: '16px',\n                  padding: '12px 16px',\n                  background: 'var(--jx-surface-2)',\n                  border: '1px solid var(--jx-border)',\n                  borderRadius: 'var(--jx-r)',\n                }}\n              >\n                <JxProgressCircle\n                  value={project.quotaUsedPercent}\n                  showValue\n                  aria-label={`Квота проекта «${project.name}» израсходована на ${project.quotaUsedPercent}%`}\n                />\n                <span\n                  style={{\n                    flex: '1 1 auto',\n                    minWidth: 0,\n                    fontSize: '15px',\n                    overflow: 'hidden',\n                    textOverflow: 'ellipsis',\n                    whiteSpace: 'nowrap',\n                  }}\n                  title={project.name}\n                >\n                  {project.name}\n                </span>\n                <JxBadge tone={STATUS_META[project.status].tone} dot>\n                  {STATUS_META[project.status].label}\n                </JxBadge>\n              </li>\n            ))}\n          </ul>\n\n          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>\n            <span style={{ color: 'var(--jx-text-2)', fontSize: '13px' }}>\n              Показано {visible.length} из {filtered.length}\n            </span>\n            {pageCount > 1 && (\n              <JxPagination total={pageCount} page={currentPage} onPageChange={setPage} />\n            )}\n          </div>\n        </>\n      )}\n    </section>\n  );\n}",
+    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport {\n  JxBadge,\n  JxButton,\n  JxChip,\n  JxEmptyState,\n  JxPagination,\n  JxProgressCircle,\n} from '@jinx-ui/react';\n\ntype SpendStatus = 'active' | 'warning' | 'over' | 'archived';\n\ntype Project = {\n  id: string;\n  name: string;\n  quotaUsedPercent: number;\n  status: SpendStatus;\n};\n\nconst PAGE_SIZE = 5;\n\nconst STATUS_META: Record<SpendStatus, { label: string; tone: 'success' | 'warning' | 'danger' | 'default' }> = {\n  active: { label: 'В норме', tone: 'success' },\n  warning: { label: 'Близко к лимиту', tone: 'warning' },\n  over: { label: 'Превышение', tone: 'danger' },\n  archived: { label: 'В архиве', tone: 'default' },\n};\n\nconst STATUS_ORDER: SpendStatus[] = ['active', 'warning', 'over', 'archived'];\n\nconst PROJECTS: Project[] = [\n  { id: 'p-01', name: 'Витрина маркетплейса', quotaUsedPercent: 42, status: 'active' },\n  { id: 'p-02', name: 'Платёжный шлюз', quotaUsedPercent: 88, status: 'warning' },\n  { id: 'p-03', name: 'Аналитика оттока пользователей', quotaUsedPercent: 117, status: 'over' },\n  { id: 'p-04', name: 'Мобильное приложение курьера', quotaUsedPercent: 23, status: 'active' },\n  { id: 'p-05', name: 'Поиск по каталогу', quotaUsedPercent: 76, status: 'warning' },\n  { id: 'p-06', name: 'Экспорт отчётности в 1С', quotaUsedPercent: 9, status: 'archived' },\n  { id: 'p-07', name: 'Рекомендательная лента', quotaUsedPercent: 64, status: 'active' },\n  { id: 'p-08', name: 'Сервис нотификаций', quotaUsedPercent: 103, status: 'over' },\n  { id: 'p-09', name: 'Кабинет партнёра', quotaUsedPercent: 51, status: 'active' },\n  { id: 'p-10', name: 'Медиахранилище', quotaUsedPercent: 94, status: 'warning' },\n  { id: 'p-11', name: 'Легаси-биллинг', quotaUsedPercent: 4, status: 'archived' },\n  { id: 'p-12', name: 'A/B-платформа экспериментов', quotaUsedPercent: 37, status: 'active' },\n];\n\nexport default function ProjectSpendPanel() {\n  const [activeStatuses, setActiveStatuses] = useState<SpendStatus[]>(['active', 'warning', 'over']);\n  const [page, setPage] = useState(1);\n\n  const filtered = useMemo(\n    () => (activeStatuses.length === 0 ? [] : PROJECTS.filter((p) => activeStatuses.includes(p.status))),\n    [activeStatuses],\n  );\n\n  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n  const visible = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);\n\n  const toggleStatus = (status: SpendStatus) => {\n    setActiveStatuses((prev) =>\n      prev.includes(status) ? prev.filter((s) => s !== status) : [...prev, status],\n    );\n    setPage(1);\n  };\n\n  const resetFilters = () => {\n    setActiveStatuses(STATUS_ORDER);\n    setPage(1);\n  };\n\n  return (\n    <section\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: '20px',\n        padding: '20px',\n        background: 'var(--jx-surface)',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n        fontFamily: 'var(--jx-font-sans)',\n        color: 'var(--jx-text)',\n      }}\n    >\n      <header style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>\n        <h2 style={{ margin: 0, fontFamily: 'var(--jx-font-display)', fontSize: '20px' }}>\n          Расход по проектам\n        </h2>\n        <p style={{ margin: 0, color: 'var(--jx-text-2)', fontSize: '14px' }}>\n          Заполненность квоты за текущий расчётный период.\n        </p>\n      </header>\n\n      <div\n        role=\"group\"\n        aria-label=\"Фильтры по статусу\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}\n      >\n        {STATUS_ORDER.map((status) => {\n          const selected = activeStatuses.includes(status);\n          return (\n            <JxChip\n              key={status}\n              active={selected}\n              removable={selected}\n              onRemove={() => toggleStatus(status)}\n              onClick={() => toggleStatus(status)}\n              onKeyDown={(event) => {\n                if (event.key === 'Enter' || event.key === ' ') {\n                  event.preventDefault();\n                  toggleStatus(status);\n                }\n              }}\n              role=\"button\"\n              tabIndex={0}\n              aria-pressed={selected}\n            >\n              {STATUS_META[status].label}\n            </JxChip>\n          );\n        })}\n      </div>\n\n      {filtered.length === 0 ? (\n        <JxEmptyState\n          title=\"Под фильтры ничего не попало\"\n          message=\"Все статусы сняты или в них нет проектов. Верните фильтры, чтобы увидеть расход.\"\n          action={\n            <JxButton variant=\"primary\" onClick={resetFilters}>\n              Сбросить фильтры\n            </JxButton>\n          }\n        />\n      ) : (\n        <>\n          <ul\n            style={{\n              listStyle: 'none',\n              margin: 0,\n              padding: 0,\n              display: 'flex',\n              flexDirection: 'column',\n              gap: '8px',\n            }}\n          >\n            {visible.map((project) => (\n              <li\n                key={project.id}\n                style={{\n                  display: 'flex',\n                  alignItems: 'center',\n                  gap: '16px',\n                  padding: '12px 16px',\n                  background: 'var(--jx-surface-2)',\n                  border: '1px solid var(--jx-border)',\n                  borderRadius: 'var(--jx-r)',\n                }}\n              >\n                <JxProgressCircle\n                  value={project.quotaUsedPercent}\n                  showValue\n                  aria-label={`Квота проекта «${project.name}» израсходована на ${project.quotaUsedPercent}%`}\n                />\n                <span\n                  style={{\n                    flex: '1 1 auto',\n                    minWidth: 0,\n                    fontSize: '15px',\n                    overflow: 'hidden',\n                    textOverflow: 'ellipsis',\n                    whiteSpace: 'nowrap',\n                  }}\n                  title={project.name}\n                >\n                  {project.name}\n                </span>\n                <JxBadge tone={STATUS_META[project.status].tone} dot>\n                  {STATUS_META[project.status].label}\n                </JxBadge>\n              </li>\n            ))}\n          </ul>\n\n          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>\n            <span style={{ color: 'var(--jx-text-2)', fontSize: '13px' }}>\n              Показано {visible.length} из {filtered.length}\n            </span>\n            {pageCount > 1 && (\n              <JxPagination total={pageCount} page={currentPage} onPageChange={setPage} />\n            )}\n          </div>\n        </>\n      )}\n    </section>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 73,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 85,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 86,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 89,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 97,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 137,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 149,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 165,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 184,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 185,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxBadge",
+      "JxButton",
+      "JxChip",
+      "JxEmptyState",
+      "JxPagination",
+      "JxProgressCircle"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

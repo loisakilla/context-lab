@@ -1,0 +1,86 @@
+{
+  "id": "tag-picker__none__claude-code__claude-sonnet-5__2",
+  "createdAt": "2026-09-23T15:22:24.113Z",
+  "repeat": 2,
+  "durationMs": 7526,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "none",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 8579,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 811,
+    "cacheRead": 8579,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0245745,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, KeyboardEvent } from 'react';\nimport { Input, Tag, Stack } from '@jinx-ui/react';\n\ninterface TagInputProps {\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function TagInput({ onChange }: TagInputProps) {\n  const [tags, setTags] = useState<string[]>([]);\n  const [inputValue, setInputValue] = useState('');\n\n  const updateTags = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  const addTag = (value: string) => {\n    const trimmed = value.trim();\n    if (!trimmed || tags.includes(trimmed)) return;\n    updateTags([...tags, trimmed]);\n  };\n\n  const removeTag = (index: number) => {\n    updateTags(tags.filter((_, i) => i !== index));\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag(inputValue);\n      setInputValue('');\n    } else if (event.key === 'Backspace' && inputValue === '' && tags.length > 0) {\n      removeTag(tags.length - 1);\n    }\n  };\n\n  const handleBlur = () => {\n    if (inputValue.trim()) {\n      addTag(inputValue);\n      setInputValue('');\n    }\n  };\n\n  return (\n    <Stack direction=\"column\" gap=\"var(--jx-space-2)\" className=\"jx-w-full\">\n      <Input\n        value={inputValue}\n        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}\n        onKeyDown={handleKeyDown}\n        onBlur={handleBlur}\n        placeholder=\"Введите тег и нажмите Enter\"\n        aria-label=\"Добавить тег\"\n      />\n      {tags.length > 0 && (\n        <Stack direction=\"row\" gap=\"var(--jx-space-1)\" wrap=\"wrap\">\n          {tags.map((tag, index) => (\n            <Tag\n              key={tag}\n              onRemove={() => removeTag(index)}\n              aria-label={`Тег ${tag}`}\n            >\n              {tag}\n            </Tag>\n          ))}\n        </Stack>\n      )}\n    </Stack>\n  );\n}",
+    "text": "```tsx\nimport { useState, KeyboardEvent } from 'react';\nimport { Input, Tag, Stack } from '@jinx-ui/react';\n\ninterface TagInputProps {\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function TagInput({ onChange }: TagInputProps) {\n  const [tags, setTags] = useState<string[]>([]);\n  const [inputValue, setInputValue] = useState('');\n\n  const updateTags = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  const addTag = (value: string) => {\n    const trimmed = value.trim();\n    if (!trimmed || tags.includes(trimmed)) return;\n    updateTags([...tags, trimmed]);\n  };\n\n  const removeTag = (index: number) => {\n    updateTags(tags.filter((_, i) => i !== index));\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag(inputValue);\n      setInputValue('');\n    } else if (event.key === 'Backspace' && inputValue === '' && tags.length > 0) {\n      removeTag(tags.length - 1);\n    }\n  };\n\n  const handleBlur = () => {\n    if (inputValue.trim()) {\n      addTag(inputValue);\n      setInputValue('');\n    }\n  };\n\n  return (\n    <Stack direction=\"column\" gap=\"var(--jx-space-2)\" className=\"jx-w-full\">\n      <Input\n        value={inputValue}\n        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}\n        onKeyDown={handleKeyDown}\n        onBlur={handleBlur}\n        placeholder=\"Введите тег и нажмите Enter\"\n        aria-label=\"Добавить тег\"\n      />\n      {tags.length > 0 && (\n        <Stack direction=\"row\" gap=\"var(--jx-space-1)\" wrap=\"wrap\">\n          {tags.map((tag, index) => (\n            <Tag\n              key={tag}\n              onRemove={() => removeTag(index)}\n              aria-label={`Тег ${tag}`}\n            >\n              {tag}\n            </Tag>\n          ))}\n        </Stack>\n      )}\n    </Stack>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Input'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Tag'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'Stack'."
+        }
+      ],
+      "unknownComponents": [
+        "Input",
+        "Stack",
+        "Tag"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

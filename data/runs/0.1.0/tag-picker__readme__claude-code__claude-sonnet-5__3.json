@@ -1,0 +1,103 @@
+{
+  "id": "tag-picker__readme__claude-code__claude-sonnet-5__3",
+  "createdAt": "2026-09-23T15:29:09.063Z",
+  "repeat": 3,
+  "durationMs": 15581,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 4,
+        "cacheRead": 9301,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 1748,
+    "cacheRead": 9301,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.04836050000000001,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, useCallback, KeyboardEvent, ChangeEvent } from 'react';\nimport { JxInput, JxBadge, JxButton } from '@jinx-ui/react';\n\ninterface ArticleTagInputProps {\n  value?: string[];\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n  placeholder?: string;\n  maxTags?: number;\n}\n\nexport default function ArticleTagInput({\n  value,\n  defaultValue = [],\n  onChange,\n  placeholder = 'Введите тег и нажмите Enter',\n  maxTags,\n}: ArticleTagInputProps) {\n  const isControlled = value !== undefined;\n  const [internalTags, setInternalTags] = useState<string[]>(defaultValue);\n  const tags = isControlled ? (value as string[]) : internalTags;\n\n  const [draft, setDraft] = useState('');\n\n  const commitTags = useCallback(\n    (next: string[]) => {\n      if (!isControlled) {\n        setInternalTags(next);\n      }\n      onChange?.(next);\n    },\n    [isControlled, onChange]\n  );\n\n  const addTag = useCallback(\n    (raw: string) => {\n      const trimmed = raw.trim();\n      if (!trimmed) return;\n      if (tags.includes(trimmed)) return;\n      if (maxTags && tags.length >= maxTags) return;\n      commitTags([...tags, trimmed]);\n    },\n    [tags, maxTags, commitTags]\n  );\n\n  const removeTag = useCallback(\n    (tagToRemove: string) => {\n      commitTags(tags.filter((tag) => tag !== tagToRemove));\n    },\n    [tags, commitTags]\n  );\n\n  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {\n    const val = event.target.value;\n    if (val.endsWith(',')) {\n      addTag(val.slice(0, -1));\n      setDraft('');\n    } else {\n      setDraft(val);\n    }\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter') {\n      event.preventDefault();\n      addTag(draft);\n      setDraft('');\n    } else if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const handleBlur = () => {\n    if (draft.trim()) {\n      addTag(draft);\n      setDraft('');\n    }\n  };\n\n  return (\n    <div className=\"jx-stack jx-stack-gap-sm\">\n      <JxInput\n        value={draft}\n        onChange={handleChange}\n        onKeyDown={handleKeyDown}\n        onBlur={handleBlur}\n        placeholder={placeholder}\n        aria-label=\"Добавить тег статьи\"\n      />\n      {tags.length > 0 && (\n        <div className=\"jx-stack jx-stack-row jx-stack-gap-xs jx-stack-wrap\">\n          {tags.map((tag) => (\n            <JxBadge key={tag} variant=\"neutral\">\n              <span>{tag}</span>\n              <JxButton\n                variant=\"ghost\"\n                size=\"sm\"\n                aria-label={`Удалить тег ${tag}`}\n                onClick={() => removeTag(tag)}\n                style={{ color: 'var(--jx-color-text-muted)' }}\n              >\n                ×\n              </JxButton>\n            </JxBadge>\n          ))}\n        </div>\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState, useCallback, KeyboardEvent, ChangeEvent } from 'react';\nimport { JxInput, JxBadge, JxButton } from '@jinx-ui/react';\n\ninterface ArticleTagInputProps {\n  value?: string[];\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n  placeholder?: string;\n  maxTags?: number;\n}\n\nexport default function ArticleTagInput({\n  value,\n  defaultValue = [],\n  onChange,\n  placeholder = 'Введите тег и нажмите Enter',\n  maxTags,\n}: ArticleTagInputProps) {\n  const isControlled = value !== undefined;\n  const [internalTags, setInternalTags] = useState<string[]>(defaultValue);\n  const tags = isControlled ? (value as string[]) : internalTags;\n\n  const [draft, setDraft] = useState('');\n\n  const commitTags = useCallback(\n    (next: string[]) => {\n      if (!isControlled) {\n        setInternalTags(next);\n      }\n      onChange?.(next);\n    },\n    [isControlled, onChange]\n  );\n\n  const addTag = useCallback(\n    (raw: string) => {\n      const trimmed = raw.trim();\n      if (!trimmed) return;\n      if (tags.includes(trimmed)) return;\n      if (maxTags && tags.length >= maxTags) return;\n      commitTags([...tags, trimmed]);\n    },\n    [tags, maxTags, commitTags]\n  );\n\n  const removeTag = useCallback(\n    (tagToRemove: string) => {\n      commitTags(tags.filter((tag) => tag !== tagToRemove));\n    },\n    [tags, commitTags]\n  );\n\n  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {\n    const val = event.target.value;\n    if (val.endsWith(',')) {\n      addTag(val.slice(0, -1));\n      setDraft('');\n    } else {\n      setDraft(val);\n    }\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter') {\n      event.preventDefault();\n      addTag(draft);\n      setDraft('');\n    } else if (event.key === 'Backspace' && draft === '' && tags.length > 0) {\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const handleBlur = () => {\n    if (draft.trim()) {\n      addTag(draft);\n      setDraft('');\n    }\n  };\n\n  return (\n    <div className=\"jx-stack jx-stack-gap-sm\">\n      <JxInput\n        value={draft}\n        onChange={handleChange}\n        onKeyDown={handleKeyDown}\n        onBlur={handleBlur}\n        placeholder={placeholder}\n        aria-label=\"Добавить тег статьи\"\n      />\n      {tags.length > 0 && (\n        <div className=\"jx-stack jx-stack-row jx-stack-gap-xs jx-stack-wrap\">\n          {tags.map((tag) => (\n            <JxBadge key={tag} variant=\"neutral\">\n              <span>{tag}</span>\n              <JxButton\n                variant=\"ghost\"\n                size=\"sm\"\n                aria-label={`Удалить тег ${tag}`}\n                onClick={() => removeTag(tag)}\n                style={{ color: 'var(--jx-color-text-muted)' }}\n              >\n                ×\n              </JxButton>\n            </JxBadge>\n          ))}\n        </div>\n      )}\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxInput'."
+        },
+        {
+          "code": 2322,
+          "line": 93,
+          "message": "Type '{ children: Element[]; key: string; variant: string; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributes<HTMLSpanElement> & { tone?: JxBadgeTone | undefined; dot?: boolean | undefined; children?: ReactNode; }'.\n  Property 'variant' does not exist on type 'IntrinsicAttributes & HTMLAttributes<HTMLSpanElement> & { tone?: JxBadgeTone | undefined; dot?: boolean | undefined; children?: ReactNode; }'."
+        }
+      ],
+      "unknownComponents": [
+        "JxInput"
+      ],
+      "unknownProps": [
+        {
+          "component": "JxBadge",
+          "prop": "variant"
+        }
+      ]
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 100,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxBadge",
+      "JxButton",
+      "JxInput"
+    ],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.42
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "id": "users-table__docs-rules__claude-code__claude-opus-5__2",
+  "createdAt": "2026-09-23T15:55:45.537Z",
+  "repeat": 2,
+  "durationMs": 9158,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "docs+rules",
+  "task": {
+    "id": "users-table",
+    "title": "Таблица пользователей с пагинацией",
+    "prompt": "Сделай таблицу пользователей с колонками «Имя», «Роль» и «Статус». Список users передаётся пропсом, показывать по десять строк на страницу с постраничной навигацией под таблицей. Статус показывай цветной меткой: активен или отключён.",
+    "taskType": "ui",
+    "expects": [
+      "JxTable",
+      "JxPagination",
+      "JxBadge"
+    ]
+  },
+  "context": {
+    "tokens": 22656,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.0",
+        "tokens": 21419,
+        "hash": "666d3360d38750da"
+      },
+      {
+        "kind": "rules",
+        "id": "jinx-ui",
+        "version": "0.1.0",
+        "tokens": 1083,
+        "hash": "29f6363615252e9b"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 5,
+        "cacheRead": 46540,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 745,
+    "cacheRead": 46540,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.041905,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxTable, JxBadge, JxPagination, JxEmptyState } from '@jinx-ui/react';\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: { users: User[] }) {\n  const [page, setPage] = useState(1);\n\n  if (users.length === 0) {\n    return (\n      <JxEmptyState\n        title=\"Пользователей пока нет\"\n        message=\"Пригласите участника, чтобы он появился в этом списке.\"\n      />\n    );\n  }\n\n  const pageCount = Math.ceil(users.length / PAGE_SIZE);\n  const currentPage = Math.min(page, pageCount);\n  const visible = users.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>\n      <JxTable>\n        <thead>\n          <tr>\n            <th>Имя</th>\n            <th>Роль</th>\n            <th>Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'default'} dot>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n      {pageCount > 1 && (\n        <JxPagination\n          aria-label=\"Страницы пользователей\"\n          total={pageCount}\n          page={currentPage}\n          onPageChange={setPage}\n        />\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxTable, JxBadge, JxPagination, JxEmptyState } from '@jinx-ui/react';\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: { users: User[] }) {\n  const [page, setPage] = useState(1);\n\n  if (users.length === 0) {\n    return (\n      <JxEmptyState\n        title=\"Пользователей пока нет\"\n        message=\"Пригласите участника, чтобы он появился в этом списке.\"\n      />\n    );\n  }\n\n  const pageCount = Math.ceil(users.length / PAGE_SIZE);\n  const currentPage = Math.min(page, pageCount);\n  const visible = users.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>\n      <JxTable>\n        <thead>\n          <tr>\n            <th>Имя</th>\n            <th>Роль</th>\n            <th>Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'default'} dot>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n      {pageCount > 1 && (\n        <JxPagination\n          aria-label=\"Страницы пользователей\"\n          total={pageCount}\n          page={currentPage}\n          onPageChange={setPage}\n        />\n      )}\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 30,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxBadge",
+      "JxEmptyState",
+      "JxPagination",
+      "JxTable"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

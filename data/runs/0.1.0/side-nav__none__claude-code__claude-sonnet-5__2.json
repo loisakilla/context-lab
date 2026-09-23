@@ -1,0 +1,124 @@
+{
+  "id": "side-nav__none__claude-code__claude-sonnet-5__2",
+  "createdAt": "2026-09-23T15:22:48.182Z",
+  "repeat": 2,
+  "durationMs": 7589,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "none",
+  "task": {
+    "id": "side-nav",
+    "title": "Боковая панель навигации",
+    "prompt": "Сделай кнопку «Меню», по которой слева выезжает панель с навигацией: пункты «Проекты», «Команда», «Настройки», разделитель и пункт «Выйти», выделенный как опасный. Выбор пункта вызывает переданный колбэк onNavigate с ключом пункта и закрывает панель.",
+    "taskType": "ui",
+    "expects": [
+      "JxDrawer",
+      "JxMenu",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 154,
+    "sources": []
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 8607,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 672,
+    "cacheRead": 8607,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0211135,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport {\n  Button,\n  Drawer,\n  DrawerHeader,\n  DrawerTitle,\n  DrawerBody,\n  DrawerCloseButton,\n  NavList,\n  NavItem,\n  Divider,\n} from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface NavMenuProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function NavMenu({ onNavigate }: NavMenuProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const handleSelect = (key: NavKey) => {\n    onNavigate(key);\n    setIsOpen(false);\n  };\n\n  return (\n    <>\n      <Button variant=\"secondary\" onClick={() => setIsOpen(true)}>\n        Меню\n      </Button>\n\n      <Drawer\n        open={isOpen}\n        onClose={() => setIsOpen(false)}\n        placement=\"left\"\n        className=\"jx-drawer\"\n      >\n        <DrawerHeader>\n          <DrawerTitle>Навигация</DrawerTitle>\n          <DrawerCloseButton onClick={() => setIsOpen(false)} />\n        </DrawerHeader>\n\n        <DrawerBody>\n          <NavList className=\"jx-nav-list\">\n            <NavItem onClick={() => handleSelect('projects')}>\n              Проекты\n            </NavItem>\n            <NavItem onClick={() => handleSelect('team')}>\n              Команда\n            </NavItem>\n            <NavItem onClick={() => handleSelect('settings')}>\n              Настройки\n            </NavItem>\n\n            <Divider className=\"jx-divider\" />\n\n            <NavItem\n              danger\n              onClick={() => handleSelect('logout')}\n            >\n              Выйти\n            </NavItem>\n          </NavList>\n        </DrawerBody>\n      </Drawer>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport {\n  Button,\n  Drawer,\n  DrawerHeader,\n  DrawerTitle,\n  DrawerBody,\n  DrawerCloseButton,\n  NavList,\n  NavItem,\n  Divider,\n} from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface NavMenuProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function NavMenu({ onNavigate }: NavMenuProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const handleSelect = (key: NavKey) => {\n    onNavigate(key);\n    setIsOpen(false);\n  };\n\n  return (\n    <>\n      <Button variant=\"secondary\" onClick={() => setIsOpen(true)}>\n        Меню\n      </Button>\n\n      <Drawer\n        open={isOpen}\n        onClose={() => setIsOpen(false)}\n        placement=\"left\"\n        className=\"jx-drawer\"\n      >\n        <DrawerHeader>\n          <DrawerTitle>Навигация</DrawerTitle>\n          <DrawerCloseButton onClick={() => setIsOpen(false)} />\n        </DrawerHeader>\n\n        <DrawerBody>\n          <NavList className=\"jx-nav-list\">\n            <NavItem onClick={() => handleSelect('projects')}>\n              Проекты\n            </NavItem>\n            <NavItem onClick={() => handleSelect('team')}>\n              Команда\n            </NavItem>\n            <NavItem onClick={() => handleSelect('settings')}>\n              Настройки\n            </NavItem>\n\n            <Divider className=\"jx-divider\" />\n\n            <NavItem\n              danger\n              onClick={() => handleSelect('logout')}\n            >\n              Выйти\n            </NavItem>\n          </NavList>\n        </DrawerBody>\n      </Drawer>\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2724,
+          "line": 3,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Button'. Did you mean 'JxButton'?"
+        },
+        {
+          "code": 2724,
+          "line": 4,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Drawer'. Did you mean 'JxDrawer'?"
+        },
+        {
+          "code": 2305,
+          "line": 5,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'DrawerHeader'."
+        },
+        {
+          "code": 2305,
+          "line": 6,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'DrawerTitle'."
+        },
+        {
+          "code": 2305,
+          "line": 7,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'DrawerBody'."
+        },
+        {
+          "code": 2305,
+          "line": 8,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'DrawerCloseButton'."
+        },
+        {
+          "code": 2305,
+          "line": 9,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'NavList'."
+        },
+        {
+          "code": 2305,
+          "line": 10,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'NavItem'."
+        },
+        {
+          "code": 2724,
+          "line": 11,
+          "message": "'\"@jinx-ui/react\"' has no exported member named 'Divider'. Did you mean 'JxDivider'?"
+        }
+      ],
+      "unknownComponents": [
+        "Button",
+        "Divider",
+        "Drawer",
+        "DrawerBody",
+        "DrawerCloseButton",
+        "DrawerHeader",
+        "DrawerTitle",
+        "NavItem",
+        "NavList"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0
+  }
+}

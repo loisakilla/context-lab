@@ -1,0 +1,91 @@
+{
+  "id": "confirm-delete__readme__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T15:34:01.951Z",
+  "repeat": 3,
+  "durationMs": 11967,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "readme",
+  "task": {
+    "id": "confirm-delete",
+    "title": "Подтверждение удаления",
+    "prompt": "Сделай компонент с кнопкой «Удалить проект». По клику открывается окно подтверждения с заголовком «Удалить проект?», текстом о том, что действие необратимо, и двумя кнопками: отмена и подтверждение удаления. Подтверждение вызывает переданный колбэк onConfirm.",
+    "taskType": "ui",
+    "expects": [
+      "JxModal",
+      "JxButton"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 7,
+        "cacheRead": 9323,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 902,
+    "cacheRead": 9323,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.0272215,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxButton, JxModal } from '@jinx-ui/react';\n\nexport interface DeleteProjectButtonProps {\n  onConfirm: () => void;\n  projectName?: string;\n}\n\nexport default function DeleteProjectButton({\n  onConfirm,\n  projectName,\n}: DeleteProjectButtonProps) {\n  const [open, setOpen] = useState(false);\n\n  const handleConfirm = () => {\n    setOpen(false);\n    onConfirm();\n  };\n\n  return (\n    <>\n      <JxButton variant=\"primary\" onClick={() => setOpen(true)}>\n        Удалить проект\n      </JxButton>\n\n      <JxModal open={open} onOpenChange={setOpen} title=\"Удалить проект?\">\n        <p style={{ margin: 0, color: 'var(--jx-color-text-muted)' }}>\n          {projectName\n            ? `Проект «${projectName}» будет удалён безвозвратно.`\n            : 'Проект будет удалён безвозвратно.'}{' '}\n          Это действие необратимо и отменить его не получится.\n        </p>\n\n        <div\n          style={{\n            display: 'flex',\n            justifyContent: 'flex-end',\n            gap: 'var(--jx-space-2)',\n            marginTop: 'var(--jx-space-4)',\n          }}\n        >\n          <JxButton onClick={() => setOpen(false)}>Отмена</JxButton>\n          <JxButton variant=\"primary\" onClick={handleConfirm}>\n            Удалить\n          </JxButton>\n        </div>\n      </JxModal>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxModal } from '@jinx-ui/react';\n\nexport interface DeleteProjectButtonProps {\n  onConfirm: () => void;\n  projectName?: string;\n}\n\nexport default function DeleteProjectButton({\n  onConfirm,\n  projectName,\n}: DeleteProjectButtonProps) {\n  const [open, setOpen] = useState(false);\n\n  const handleConfirm = () => {\n    setOpen(false);\n    onConfirm();\n  };\n\n  return (\n    <>\n      <JxButton variant=\"primary\" onClick={() => setOpen(true)}>\n        Удалить проект\n      </JxButton>\n\n      <JxModal open={open} onOpenChange={setOpen} title=\"Удалить проект?\">\n        <p style={{ margin: 0, color: 'var(--jx-color-text-muted)' }}>\n          {projectName\n            ? `Проект «${projectName}» будет удалён безвозвратно.`\n            : 'Проект будет удалён безвозвратно.'}{' '}\n          Это действие необратимо и отменить его не получится.\n        </p>\n\n        <div\n          style={{\n            display: 'flex',\n            justifyContent: 'flex-end',\n            gap: 'var(--jx-space-2)',\n            marginTop: 'var(--jx-space-4)',\n          }}\n        >\n          <JxButton onClick={() => setOpen(false)}>Отмена</JxButton>\n          <JxButton variant=\"primary\" onClick={handleConfirm}>\n            Удалить\n          </JxButton>\n        </div>\n      </JxModal>\n    </>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 27,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 35,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxButton",
+      "JxModal"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}

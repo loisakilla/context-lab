@@ -1,0 +1,99 @@
+{
+  "id": "tag-picker__readme__claude-code__claude-sonnet-5__1",
+  "createdAt": "2026-09-23T15:28:34.306Z",
+  "repeat": 1,
+  "durationMs": 8195,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-sonnet-5",
+  "mode": "readme",
+  "task": {
+    "id": "tag-picker",
+    "title": "Выбор тегов",
+    "prompt": "Сделай компонент выбора тегов для статьи: пользователь набирает теги в одном поле, каждый введённый тег превращается в удаляемую метку. Выбранные теги показывай под полем и отдавай наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxTagInput"
+    ]
+  },
+  "context": {
+    "tokens": 650,
+    "sources": [
+      {
+        "kind": "readme",
+        "id": "README.md",
+        "version": "0.1.0",
+        "tokens": 496,
+        "hash": "cf8d40f8d175d405"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 1,
+        "cacheRead": 8235,
+        "cacheCreation": 1066
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 810,
+    "cacheRead": 8235,
+    "cacheCreation": 1066
+  },
+  "costUsd": 0.031039999999999998,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState, KeyboardEvent } from 'react';\nimport { JxTextField, JxTag, JxButton, JxStack } from '@jinx-ui/react';\n\ninterface TagInputProps {\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function TagInput({ onChange }: TagInputProps) {\n  const [tags, setTags] = useState<string[]>([]);\n  const [inputValue, setInputValue] = useState('');\n\n  const updateTags = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  const addTag = (rawValue: string) => {\n    const value = rawValue.trim();\n    if (!value || tags.includes(value)) {\n      setInputValue('');\n      return;\n    }\n    updateTags([...tags, value]);\n    setInputValue('');\n  };\n\n  const removeTag = (tagToRemove: string) => {\n    updateTags(tags.filter((tag) => tag !== tagToRemove));\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag(inputValue);\n    } else if (event.key === 'Backspace' && inputValue === '' && tags.length > 0) {\n      updateTags(tags.slice(0, -1));\n    }\n  };\n\n  return (\n    <JxStack direction=\"column\" gap=\"var(--jx-space-2)\" className=\"jx-tag-input\">\n      <JxTextField\n        value={inputValue}\n        onValueChange={setInputValue}\n        onKeyDown={handleKeyDown}\n        onBlur={() => addTag(inputValue)}\n        placeholder=\"Введите тег и нажмите Enter\"\n        aria-label=\"Добавить тег\"\n      />\n      <JxStack direction=\"row\" wrap gap=\"var(--jx-space-1)\" className=\"jx-tag-input__tags\">\n        {tags.map((tag) => (\n          <JxTag key={tag} variant=\"subtle\">\n            {tag}\n            <JxButton\n              variant=\"ghost\"\n              size=\"sm\"\n              aria-label={`Удалить тег ${tag}`}\n              onClick={() => removeTag(tag)}\n            >\n              ×\n            </JxButton>\n          </JxTag>\n        ))}\n      </JxStack>\n    </JxStack>\n  );\n}",
+    "text": "```tsx\nimport { useState, KeyboardEvent } from 'react';\nimport { JxTextField, JxTag, JxButton, JxStack } from '@jinx-ui/react';\n\ninterface TagInputProps {\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function TagInput({ onChange }: TagInputProps) {\n  const [tags, setTags] = useState<string[]>([]);\n  const [inputValue, setInputValue] = useState('');\n\n  const updateTags = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  const addTag = (rawValue: string) => {\n    const value = rawValue.trim();\n    if (!value || tags.includes(value)) {\n      setInputValue('');\n      return;\n    }\n    updateTags([...tags, value]);\n    setInputValue('');\n  };\n\n  const removeTag = (tagToRemove: string) => {\n    updateTags(tags.filter((tag) => tag !== tagToRemove));\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag(inputValue);\n    } else if (event.key === 'Backspace' && inputValue === '' && tags.length > 0) {\n      updateTags(tags.slice(0, -1));\n    }\n  };\n\n  return (\n    <JxStack direction=\"column\" gap=\"var(--jx-space-2)\" className=\"jx-tag-input\">\n      <JxTextField\n        value={inputValue}\n        onValueChange={setInputValue}\n        onKeyDown={handleKeyDown}\n        onBlur={() => addTag(inputValue)}\n        placeholder=\"Введите тег и нажмите Enter\"\n        aria-label=\"Добавить тег\"\n      />\n      <JxStack direction=\"row\" wrap gap=\"var(--jx-space-1)\" className=\"jx-tag-input__tags\">\n        {tags.map((tag) => (\n          <JxTag key={tag} variant=\"subtle\">\n            {tag}\n            <JxButton\n              variant=\"ghost\"\n              size=\"sm\"\n              aria-label={`Удалить тег ${tag}`}\n              onClick={() => removeTag(tag)}\n            >\n              ×\n            </JxButton>\n          </JxTag>\n        ))}\n      </JxStack>\n    </JxStack>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxTextField'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxTag'."
+        },
+        {
+          "code": 2305,
+          "line": 2,
+          "message": "Module '\"@jinx-ui/react\"' has no exported member 'JxStack'."
+        }
+      ],
+      "unknownComponents": [
+        "JxStack",
+        "JxTag",
+        "JxTextField"
+      ],
+      "unknownProps": []
+    },
+    "lint": [],
+    "usedComponents": [
+      "JxButton",
+      "JxStack",
+      "JxTag",
+      "JxTextField"
+    ],
+    "expectedCoverage": 0,
+    "passed": false
+  },
+  "verdict": {
+    "passed": false,
+    "score": 0.28
+  }
+}

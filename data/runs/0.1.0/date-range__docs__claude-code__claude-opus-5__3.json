@@ -1,0 +1,91 @@
+{
+  "id": "date-range__docs__claude-code__claude-opus-5__3",
+  "createdAt": "2026-09-23T15:51:59.441Z",
+  "repeat": 3,
+  "durationMs": 8061,
+  "driver": "claude-code",
+  "library": {
+    "name": "jinx-ui",
+    "package": "@jinx-ui/react",
+    "version": "0.1.0",
+    "commit": ""
+  },
+  "model": "claude-opus-5",
+  "mode": "docs",
+  "task": {
+    "id": "date-range",
+    "title": "Выбор периода",
+    "prompt": "Сделай выбор даты отчёта: календарь на месяц и над ним ряд быстрых вариантов «Сегодня», «Вчера», «Неделя назад», при нажатии на которые дата подставляется в календарь. Выбранная дата отдаётся наружу через колбэк onChange.",
+    "taskType": "ui",
+    "expects": [
+      "JxCalendar",
+      "JxChip"
+    ]
+  },
+  "context": {
+    "tokens": 21573,
+    "sources": [
+      {
+        "kind": "docs",
+        "id": "llms-full.txt",
+        "version": "0.1.0",
+        "tokens": 21419,
+        "hash": "666d3360d38750da"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "usage": {
+        "input": 2,
+        "output": 3,
+        "cacheRead": 44844,
+        "cacheCreation": 0
+      },
+      "toolCalls": []
+    }
+  ],
+  "usage": {
+    "input": 2,
+    "output": 698,
+    "cacheRead": 44844,
+    "cacheCreation": 0
+  },
+  "costUsd": 0.039882,
+  "stopReason": "end_turn",
+  "output": {
+    "code": "import { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ninterface ReportDatePickerProps {\n  defaultValue?: Date | null;\n  onChange?: (value: Date | null) => void;\n}\n\nconst startOfDay = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst shiftDays = (days: number) => {\n  const base = startOfDay(new Date());\n  base.setDate(base.getDate() + days);\n  return base;\n};\n\nconst presets = [\n  { key: 'today', label: 'Сегодня', offset: 0 },\n  { key: 'yesterday', label: 'Вчера', offset: -1 },\n  { key: 'week', label: 'Неделя назад', offset: -7 },\n];\n\nexport default function ReportDatePicker({ defaultValue = null, onChange }: ReportDatePickerProps) {\n  const [date, setDate] = useState<Date | null>(defaultValue);\n\n  const select = (next: Date | null) => {\n    setDate(next);\n    onChange?.(next);\n  };\n\n  const selectedTime = date ? startOfDay(date).getTime() : null;\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>\n        {presets.map((preset) => {\n          const presetDate = shiftDays(preset.offset);\n          return (\n            <JxChip\n              key={preset.key}\n              active={selectedTime === presetDate.getTime()}\n              onClick={() => select(presetDate)}\n            >\n              {preset.label}\n            </JxChip>\n          );\n        })}\n      </div>\n      <JxCalendar locale=\"ru-RU\" value={date} onValueChange={select} />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ninterface ReportDatePickerProps {\n  defaultValue?: Date | null;\n  onChange?: (value: Date | null) => void;\n}\n\nconst startOfDay = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst shiftDays = (days: number) => {\n  const base = startOfDay(new Date());\n  base.setDate(base.getDate() + days);\n  return base;\n};\n\nconst presets = [\n  { key: 'today', label: 'Сегодня', offset: 0 },\n  { key: 'yesterday', label: 'Вчера', offset: -1 },\n  { key: 'week', label: 'Неделя назад', offset: -7 },\n];\n\nexport default function ReportDatePicker({ defaultValue = null, onChange }: ReportDatePickerProps) {\n  const [date, setDate] = useState<Date | null>(defaultValue);\n\n  const select = (next: Date | null) => {\n    setDate(next);\n    onChange?.(next);\n  };\n\n  const selectedTime = date ? startOfDay(date).getTime() : null;\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>\n      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>\n        {presets.map((preset) => {\n          const presetDate = shiftDays(preset.offset);\n          return (\n            <JxChip\n              key={preset.key}\n              active={selectedTime === presetDate.getTime()}\n              onClick={() => select(presetDate)}\n            >\n              {preset.label}\n            </JxChip>\n          );\n        })}\n      </div>\n      <JxCalendar locale=\"ru-RU\" value={date} onValueChange={select} />\n    </div>\n  );\n}\n```"
+  },
+  "checks": {
+    "tsc": {
+      "errors": [],
+      "unknownComponents": [],
+      "unknownProps": []
+    },
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 34,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 35,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
+    "usedComponents": [
+      "JxCalendar",
+      "JxChip"
+    ],
+    "expectedCoverage": 1,
+    "passed": true
+  },
+  "verdict": {
+    "passed": true,
+    "score": 1
+  }
+}
