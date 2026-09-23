@@ -4,7 +4,7 @@ import { labConfig } from '@/lib/data';
 import { readJsonObject, sameOrigin, sendsJson } from '@/lib/request-guard';
 
 export const runtime = 'nodejs';
-export const maxDuration = 600;
+export const maxDuration = 300;
 
 function text(value: unknown): string | undefined {
   return typeof value === 'string' ? value : undefined;

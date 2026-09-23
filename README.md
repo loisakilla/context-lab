@@ -2,6 +2,8 @@
 
 Инфраструктура AI-контекста для библиотеки React-компонентов и лаборатория, в которой видно, что меняется в коде агента, когда контекста нет, когда есть документация и когда есть MCP-сервер.
 
+Лаборатория: [context-lab-seven.vercel.app](https://context-lab-seven.vercel.app). AI-документация: [loisakilla.github.io/context-lab](https://loisakilla.github.io/context-lab/).
+
 Библиотека-цель: [Jinx UI](https://github.com/loisakilla/Jinx-UI), 40 компонентов, 3 хука, 34 CSS-токена. Своя библиотека взята намеренно: её нет в обучающих данных, поэтому всё, что агент про неё знает, пришло только из контекста, и вклад контекста виден в чистом виде.
 
 <sub>English: a context infrastructure for a React component library (index built with the TypeScript Compiler API, AI-friendly docs, a versioned rule registry with inheritance, an MCP server) plus a web lab that runs the same task in five context modes and grades the generated code with `tsc` and a linter.</sub>
@@ -16,7 +18,7 @@
 
 ## Что можно потыкать
 
-Лаборатория запускает одну и ту же задачу одной и той же моделью в пяти режимах контекста, рендерит результат и разбирает его.
+[Лаборатория](https://context-lab-seven.vercel.app) запускает одну и ту же задачу одной и той же моделью в пяти режимах контекста, рендерит результат и разбирает его. Запустить её можно со своим ключом Anthropic API: ключ остаётся в браузере.
 
 <!-- modes:start -->
 

@@ -1,0 +1,10 @@
+node_modules
+.next
+.idea
+.vercel
+coverage
+*.tsbuildinfo
+apps/lab/src/generated
+apps/lab/public/preview/index.html
+data/outputs
+data/prompts
