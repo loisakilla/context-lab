@@ -6,7 +6,7 @@ import { CodeBlock } from './ui';
 import { Preview, type RenderStatus } from './Preview';
 import { Report } from './Report';
 
-export function RunView({ record }: { record: RunRecord }) {
+export function RunView({ record, compiled }: { record: RunRecord; compiled: string | null }) {
   const [render, setRender] = useState<RenderStatus | null>(null);
   const onRendered = useCallback((status: RenderStatus) => setRender(status), []);
 
@@ -26,7 +26,7 @@ export function RunView({ record }: { record: RunRecord }) {
         <>
           <section className="flex flex-col gap-3">
             <h2>Рендер</h2>
-            <Preview code={record.output.code} onRendered={onRendered} />
+            <Preview code={record.output.code} compiled={compiled} onRendered={onRendered} />
           </section>
           <section className="flex flex-col gap-3">
             <h2>Код компонента</h2>

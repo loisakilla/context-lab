@@ -6,7 +6,7 @@ import { CodeBlock } from './ui';
 import { Preview, type RenderStatus } from './Preview';
 import { Report } from './Report';
 
-export function RunPane({ record, title }: { record: RunRecord; title: string }) {
+export function RunPane({ record, compiled, title }: { record: RunRecord; compiled: string | null; title: string }) {
   const [render, setRender] = useState<RenderStatus | null>(null);
   const onRendered = useCallback((status: RenderStatus) => setRender(status), []);
 
@@ -18,7 +18,7 @@ export function RunPane({ record, title }: { record: RunRecord; title: string })
         <>
           <section className="flex flex-col gap-3">
             <span className="jx-label">Рендер</span>
-            <Preview code={record.output.code} onRendered={onRendered} />
+            <Preview code={record.output.code} compiled={compiled} onRendered={onRendered} />
           </section>
           <details>
             <summary>Код компонента</summary>

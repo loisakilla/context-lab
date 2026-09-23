@@ -1,11 +1,17 @@
 import { docsReader } from '@context-lab/docs/render';
-import type { LibraryIndex, ToolSources } from '@context-lab/index-tools';
+import type { ContextSources } from '@context-lab/runner/browser';
 import { registryFromSets, rulesToolSource, type RuleSet } from '@context-lab/rules/browser';
 
-export function browserToolSources(index: LibraryIndex, ruleSets: RuleSet[]): ToolSources {
+export type BrowserSources = Omit<ContextSources, 'tools'> & { ruleSets: RuleSet[] };
+
+export function contextSources({ ruleSets, ...sources }: BrowserSources): ContextSources {
   const registry = registryFromSets(ruleSets);
+  const name = sources.index.library.name;
   return {
-    docs: docsReader(index),
-    ...(registry.sets.has(index.library.name) ? { rules: rulesToolSource(registry, index.library.name) } : {}),
+    ...sources,
+    tools: {
+      docs: docsReader(sources.index),
+      ...(registry.sets.has(name) ? { rules: rulesToolSource(registry, name) } : {}),
+    },
   };
 }

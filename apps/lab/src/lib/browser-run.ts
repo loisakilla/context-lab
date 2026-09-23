@@ -1,15 +1,30 @@
 import type { CheckReport } from '@context-lab/checks';
 import { apiDriver, runTask, type ContextMode, type ContextSources, type RunRecord, type Task } from '@context-lab/runner/browser';
+import { contextSources, type BrowserSources } from './tool-sources';
 
 export interface BrowserRunOptions {
   apiKey: string;
   mode: ContextMode;
   task: Task;
-  sources: ContextSources;
   model: string;
   effort?: string;
   signal?: AbortSignal;
   onText?: (delta: string) => void;
+}
+
+let sourcesPromise: Promise<ContextSources> | undefined;
+
+function loadSources(): Promise<ContextSources> {
+  sourcesPromise ??= fetch('/api/sources')
+    .then(async (response) => {
+      if (!response.ok) throw new Error(`Контекст библиотеки не загрузился: ${response.status}`);
+      return contextSources((await response.json()) as BrowserSources);
+    })
+    .catch((error: unknown) => {
+      sourcesPromise = undefined;
+      throw error;
+    });
+  return sourcesPromise;
 }
 
 export async function checkOnServer(code: string, expects: string[]): Promise<CheckReport> {
@@ -25,41 +40,17 @@ export async function checkOnServer(code: string, expects: string[]): Promise<Ch
   return (await response.json()) as CheckReport;
 }
 
-export function runInBrowser(options: BrowserRunOptions): Promise<RunRecord> {
-  const driver = apiDriver({ apiKey: options.apiKey, dangerouslyAllowBrowser: true });
+export async function runInBrowser(options: BrowserRunOptions): Promise<RunRecord> {
+  const sources = await loadSources();
   return runTask({
-    driver,
+    driver: apiDriver({ apiKey: options.apiKey, dangerouslyAllowBrowser: true }),
     mode: options.mode,
     task: options.task,
-    sources: options.sources,
+    sources,
     model: options.model,
     ...(options.effort ? { effort: options.effort } : {}),
     checker: { check: checkOnServer },
     ...(options.signal ? { signal: options.signal } : {}),
     ...(options.onText ? { onText: options.onText } : {}),
   });
-}
-
-export async function runLocally(body: { taskId?: string; prompt?: string; expects?: string[]; mode: ContextMode; model: string }, signal?: AbortSignal): Promise<RunRecord> {
-  const response = await fetch('/api/local-run', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(body),
-    ...(signal ? { signal } : {}),
-  });
-  const payload = (await response.json()) as RunRecord | { error: string };
-  if (!response.ok || 'error' in payload) throw new Error('error' in payload ? payload.error : `Локальный прогон не удался: ${response.status}`);
-  return payload;
-}
-
-export function describeApiError(error: unknown): string {
-  if (error instanceof Error) {
-    const status = (error as { status?: number }).status;
-    if (status === 401) return 'Ключ не принят: проверьте, что это ключ Anthropic API и он не отозван.';
-    if (status === 429) return 'Лимит запросов исчерпан, подождите и повторите.';
-    if (status === 400) return `Запрос отклонён: ${error.message}`;
-    if (error.name === 'AbortError') return 'Прогон отменён.';
-    return error.message;
-  }
-  return String(error);
 }

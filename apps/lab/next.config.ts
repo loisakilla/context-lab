@@ -20,6 +20,7 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(import.meta.dirname, '..', '..'),
   outputFileTracingIncludes: {
     '/': LAB_DATA,
+    '/api/sources': LAB_DATA,
     '/rules': LAB_DATA,
     '/compare': [...LAB_DATA, ...RUNS],
     '/run/\\[library\\]/\\[id\\]': [...LAB_DATA, ...RUNS],

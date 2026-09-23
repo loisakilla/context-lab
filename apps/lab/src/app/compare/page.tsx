@@ -1,9 +1,10 @@
+import type { ReactNode } from 'react';
 import { Note } from '@/components/ui';
 import { CompareControls } from '@/components/CompareControls';
 import { RunPane } from '@/components/RunPane';
 import { TopBar } from '@/components/TopBar';
 import { MODE_LABELS } from '@/lib/labels';
-import { loadLabData, loadRun, loadRunIndex, pickRun, publishedLibrary } from '@/lib/data';
+import { currentLibrary, forDisplay, loadLabTasks, loadMatrix, loadRun, pickRunId, type ShownRun } from '@/lib/data';
 import { libraryKey } from '@context-lab/runner/browser';
 
 export const dynamic = 'force-dynamic';
@@ -24,27 +25,12 @@ function first(value: string | string[] | undefined, fallback: string): string {
   return (Array.isArray(value) ? value[0] : value) ?? fallback;
 }
 
-export default async function ComparePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
-  const params = await searchParams;
-  const data = loadLabData();
-  const library = publishedLibrary(data);
-  const runs = loadRunIndex(library);
-  const tasks = data.tasks.filter((task) => runs.some((run) => run.taskId === task.id)).map((task) => ({ id: task.id, title: task.title }));
-  const modes = data.matrix?.modes ?? [...new Set(runs.map((run) => run.mode))];
+function recordFor(library: string, id: string | null): ShownRun | null {
+  const record = id ? loadRun(library, id) : null;
+  return record ? forDisplay(record) : null;
+}
 
-  const task = first(params.task, tasks[0]?.id ?? '');
-  const left = first(params.left, 'none');
-  const right = first(params.right, 'mcp');
-
-  const leftPick = pickRun(runs, task, left, data.matrix);
-  const rightPick = pickRun(runs, task, right, data.matrix);
-  const leftRun = leftPick ? loadRun(library, leftPick.id) : null;
-  const rightRun = rightPick ? loadRun(library, rightPick.id) : null;
-  const prompt = leftRun?.task.prompt ?? rightRun?.task.prompt ?? '';
-  const mismatched = leftRun && rightRun && (leftRun.model !== rightRun.model || leftRun.driver !== rightRun.driver);
-  const currentLibrary = libraryKey(data.index.library);
-  const staleLibrary = (leftRun || rightRun) && library !== currentLibrary ? library : null;
-
+function Frame({ children }: { children: ReactNode }) {
   return (
     <>
       <TopBar current="compare" />
@@ -56,47 +42,65 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
             цену.
           </p>
         </header>
-
-        <div className="jx-card flex flex-col gap-6">
-          <CompareControls tasks={tasks} modes={modes} task={task} left={left} right={right} />
-          {prompt && (
-            <>
-              <hr className="rule" />
-              <div className="flex flex-col gap-2">
-                <span className="jx-label">Формулировка задачи</span>
-                <p className="max-w-[80ch]">{prompt}</p>
-              </div>
-            </>
-          )}
-        </div>
-
-        {mismatched && leftRun && rightRun && (
-          <Note title="Прогоны сделаны по-разному">
-            Слева {leftRun.model} через {leftRun.driver}, справа {rightRun.model} через {rightRun.driver}. Сравнивать их между собой некорректно: перезапишите
-            недостающие ячейки одной моделью.
-          </Note>
-        )}
-
-        {staleLibrary && (
-          <Note title="Прогоны сделаны против другой версии библиотеки">
-            Эти прогоны записаны против jinx-ui {staleLibrary}, а лаборатория сейчас собирает контекст из {currentLibrary}. Они показывают, как контекст работал
-            на той версии; чтобы сравнивать на текущей, перезапишите прогоны.
-          </Note>
-        )}
-
-        <section className="grid items-start gap-10 xl:grid-cols-2 xl:gap-12">
-          {leftRun ? (
-            <RunPane record={leftRun} title={MODE_LABELS[left] ?? left} />
-          ) : (
-            <MissingRun task={task} mode={left} />
-          )}
-          {rightRun ? (
-            <RunPane record={rightRun} title={MODE_LABELS[right] ?? right} />
-          ) : (
-            <MissingRun task={task} mode={right} />
-          )}
-        </section>
+        {children}
       </main>
     </>
+  );
+}
+
+export default async function ComparePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const params = await searchParams;
+  const matrix = loadMatrix();
+  if (!matrix?.library) {
+    return (
+      <Frame>
+        <Note title="Сравнивать пока нечего">
+          Матрица ещё не записана: запишите прогоны командой <code>npm run run</code> и соберите таблицу через <code>npm run matrix</code>.
+        </Note>
+      </Frame>
+    );
+  }
+
+  const library = libraryKey(matrix.library);
+  const tasks = loadLabTasks()
+    .filter((task) => matrix.cells.some((cell) => cell.taskId === task.id))
+    .map((task) => ({ id: task.id, title: task.title }));
+  const task = first(params.task, tasks[0]?.id ?? '');
+  const left = first(params.left, 'none');
+  const right = first(params.right, 'mcp');
+
+  const leftRun = recordFor(library, pickRunId(matrix, task, left));
+  const rightRun = recordFor(library, pickRunId(matrix, task, right));
+  const prompt = leftRun?.record.task.prompt ?? rightRun?.record.task.prompt ?? '';
+  const current = currentLibrary();
+  const staleLibrary = (leftRun || rightRun) && library !== current ? library : null;
+
+  return (
+    <Frame>
+      <div className="jx-card flex flex-col gap-6">
+        <CompareControls tasks={tasks} modes={matrix.modes} task={task} left={left} right={right} />
+        {prompt && (
+          <>
+            <hr className="rule" />
+            <div className="flex flex-col gap-2">
+              <span className="jx-label">Формулировка задачи</span>
+              <p className="max-w-[80ch]">{prompt}</p>
+            </div>
+          </>
+        )}
+      </div>
+
+      {staleLibrary && (
+        <Note title="Прогоны сделаны против другой версии библиотеки">
+          Эти прогоны записаны против jinx-ui {staleLibrary}, а лаборатория сейчас собирает контекст из {current}. Они показывают, как контекст работал на той
+          версии; чтобы сравнивать на текущей, перезапишите прогоны.
+        </Note>
+      )}
+
+      <section className="grid items-start gap-10 xl:grid-cols-2 xl:gap-12">
+        {leftRun ? <RunPane record={leftRun.record} compiled={leftRun.compiled} title={MODE_LABELS[left] ?? left} /> : <MissingRun task={task} mode={left} />}
+        {rightRun ? <RunPane record={rightRun.record} compiled={rightRun.compiled} title={MODE_LABELS[right] ?? right} /> : <MissingRun task={task} mode={right} />}
+      </section>
+    </Frame>
   );
 }

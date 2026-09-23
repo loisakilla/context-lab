@@ -3,13 +3,13 @@ import * as ReactDOM from 'react-dom';
 import * as ReactDOMClient from 'react-dom/client';
 import * as JsxRuntime from 'react/jsx-runtime';
 import * as JinxReact from '@jinx-ui/react';
-import { transform } from 'sucrase';
 import '@jinx-ui/tokens';
 import '@jinx-ui/core';
 
 interface RenderMessage {
   type: 'render';
   code: string;
+  compiled: string;
   theme?: string;
   style?: string;
 }
@@ -85,10 +85,6 @@ function requireShim(name: string): unknown {
   const found = modules[name];
   if (found === undefined) throw new Error(`Неизвестный модуль "${name}": доступны ${Object.keys(modules).join(', ')}`);
   return found;
-}
-
-function compile(code: string): string {
-  return transform(code, { transforms: ['typescript', 'jsx', 'imports'], jsxRuntime: 'automatic', production: true }).code;
 }
 
 function evaluate(compiled: string): React.ComponentType {
@@ -179,12 +175,11 @@ function render(message: RenderMessage): void {
   const current = generation;
   applyMode(message.theme, message.style);
   try {
-    const compiled = compile(message.code);
-    const missing = missingExports(compiled);
+    const missing = missingExports(message.compiled);
     if (missing.length > 0) {
       throw new Error(`В библиотеке @jinx-ui/react нет: ${missing.join(', ')}. Превью не строится, пока компонент ссылается на то, чего не существует.`);
     }
-    const Component = evaluate(compiled);
+    const Component = evaluate(message.compiled);
     mount(Component);
     window.setTimeout(() => {
       if (current !== generation) return;
@@ -216,7 +211,7 @@ function render(message: RenderMessage): void {
 
 window.addEventListener('message', (event: MessageEvent<RenderMessage>) => {
   if (event.source !== window.parent) return;
-  if (!event.data || event.data.type !== 'render' || typeof event.data.code !== 'string') return;
+  if (!event.data || event.data.type !== 'render' || typeof event.data.code !== 'string' || typeof event.data.compiled !== 'string') return;
   render(event.data);
 });
 

@@ -1,33 +1,31 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { LibraryIndex } from '@context-lab/index-tools';
-import type { RuleSet } from '@context-lab/rules/browser';
-import { CONTEXT_MODES, estimateContext, knownModels, libraryKey, type ContextMode, type Matrix, type RunRecord, type Task } from '@/lib/runner-browser';
-import { describeApiError, runInBrowser, runLocally } from '@/lib/browser-run';
-import { browserToolSources } from '@/lib/tool-sources';
+import type { LibraryMeta } from '@context-lab/index-tools';
+import { knownModels, libraryKey, type ContextMode, type Matrix, type RunRecord, type Task } from '@context-lab/runner/browser';
+import { describeApiError, runLocally, runWithKey } from '@/lib/lab-run';
+import type { ModePreview } from '@/lib/mode-preview';
 import { ContextPreview } from './ContextPreview';
 import { KeyForm } from './KeyForm';
 import { MODE_LABELS } from '@/lib/labels';
 import { MatrixTable } from './MatrixTable';
 import { Preview, type RenderStatus } from './Preview';
 import { Report } from './Report';
+import { createTextStream, StreamBox } from './StreamBox';
 import { Button, CodeBlock, Note, Select, Tabs, Textarea } from './ui';
 
 export interface LabProps {
-  index: LibraryIndex;
+  library: LibraryMeta;
   tasks: Task[];
-  readme: string;
-  docs: string;
-  rules: string | null;
-  ruleSets: RuleSet[];
+  modes: ContextMode[];
+  previews: Record<ContextMode, ModePreview>;
   matrix: Matrix | null;
   localRunEnabled: boolean;
 }
 
 type Engine = 'local' | 'byok';
 
-export function Lab({ index, tasks, readme, docs, rules, ruleSets, matrix, localRunEnabled }: LabProps) {
+export function Lab({ library, tasks, modes, previews, matrix, localRunEnabled }: LabProps) {
   const [taskId, setTaskId] = useState(tasks[0]?.id ?? 'custom');
   const [prompt, setPrompt] = useState(tasks[0]?.prompt ?? '');
   const [mode, setMode] = useState<ContextMode>('none');
@@ -35,19 +33,14 @@ export function Lab({ index, tasks, readme, docs, rules, ruleSets, matrix, local
   const [engine, setEngine] = useState<Engine>(localRunEnabled ? 'local' : 'byok');
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [running, setRunning] = useState(false);
-  const [stream, setStream] = useState('');
+  const [stream] = useState(createTextStream);
   const [record, setRecord] = useState<RunRecord | null>(null);
   const [render, setRender] = useState<RenderStatus | null>(null);
   const [error, setError] = useState<string | null>(null);
   const abort = useRef<AbortController | null>(null);
 
-  const sources = useMemo(
-    () => ({ index, readme, docs, ...(rules ? { rules } : {}), tools: browserToolSources(index, ruleSets) }),
-    [index, readme, docs, rules, ruleSets],
-  );
-  const modeTokens = useMemo(() => estimateContext(sources), [sources]);
-  const availableModes = CONTEXT_MODES.filter((candidate) => (candidate === 'docs+rules' ? rules !== null : true));
-  const currentLibrary = libraryKey(index.library);
+  const preview = previews[mode];
+  const currentLibrary = libraryKey(library);
   const matrixLibrary = matrix?.library ? libraryKey(matrix.library) : currentLibrary;
 
   const task: Task = useMemo(() => {
@@ -70,7 +63,7 @@ export function Lab({ index, tasks, readme, docs, rules, ruleSets, matrix, local
     setError(null);
     setRecord(null);
     setRender(null);
-    setStream('');
+    stream.clear();
     setRunning(true);
     const controller = new AbortController();
     abort.current = controller;
@@ -78,14 +71,13 @@ export function Lab({ index, tasks, readme, docs, rules, ruleSets, matrix, local
       const result =
         engine === 'local'
           ? await runLocally({ taskId: task.id === 'custom' ? undefined : task.id, prompt: task.prompt, expects: task.expects, mode, model }, controller.signal)
-          : await runInBrowser({
+          : await runWithKey({
               apiKey: apiKey ?? '',
               mode,
               task,
-              sources,
               model,
               signal: controller.signal,
-              onText: (delta) => setStream((current) => current + delta),
+              onText: stream.append,
             });
       setRecord(result);
     } catch (caught) {
@@ -145,8 +137,8 @@ export function Lab({ index, tasks, readme, docs, rules, ruleSets, matrix, local
             <div className="scroller">
               <Tabs
                 ariaLabel="Режим контекста"
-                items={availableModes.map((candidate) => ({ value: candidate, label: MODE_LABELS[candidate] ?? candidate }))}
-                value={availableModes.includes(mode) ? mode : 'none'}
+                items={modes.map((candidate) => ({ value: candidate, label: MODE_LABELS[candidate] ?? candidate }))}
+                value={modes.includes(mode) ? mode : 'none'}
                 onValueChange={(value) => setMode(value as ContextMode)}
               />
             </div>
@@ -155,7 +147,9 @@ export function Lab({ index, tasks, readme, docs, rules, ruleSets, matrix, local
                 ? engine === 'local'
                   ? 'Claude Code берёт контекст через MCP-сервер репозитория.'
                   : 'Инструменты MCP вызываются через tool use по ходу генерации.'
-                : `≈ ${modeTokens[mode].toLocaleString('ru-RU')} токенов контекста до задачи.`}
+                : 'error' in preview
+                  ? 'Контекст для этого режима не собрался.'
+                  : `≈ ${preview.tokens.toLocaleString('ru-RU')} токенов контекста до задачи.`}
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -178,12 +172,8 @@ export function Lab({ index, tasks, readme, docs, rules, ruleSets, matrix, local
       </section>
 
       <section className="flex flex-col gap-6">
-        {!record && !running && !stream && <ContextPreview mode={mode} task={task} sources={sources} />}
-        {running && (
-          <pre className="codebox max-h-[32rem] overflow-auto">
-            {stream || (engine === 'local' ? 'Claude Code думает… обычно 20–60 секунд.' : 'Ждём первые токены…')}
-          </pre>
-        )}
+        {!record && !running && <ContextPreview preview={preview} prompt={task.prompt} />}
+        {running && <StreamBox stream={stream} placeholder={engine === 'local' ? 'Claude Code думает… обычно 20–60 секунд.' : 'Ждём первые токены…'} />}
         {record && (
           <>
             <Report record={record} render={render} />

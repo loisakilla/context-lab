@@ -11,6 +11,7 @@ export interface RenderStatus {
 
 interface PreviewProps {
   code: string;
+  compiled?: string | null;
   onRendered?: (status: RenderStatus) => void;
 }
 
@@ -57,7 +58,7 @@ function statusOf(message: PreviewMessage): RenderStatus {
   };
 }
 
-export function Preview({ code, onRendered }: PreviewProps) {
+export function Preview({ code, compiled, onRendered }: PreviewProps) {
   const frame = useRef<HTMLIFrameElement>(null);
   const [shell, setShell] = useState<string | null>(null);
   const [readyCount, setReadyCount] = useState(0);
@@ -100,9 +101,27 @@ export function Preview({ code, onRendered }: PreviewProps) {
 
   useEffect(() => {
     if (readyCount === 0 || !code) return;
+    let active = true;
     setStatus(null);
-    frame.current?.contentWindow?.postMessage({ type: 'render', code, theme: 'light', style: 'brutal' }, '*');
-  }, [readyCount, code]);
+    const send = (javascript: string) => frame.current?.contentWindow?.postMessage({ type: 'render', code, compiled: javascript, theme: 'light', style: 'brutal' }, '*');
+    if (compiled) {
+      send(compiled);
+    } else {
+      import('@/lib/compile-preview')
+        .then(({ compilePreview }) => {
+          if (active) send(compilePreview(code));
+        })
+        .catch((error: unknown) => {
+          if (!active) return;
+          const failed: RenderStatus = { ok: false, error: error instanceof Error ? error.message : String(error) };
+          setStatus(failed);
+          onRendered?.(failed);
+        });
+    }
+    return () => {
+      active = false;
+    };
+  }, [readyCount, code, compiled, onRendered]);
 
   if (loadError) return <pre className="codebox" style={{ color: 'var(--jx-danger)' }}>{loadError}</pre>;
 

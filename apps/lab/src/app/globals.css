@@ -143,15 +143,6 @@ a {
   color: var(--jx-text-2);
 }
 
-.link {
-  border-bottom: 1px solid var(--jx-text-4);
-  transition: border-color 120ms ease;
-}
-
-.link:hover {
-  border-bottom-color: var(--jx-accent);
-}
-
 .card-head {
   display: flex;
   flex-wrap: wrap;

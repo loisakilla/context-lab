@@ -1,9 +1,8 @@
 import Link from 'next/link';
 import { JxBadge, JxTable } from '@jinx-ui/react';
 import { libraryKey, type Matrix } from '@context-lab/runner/browser';
-import { MODE_LABELS } from '@/lib/labels';
+import { MODE_LABELS, plural } from '@/lib/labels';
 import { formatCost } from './Report';
-import { plural } from './ui';
 
 function decimal(value: number): string {
   return value.toLocaleString('ru-RU', { maximumFractionDigits: 1 });
