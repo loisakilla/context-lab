@@ -1,0 +1,36 @@
+# JxKbd
+
+Клавиша в тексте: обозначение горячих клавиш и сочетаний. Для сочетания ставьте несколько элементов подряд.
+
+Импорт: `import { JxKbd } from '@jinx-ui/react'`  
+Источник: `dist/components/Kbd.d.ts:6`
+Ключевые слова: kbd, клавиша, горячие клавиши, сочетание, shortcut
+
+## Сигнатура
+
+```tsx
+<JxKbd children?: ReactNode; ref?: Ref<HTMLSpanElement> />
+```
+
+Наследует `HTMLAttributes<HTMLSpanElement>`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `children` | `ReactNode` | нет |  | название клавиши |
+| `ref` | `Ref<HTMLSpanElement>` | нет |  |  |
+
+## CSS-классы
+
+`jx-kbd`
+
+## Примеры
+
+### Сочетание клавиш в подсказке
+
+```tsx
+<span>
+  Сохранить: <JxKbd>Ctrl</JxKbd> <JxKbd>S</JxKbd>
+</span>
+```

@@ -68,9 +68,10 @@ describe('экстрактор на опубликованном пакете Ji
     expect(byName.has('useJxToastQueue')).toBe(false);
   });
 
-  it('у JxButton три собственных пропса: типы из .d.ts, значения по умолчанию и классы из скомпилированного .js', () => {
+  it('у JxButton четыре собственных пропса вместе с ref: типы из .d.ts, значения по умолчанию и классы из скомпилированного .js', () => {
     const button = byName.get('JxButton');
-    expect(button?.props.map((prop) => prop.name).sort()).toEqual(['iconOnly', 'size', 'variant']);
+    expect(button?.props.map((prop) => prop.name).sort()).toEqual(['iconOnly', 'ref', 'size', 'variant']);
+    expect(button?.props.find((prop) => prop.name === 'ref')).toMatchObject({ type: 'Ref<HTMLButtonElement>', required: false });
     expect(button?.props.find((prop) => prop.name === 'variant')?.unionValues).toEqual(['"primary"', '"secondary"', '"ghost"', '"outline"', '"danger"']);
     expect(button?.props.find((prop) => prop.name === 'size')?.defaultValue).toBe("'md'");
     expect(button?.inheritsFrom).toEqual(['ButtonHTMLAttributes<HTMLButtonElement>']);

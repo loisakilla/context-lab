@@ -1,0 +1,44 @@
+# JxCheckbox
+
+Флажок с подписью. Внутри обычный `<input type="checkbox">`: `checked`, `onChange`, `name`, `disabled` передаются напрямую. Для взаимоисключающего выбора используйте `JxRadio`, для настроек «вкл/выкл» — `JxSwitch`.
+
+Импорт: `import { JxCheckbox } from '@jinx-ui/react'`  
+Источник: `dist/components/Checkbox.d.ts:7`
+Ключевые слова: checkbox, чекбокс, флажок, согласие, выбрать несколько, галочка
+
+## Сигнатура
+
+```tsx
+<JxCheckbox label?: ReactNode; ref?: Ref<HTMLInputElement>; wrapClassName?: string />
+```
+
+Наследует `Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size">`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `label` | `ReactNode` | нет |  | подпись рядом с флажком |
+| `ref` | `Ref<HTMLInputElement>` | нет |  | ссылка на `<input>` |
+| `wrapClassName` | `string` | нет |  | класс на обёртке с подписью |
+
+## CSS-классы
+
+`jx-check`
+
+## Примеры
+
+### Согласие с условиями
+
+```tsx
+function TermsConsent() {
+  const [agreed, setAgreed] = useState(false);
+  return (
+    <JxCheckbox
+      label="Согласен с условиями обработки данных"
+      checked={agreed}
+      onChange={(event) => setAgreed(event.target.checked)}
+    />
+  );
+}
+```

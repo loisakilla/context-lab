@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@jinx-ui/core": "0.1.0",
-    "@jinx-ui/react": "0.1.0",
+    "@jinx-ui/react": "0.1.1",
     "@jinx-ui/tokens": "0.1.0",
     "@types/node": "^22.10.0",
     "esbuild": "^0.28.2",
