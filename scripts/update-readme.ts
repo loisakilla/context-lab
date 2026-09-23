@@ -12,7 +12,7 @@ const DRIVER_PHRASES: Record<string, string> = {
 
 const MODE_CONTENTS: Record<string, string> = {
   none: 'только формулировка задачи и требования к ответу',
-  readme: 'README библиотеки: в записанных прогонах README репозитория Jinx UI, в лаборатории сейчас README npm-пакета',
+  readme: 'README npm-пакета `@jinx-ui/react`: установка, модель состояния, клавиатура; из компонентов названы только `JxButton` и `JxModal`',
   docs: 'сгенерированный `llms-full.txt`',
   'docs+rules': 'то же плюс правила из реестра',
   mcp: 'описания шести инструментов сервера; API и правила агент берёт сам через `search_components`, `get_component_api` и `get_rules`',
