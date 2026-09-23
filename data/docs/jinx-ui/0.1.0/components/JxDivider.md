@@ -3,7 +3,7 @@
 Горизонтальный разделитель между блоками. С подписью превращается в заголовок секции с линиями по бокам.
 
 Импорт: `import { JxDivider } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Divider.tsx:8`
+Источник: `dist/components/Divider.d.ts:5`
 Ключевые слова: divider, разделитель, линия, секция
 
 ## Сигнатура

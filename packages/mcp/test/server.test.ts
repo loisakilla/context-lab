@@ -48,7 +48,7 @@ describe('MCP-сервер по stdio', () => {
   it('get_component_api отдаёт реальные пропсы JxButton с дефолтами и наследованием', async () => {
     const text = textOf(await client.callTool({ name: 'get_component_api', arguments: { name: 'JxButton' } }));
     expect(text).toMatch(/variant\?: JxButtonVariant = 'primary'/);
-    expect(text).toMatch(/values: "primary" \| "alt" \| "secondary" \| "ghost" \| "outline" \| "danger"/);
+    expect(text).toMatch(/values: "primary" \| "secondary" \| "ghost" \| "outline" \| "danger"/);
     expect(text).toMatch(/extends: ButtonHTMLAttributes<HTMLButtonElement>/);
   });
 

@@ -2,14 +2,14 @@
   "library": {
     "name": "jinx-ui",
     "package": "@jinx-ui/react",
-    "libraryRoot": "vendor/jinx-ui",
-    "packageRoot": "vendor/jinx-ui/packages/react",
-    "entry": "src/runtime.ts",
+    "libraryRoot": "node_modules/@jinx-ui/react",
+    "packageRoot": "node_modules/@jinx-ui/react",
+    "entry": "dist/runtime.d.ts",
     "docsDir": "docs/library/jinx-ui/components",
     "tokensCss": [
-      "vendor/jinx-ui/packages/tokens/src/index.css"
+      "node_modules/@jinx-ui/tokens/src/index.css"
     ],
-    "readme": "vendor/jinx-ui/README.md"
+    "readme": "node_modules/@jinx-ui/react/README.md"
   },
   "index": "data/index/jinx-ui.json",
   "docs": "data/docs/jinx-ui",

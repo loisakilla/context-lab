@@ -3,7 +3,7 @@
 Ползунок для выбора числа в диапазоне: громкость, масштаб, бюджет. Управляемый через `value` и `onValueChange`, неуправляемый — через `defaultValue`. Границы и шаг задаются обычными атрибутами `input[type=range]`: `min`, `max`, `step`; по умолчанию это диапазон от 0 до 100 с шагом 1.
 
 Импорт: `import { JxSlider } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Slider.tsx:15`
+Источник: `dist/components/Slider.d.ts:10`
 Ключевые слова: slider, слайдер, ползунок, диапазон, громкость, значение
 
 ## Сигнатура
@@ -12,7 +12,7 @@
 <JxSlider defaultValue?: number; label?: ReactNode; onValueChange?: (value: number) => void; showOutput?: boolean = true; unit?: string = ''; value?: number />
 ```
 
-Наследует `Omit<InputHTMLAttributes<HTMLInputElement>, "defaultValue" | "value" | "onChange" | "type">`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+Наследует `Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "value" | "onChange" | "defaultValue">`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
 
 ## Пропсы
 

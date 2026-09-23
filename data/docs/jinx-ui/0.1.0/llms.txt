@@ -1,6 +1,6 @@
 # jinx-ui (@jinx-ui/react@0.1.0)
 
-> Библиотека React-компонентов: 38 компонентов, 3 хуков, 35 CSS-токенов. Версия 0.1.0, коммит e141e2a.
+> Библиотека React-компонентов: 40 компонентов, 3 хуков, 34 CSS-токенов. Версия 0.1.0, коммит n/a.
 
 ## Как пользоваться
 
@@ -26,13 +26,15 @@
 - **JxButton** — Кнопка действия.
   `<JxButton iconOnly?: boolean = false; size?: JxButtonSize = 'md'; variant?: JxButtonVariant = 'primary' />` extends ButtonHTMLAttributes<HTMLButtonElement>
 - **JxCalendar** — Календарь на один месяц с выбором одной даты.
-  `<JxCalendar defaultValue?: Date | null; locale?: string = 'en-US'; monthFormatter?: (date: Date) => { month: string; year: string }; onValueChange?: (value: Date | null) => void; rangeHover?: { from: Date; to: Date } | null; value?: Date | null />` extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange">
+  `<JxCalendar defaultValue?: Date | null; locale?: string = 'en-US'; monthFormatter?: (date: Date) => { month: string; year: string; }; onValueChange?: (value: Date | null) => void; rangeHover?: { from: Date; to: Date; } | null; value?: Date | null />` extends Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue">
 - **JxCheckbox** — Флажок с подписью.
   `<JxCheckbox label?: ReactNode; wrapClassName?: string />` extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size">
 - **JxChip** — Компактная метка-кнопка для фильтров и быстрого выбора.
   `<JxChip active?: boolean = false; children?: ReactNode; onRemove?: () => void; removable?: boolean = false />` extends HTMLAttributes<HTMLSpanElement>
 - **JxCombobox** — Поле с автодополнением: пользователь печатает, список фильтруется, выбор одного значения.
-  `<JxCombobox options: JxComboboxOption[]; ariaLabel?: string; className?: string; defaultValue?: string; emptyText?: string = 'No matches. Try fewer letters.'; onValueChange?: (value: string) => void; placeholder?: string = 'Search...'; value?: string />`
+  `<JxCombobox options: JxComboboxOption[]; ariaLabel?: string; className?: string; clearLabel?: string = 'Clear search'; defaultValue?: string; emptyText?: string = 'No matches. Try fewer letters.'; onValueChange?: (value: string) => void; placeholder?: string = 'Search...'; value?: string />`
+- **JxDateRangePicker** — Выбор периода на календаре.
+  `<JxDateRangePicker defaultValue?: JxDateRange; fromLabel?: string = 'From'; locale?: string = 'en-US'; monthFormatter?: (date: Date) => { month: string; year: string; }; onValueChange?: (value: JxDateRange) => void; toLabel?: string = 'To'; value?: JxDateRange />` extends Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue">
 - **JxDivider** — Горизонтальный разделитель между блоками.
   `<JxDivider label?: ReactNode />` extends HTMLAttributes<HTMLDivElement>
 - **JxDrawer** — Боковая панель, выезжающая слева или справа поверх страницы, с ловушкой фокуса и закрытием по Escape.
@@ -49,6 +51,8 @@
   `<JxModal title: ReactNode; children?: ReactNode; className?: string; defaultOpen?: boolean = false; icon?: ReactNode; intent?: JxModalIntent = 'default'; message?: ReactNode; onOpenChange?: (open: boolean) => void; open?: boolean />`
 - **JxPagination** — Постраничная навигация с кнопками «назад» и «вперёд» и многоточиями для длинных списков.
   `<JxPagination total: number; defaultPage?: number; onPageChange?: (page: number) => void; page?: number; siblingCount?: number = 1 />` extends Omit<HTMLAttributes<HTMLElement>, "onChange">
+- **JxPasswordField** — Поле пароля с кнопкой «показать / скрыть».
+  `<JxPasswordField className?: string; errorText?: string; helperText?: string; hideLabel?: string = 'Hide password'; label?: string; required?: boolean; revealLabel?: string = 'Show password' />` extends Omit<InputHTMLAttributes<HTMLInputElement>, "type">
 - **JxProgress** — Горизонтальная полоса прогресса.
   `<JxProgress value: number; label?: string; max?: number = 100 />` extends HTMLAttributes<HTMLDivElement>
 - **JxProgressCircle** — Круговой индикатор прогресса для компактных мест: карточек, плиток, строк таблицы.
@@ -60,7 +64,7 @@
 - **JxSkeleton** — Заглушка на время загрузки: прямоугольник или круг с мерцанием на месте будущего содержимого.
   `<JxSkeleton circle?: boolean = false; height?: CSSProperties['height']; width?: CSSProperties['width'] />` extends HTMLAttributes<HTMLDivElement>
 - **JxSlider** — Ползунок для выбора числа в диапазоне: громкость, масштаб, бюджет.
-  `<JxSlider defaultValue?: number; label?: ReactNode; onValueChange?: (value: number) => void; showOutput?: boolean = true; unit?: string = ''; value?: number />` extends Omit<InputHTMLAttributes<HTMLInputElement>, "defaultValue" | "value" | "onChange" | "type">
+  `<JxSlider defaultValue?: number; label?: ReactNode; onValueChange?: (value: number) => void; showOutput?: boolean = true; unit?: string = ''; value?: number />` extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "value" | "onChange" | "defaultValue">
 - **JxSnip** — Инлайновый код внутри строки текста: имя пропса, путь файла, короткая команда.
   `<JxSnip children?: ReactNode />` extends HTMLAttributes<HTMLSpanElement>
 - **JxSnippet** — Блок кода или команды с кнопкой копирования.
@@ -91,16 +95,17 @@
 ## Хуки
 
 - `useControllableState<T>(controlledValue: T | undefined, defaultValue: T, onChange?: (value: T) => void): readonly [T, (nextValue: T) => void]`
-  Источник: `packages/react/src/hooks/useControllableState.ts:3`
+  Источник: `dist/hooks/useControllableState.d.ts:1`
 - `useDialogA11y({ isOpen, onClose, containerRef, initialFocusRef }: { isOpen: boolean; onClose: () => void; containerRef: RefObject<HTMLElement | null>; initialFocusRef: RefObject<HTMLElement | null>; }): void`
-  Источник: `packages/react/src/hooks/useDialogA11y.ts:26`
+  Источник: `dist/hooks/useDialogA11y.d.ts:2`
 - `useJxToastQueue(initial?: JxToastItem[]): { items: JxToastItem[]; push: (item: Omit<JxToastItem, "id">) => `${string}-${string}-${string}-${string}-${string}`; dismiss: (id: string) => void; clear: () => void; }`
-  Источник: `packages/react/src/components/Toast.tsx:127`
+  Источник: `dist/components/Toast.d.ts:24`
 
 ## Токены
 
-- color (21): --jx-accent, --jx-accent-2, --jx-accent-2-ink, --jx-accent-ink, --jx-accent-soft, --jx-bg, --jx-bg-2, --jx-border, --jx-border-2, --jx-danger, --jx-info, --jx-rule, --jx-success, --jx-surface, --jx-surface-2, --jx-surface-3, --jx-text, --jx-text-2, --jx-text-3, --jx-text-4, --jx-warning
+- color (19): --jx-accent, --jx-accent-ink, --jx-accent-soft, --jx-bg, --jx-bg-2, --jx-border, --jx-border-2, --jx-danger, --jx-info, --jx-rule, --jx-success, --jx-surface, --jx-surface-2, --jx-surface-3, --jx-text, --jx-text-2, --jx-text-3, --jx-text-4, --jx-warning
 - font (3): --jx-font-display, --jx-font-mono, --jx-font-sans
 - motion (2): --jx-ease, --jx-ease-out
+- other (1): --jx-edge
 - radius (6): --jx-r, --jx-r-lg, --jx-r-pill, --jx-r-sm, --jx-r-xl, --jx-r-xs
 - shadow (3): --jx-shadow, --jx-shadow-lg, --jx-shadow-sm

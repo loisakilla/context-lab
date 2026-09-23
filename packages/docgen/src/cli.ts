@@ -8,7 +8,7 @@ const USAGE = `context-lab docgen
 
 Команды:
   build   Собрать индекс компонентов и токенов по context-lab.config.json
-  check   Проверить, что закоммиченный индекс не разошёлся с исходниками (для CI)
+  check   Проверить, что закоммиченный индекс не разошёлся с библиотекой (для CI)
 
 Опции:
   -c, --config <file>   Путь к конфигу, по умолчанию context-lab.config.json
@@ -40,7 +40,7 @@ function main(): void {
   const started = Date.now();
   const fresh = serializeIndex(buildIndex(buildOptionsFromConfig(config)));
   const index = JSON.parse(fresh) as { components: unknown[]; hooks: unknown[]; tokens: unknown[]; library: { version: string; commit: string } };
-  const summary = `компонентов ${index.components.length}, хуков ${index.hooks.length}, токенов ${index.tokens.length}, версия ${index.library.version}@${index.library.commit.slice(0, 7)}`;
+  const summary = `компонентов ${index.components.length}, хуков ${index.hooks.length}, токенов ${index.tokens.length}, версия ${index.library.version}${index.library.commit ? `@${index.library.commit.slice(0, 7)}` : ''}`;
 
   switch (command) {
     case 'build': {
@@ -56,8 +56,8 @@ function main(): void {
       } catch {
         fail(`Индекс ${config.index} не найден. Соберите его: npm run index`);
       }
-      if (committed !== fresh) fail(`Индекс ${config.index} разошёлся с исходниками библиотеки. Пересоберите его: npm run index`);
-      process.stderr.write(`Индекс ${config.index} соответствует исходникам: ${summary}.\n`);
+      if (committed !== fresh) fail(`Индекс ${config.index} разошёлся с библиотекой. Пересоберите его: npm run index`);
+      process.stderr.write(`Индекс ${config.index} соответствует библиотеке: ${summary}.\n`);
       return;
     }
     default:

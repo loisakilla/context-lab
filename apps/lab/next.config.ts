@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(import.meta.dirname, '..', '..'),
   outputFileTracingExcludes: {
     '/api/local-run': ['**/*'],
-    '*': ['.git/**', 'data/runs/**', 'vendor/**/node_modules/**', 'apps/lab/public/preview/**'],
+    '*': ['.git/**', 'data/runs/**', 'apps/lab/public/preview/**'],
   },
   async headers() {
     return [

@@ -6,7 +6,7 @@ keywords: [badge, бейдж, статус, метка, счётчик, инди
 
 ## Props
 - children: текст метки
-- tone: цветовой тон: `default`, `accent`, `alt`, `success`, `warning`, `danger`, `info`, `solid`
+- tone: цветовой тон: `default`, `accent`, `success`, `warning`, `danger`, `info`, `solid`
 - dot: показать точку-индикатор
 
 ## Examples

@@ -1,3 +1,4 @@
+import { existsSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';
 
@@ -7,6 +8,7 @@ export interface LibraryProgram {
   packageRoot: string;
   libraryRoot: string;
   files: string[];
+  mode: 'source' | 'package';
 }
 
 export interface ProgramOptions {
@@ -16,16 +18,27 @@ export interface ProgramOptions {
 }
 
 const IGNORED = /(\.(test|spec|stories)\.tsx?|\.d\.ts)$/;
+const SHIPPED_TYPES = /\.d\.ts$/;
+const SHIPPED_CODE = /\.(m?js)$/;
+
+const PACKAGE_OPTIONS: ts.CompilerOptions = {
+  target: ts.ScriptTarget.ES2022,
+  module: ts.ModuleKind.ESNext,
+  moduleResolution: ts.ModuleResolutionKind.Bundler,
+  jsx: ts.JsxEmit.ReactJSX,
+  allowJs: true,
+  checkJs: false,
+  strict: true,
+  noEmit: true,
+  skipLibCheck: true,
+  types: [],
+};
 
 export function toPosix(file: string): string {
   return file.replace(/\\/g, '/');
 }
 
-function readConfig(packageRoot: string, explicit?: string): ts.ParsedCommandLine {
-  const configPath = explicit ?? ts.findConfigFile(packageRoot, ts.sys.fileExists, 'tsconfig.json');
-  if (!configPath) {
-    throw new Error(`tsconfig.json не найден в ${packageRoot}`);
-  }
+function readConfig(configPath: string): ts.ParsedCommandLine {
   const raw = ts.readConfigFile(configPath, ts.sys.readFile);
   if (raw.error) {
     throw new Error(ts.flattenDiagnosticMessageText(raw.error.messageText, '\n'));
@@ -33,12 +46,22 @@ function readConfig(packageRoot: string, explicit?: string): ts.ParsedCommandLin
   return ts.parseJsonConfigFileContent(raw.config, ts.sys, path.dirname(configPath));
 }
 
-export function createLibraryProgram(options: ProgramOptions): LibraryProgram {
-  const packageRoot = toPosix(path.resolve(options.packageRoot));
-  const libraryRoot = toPosix(path.resolve(options.libraryRoot ?? options.packageRoot));
-  const parsed = readConfig(packageRoot, options.tsconfig);
-  const files = parsed.fileNames.map(toPosix).filter((file) => !IGNORED.test(file));
+function shippedFiles(dir: string, into: string[]): string[] {
+  for (const entry of readdirSync(dir)) {
+    if (entry === 'node_modules') continue;
+    const absolute = path.join(dir, entry);
+    if (statSync(absolute).isDirectory()) {
+      shippedFiles(absolute, into);
+      continue;
+    }
+    if (SHIPPED_TYPES.test(entry) || SHIPPED_CODE.test(entry)) into.push(toPosix(absolute));
+  }
+  return into;
+}
 
+function sourceProgram(configPath: string, packageRoot: string, libraryRoot: string): LibraryProgram {
+  const parsed = readConfig(configPath);
+  const files = parsed.fileNames.map(toPosix).filter((file) => !IGNORED.test(file));
   const program = ts.createProgram({
     rootNames: files,
     options: {
@@ -49,6 +72,23 @@ export function createLibraryProgram(options: ProgramOptions): LibraryProgram {
       jsx: parsed.options.jsx ?? ts.JsxEmit.ReactJSX,
     },
   });
+  return { program, checker: program.getTypeChecker(), packageRoot, libraryRoot, files, mode: 'source' };
+}
 
-  return { program, checker: program.getTypeChecker(), packageRoot, libraryRoot, files };
+function packageProgram(packageRoot: string, libraryRoot: string): LibraryProgram {
+  const shipped = shippedFiles(packageRoot, []);
+  if (!shipped.some((file) => SHIPPED_TYPES.test(file))) {
+    throw new Error(`В ${packageRoot} нет ни tsconfig.json, ни объявлений .d.ts: разбирать нечего`);
+  }
+  const program = ts.createProgram({ rootNames: shipped, options: PACKAGE_OPTIONS });
+  const files = shipped.filter((file) => SHIPPED_TYPES.test(file));
+  return { program, checker: program.getTypeChecker(), packageRoot, libraryRoot, files, mode: 'package' };
+}
+
+export function createLibraryProgram(options: ProgramOptions): LibraryProgram {
+  const packageRoot = toPosix(path.resolve(options.packageRoot));
+  const libraryRoot = toPosix(path.resolve(options.libraryRoot ?? options.packageRoot));
+  const ownConfig = path.join(packageRoot, 'tsconfig.json');
+  const configPath = options.tsconfig ?? (existsSync(ownConfig) ? ownConfig : undefined);
+  return configPath ? sourceProgram(configPath, packageRoot, libraryRoot) : packageProgram(packageRoot, libraryRoot);
 }

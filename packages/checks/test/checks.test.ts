@@ -45,7 +45,7 @@ let checker: Checker;
 
 beforeAll(() => {
   bundle = buildNodeTypeBundle({
-    packageRoot: path.join(root, 'vendor/jinx-ui/packages/react'),
+    packageRoot: path.join(root, 'node_modules/@jinx-ui/react'),
     packageName: '@jinx-ui/react',
     nodeModules: path.join(root, 'node_modules'),
   });
@@ -54,7 +54,7 @@ beforeAll(() => {
 
 describe('бандл типов', () => {
   it('содержит d.ts библиотеки, типы React и стандартные библиотеки', () => {
-    expect(Object.keys(bundle.files)).toEqual(expect.arrayContaining(['/node_modules/@jinx-ui/react/src/runtime.d.ts', '/node_modules/@types/react/index.d.ts', '/lib.dom.d.ts']));
+    expect(Object.keys(bundle.files)).toEqual(expect.arrayContaining(['/node_modules/@jinx-ui/react/dist/runtime.d.ts', '/node_modules/@types/react/index.d.ts', '/lib.dom.d.ts']));
     expect(bundle.files['/node_modules/@jinx-ui/react/package.json']).toMatch(/"types"/);
   });
 
@@ -62,8 +62,8 @@ describe('бандл типов', () => {
     const manifest = JSON.parse(bundle.files['/node_modules/@jinx-ui/react/package.json'] ?? '{}') as {
       exports: Record<string, { types: string }>;
     };
-    expect(manifest.exports['.']?.types).toBe('./src/index.d.ts');
-    expect(manifest.exports['./runtime']?.types).toBe('./src/runtime.d.ts');
+    expect(manifest.exports['.']?.types).toBe('./dist/index.d.ts');
+    expect(manifest.exports['./runtime']?.types).toBe('./dist/runtime.d.ts');
     expect(manifest.exports['./package.json']).toBeUndefined();
     Object.values(manifest.exports).forEach((entry) => {
       expect(bundle.files[`/node_modules/@jinx-ui/react/${entry.types.slice(2)}`]).toBeTruthy();

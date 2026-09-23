@@ -3,7 +3,7 @@
 Одно всплывающее уведомление с заголовком, текстом и кнопкой закрытия. В приложении обычно не рендерится напрямую: очередь ведёт хук `useJxToastQueue`, а список показывает `JxToastViewport`.
 
 Импорт: `import { JxToast } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Toast.tsx:57`
+Источник: `dist/components/Toast.d.ts:17`
 Ключевые слова: toast, уведомление, всплывающее сообщение, notification, снэкбар, успешно сохранено
 
 ## Сигнатура

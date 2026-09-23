@@ -4,7 +4,7 @@ import { sampleIndex } from '../../index-tools/test/helpers.ts';
 import { buildContext, contextTokens } from '../src/context.ts';
 import { buildClaudeArgs, composePrompt, parseStreamJson } from '../src/drivers/claude-code.ts';
 import { extractCode } from '../src/extract-code.ts';
-import { buildMatrix, median } from '../src/matrix.ts';
+import { buildMatrix, libraryKey, median } from '../src/matrix.ts';
 import { priceOf } from '../src/price.ts';
 import { runTask } from '../src/run.ts';
 import type { Driver, RunRecord, Task } from '../src/types.ts';
@@ -179,5 +179,34 @@ describe('матрица', () => {
     expect(none).toMatchObject({ passRate: 0.5, medianTokens: 220, medianContextTokens: 0, medianCostUsd: 0.015, runs: ['a', 'b'] });
     expect(median([3, 1, 2])).toBe(2);
     expect(median([])).toBe(0);
+  });
+
+  it('не смешивает в одной матрице прогоны против разных версий библиотеки', () => {
+    const run = (id: string, library: RunRecord['library']): RunRecord => ({
+      id,
+      createdAt: '',
+      repeat: 1,
+      durationMs: 1,
+      driver: 'api',
+      library,
+      model: 'claude-sonnet-5',
+      mode: 'none',
+      task,
+      context: { tokens: 0, sources: [] },
+      turns: [],
+      usage: { input: 1, output: 1, cacheRead: 0, cacheCreation: 0 },
+      costUsd: null,
+      stopReason: 'end_turn',
+      output: { code: '', text: '' },
+      checks: null,
+      verdict: { passed: true, score: 1 },
+    });
+    const sourceBuild = { name: 'jinx-ui', version: '0.1.0', commit: '63b81b611c5912463052a5eda0da76ddfd1eb931' };
+    const published = { name: 'jinx-ui', version: '0.1.0', commit: '' };
+
+    expect(libraryKey(sourceBuild)).toBe('0.1.0@63b81b6');
+    expect(libraryKey(published)).toBe('0.1.0');
+    expect(() => buildMatrix([run('old', sourceBuild), run('new', published)])).toThrow(/0\.1\.0@63b81b6, 0\.1\.0/);
+    expect(buildMatrix([run('a', published), run('b', published)]).library).toEqual(published);
   });
 });

@@ -3,7 +3,7 @@
 Пустое состояние списка или раздела: что здесь появится и что для этого сделать. Ставьте вместо пустой таблицы или нулевого счётчика.
 
 Импорт: `import { JxEmptyState } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/EmptyState.tsx:18`
+Источник: `dist/components/EmptyState.d.ts:8`
 Ключевые слова: empty state, пустой экран, нет данных, заглушка, первый запуск
 
 ## Сигнатура

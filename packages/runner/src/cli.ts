@@ -7,7 +7,7 @@ import type { ContextSources } from './context.ts';
 import { apiDriver } from './drivers/api.ts';
 import { claudeCodeDriver, type ClaudeCodeDriverOptions } from './drivers/claude-code.ts';
 import { findClaudeBinary } from './find-claude.ts';
-import { buildMatrix } from './matrix.ts';
+import { buildMatrix, libraryKey } from './matrix.ts';
 import { commandMcpServer, repoMcpServer } from './mcp-config.ts';
 import { runFileName, runTask, type CodeChecker } from './run.ts';
 import { agentSandbox } from './sandbox.ts';
@@ -34,6 +34,7 @@ const USAGE = `context-lab runner
 Опции matrix:
   -d, --driver <name>          Учитывать только прогоны этого драйвера
       --model <model>          Учитывать только прогоны этой модели
+      --library <key>          Учитывать только прогоны этой версии библиотеки: 0.1.0 или 0.1.0@63b81b6
   -o, --out <file>             Куда записать матрицу, по умолчанию из конфига`;
 
 function fail(message: string): never {
@@ -146,12 +147,18 @@ function commandMatrix(config: LabConfig, values: Record<string, string | boolea
   if (!existsSync(runsDir)) fail(`Папки ${config.runs} нет: сначала выполните contextlab run`);
   const driver = values.driver as string | undefined;
   const model = values.model as string | undefined;
+  const library = values.library as string | undefined;
   const runs = readdirSync(runsDir)
     .filter((file) => file.endsWith('.json'))
     .map((file) => JSON.parse(readFileSync(path.join(runsDir, file), 'utf8')) as RunRecord)
-    .filter((run) => (!driver || run.driver === driver) && (!model || run.model === model));
+    .filter((run) => (!driver || run.driver === driver) && (!model || run.model === model) && (!library || libraryKey(run.library) === library));
   if (runs.length === 0) fail('Нет ни одной записи прогона под заданные фильтры');
-  const matrix = buildMatrix(runs);
+  let matrix: ReturnType<typeof buildMatrix>;
+  try {
+    matrix = buildMatrix(runs);
+  } catch (error) {
+    fail(error instanceof Error ? error.message : String(error));
+  }
   const out = values.out as string | undefined;
   const target = out ? path.resolve(config.root, out) : resolveFrom(config, config.matrix);
   writeFileSync(target, `${JSON.stringify(matrix, null, 2)}\n`, 'utf8');
@@ -171,6 +178,7 @@ async function main(): Promise<void> {
       mode: { type: 'string', short: 'm' },
       driver: { type: 'string', short: 'd' },
       model: { type: 'string' },
+      library: { type: 'string' },
       effort: { type: 'string' },
       repeat: { type: 'string', short: 'r' },
       resume: { type: 'boolean' },

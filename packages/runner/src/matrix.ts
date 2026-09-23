@@ -33,7 +33,17 @@ export function median(values: number[]): number {
   return sorted.length % 2 === 0 ? ((sorted[middle - 1] ?? 0) + (sorted[middle] ?? 0)) / 2 : sorted[middle] ?? 0;
 }
 
+export function libraryKey(library: { version: string; commit: string }): string {
+  return library.commit ? `${library.version}@${library.commit.slice(0, 7)}` : library.version;
+}
+
 export function buildMatrix(runs: RunRecord[]): Matrix {
+  const libraries = [...new Set(runs.map((run) => libraryKey(run.library)))];
+  if (libraries.length > 1) {
+    throw new Error(
+      `Прогоны сделаны против разных версий библиотеки: ${libraries.join(', ')}. В одной матрице их сравнивать нельзя — выберите одну через --library.`
+    );
+  }
   const first = runs[0];
   const tasks = new Map<string, string>();
   const groups = new Map<string, RunRecord[]>();

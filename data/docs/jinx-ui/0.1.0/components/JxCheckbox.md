@@ -3,7 +3,7 @@
 Флажок с подписью. Внутри обычный `<input type="checkbox">`: `checked`, `onChange`, `name`, `disabled` передаются напрямую. Для взаимоисключающего выбора используйте `JxRadio`, для настроек «вкл/выкл» — `JxSwitch`.
 
 Импорт: `import { JxCheckbox } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Checkbox.tsx:9`
+Источник: `dist/components/Checkbox.d.ts:6`
 Ключевые слова: checkbox, чекбокс, флажок, согласие, выбрать несколько, галочка
 
 ## Сигнатура

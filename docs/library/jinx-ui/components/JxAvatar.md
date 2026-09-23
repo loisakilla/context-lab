@@ -6,7 +6,7 @@ keywords: [avatar, аватар, пользователь, инициалы, ф�
 
 ## Props
 - children: инициалы или изображение внутри аватара
-- tone: цветовой тон фона: `default`, `accent`, `alt`, `info`
+- tone: цветовой тон фона: `default`, `accent`, `info`
 - size: размер: `sm`, `md`, `lg`
 - status: показать точку присутствия
 

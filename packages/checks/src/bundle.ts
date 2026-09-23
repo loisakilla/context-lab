@@ -29,10 +29,6 @@ export const CHECK_COMPILER_OPTIONS: ts.CompilerOptions = {
   types: [],
 };
 
-function toPosix(file: string): string {
-  return file.replace(/\\/g, '/');
-}
-
 function walk(dir: string, filter: (file: string) => boolean, into: Record<string, string>, prefix: string): void {
   for (const entry of readdirSync(dir)) {
     const absolute = path.join(dir, entry);
@@ -46,37 +42,13 @@ function walk(dir: string, filter: (file: string) => boolean, into: Record<strin
   }
 }
 
-function emitDeclarations(packageRoot: string, packageName: string, into: Record<string, string>): string[] {
-  const configPath = ts.findConfigFile(packageRoot, ts.sys.fileExists, 'tsconfig.json');
-  if (!configPath) throw new Error(`tsconfig.json не найден в ${packageRoot}`);
-  const raw = ts.readConfigFile(configPath, ts.sys.readFile);
-  const parsed = ts.parseJsonConfigFileContent(raw.config, ts.sys, path.dirname(configPath));
-  const rootNames = parsed.fileNames.filter((file) => !/\.(test|spec|stories)\.tsx?$/.test(file));
-  const rootDir = toPosix(path.resolve(packageRoot));
-  const program = ts.createProgram({
-    rootNames,
-    options: {
-      ...parsed.options,
-      noEmit: false,
-      declaration: true,
-      emitDeclarationOnly: true,
-      declarationMap: false,
-      sourceMap: false,
-      outDir: '/emit',
-      rootDir,
-      types: [],
-      skipLibCheck: true,
-      jsx: parsed.options.jsx ?? ts.JsxEmit.ReactJSX,
-    },
-  });
-  const written: string[] = [];
-  program.emit(undefined, (fileName, text) => {
-    const relative = toPosix(fileName).replace(/^\/emit\//, '');
-    const target = `/node_modules/${packageName}/${relative}`;
-    into[target] = text;
-    written.push(target);
-  });
-  return written;
+function shippedDeclarations(packageRoot: string, packageName: string, into: Record<string, string>): string[] {
+  const prefix = `/node_modules/${packageName}`;
+  const before = new Set(Object.keys(into));
+  walk(packageRoot, (file) => file.endsWith('.d.ts'), into, prefix);
+  const copied = Object.keys(into).filter((file) => file.startsWith(`${prefix}/`) && !before.has(file));
+  if (copied.length === 0) throw new Error(`В ${packageRoot} нет объявлений .d.ts: пакет не собран или установлен не тот`);
+  return copied;
 }
 
 type ExportTarget = string | Record<string, string> | null;
@@ -99,23 +71,24 @@ function targetPath(target: ExportTarget): string | undefined {
 function declarationFor(target: ExportTarget): string | undefined {
   const file = targetPath(target);
   if (!file || !/\.(ts|tsx|js|mjs|d\.ts)$/.test(file)) return undefined;
-  return file.replace(/^\.\/dist\//, './src/').replace(/\.(d\.ts|tsx?|mjs|js)$/, '.d.ts');
+  return file.replace(/\.(d\.ts|tsx?|mjs|js)$/, '.d.ts');
 }
 
 export function buildNodeTypeBundle(options: BundleOptions): TypeBundle {
   const files: Record<string, string> = {};
   for (const [name, content] of createDefaultMapFromNodeModules({ target: ts.ScriptTarget.ES2022 }, ts)) files[name] = content;
 
-  const emitted = new Set(emitDeclarations(options.packageRoot, options.packageName, files));
+  const shipped = new Set(shippedDeclarations(options.packageRoot, options.packageName, files));
   const exportsMap = readPackageExports(options.packageRoot);
   const typedExports: Record<string, { types: string }> = {};
   for (const [subpath, target] of Object.entries(exportsMap)) {
     const declaration = declarationFor(target);
     if (!declaration) continue;
-    if (!emitted.has(`/node_modules/${options.packageName}/${declaration.replace(/^\.\//, '')}`)) continue;
+    if (!shipped.has(`/node_modules/${options.packageName}/${declaration.replace(/^\.\//, '')}`)) continue;
     typedExports[subpath] = { types: declaration };
   }
-  files[`/node_modules/${options.packageName}/package.json`] = JSON.stringify({ name: options.packageName, types: typedExports['.']?.types ?? './src/index.d.ts', exports: typedExports }, null, 2);
+  if (!typedExports['.']) throw new Error(`У ${options.packageName} нет точки входа с типами в exports['.']`);
+  files[`/node_modules/${options.packageName}/package.json`] = JSON.stringify({ name: options.packageName, types: typedExports['.'].types, exports: typedExports }, null, 2);
 
   for (const pkg of ['@types/react', 'csstype', ...(options.extraPackages ?? [])]) {
     const dir = path.join(options.nodeModules, pkg);

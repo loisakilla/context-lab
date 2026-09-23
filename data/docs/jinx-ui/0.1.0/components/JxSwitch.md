@@ -3,7 +3,7 @@
 Переключатель «включено/выключено» с подписью. Внутри обычный `<input type="checkbox">`, поэтому состояние задаётся через `checked` и `onChange`, а имя для формы через `name`.
 
 Импорт: `import { JxSwitch } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Switch.tsx:9`
+Источник: `dist/components/Switch.d.ts:6`
 Ключевые слова: switch, переключатель, тумблер, включить, выключить, уведомления, настройка
 
 ## Сигнатура

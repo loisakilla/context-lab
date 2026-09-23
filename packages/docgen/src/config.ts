@@ -34,8 +34,21 @@ export function resolveFrom(config: LabConfig, relative: string): string {
   return path.resolve(config.root, relative);
 }
 
-export function libraryCommit(libraryRoot: string): string {
+function manifestGitHead(libraryRoot: string): string {
   try {
+    const raw = JSON.parse(readFileSync(path.join(libraryRoot, 'package.json'), 'utf8')) as { gitHead?: string };
+    return raw.gitHead ?? '';
+  } catch {
+    return '';
+  }
+}
+
+export function libraryCommit(libraryRoot: string): string {
+  const fromManifest = manifestGitHead(libraryRoot);
+  if (fromManifest) return fromManifest;
+  try {
+    const topLevel = execFileSync('git', ['-C', libraryRoot, 'rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim();
+    if (path.resolve(topLevel) !== path.resolve(libraryRoot)) return '';
     return execFileSync('git', ['-C', libraryRoot, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
   } catch {
     return '';

@@ -9,11 +9,9 @@
   },
   "workspaces": [
     "packages/*",
-    "apps/*",
-    "vendor/jinx-ui/packages/*"
+    "apps/*"
   ],
   "scripts": {
-    "preinstall": "node scripts/check-submodule.mjs",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "vitest run",
     "verify": "npm run typecheck && npm run test && npm run index:check && npm run docs:check && npm run docs:lint && npm run rules:lint && npm run rules:check",
@@ -41,6 +39,9 @@
     "screenshots": "tsx scripts/screenshots.ts"
   },
   "devDependencies": {
+    "@jinx-ui/core": "0.1.0",
+    "@jinx-ui/react": "0.1.0",
+    "@jinx-ui/tokens": "0.1.0",
     "@types/node": "^22.10.0",
     "cross-env": "^7.0.3",
     "esbuild": "^0.28.2",

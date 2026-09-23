@@ -3,7 +3,7 @@
 Вертикальное меню действий. Пункты описываются массивом `JxMenuItem`: обычный пункт с `label` и `onSelect`, разделитель `{ type: 'divider' }` и подпись группы `{ type: 'label', label }`. Опасные действия помечаются `danger`, недоступные — `disabled`.
 
 Импорт: `import { JxMenu } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Menu.tsx:18`
+Источник: `dist/components/Menu.d.ts:14`
 Ключевые слова: menu, меню, список действий, навигация, контекстное меню, пункты
 
 ## Сигнатура

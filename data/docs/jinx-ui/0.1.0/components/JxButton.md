@@ -3,7 +3,7 @@
 Кнопка действия. Шесть визуальных вариантов и три размера, всё остальное берётся из атрибутов `<button>`: `type`, `disabled`, `onClick`, `aria-label`. По умолчанию `type="button"`, поэтому для отправки формы задавайте `type="submit"` явно.
 
 Импорт: `import { JxButton } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Button.tsx:28`
+Источник: `dist/components/Button.d.ts:9`
 Ключевые слова: кнопка, button, действие, submit, отправить, сохранить, удалить, cta
 
 ## Сигнатура
@@ -20,11 +20,11 @@
 |---|---|---|---|---|
 | `iconOnly` | `boolean` | нет | `false` | квадратная кнопка под одну иконку; обязательно добавьте `aria-label` |
 | `size` | `"sm" \\| "md" \\| "lg"` | нет | `'md'` | размер кнопки, `md` по умолчанию |
-| `variant` | `"primary" \\| "alt" \\| "secondary" \\| "ghost" \\| "outline" \\| "danger"` | нет | `'primary'` | визуальный стиль; `primary` для главного действия, `danger` для разрушительного, `outline` и `ghost` для второстепенных |
+| `variant` | `"primary" \\| "secondary" \\| "ghost" \\| "outline" \\| "danger"` | нет | `'primary'` | визуальный стиль; `primary` для главного действия, `danger` для разрушительного, `outline` и `ghost` для второстепенных |
 
 ## CSS-классы
 
-`jx-btn`, `jx-btn--alt`, `jx-btn--danger`, `jx-btn--ghost`, `jx-btn--icon`, `jx-btn--lg`, `jx-btn--outline`, `jx-btn--primary`, `jx-btn--secondary`, `jx-btn--sm`
+`jx-btn`, `jx-btn--danger`, `jx-btn--ghost`, `jx-btn--icon`, `jx-btn--lg`, `jx-btn--outline`, `jx-btn--primary`, `jx-btn--secondary`, `jx-btn--sm`
 
 ## Примеры
 

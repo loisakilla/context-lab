@@ -3,7 +3,7 @@
 Постраничная навигация с кнопками «назад» и «вперёд» и многоточиями для длинных списков. Страницы нумеруются с единицы; `total` — это количество страниц, а не элементов, поэтому его считают заранее: `Math.ceil(items.length / pageSize)`.
 
 Импорт: `import { JxPagination } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Pagination.tsx:41`
+Источник: `dist/components/Pagination.d.ts:9`
 Ключевые слова: pagination, пагинация, страницы, постраничная навигация, таблица, список
 
 ## Сигнатура

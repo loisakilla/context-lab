@@ -11,7 +11,7 @@ const tasks = JSON.parse(readFileSync(resolveFrom(config, config.tasks), 'utf8')
 
 const sources: ContextSources = {
   index,
-  readme: readFileSync(resolveFrom(config, config.library.readme ?? 'vendor/jinx-ui/README.md'), 'utf8'),
+  readme: readFileSync(resolveFrom(config, config.library.readme ?? 'node_modules/@jinx-ui/react/README.md'), 'utf8'),
   docs: readFileSync(path.join(resolveFrom(config, config.docs), index.library.version, 'llms-full.txt'), 'utf8'),
   rules: readFileSync(resolveFrom(config, 'rules/compiled/jinx-ui.md'), 'utf8'),
 };

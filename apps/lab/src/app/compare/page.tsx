@@ -4,6 +4,7 @@ import { MODE_LABELS } from '@/components/MatrixTable';
 import { RunPane } from '@/components/RunPane';
 import { TopBar } from '@/components/TopBar';
 import { loadLabData, loadRun, loadRunIndex, pickRun } from '@/lib/data';
+import { libraryKey } from '@context-lab/runner/browser';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,6 +29,11 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
   const rightRun = rightPick ? loadRun(rightPick.id) : null;
   const prompt = leftRun?.task.prompt ?? rightRun?.task.prompt ?? '';
   const mismatched = leftRun && rightRun && (leftRun.model !== rightRun.model || leftRun.driver !== rightRun.driver);
+  const currentLibrary = libraryKey(data.index.library);
+  const leftLibrary = leftRun ? libraryKey(leftRun.library) : null;
+  const rightLibrary = rightRun ? libraryKey(rightRun.library) : null;
+  const splitLibrary = leftLibrary !== null && rightLibrary !== null && leftLibrary !== rightLibrary;
+  const staleLibrary = [leftLibrary, rightLibrary].find((key) => key !== null && key !== currentLibrary) ?? null;
 
   return (
     <>
@@ -58,6 +64,20 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
           <Note title="Прогоны сделаны по-разному">
             Слева {leftRun.model} через {leftRun.driver}, справа {rightRun.model} через {rightRun.driver}. Сравнивать их между собой некорректно: перезапишите
             недостающие ячейки одной моделью.
+          </Note>
+        )}
+
+        {splitLibrary && (
+          <Note title="Прогоны сделаны против разных версий библиотеки">
+            Слева jinx-ui {leftLibrary}, справа {rightLibrary}. У версий разный набор компонентов и пропсов, поэтому разница в вердикте может объясняться
+            библиотекой, а не контекстом.
+          </Note>
+        )}
+
+        {!splitLibrary && staleLibrary && (
+          <Note title="Прогоны сделаны против другой версии библиотеки">
+            Эти прогоны записаны против jinx-ui {staleLibrary}, а лаборатория сейчас собирает контекст из {currentLibrary}. Они показывают, как контекст работал
+            на той версии; чтобы сравнивать на текущей, перезапишите прогоны.
           </Note>
         )}
 

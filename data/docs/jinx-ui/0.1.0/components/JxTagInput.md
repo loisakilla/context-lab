@@ -3,7 +3,7 @@
 Поле для набора тегов: пользователь вводит текст, Enter добавляет тег, Backspace удаляет последний. Значение — массив строк, управляемое через `value` и `onValueChange` или неуправляемое через `defaultValue`.
 
 Импорт: `import { JxTagInput } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/TagInput.tsx:16`
+Источник: `dist/components/TagInput.d.ts:9`
 Ключевые слова: теги, tags, метки, множественный ввод, чипы, ключевые слова
 
 ## Сигнатура

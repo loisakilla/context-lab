@@ -13,6 +13,6 @@ keywords: [avatar stack, группа аватаров, участники, на
 <JxAvatarStack>
   <JxAvatar>ГК</JxAvatar>
   <JxAvatar tone="info">АС</JxAvatar>
-  <JxAvatar tone="alt">МП</JxAvatar>
+  <JxAvatar tone="accent">МП</JxAvatar>
 </JxAvatarStack>
 ```

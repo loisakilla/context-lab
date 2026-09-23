@@ -3,7 +3,7 @@
 Модальное окно с ловушкой фокуса и закрытием по Escape. Управляется парой `open` и `onOpenChange`; кнопки действий передаются как `children`. У окна нет собственной кнопки закрытия, поэтому в `children` всегда должна быть кнопка, которая вызывает `onOpenChange(false)`.
 
 Импорт: `import { JxModal } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Modal.tsx:67`
+Источник: `dist/components/Modal.d.ts:14`
 Ключевые слова: модальное окно, модалка, диалог, dialog, подтверждение, confirm, удалить, popup
 
 ## Сигнатура

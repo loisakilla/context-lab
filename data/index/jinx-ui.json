@@ -4,13 +4,13 @@
     "name": "jinx-ui",
     "package": "@jinx-ui/react",
     "version": "0.1.0",
-    "commit": "e141e2a552120a82833cd809d2eabaf56420ee06"
+    "commit": ""
   },
   "components": [
     {
       "name": "JxAccordion",
-      "file": "packages/react/src/components/Accordion.tsx",
-      "line": 22,
+      "file": "dist/components/Accordion.d.ts",
+      "line": 15,
       "keywords": [
         "accordion",
         "аккордеон",
@@ -77,8 +77,8 @@
     },
     {
       "name": "JxAlert",
-      "file": "packages/react/src/components/Alert.tsx",
-      "line": 47,
+      "file": "dist/components/Alert.d.ts",
+      "line": 9,
       "keywords": [
         "alert",
         "предупреждение",
@@ -142,8 +142,8 @@
     },
     {
       "name": "JxAvatar",
-      "file": "packages/react/src/components/Avatar.tsx",
-      "line": 26,
+      "file": "dist/components/Avatar.d.ts",
+      "line": 10,
       "keywords": [
         "avatar",
         "аватар",
@@ -164,13 +164,12 @@
           "type": "JxAvatarTone",
           "required": false,
           "unionValues": [
-            "\"alt\"",
             "\"default\"",
             "\"info\"",
             "\"accent\""
           ],
           "defaultValue": "'default'",
-          "description": "цветовой тон фона: `default`, `accent`, `alt`, `info`"
+          "description": "цветовой тон фона: `default`, `accent`, `info`"
         },
         {
           "name": "size",
@@ -198,7 +197,6 @@
       "cssClasses": [
         "jx-avatar",
         "jx-avatar--accent",
-        "jx-avatar--alt",
         "jx-avatar--info",
         "jx-avatar--lg",
         "jx-avatar--sm",
@@ -214,8 +212,8 @@
     },
     {
       "name": "JxAvatarStack",
-      "file": "packages/react/src/components/Avatar.tsx",
-      "line": 42,
+      "file": "dist/components/Avatar.d.ts",
+      "line": 14,
       "keywords": [
         "avatar stack",
         "группа аватаров",
@@ -240,15 +238,15 @@
       "examples": [
         {
           "title": "Участники задачи",
-          "code": "<JxAvatarStack>\n  <JxAvatar>ГК</JxAvatar>\n  <JxAvatar tone=\"info\">АС</JxAvatar>\n  <JxAvatar tone=\"alt\">МП</JxAvatar>\n</JxAvatarStack>"
+          "code": "<JxAvatarStack>\n  <JxAvatar>ГК</JxAvatar>\n  <JxAvatar tone=\"info\">АС</JxAvatar>\n  <JxAvatar tone=\"accent\">МП</JxAvatar>\n</JxAvatarStack>"
         }
       ],
       "description": "Группа аватаров внахлёст: участники проекта, исполнители задачи, читатели документа. Принимает готовые `JxAvatar` и сдвигает их друг на друга."
     },
     {
       "name": "JxBadge",
-      "file": "packages/react/src/components/Badge.tsx",
-      "line": 22,
+      "file": "dist/components/Badge.d.ts",
+      "line": 8,
       "keywords": [
         "badge",
         "бейдж",
@@ -270,7 +268,6 @@
           "type": "JxBadgeTone",
           "required": false,
           "unionValues": [
-            "\"alt\"",
             "\"danger\"",
             "\"default\"",
             "\"warning\"",
@@ -280,7 +277,7 @@
             "\"solid\""
           ],
           "defaultValue": "'default'",
-          "description": "цветовой тон: `default`, `accent`, `alt`, `success`, `warning`, `danger`, `info`, `solid`"
+          "description": "цветовой тон: `default`, `accent`, `success`, `warning`, `danger`, `info`, `solid`"
         },
         {
           "name": "dot",
@@ -296,7 +293,6 @@
       "cssClasses": [
         "jx-badge",
         "jx-badge--accent",
-        "jx-badge--alt",
         "jx-badge--danger",
         "jx-badge--dot",
         "jx-badge--info",
@@ -314,8 +310,8 @@
     },
     {
       "name": "JxBreadcrumbs",
-      "file": "packages/react/src/components/Breadcrumbs.tsx",
-      "line": 15,
+      "file": "dist/components/Breadcrumbs.d.ts",
+      "line": 10,
       "keywords": [
         "breadcrumbs",
         "хлебные крошки",
@@ -355,8 +351,8 @@
     },
     {
       "name": "JxButton",
-      "file": "packages/react/src/components/Button.tsx",
-      "line": 28,
+      "file": "dist/components/Button.d.ts",
+      "line": 9,
       "keywords": [
         "кнопка",
         "button",
@@ -375,7 +371,6 @@
           "required": false,
           "unionValues": [
             "\"primary\"",
-            "\"alt\"",
             "\"secondary\"",
             "\"ghost\"",
             "\"outline\"",
@@ -409,7 +404,6 @@
       ],
       "cssClasses": [
         "jx-btn",
-        "jx-btn--alt",
         "jx-btn--danger",
         "jx-btn--ghost",
         "jx-btn--icon",
@@ -433,8 +427,8 @@
     },
     {
       "name": "JxCalendar",
-      "file": "packages/react/src/components/Calendar.tsx",
-      "line": 59,
+      "file": "dist/components/Calendar.d.ts",
+      "line": 32,
       "keywords": [
         "календарь",
         "calendar",
@@ -466,13 +460,13 @@
         },
         {
           "name": "rangeHover",
-          "type": "{ from: Date; to: Date } | null",
+          "type": "{ from: Date; to: Date; } | null",
           "required": false,
           "description": "подсветка диапазона `{ from, to }`"
         },
         {
           "name": "monthFormatter",
-          "type": "(date: Date) => { month: string; year: string }",
+          "type": "(date: Date) => { month: string; year: string; }",
           "required": false,
           "description": "функция форматирования подписи месяца и года"
         },
@@ -481,16 +475,18 @@
           "type": "string",
           "required": false,
           "defaultValue": "'en-US'",
-          "description": "локаль для названий месяцев и дней недели, `en-US` по умолчанию"
+          "description": "локаль для названия месяца и доступных имён дней, `en-US` по умолчанию; однобуквенные подписи дней недели не локализуются"
         }
       ],
       "inheritsFrom": [
-        "Omit<HTMLAttributes<HTMLDivElement>, \"defaultValue\" | \"onChange\">"
+        "Omit<HTMLAttributes<HTMLDivElement>, \"onChange\" | \"defaultValue\">"
       ],
       "cssClasses": [
         "jx-cal-day",
         "jx-cal-day--in-range",
         "jx-cal-day--out",
+        "jx-cal-day--range-end",
+        "jx-cal-day--range-start",
         "jx-cal-day--selected",
         "jx-cal-day--today",
         "jx-cal-dow",
@@ -506,12 +502,12 @@
           "code": "<JxCalendar locale=\"ru-RU\" value={date} onValueChange={setDate} />"
         }
       ],
-      "description": "Календарь на один месяц с выбором одной даты. Значение — `Date` или `null`, управляемое через `value` и `onValueChange`. Диапазон подсвечивается через `rangeHover`, а подпись месяца форматируется `monthFormatter` или локалью."
+      "description": "Календарь на один месяц с выбором одной даты. Значение — `Date` или `null`, управляемое через `value` и `onValueChange`. Диапазон подсвечивается через `rangeHover`, а подпись месяца форматируется `monthFormatter` или локалью. Чтобы пользователь сам выбирал период, берите `JxDateRangePicker`: `rangeHover` только показывает готовый диапазон.\n\nС клавиатуры: стрелки ходят по дням и неделям, `Home` и `End` — к краям недели, `PageUp` и `PageDown` — по месяцам. Доступное имя каждого дня — полная дата, а не число."
     },
     {
       "name": "JxCheckbox",
-      "file": "packages/react/src/components/Checkbox.tsx",
-      "line": 9,
+      "file": "dist/components/Checkbox.d.ts",
+      "line": 6,
       "keywords": [
         "checkbox",
         "чекбокс",
@@ -551,8 +547,8 @@
     },
     {
       "name": "JxChip",
-      "file": "packages/react/src/components/Chip.tsx",
-      "line": 11,
+      "file": "dist/components/Chip.d.ts",
+      "line": 8,
       "keywords": [
         "chip",
         "чип",
@@ -608,8 +604,8 @@
     },
     {
       "name": "JxCombobox",
-      "file": "packages/react/src/components/Combobox.tsx",
-      "line": 24,
+      "file": "dist/components/Combobox.d.ts",
+      "line": 19,
       "keywords": [
         "combobox",
         "автодополнение",
@@ -669,11 +665,19 @@
           "type": "string",
           "required": false,
           "description": "доступное имя поля, если нет видимой подписи"
+        },
+        {
+          "name": "clearLabel",
+          "type": "string",
+          "required": false,
+          "defaultValue": "'Clear search'",
+          "description": "доступное имя кнопки очистки; кнопка появляется, когда в поле есть текст, и возвращает фокус в поле"
         }
       ],
       "inheritsFrom": [],
       "cssClasses": [
         "jx-combobox",
+        "jx-combobox-clear",
         "jx-combobox-empty",
         "jx-combobox-input",
         "jx-combobox-list",
@@ -689,9 +693,108 @@
       "description": "Поле с автодополнением: пользователь печатает, список фильтруется, выбор одного значения. Опции `JxComboboxOption`: `value`, `label`, необязательные `subLabel` и `icon`. Для множественного выбора тегов используйте `JxTagInput`."
     },
     {
+      "name": "JxDateRangePicker",
+      "file": "dist/components/Calendar.d.ts",
+      "line": 33,
+      "keywords": [
+        "диапазон дат",
+        "период",
+        "date range",
+        "от и до",
+        "с по",
+        "выбор периода",
+        "отпуск",
+        "бронирование",
+        "отчёт за период"
+      ],
+      "status": "stable",
+      "props": [
+        {
+          "name": "value",
+          "type": "JxDateRange",
+          "required": false,
+          "description": "выбранный период `{ from, to }` в управляемом режиме"
+        },
+        {
+          "name": "defaultValue",
+          "type": "JxDateRange",
+          "required": false,
+          "description": "начальный период"
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: JxDateRange) => void",
+          "required": false,
+          "description": "вызывается с новым `{ from, to }` после каждого клика; пока выбрано только начало, `to` равно `null`"
+        },
+        {
+          "name": "monthFormatter",
+          "type": "(date: Date) => { month: string; year: string; }",
+          "required": false,
+          "description": "функция форматирования подписи месяца и года"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "required": false,
+          "defaultValue": "'en-US'",
+          "description": "локаль для названия месяца и подписей дат, `en-US` по умолчанию"
+        },
+        {
+          "name": "fromLabel",
+          "type": "string",
+          "required": false,
+          "defaultValue": "'From'",
+          "description": "подпись поля начала, `From` по умолчанию"
+        },
+        {
+          "name": "toLabel",
+          "type": "string",
+          "required": false,
+          "defaultValue": "'To'",
+          "description": "подпись поля конца, `To` по умолчанию"
+        }
+      ],
+      "inheritsFrom": [
+        "Omit<HTMLAttributes<HTMLDivElement>, \"onChange\" | \"defaultValue\">"
+      ],
+      "cssClasses": [
+        "jx-cal-day",
+        "jx-cal-day--in-range",
+        "jx-cal-day--out",
+        "jx-cal-day--range-end",
+        "jx-cal-day--range-start",
+        "jx-cal-day--selected",
+        "jx-cal-day--today",
+        "jx-cal-dow",
+        "jx-cal-grid",
+        "jx-cal-head",
+        "jx-cal-month",
+        "jx-cal-nav",
+        "jx-daterange-arrow",
+        "jx-daterange-clear",
+        "jx-daterange-field",
+        "jx-daterange-field-label",
+        "jx-daterange-field-value",
+        "jx-daterange-fields",
+        "jx-daterange-status"
+      ],
+      "examples": [
+        {
+          "title": "Период отчёта",
+          "code": "const [range, setRange] = useState<JxDateRange>({ from: null, to: null });\n\n<JxDateRangePicker locale=\"ru-RU\" fromLabel=\"С\" toLabel=\"По\" value={range} onValueChange={setRange} />"
+        },
+        {
+          "title": "Кнопка активна только при выбранном периоде",
+          "code": "<JxDateRangePicker value={range} onValueChange={setRange} />\n<JxButton variant=\"primary\" disabled={!range.from || !range.to}>Построить отчёт</JxButton>"
+        }
+      ],
+      "description": "Выбор периода на календаре. Первый клик задаёт начало, второй — конец; если второй день раньше первого, границы меняются местами сами. Пока конец не выбран, наведение подсвечивает будущий промежуток. Значение — объект `{ from, to }`, где любая граница может быть `null`, управляемый через `value` и `onValueChange`. Над сеткой показаны обе даты и кнопка сброса, под сеткой — текстовый статус для скринридера.\n\nКлавиатура общая с `JxCalendar`: стрелки ходят по дням и неделям, `Home` и `End` — к краям недели, `PageUp` и `PageDown` — по месяцам, фокус переходит через границу месяца. Названия дней недели не локализуются — `locale` влияет на месяц и на подписи дат."
+    },
+    {
       "name": "JxDivider",
-      "file": "packages/react/src/components/Divider.tsx",
-      "line": 8,
+      "file": "dist/components/Divider.d.ts",
+      "line": 5,
       "keywords": [
         "divider",
         "разделитель",
@@ -724,8 +827,8 @@
     },
     {
       "name": "JxDrawer",
-      "file": "packages/react/src/components/Drawer.tsx",
-      "line": 20,
+      "file": "dist/components/Drawer.d.ts",
+      "line": 12,
       "keywords": [
         "drawer",
         "боковая панель",
@@ -767,8 +870,8 @@
           "type": "JxDrawerSide",
           "required": false,
           "unionValues": [
-            "\"left\"",
-            "\"right\""
+            "\"right\"",
+            "\"left\""
           ],
           "defaultValue": "'right'",
           "description": "с какой стороны выезжает, `right` по умолчанию"
@@ -804,8 +907,8 @@
     },
     {
       "name": "JxEmptyState",
-      "file": "packages/react/src/components/EmptyState.tsx",
-      "line": 18,
+      "file": "dist/components/EmptyState.d.ts",
+      "line": 8,
       "keywords": [
         "empty state",
         "пустой экран",
@@ -859,8 +962,8 @@
     },
     {
       "name": "JxInputField",
-      "file": "packages/react/src/components/Fields.tsx",
-      "line": 17,
+      "file": "dist/components/Fields.d.ts",
+      "line": 12,
       "keywords": [
         "поле ввода",
         "input",
@@ -938,8 +1041,8 @@
     },
     {
       "name": "JxKbd",
-      "file": "packages/react/src/components/Kbd.tsx",
-      "line": 8,
+      "file": "dist/components/Kbd.d.ts",
+      "line": 5,
       "keywords": [
         "kbd",
         "клавиша",
@@ -972,8 +1075,8 @@
     },
     {
       "name": "JxMenu",
-      "file": "packages/react/src/components/Menu.tsx",
-      "line": 18,
+      "file": "dist/components/Menu.d.ts",
+      "line": 14,
       "keywords": [
         "menu",
         "меню",
@@ -1012,8 +1115,8 @@
     },
     {
       "name": "JxModal",
-      "file": "packages/react/src/components/Modal.tsx",
-      "line": 67,
+      "file": "dist/components/Modal.d.ts",
+      "line": 14,
       "keywords": [
         "модальное окно",
         "модалка",
@@ -1109,8 +1212,8 @@
     },
     {
       "name": "JxPagination",
-      "file": "packages/react/src/components/Pagination.tsx",
-      "line": 41,
+      "file": "dist/components/Pagination.d.ts",
+      "line": 9,
       "keywords": [
         "pagination",
         "пагинация",
@@ -1170,9 +1273,96 @@
       "description": "Постраничная навигация с кнопками «назад» и «вперёд» и многоточиями для длинных списков. Страницы нумеруются с единицы; `total` — это количество страниц, а не элементов, поэтому его считают заранее: `Math.ceil(items.length / pageSize)`."
     },
     {
+      "name": "JxPasswordField",
+      "file": "dist/components/Fields.d.ts",
+      "line": 17,
+      "keywords": [
+        "пароль",
+        "password",
+        "поле пароля",
+        "показать пароль",
+        "скрыть пароль",
+        "вход",
+        "регистрация",
+        "подтверждение пароля"
+      ],
+      "status": "stable",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "подпись над полем"
+        },
+        {
+          "name": "helperText",
+          "type": "string",
+          "required": false,
+          "description": "подсказка под полем, например требования к длине"
+        },
+        {
+          "name": "errorText",
+          "type": "string",
+          "required": false,
+          "description": "текст ошибки; при наличии поле подсвечивается как невалидное"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "помечает поле обязательным звёздочкой и атрибутом `required`"
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": "дополнительный класс корневого элемента"
+        },
+        {
+          "name": "revealLabel",
+          "type": "string",
+          "required": false,
+          "defaultValue": "'Show password'",
+          "description": "доступное имя кнопки, пока пароль скрыт"
+        },
+        {
+          "name": "hideLabel",
+          "type": "string",
+          "required": false,
+          "defaultValue": "'Hide password'",
+          "description": "доступное имя кнопки, пока пароль виден"
+        }
+      ],
+      "inheritsFrom": [
+        "Omit<InputHTMLAttributes<HTMLInputElement>, \"type\">"
+      ],
+      "cssClasses": [
+        "jx-field",
+        "jx-field--error",
+        "jx-input",
+        "jx-input-action",
+        "jx-input-error",
+        "jx-input-group",
+        "jx-input-help",
+        "jx-label",
+        "jx-label-req"
+      ],
+      "examples": [
+        {
+          "title": "Вход",
+          "code": "<JxPasswordField\n  label=\"Пароль\"\n  required\n  value={password}\n  onChange={(event) => setPassword(event.target.value)}\n  revealLabel=\"Показать пароль\"\n  hideLabel=\"Скрыть пароль\"\n/>"
+        },
+        {
+          "title": "Регистрация с подтверждением",
+          "code": "<JxPasswordField label=\"Новый пароль\" autoComplete=\"new-password\" helperText=\"Не короче 12 символов\" value={next} onChange={(event) => setNext(event.target.value)} />\n<JxPasswordField\n  label=\"Повторите пароль\"\n  autoComplete=\"new-password\"\n  value={repeat}\n  onChange={(event) => setRepeat(event.target.value)}\n  errorText={repeat && repeat !== next ? 'Пароли не совпадают' : undefined}\n/>"
+        }
+      ],
+      "description": "Поле пароля с кнопкой «показать / скрыть». Кнопка переключает `type` между `password` и `text` и сообщает своё состояние через `aria-pressed`, поэтому своё переключение видимости писать не нужно. Само поле — обычный `<input>`: `value`, `onChange`, `name`, `autoComplete` и `disabled` передаются напрямую, а `type` задать нельзя — им управляет компонент. По умолчанию стоит `autoComplete=\"current-password\"`; для регистрации передайте `new-password`."
+    },
+    {
       "name": "JxProgress",
-      "file": "packages/react/src/components/Progress.tsx",
-      "line": 11,
+      "file": "dist/components/Progress.d.ts",
+      "line": 7,
       "keywords": [
         "progress",
         "прогресс",
@@ -1219,8 +1409,8 @@
     },
     {
       "name": "JxProgressCircle",
-      "file": "packages/react/src/components/Progress.tsx",
-      "line": 40,
+      "file": "dist/components/Progress.d.ts",
+      "line": 13,
       "keywords": [
         "progress circle",
         "круговой прогресс",
@@ -1268,8 +1458,8 @@
     },
     {
       "name": "JxRadio",
-      "file": "packages/react/src/components/Radio.tsx",
-      "line": 9,
+      "file": "dist/components/Radio.d.ts",
+      "line": 6,
       "keywords": [
         "radio",
         "радиокнопка",
@@ -1308,8 +1498,8 @@
     },
     {
       "name": "JxSelect",
-      "file": "packages/react/src/components/Select.tsx",
-      "line": 45,
+      "file": "dist/components/Select.d.ts",
+      "line": 17,
       "keywords": [
         "select",
         "выпадающий список",
@@ -1396,8 +1586,8 @@
     },
     {
       "name": "JxSkeleton",
-      "file": "packages/react/src/components/Skeleton.tsx",
-      "line": 10,
+      "file": "dist/components/Skeleton.d.ts",
+      "line": 7,
       "keywords": [
         "skeleton",
         "скелетон",
@@ -1443,8 +1633,8 @@
     },
     {
       "name": "JxSlider",
-      "file": "packages/react/src/components/Slider.tsx",
-      "line": 15,
+      "file": "dist/components/Slider.d.ts",
+      "line": 10,
       "keywords": [
         "slider",
         "слайдер",
@@ -1495,7 +1685,7 @@
         }
       ],
       "inheritsFrom": [
-        "Omit<InputHTMLAttributes<HTMLInputElement>, \"defaultValue\" | \"value\" | \"onChange\" | \"type\">"
+        "Omit<InputHTMLAttributes<HTMLInputElement>, \"type\" | \"value\" | \"onChange\" | \"defaultValue\">"
       ],
       "cssClasses": [
         "jx-slider",
@@ -1511,8 +1701,8 @@
     },
     {
       "name": "JxSnip",
-      "file": "packages/react/src/components/Snippet.tsx",
-      "line": 66,
+      "file": "dist/components/Snippet.d.ts",
+      "line": 14,
       "keywords": [
         "snip",
         "инлайновый код",
@@ -1544,8 +1734,8 @@
     },
     {
       "name": "JxSnippet",
-      "file": "packages/react/src/components/Snippet.tsx",
-      "line": 27,
+      "file": "dist/components/Snippet.d.ts",
+      "line": 10,
       "keywords": [
         "snippet",
         "код",
@@ -1572,12 +1762,11 @@
           "type": "JxSnippetTone",
           "required": false,
           "unionValues": [
-            "\"alt\"",
             "\"default\"",
             "\"info\""
           ],
           "defaultValue": "'default'",
-          "description": "тон блока: `default`, `accent`, `alt`, `info`"
+          "description": "тон знака приглашения: `default` — цвет акцента, `info` — информационный синий"
         },
         {
           "name": "block",
@@ -1598,7 +1787,6 @@
       ],
       "cssClasses": [
         "jx-snippet",
-        "jx-snippet--alt",
         "jx-snippet--block",
         "jx-snippet--info",
         "jx-snippet-code",
@@ -1615,8 +1803,8 @@
     },
     {
       "name": "JxSpinner",
-      "file": "packages/react/src/components/Spinner.tsx",
-      "line": 9,
+      "file": "dist/components/Spinner.d.ts",
+      "line": 6,
       "keywords": [
         "spinner",
         "спиннер",
@@ -1661,8 +1849,8 @@
     },
     {
       "name": "JxStepper",
-      "file": "packages/react/src/components/Stepper.tsx",
-      "line": 19,
+      "file": "dist/components/Stepper.d.ts",
+      "line": 9,
       "keywords": [
         "stepper",
         "шаги",
@@ -1705,8 +1893,8 @@
     },
     {
       "name": "JxSwitch",
-      "file": "packages/react/src/components/Switch.tsx",
-      "line": 9,
+      "file": "dist/components/Switch.d.ts",
+      "line": 6,
       "keywords": [
         "switch",
         "переключатель",
@@ -1748,8 +1936,8 @@
     },
     {
       "name": "JxTable",
-      "file": "packages/react/src/components/Table.tsx",
-      "line": 6,
+      "file": "dist/components/Table.d.ts",
+      "line": 3,
       "keywords": [
         "table",
         "таблица",
@@ -1776,8 +1964,8 @@
     },
     {
       "name": "JxTabs",
-      "file": "packages/react/src/components/Tabs.tsx",
-      "line": 21,
+      "file": "dist/components/Tabs.d.ts",
+      "line": 14,
       "keywords": [
         "tabs",
         "вкладки",
@@ -1853,8 +2041,8 @@
     },
     {
       "name": "JxTagInput",
-      "file": "packages/react/src/components/TagInput.tsx",
-      "line": 16,
+      "file": "dist/components/TagInput.d.ts",
+      "line": 9,
       "keywords": [
         "теги",
         "tags",
@@ -1918,8 +2106,8 @@
     },
     {
       "name": "JxTextareaField",
-      "file": "packages/react/src/components/Fields.tsx",
-      "line": 65,
+      "file": "dist/components/Fields.d.ts",
+      "line": 19,
       "keywords": [
         "textarea",
         "многострочное поле",
@@ -1982,8 +2170,8 @@
     },
     {
       "name": "JxToast",
-      "file": "packages/react/src/components/Toast.tsx",
-      "line": 57,
+      "file": "dist/components/Toast.d.ts",
+      "line": 17,
       "keywords": [
         "toast",
         "уведомление",
@@ -2052,8 +2240,8 @@
     },
     {
       "name": "JxToastViewport",
-      "file": "packages/react/src/components/Toast.tsx",
-      "line": 89,
+      "file": "dist/components/Toast.d.ts",
+      "line": 23,
       "keywords": [
         "toast",
         "очередь уведомлений",
@@ -2090,7 +2278,14 @@
         }
       ],
       "inheritsFrom": [],
-      "cssClasses": [],
+      "cssClasses": [
+        "jx-toast",
+        "jx-toast-body",
+        "jx-toast-close",
+        "jx-toast-icon",
+        "jx-toast-msg",
+        "jx-toast-title"
+      ],
       "examples": [
         {
           "title": "Уведомление после отправки формы",
@@ -2101,8 +2296,8 @@
     },
     {
       "name": "JxToggle",
-      "file": "packages/react/src/components/Toggle.tsx",
-      "line": 19,
+      "file": "dist/components/Toggle.d.ts",
+      "line": 12,
       "keywords": [
         "toggle",
         "переключатель",
@@ -2155,8 +2350,8 @@
     },
     {
       "name": "JxTooltip",
-      "file": "packages/react/src/components/Tooltip.tsx",
-      "line": 9,
+      "file": "dist/components/Tooltip.d.ts",
+      "line": 6,
       "keywords": [
         "tooltip",
         "подсказка",
@@ -2198,20 +2393,20 @@
   "hooks": [
     {
       "name": "useControllableState",
-      "file": "packages/react/src/hooks/useControllableState.ts",
-      "line": 3,
+      "file": "dist/hooks/useControllableState.d.ts",
+      "line": 1,
       "signature": "<T>(controlledValue: T | undefined, defaultValue: T, onChange?: (value: T) => void): readonly [T, (nextValue: T) => void]"
     },
     {
       "name": "useDialogA11y",
-      "file": "packages/react/src/hooks/useDialogA11y.ts",
-      "line": 26,
+      "file": "dist/hooks/useDialogA11y.d.ts",
+      "line": 2,
       "signature": "({ isOpen, onClose, containerRef, initialFocusRef }: { isOpen: boolean; onClose: () => void; containerRef: RefObject<HTMLElement | null>; initialFocusRef: RefObject<HTMLElement | null>; }): void"
     },
     {
       "name": "useJxToastQueue",
-      "file": "packages/react/src/components/Toast.tsx",
-      "line": 127,
+      "file": "dist/components/Toast.d.ts",
+      "line": 24,
       "signature": "(initial?: JxToastItem[]): { items: JxToastItem[]; push: (item: Omit<JxToastItem, \"id\">) => `${string}-${string}-${string}-${string}-${string}`; dismiss: (id: string) => void; clear: () => void; }"
     }
   ],
@@ -2223,29 +2418,7 @@
       "scopes": {
         ":root": "#c9a3ff",
         "[data-theme=\"dark\"]": "#c9a3ff",
-        "[data-theme=\"light\"]": "#6f3fcc",
-        "[data-style=\"brutal\"]": "#1a1726",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "#f5ff3d"
-      }
-    },
-    {
-      "name": "--jx-accent-2",
-      "group": "color",
-      "value": "#d4ff3d",
-      "scopes": {
-        ":root": "#d4ff3d",
-        "[data-theme=\"dark\"]": "#d4ff3d",
-        "[data-theme=\"light\"]": "#859e00"
-      }
-    },
-    {
-      "name": "--jx-accent-2-ink",
-      "group": "color",
-      "value": "#0c0a14",
-      "scopes": {
-        ":root": "#0c0a14",
-        "[data-theme=\"dark\"]": "#0c0a14",
-        "[data-theme=\"light\"]": "#14180a"
+        "[data-theme=\"light\"]": "#6f3fcc"
       }
     },
     {
@@ -2255,9 +2428,7 @@
       "scopes": {
         ":root": "#0c0a14",
         "[data-theme=\"dark\"]": "#0c0a14",
-        "[data-theme=\"light\"]": "#fff",
-        "[data-style=\"brutal\"]": "#f5ff3d",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "#1a1726"
+        "[data-theme=\"light\"]": "#ffffff"
       }
     },
     {
@@ -2267,9 +2438,7 @@
       "scopes": {
         ":root": "rgba(201, 163, 255, 0.14)",
         "[data-theme=\"dark\"]": "rgba(201, 163, 255, 0.14)",
-        "[data-theme=\"light\"]": "rgba(111, 63, 204, 0.12)",
-        "[data-style=\"brutal\"]": "rgba(26, 23, 38, 0.08)",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "rgba(245, 255, 61, 0.14)"
+        "[data-theme=\"light\"]": "rgba(111, 63, 204, 0.12)"
       }
     },
     {
@@ -2279,9 +2448,7 @@
       "scopes": {
         ":root": "#0c0a14",
         "[data-theme=\"dark\"]": "#0c0a14",
-        "[data-theme=\"light\"]": "#f5f2e9",
-        "[data-style=\"brutal\"]": "#f5f2e9",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "#1a1726"
+        "[data-theme=\"light\"]": "#f5f2e9"
       }
     },
     {
@@ -2291,9 +2458,7 @@
       "scopes": {
         ":root": "#0f0d18",
         "[data-theme=\"dark\"]": "#0f0d18",
-        "[data-theme=\"light\"]": "#ece8dc",
-        "[data-style=\"brutal\"]": "#ece8dc",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "#0c0a14"
+        "[data-theme=\"light\"]": "#ece8dc"
       }
     },
     {
@@ -2304,8 +2469,7 @@
         ":root": "#221c30",
         "[data-theme=\"dark\"]": "#221c30",
         "[data-theme=\"light\"]": "#ddd6c4",
-        "[data-style=\"brutal\"]": "#1a1726",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "#f5ff3d"
+        "[data-style=\"brutal\"]": "var(--jx-edge)"
       }
     },
     {
@@ -2316,8 +2480,7 @@
         ":root": "#3a3150",
         "[data-theme=\"dark\"]": "#3a3150",
         "[data-theme=\"light\"]": "#b8ae96",
-        "[data-style=\"brutal\"]": "#1a1726",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "#f5ff3d"
+        "[data-style=\"brutal\"]": "var(--jx-edge)"
       }
     },
     {
@@ -2344,6 +2507,14 @@
       "value": "cubic-bezier(0.16, 1, 0.3, 1)",
       "scopes": {
         ":root": "cubic-bezier(0.16, 1, 0.3, 1)"
+      }
+    },
+    {
+      "name": "--jx-edge",
+      "group": "other",
+      "value": "color-mix(in oklab, var(--jx-text) 82%, var(--jx-bg))",
+      "scopes": {
+        "[data-style=\"brutal\"]": "color-mix(in oklab, var(--jx-text) 82%, var(--jx-bg))"
       }
     },
     {
@@ -2386,7 +2557,6 @@
       "value": "14px",
       "scopes": {
         ":root": "14px",
-        "[data-style=\"glass\"]": "14px",
         "[data-style=\"minimal\"]": "14px",
         "[data-style=\"brutal\"]": "4px"
       }
@@ -2397,7 +2567,6 @@
       "value": "14px",
       "scopes": {
         ":root": "14px",
-        "[data-style=\"glass\"]": "14px",
         "[data-style=\"minimal\"]": "14px",
         "[data-style=\"brutal\"]": "4px"
       }
@@ -2408,7 +2577,6 @@
       "value": "14px",
       "scopes": {
         ":root": "14px",
-        "[data-style=\"glass\"]": "14px",
         "[data-style=\"minimal\"]": "14px",
         "[data-style=\"brutal\"]": "4px"
       }
@@ -2419,7 +2587,6 @@
       "value": "14px",
       "scopes": {
         ":root": "14px",
-        "[data-style=\"glass\"]": "14px",
         "[data-style=\"minimal\"]": "14px",
         "[data-style=\"brutal\"]": "4px"
       }
@@ -2430,7 +2597,6 @@
       "value": "14px",
       "scopes": {
         ":root": "14px",
-        "[data-style=\"glass\"]": "14px",
         "[data-style=\"minimal\"]": "14px",
         "[data-style=\"brutal\"]": "4px"
       }
@@ -2441,7 +2607,6 @@
       "value": "14px",
       "scopes": {
         ":root": "14px",
-        "[data-style=\"glass\"]": "14px",
         "[data-style=\"minimal\"]": "14px",
         "[data-style=\"brutal\"]": "4px"
       }
@@ -2454,8 +2619,7 @@
         ":root": "#1c1828",
         "[data-theme=\"dark\"]": "#1c1828",
         "[data-theme=\"light\"]": "#ddd6c4",
-        "[data-style=\"brutal\"]": "#1a1726",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "#f5ff3d"
+        "[data-style=\"brutal\"]": "var(--jx-edge)"
       }
     },
     {
@@ -2465,8 +2629,7 @@
       "scopes": {
         ":root": "0 8px 24px -8px rgba(0, 0, 0, 0.6)",
         "[data-theme=\"dark\"]": "0 8px 24px -8px rgba(0, 0, 0, 0.6)",
-        "[data-style=\"brutal\"]": "6px 6px 0 #1a1726",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "6px 6px 0 #f5ff3d"
+        "[data-style=\"brutal\"]": "6px 6px 0 var(--jx-edge)"
       }
     },
     {
@@ -2476,8 +2639,7 @@
       "scopes": {
         ":root": "0 24px 48px -16px rgba(0, 0, 0, 0.7)",
         "[data-theme=\"dark\"]": "0 24px 48px -16px rgba(0, 0, 0, 0.7)",
-        "[data-style=\"brutal\"]": "10px 10px 0 #1a1726",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "10px 10px 0 #f5ff3d"
+        "[data-style=\"brutal\"]": "10px 10px 0 var(--jx-edge)"
       }
     },
     {
@@ -2487,8 +2649,7 @@
       "scopes": {
         ":root": "0 1px 2px rgba(0, 0, 0, 0.4)",
         "[data-theme=\"dark\"]": "0 1px 2px rgba(0, 0, 0, 0.4)",
-        "[data-style=\"brutal\"]": "4px 4px 0 #1a1726",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "4px 4px 0 #f5ff3d"
+        "[data-style=\"brutal\"]": "4px 4px 0 var(--jx-edge)"
       }
     },
     {
@@ -2508,9 +2669,7 @@
       "scopes": {
         ":root": "#15121f",
         "[data-theme=\"dark\"]": "#15121f",
-        "[data-theme=\"light\"]": "#ffffff",
-        "[data-style=\"brutal\"]": "#ffffff",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "#1a1726"
+        "[data-theme=\"light\"]": "#ffffff"
       }
     },
     {
@@ -2520,9 +2679,7 @@
       "scopes": {
         ":root": "#1c1828",
         "[data-theme=\"dark\"]": "#1c1828",
-        "[data-theme=\"light\"]": "#f5f1e6",
-        "[data-style=\"brutal\"]": "#f0ebdb",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "#0c0a14"
+        "[data-theme=\"light\"]": "#f5f1e6"
       }
     },
     {
@@ -2532,9 +2689,7 @@
       "scopes": {
         ":root": "#2a2438",
         "[data-theme=\"dark\"]": "#2a2438",
-        "[data-theme=\"light\"]": "#e6e0d0",
-        "[data-style=\"brutal\"]": "#ddd6c4",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "#2a2438"
+        "[data-theme=\"light\"]": "#e6e0d0"
       }
     },
     {
@@ -2544,9 +2699,7 @@
       "scopes": {
         ":root": "#f0ecf5",
         "[data-theme=\"dark\"]": "#f0ecf5",
-        "[data-theme=\"light\"]": "#1a1726",
-        "[data-style=\"brutal\"]": "#1a1726",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "#f5ff3d"
+        "[data-theme=\"light\"]": "#1a1726"
       }
     },
     {
@@ -2556,9 +2709,7 @@
       "scopes": {
         ":root": "#a59cb8",
         "[data-theme=\"dark\"]": "#a59cb8",
-        "[data-theme=\"light\"]": "#4a4258",
-        "[data-style=\"brutal\"]": "#1a1726",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "#f5ff3d"
+        "[data-theme=\"light\"]": "#4a4258"
       }
     },
     {
@@ -2568,9 +2719,7 @@
       "scopes": {
         ":root": "#8d84a8",
         "[data-theme=\"dark\"]": "#8d84a8",
-        "[data-theme=\"light\"]": "#6b6379",
-        "[data-style=\"brutal\"]": "#6e6386",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "#a59cb8"
+        "[data-theme=\"light\"]": "#6b6379"
       }
     },
     {
@@ -2580,9 +2729,7 @@
       "scopes": {
         ":root": "#463e5a",
         "[data-theme=\"dark\"]": "#463e5a",
-        "[data-theme=\"light\"]": "#b4abc0",
-        "[data-style=\"brutal\"]": "#b4abc0",
-        "[data-style=\"brutal\"][data-theme=\"dark\"]": "#463e5a"
+        "[data-theme=\"light\"]": "#b4abc0"
       }
     },
     {

@@ -3,7 +3,7 @@
 Горизонтальная полоса прогресса. Значение сравнивается с `max`, подпись выводится рядом с полосой.
 
 Импорт: `import { JxProgress } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Progress.tsx:11`
+Источник: `dist/components/Progress.d.ts:7`
 Ключевые слова: progress, прогресс, полоса загрузки, заполнение, процент выполнения
 
 ## Сигнатура

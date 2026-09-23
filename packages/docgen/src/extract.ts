@@ -18,7 +18,7 @@ const TYPE_FLAGS = ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.UseAlias
 const CLASS_LITERAL = /^jx-[a-z0-9-]+(?:--[a-z0-9-]+)?$/;
 
 function isInside(file: string, root: string): boolean {
-  return file.startsWith(`${root}/`) && !file.includes('/node_modules/');
+  return file.startsWith(`${root}/`) && !file.slice(root.length).includes('/node_modules/');
 }
 
 function resolveAlias(checker: ts.TypeChecker, symbol: ts.Symbol): ts.Symbol {
@@ -36,6 +36,23 @@ function unwrapFunction(node: ts.Node | undefined): ts.SignatureDeclaration | un
     }
   }
   if (ts.isParenthesizedExpression(node) || ts.isAsExpression(node) || ts.isSatisfiesExpression(node)) return unwrapFunction(node.expression);
+  return undefined;
+}
+
+function implementationOf(declaration: ts.Node, name: string, lib: LibraryProgram): ts.SignatureDeclaration | undefined {
+  if (lib.mode !== 'package') return undefined;
+  const typesFile = toPosix(declaration.getSourceFile().fileName);
+  if (!typesFile.endsWith('.d.ts')) return undefined;
+  const base = typesFile.slice(0, -'.d.ts'.length);
+  const code = [`${base}.js`, `${base}.mjs`].map((file) => lib.program.getSourceFile(file)).find((file) => file !== undefined);
+  if (!code) return undefined;
+  for (const statement of code.statements) {
+    if (ts.isFunctionDeclaration(statement) && statement.name?.text === name) return statement;
+    if (!ts.isVariableStatement(statement)) continue;
+    for (const variable of statement.declarationList.declarations) {
+      if (ts.isIdentifier(variable.name) && variable.name.text === name) return unwrapFunction(variable);
+    }
+  }
   return undefined;
 }
 
@@ -116,15 +133,14 @@ function collectClassLiterals(node: ts.Node, checker: ts.TypeChecker): string[] 
     }
     if (ts.isIdentifier(current)) {
       const declaration = checker.getSymbolAtLocation(current)?.valueDeclaration;
-      if (
-        declaration &&
-        ts.isVariableDeclaration(declaration) &&
-        declaration.getSourceFile() === source &&
-        declaration.initializer &&
-        !visited.has(declaration)
-      ) {
-        visited.add(declaration);
-        visit(declaration.initializer);
+      if (declaration && declaration.getSourceFile() === source && !visited.has(declaration)) {
+        if (ts.isVariableDeclaration(declaration) && declaration.initializer) {
+          visited.add(declaration);
+          visit(declaration.initializer);
+        } else if (ts.isFunctionDeclaration(declaration) && declaration.body) {
+          visited.add(declaration);
+          visit(declaration.body);
+        }
       }
     }
     ts.forEachChild(current, visit);
@@ -298,7 +314,7 @@ export function extract(lib: LibraryProgram, options: ExtractOptions = {}): Extr
     if (!/^[A-Z]/.test(name)) continue;
 
     const described = options.descriptions?.get(name);
-    const fn = unwrapFunction(declaration);
+    const fn = implementationOf(declaration, resolved.name, lib) ?? unwrapFunction(declaration);
     const defaults = defaultsFromSignature(fn);
     const propsSymbol = signature.getParameters()[0];
     const propsType = propsSymbol ? lib.checker.getTypeOfSymbolAtLocation(propsSymbol, propsSymbol.valueDeclaration ?? declaration) : undefined;

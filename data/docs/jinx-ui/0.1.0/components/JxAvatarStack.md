@@ -3,7 +3,7 @@
 Группа аватаров внахлёст: участники проекта, исполнители задачи, читатели документа. Принимает готовые `JxAvatar` и сдвигает их друг на друга.
 
 Импорт: `import { JxAvatarStack } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Avatar.tsx:42`
+Источник: `dist/components/Avatar.d.ts:14`
 Ключевые слова: avatar stack, группа аватаров, участники, наложение
 
 ## Сигнатура
@@ -32,6 +32,6 @@
 <JxAvatarStack>
   <JxAvatar>ГК</JxAvatar>
   <JxAvatar tone="info">АС</JxAvatar>
-  <JxAvatar tone="alt">МП</JxAvatar>
+  <JxAvatar tone="accent">МП</JxAvatar>
 </JxAvatarStack>
 ```

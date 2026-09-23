@@ -3,7 +3,7 @@
 Выпадающий список с одним выбранным значением, клавиатурной навигацией и группами. Управляемый через `value` и `onValueChange` или неуправляемый через `defaultValue`. Опции описываются массивом `JxSelectOption`: `value`, `label`, необязательные `meta`, `group`, `disabled`.
 
 Импорт: `import { JxSelect } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Select.tsx:45`
+Источник: `dist/components/Select.d.ts:17`
 Ключевые слова: select, выпадающий список, выбор, дропдаун, dropdown, язык, статус, категория
 
 ## Сигнатура

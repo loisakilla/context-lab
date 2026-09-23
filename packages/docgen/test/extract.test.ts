@@ -6,7 +6,7 @@ import { createLibraryProgram } from '../src/program.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const fixture = path.join(here, 'fixtures', 'ui-kit');
-const jinx = path.resolve(here, '../../../vendor/jinx-ui');
+const jinx = path.resolve(here, '../../../node_modules/@jinx-ui/react');
 
 describe('экстрактор на фикстуре с JSDoc, forwardRef и наследованием', () => {
   const lib = createLibraryProgram({ packageRoot: fixture });
@@ -51,26 +51,27 @@ describe('экстрактор на фикстуре с JSDoc, forwardRef и н�
   });
 });
 
-describe('экстрактор на настоящей библиотеке Jinx UI', () => {
-  const lib = createLibraryProgram({ packageRoot: path.join(jinx, 'packages/react'), libraryRoot: jinx });
-  const { components, hooks } = extract(lib, { entry: 'src/runtime.ts' });
+describe('экстрактор на опубликованном пакете Jinx UI из node_modules', () => {
+  const lib = createLibraryProgram({ packageRoot: jinx });
+  const { components, hooks } = extract(lib, { entry: 'dist/runtime.d.ts' });
   const byName = new Map(components.map((component) => [component.name, component]));
 
   it('находит все экспортированные компоненты рантайма', () => {
-    expect(components.length).toBeGreaterThanOrEqual(33);
+    expect(lib.mode).toBe('package');
+    expect(components.length).toBeGreaterThanOrEqual(40);
     expect(byName.has('JxButton')).toBe(true);
     expect(byName.has('JxToastViewport')).toBe(true);
     expect(byName.has('useJxToastQueue')).toBe(false);
   });
 
-  it('у JxButton три собственных пропса, остальное унаследовано от ButtonHTMLAttributes', () => {
+  it('у JxButton три собственных пропса: типы из .d.ts, значения по умолчанию и классы из скомпилированного .js', () => {
     const button = byName.get('JxButton');
     expect(button?.props.map((prop) => prop.name).sort()).toEqual(['iconOnly', 'size', 'variant']);
-    expect(button?.props.find((prop) => prop.name === 'variant')?.unionValues).toEqual(['"primary"', '"alt"', '"secondary"', '"ghost"', '"outline"', '"danger"']);
+    expect(button?.props.find((prop) => prop.name === 'variant')?.unionValues).toEqual(['"primary"', '"secondary"', '"ghost"', '"outline"', '"danger"']);
     expect(button?.props.find((prop) => prop.name === 'size')?.defaultValue).toBe("'md'");
     expect(button?.inheritsFrom).toEqual(['ButtonHTMLAttributes<HTMLButtonElement>']);
     expect(button?.cssClasses).toContain('jx-btn--danger');
-    expect(button?.file).toBe('packages/react/src/components/Button.tsx');
+    expect(button?.file).toBe('dist/components/Button.d.ts');
   });
 
   it('обязательные пропсы объектных типов помечаются как required', () => {
@@ -88,6 +89,13 @@ describe('экстрактор на настоящей библиотеке Jinx
   it('хуки попадают в отдельный список с сигнатурой', () => {
     const hook = hooks.find((candidate) => candidate.name === 'useControllableState');
     expect(hook?.signature).toMatch(/controlledValue/);
-    expect(hook?.file).toBe('packages/react/src/hooks/useControllableState.ts');
+    expect(hook?.file).toBe('dist/hooks/useControllableState.d.ts');
+  });
+
+  it('идёт за классами во внутренний компонент того же файла, которым рендерится экспортируемый', () => {
+    const calendar = byName.get('JxCalendar');
+    expect(calendar?.cssClasses).toEqual(expect.arrayContaining(['jx-calendar', 'jx-cal-grid', 'jx-cal-day--selected']));
+    const range = byName.get('JxDateRangePicker');
+    expect(range?.cssClasses).toEqual(expect.arrayContaining(['jx-daterange-field', 'jx-cal-day--range-start', 'jx-cal-day--in-range']));
   });
 });

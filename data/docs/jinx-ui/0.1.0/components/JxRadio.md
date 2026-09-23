@@ -3,7 +3,7 @@
 Радиокнопка с подписью. Внутри обычный `<input type="radio">`; варианты одной группы объединяются одинаковым `name`, выбранный задаётся через `checked` и `onChange`.
 
 Импорт: `import { JxRadio } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Radio.tsx:9`
+Источник: `dist/components/Radio.d.ts:6`
 Ключевые слова: radio, радиокнопка, один из нескольких, выбор варианта, тариф
 
 ## Сигнатура

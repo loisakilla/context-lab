@@ -1,6 +1,6 @@
 # jinx-ui (@jinx-ui/react@0.1.0)
 
-> Библиотека React-компонентов: 38 компонентов, 3 хуков, 35 CSS-токенов. Версия 0.1.0, коммит e141e2a.
+> Библиотека React-компонентов: 40 компонентов, 3 хуков, 34 CSS-токенов. Версия 0.1.0, коммит n/a.
 
 ## Как пользоваться
 
@@ -26,13 +26,15 @@
 - **JxButton** — Кнопка действия.
   `<JxButton iconOnly?: boolean = false; size?: JxButtonSize = 'md'; variant?: JxButtonVariant = 'primary' />` extends ButtonHTMLAttributes<HTMLButtonElement>
 - **JxCalendar** — Календарь на один месяц с выбором одной даты.
-  `<JxCalendar defaultValue?: Date | null; locale?: string = 'en-US'; monthFormatter?: (date: Date) => { month: string; year: string }; onValueChange?: (value: Date | null) => void; rangeHover?: { from: Date; to: Date } | null; value?: Date | null />` extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange">
+  `<JxCalendar defaultValue?: Date | null; locale?: string = 'en-US'; monthFormatter?: (date: Date) => { month: string; year: string; }; onValueChange?: (value: Date | null) => void; rangeHover?: { from: Date; to: Date; } | null; value?: Date | null />` extends Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue">
 - **JxCheckbox** — Флажок с подписью.
   `<JxCheckbox label?: ReactNode; wrapClassName?: string />` extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size">
 - **JxChip** — Компактная метка-кнопка для фильтров и быстрого выбора.
   `<JxChip active?: boolean = false; children?: ReactNode; onRemove?: () => void; removable?: boolean = false />` extends HTMLAttributes<HTMLSpanElement>
 - **JxCombobox** — Поле с автодополнением: пользователь печатает, список фильтруется, выбор одного значения.
-  `<JxCombobox options: JxComboboxOption[]; ariaLabel?: string; className?: string; defaultValue?: string; emptyText?: string = 'No matches. Try fewer letters.'; onValueChange?: (value: string) => void; placeholder?: string = 'Search...'; value?: string />`
+  `<JxCombobox options: JxComboboxOption[]; ariaLabel?: string; className?: string; clearLabel?: string = 'Clear search'; defaultValue?: string; emptyText?: string = 'No matches. Try fewer letters.'; onValueChange?: (value: string) => void; placeholder?: string = 'Search...'; value?: string />`
+- **JxDateRangePicker** — Выбор периода на календаре.
+  `<JxDateRangePicker defaultValue?: JxDateRange; fromLabel?: string = 'From'; locale?: string = 'en-US'; monthFormatter?: (date: Date) => { month: string; year: string; }; onValueChange?: (value: JxDateRange) => void; toLabel?: string = 'To'; value?: JxDateRange />` extends Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue">
 - **JxDivider** — Горизонтальный разделитель между блоками.
   `<JxDivider label?: ReactNode />` extends HTMLAttributes<HTMLDivElement>
 - **JxDrawer** — Боковая панель, выезжающая слева или справа поверх страницы, с ловушкой фокуса и закрытием по Escape.
@@ -49,6 +51,8 @@
   `<JxModal title: ReactNode; children?: ReactNode; className?: string; defaultOpen?: boolean = false; icon?: ReactNode; intent?: JxModalIntent = 'default'; message?: ReactNode; onOpenChange?: (open: boolean) => void; open?: boolean />`
 - **JxPagination** — Постраничная навигация с кнопками «назад» и «вперёд» и многоточиями для длинных списков.
   `<JxPagination total: number; defaultPage?: number; onPageChange?: (page: number) => void; page?: number; siblingCount?: number = 1 />` extends Omit<HTMLAttributes<HTMLElement>, "onChange">
+- **JxPasswordField** — Поле пароля с кнопкой «показать / скрыть».
+  `<JxPasswordField className?: string; errorText?: string; helperText?: string; hideLabel?: string = 'Hide password'; label?: string; required?: boolean; revealLabel?: string = 'Show password' />` extends Omit<InputHTMLAttributes<HTMLInputElement>, "type">
 - **JxProgress** — Горизонтальная полоса прогресса.
   `<JxProgress value: number; label?: string; max?: number = 100 />` extends HTMLAttributes<HTMLDivElement>
 - **JxProgressCircle** — Круговой индикатор прогресса для компактных мест: карточек, плиток, строк таблицы.
@@ -60,7 +64,7 @@
 - **JxSkeleton** — Заглушка на время загрузки: прямоугольник или круг с мерцанием на месте будущего содержимого.
   `<JxSkeleton circle?: boolean = false; height?: CSSProperties['height']; width?: CSSProperties['width'] />` extends HTMLAttributes<HTMLDivElement>
 - **JxSlider** — Ползунок для выбора числа в диапазоне: громкость, масштаб, бюджет.
-  `<JxSlider defaultValue?: number; label?: ReactNode; onValueChange?: (value: number) => void; showOutput?: boolean = true; unit?: string = ''; value?: number />` extends Omit<InputHTMLAttributes<HTMLInputElement>, "defaultValue" | "value" | "onChange" | "type">
+  `<JxSlider defaultValue?: number; label?: ReactNode; onValueChange?: (value: number) => void; showOutput?: boolean = true; unit?: string = ''; value?: number />` extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "value" | "onChange" | "defaultValue">
 - **JxSnip** — Инлайновый код внутри строки текста: имя пропса, путь файла, короткая команда.
   `<JxSnip children?: ReactNode />` extends HTMLAttributes<HTMLSpanElement>
 - **JxSnippet** — Блок кода или команды с кнопкой копирования.
@@ -91,17 +95,18 @@
 ## Хуки
 
 - `useControllableState<T>(controlledValue: T | undefined, defaultValue: T, onChange?: (value: T) => void): readonly [T, (nextValue: T) => void]`
-  Источник: `packages/react/src/hooks/useControllableState.ts:3`
+  Источник: `dist/hooks/useControllableState.d.ts:1`
 - `useDialogA11y({ isOpen, onClose, containerRef, initialFocusRef }: { isOpen: boolean; onClose: () => void; containerRef: RefObject<HTMLElement | null>; initialFocusRef: RefObject<HTMLElement | null>; }): void`
-  Источник: `packages/react/src/hooks/useDialogA11y.ts:26`
+  Источник: `dist/hooks/useDialogA11y.d.ts:2`
 - `useJxToastQueue(initial?: JxToastItem[]): { items: JxToastItem[]; push: (item: Omit<JxToastItem, "id">) => `${string}-${string}-${string}-${string}-${string}`; dismiss: (id: string) => void; clear: () => void; }`
-  Источник: `packages/react/src/components/Toast.tsx:127`
+  Источник: `dist/components/Toast.d.ts:24`
 
 ## Токены
 
-- color (21): --jx-accent, --jx-accent-2, --jx-accent-2-ink, --jx-accent-ink, --jx-accent-soft, --jx-bg, --jx-bg-2, --jx-border, --jx-border-2, --jx-danger, --jx-info, --jx-rule, --jx-success, --jx-surface, --jx-surface-2, --jx-surface-3, --jx-text, --jx-text-2, --jx-text-3, --jx-text-4, --jx-warning
+- color (19): --jx-accent, --jx-accent-ink, --jx-accent-soft, --jx-bg, --jx-bg-2, --jx-border, --jx-border-2, --jx-danger, --jx-info, --jx-rule, --jx-success, --jx-surface, --jx-surface-2, --jx-surface-3, --jx-text, --jx-text-2, --jx-text-3, --jx-text-4, --jx-warning
 - font (3): --jx-font-display, --jx-font-mono, --jx-font-sans
 - motion (2): --jx-ease, --jx-ease-out
+- other (1): --jx-edge
 - radius (6): --jx-r, --jx-r-lg, --jx-r-pill, --jx-r-sm, --jx-r-xl, --jx-r-xs
 - shadow (3): --jx-shadow, --jx-shadow-lg, --jx-shadow-sm
 
@@ -112,7 +117,7 @@
 Список раскрывающихся секций. Элементы описываются типом `JxAccordionItem`: `value`, `title`, `content`. По умолчанию открыта одна секция; `single={false}` разрешает несколько. Открытые секции задаются массивом `value`.
 
 Импорт: `import { JxAccordion } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Accordion.tsx:22`
+Источник: `dist/components/Accordion.d.ts:15`
 Ключевые слова: accordion, аккордеон, раскрывающиеся секции, faq, вопросы и ответы
 
 ## Сигнатура
@@ -157,7 +162,7 @@
 Встроенное в разметку сообщение с иконкой, заголовком и текстом. В отличие от `JxToast` не исчезает само и не требует очереди.
 
 Импорт: `import { JxAlert } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Alert.tsx:47`
+Источник: `dist/components/Alert.d.ts:9`
 Ключевые слова: alert, предупреждение, сообщение, ошибка, info, инлайн-уведомление, баннер
 
 ## Сигнатура
@@ -198,7 +203,7 @@
 Аватар пользователя: инициалы или изображение внутри круга. Тон задаёт цвет фона из токенов, `status` добавляет точку присутствия в углу.
 
 Импорт: `import { JxAvatar } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Avatar.tsx:26`
+Источник: `dist/components/Avatar.d.ts:10`
 Ключевые слова: avatar, аватар, пользователь, инициалы, фото профиля
 
 ## Сигнатура
@@ -216,11 +221,11 @@
 | `children` | `ReactNode` | нет |  | инициалы или изображение внутри аватара |
 | `size` | `"sm" \\| "md" \\| "lg"` | нет | `'md'` | размер: `sm`, `md`, `lg` |
 | `status` | `boolean` | нет | `false` | показать точку присутствия |
-| `tone` | `"alt" \\| "default" \\| "info" \\| "accent"` | нет | `'default'` | цветовой тон фона: `default`, `accent`, `alt`, `info` |
+| `tone` | `"default" \\| "info" \\| "accent"` | нет | `'default'` | цветовой тон фона: `default`, `accent`, `info` |
 
 ## CSS-классы
 
-`jx-avatar`, `jx-avatar--accent`, `jx-avatar--alt`, `jx-avatar--info`, `jx-avatar--lg`, `jx-avatar--sm`, `jx-avatar-status`
+`jx-avatar`, `jx-avatar--accent`, `jx-avatar--info`, `jx-avatar--lg`, `jx-avatar--sm`, `jx-avatar-status`
 
 ## Примеры
 
@@ -239,7 +244,7 @@
 Группа аватаров внахлёст: участники проекта, исполнители задачи, читатели документа. Принимает готовые `JxAvatar` и сдвигает их друг на друга.
 
 Импорт: `import { JxAvatarStack } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Avatar.tsx:42`
+Источник: `dist/components/Avatar.d.ts:14`
 Ключевые слова: avatar stack, группа аватаров, участники, наложение
 
 ## Сигнатура
@@ -268,7 +273,7 @@
 <JxAvatarStack>
   <JxAvatar>ГК</JxAvatar>
   <JxAvatar tone="info">АС</JxAvatar>
-  <JxAvatar tone="alt">МП</JxAvatar>
+  <JxAvatar tone="accent">МП</JxAvatar>
 </JxAvatarStack>
 ```
 
@@ -279,7 +284,7 @@
 Небольшая метка статуса или счётчика. Тон задаёт цвет из токенов, `dot` добавляет точку-индикатор перед текстом.
 
 Импорт: `import { JxBadge } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Badge.tsx:22`
+Источник: `dist/components/Badge.d.ts:8`
 Ключевые слова: badge, бейдж, статус, метка, счётчик, индикатор
 
 ## Сигнатура
@@ -296,11 +301,11 @@
 |---|---|---|---|---|
 | `children` | `ReactNode` | нет |  | текст метки |
 | `dot` | `boolean` | нет | `false` | показать точку-индикатор |
-| `tone` | `"alt" \\| "danger" \\| "default" \\| "warning" \\| "info" \\| "success" \\| "accent" \\| "solid"` | нет | `'default'` | цветовой тон: `default`, `accent`, `alt`, `success`, `warning`, `danger`, `info`, `solid` |
+| `tone` | `"danger" \\| "default" \\| "warning" \\| "info" \\| "success" \\| "accent" \\| "solid"` | нет | `'default'` | цветовой тон: `default`, `accent`, `success`, `warning`, `danger`, `info`, `solid` |
 
 ## CSS-классы
 
-`jx-badge`, `jx-badge--accent`, `jx-badge--alt`, `jx-badge--danger`, `jx-badge--dot`, `jx-badge--info`, `jx-badge--solid`, `jx-badge--success`, `jx-badge--warning`
+`jx-badge`, `jx-badge--accent`, `jx-badge--danger`, `jx-badge--dot`, `jx-badge--info`, `jx-badge--solid`, `jx-badge--success`, `jx-badge--warning`
 
 ## Примеры
 
@@ -318,7 +323,7 @@
 Хлебные крошки: путь от корня раздела до текущей страницы. Элемент без `href` считается текущим и ссылкой не становится.
 
 Импорт: `import { JxBreadcrumbs } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Breadcrumbs.tsx:15`
+Источник: `dist/components/Breadcrumbs.d.ts:10`
 Ключевые слова: breadcrumbs, хлебные крошки, навигация, путь, иерархия
 
 ## Сигнатура
@@ -361,7 +366,7 @@
 Кнопка действия. Шесть визуальных вариантов и три размера, всё остальное берётся из атрибутов `<button>`: `type`, `disabled`, `onClick`, `aria-label`. По умолчанию `type="button"`, поэтому для отправки формы задавайте `type="submit"` явно.
 
 Импорт: `import { JxButton } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Button.tsx:28`
+Источник: `dist/components/Button.d.ts:9`
 Ключевые слова: кнопка, button, действие, submit, отправить, сохранить, удалить, cta
 
 ## Сигнатура
@@ -378,11 +383,11 @@
 |---|---|---|---|---|
 | `iconOnly` | `boolean` | нет | `false` | квадратная кнопка под одну иконку; обязательно добавьте `aria-label` |
 | `size` | `"sm" \\| "md" \\| "lg"` | нет | `'md'` | размер кнопки, `md` по умолчанию |
-| `variant` | `"primary" \\| "alt" \\| "secondary" \\| "ghost" \\| "outline" \\| "danger"` | нет | `'primary'` | визуальный стиль; `primary` для главного действия, `danger` для разрушительного, `outline` и `ghost` для второстепенных |
+| `variant` | `"primary" \\| "secondary" \\| "ghost" \\| "outline" \\| "danger"` | нет | `'primary'` | визуальный стиль; `primary` для главного действия, `danger` для разрушительного, `outline` и `ghost` для второстепенных |
 
 ## CSS-классы
 
-`jx-btn`, `jx-btn--alt`, `jx-btn--danger`, `jx-btn--ghost`, `jx-btn--icon`, `jx-btn--lg`, `jx-btn--outline`, `jx-btn--primary`, `jx-btn--secondary`, `jx-btn--sm`
+`jx-btn`, `jx-btn--danger`, `jx-btn--ghost`, `jx-btn--icon`, `jx-btn--lg`, `jx-btn--outline`, `jx-btn--primary`, `jx-btn--secondary`, `jx-btn--sm`
 
 ## Примеры
 
@@ -407,34 +412,34 @@
 
 # JxCalendar
 
-Календарь на один месяц с выбором одной даты. Значение — `Date` или `null`, управляемое через `value` и `onValueChange`. Диапазон подсвечивается через `rangeHover`, а подпись месяца форматируется `monthFormatter` или локалью.
+Календарь на один месяц с выбором одной даты. Значение — `Date` или `null`, управляемое через `value` и `onValueChange`. Диапазон подсвечивается через `rangeHover`, а подпись месяца форматируется `monthFormatter` или локалью. Чтобы пользователь сам выбирал период, берите `JxDateRangePicker`: `rangeHover` только показывает готовый диапазон. С клавиатуры: стрелки ходят по дням и неделям, `Home` и `End` — к краям недели, `PageUp` и `PageDown` — по месяцам. Доступное имя каждого дня — полная дата, а не число.
 
 Импорт: `import { JxCalendar } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Calendar.tsx:59`
+Источник: `dist/components/Calendar.d.ts:32`
 Ключевые слова: календарь, calendar, дата, выбор даты, datepicker, период, месяц
 
 ## Сигнатура
 
 ```tsx
-<JxCalendar defaultValue?: Date | null; locale?: string = 'en-US'; monthFormatter?: (date: Date) => { month: string; year: string }; onValueChange?: (value: Date | null) => void; rangeHover?: { from: Date; to: Date } | null; value?: Date | null />
+<JxCalendar defaultValue?: Date | null; locale?: string = 'en-US'; monthFormatter?: (date: Date) => { month: string; year: string; }; onValueChange?: (value: Date | null) => void; rangeHover?: { from: Date; to: Date; } | null; value?: Date | null />
 ```
 
-Наследует `Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange">`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+Наследует `Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue">`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
 
 ## Пропсы
 
 | Проп | Тип | Обязателен | По умолчанию | Описание |
 |---|---|---|---|---|
 | `defaultValue` | `Date \| null` | нет |  | начальная дата |
-| `locale` | `string` | нет | `'en-US'` | локаль для названий месяцев и дней недели, `en-US` по умолчанию |
-| `monthFormatter` | `(date: Date) => { month: string; year: string }` | нет |  | функция форматирования подписи месяца и года |
+| `locale` | `string` | нет | `'en-US'` | локаль для названия месяца и доступных имён дней, `en-US` по умолчанию; однобуквенные подписи дней недели не локализуются |
+| `monthFormatter` | `(date: Date) => { month: string; year: string; }` | нет |  | функция форматирования подписи месяца и года |
 | `onValueChange` | `(value: Date \| null) => void` | нет |  | вызывается с выбранной датой или `null` |
-| `rangeHover` | `{ from: Date; to: Date } \| null` | нет |  | подсветка диапазона `{ from, to }` |
+| `rangeHover` | `{ from: Date; to: Date; } \| null` | нет |  | подсветка диапазона `{ from, to }` |
 | `value` | `Date \| null` | нет |  | выбранная дата в управляемом режиме |
 
 ## CSS-классы
 
-`jx-cal-day`, `jx-cal-day--in-range`, `jx-cal-day--out`, `jx-cal-day--selected`, `jx-cal-day--today`, `jx-cal-dow`, `jx-cal-grid`, `jx-cal-head`, `jx-cal-month`, `jx-cal-nav`, `jx-calendar`
+`jx-cal-day`, `jx-cal-day--in-range`, `jx-cal-day--out`, `jx-cal-day--range-end`, `jx-cal-day--range-start`, `jx-cal-day--selected`, `jx-cal-day--today`, `jx-cal-dow`, `jx-cal-grid`, `jx-cal-head`, `jx-cal-month`, `jx-cal-nav`, `jx-calendar`
 
 ## Примеры
 
@@ -451,7 +456,7 @@
 Флажок с подписью. Внутри обычный `<input type="checkbox">`: `checked`, `onChange`, `name`, `disabled` передаются напрямую. Для взаимоисключающего выбора используйте `JxRadio`, для настроек «вкл/выкл» — `JxSwitch`.
 
 Импорт: `import { JxCheckbox } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Checkbox.tsx:9`
+Источник: `dist/components/Checkbox.d.ts:6`
 Ключевые слова: checkbox, чекбокс, флажок, согласие, выбрать несколько, галочка
 
 ## Сигнатура
@@ -492,7 +497,7 @@
 Компактная метка-кнопка для фильтров и быстрого выбора. Может быть активной и удаляемой; клик обрабатывается через обычный `onClick`, так как компонент наследует атрибуты `<span>`.
 
 Импорт: `import { JxChip } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Chip.tsx:11`
+Источник: `dist/components/Chip.d.ts:8`
 Ключевые слова: chip, чип, фильтр, быстрый выбор, период, удаляемая метка
 
 ## Сигнатура
@@ -537,13 +542,13 @@
 Поле с автодополнением: пользователь печатает, список фильтруется, выбор одного значения. Опции `JxComboboxOption`: `value`, `label`, необязательные `subLabel` и `icon`. Для множественного выбора тегов используйте `JxTagInput`.
 
 Импорт: `import { JxCombobox } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Combobox.tsx:24`
+Источник: `dist/components/Combobox.d.ts:19`
 Ключевые слова: combobox, автодополнение, поиск по списку, autocomplete, подсказки, поиск
 
 ## Сигнатура
 
 ```tsx
-<JxCombobox options: JxComboboxOption[]; ariaLabel?: string; className?: string; defaultValue?: string; emptyText?: string = 'No matches. Try fewer letters.'; onValueChange?: (value: string) => void; placeholder?: string = 'Search...'; value?: string />
+<JxCombobox options: JxComboboxOption[]; ariaLabel?: string; className?: string; clearLabel?: string = 'Clear search'; defaultValue?: string; emptyText?: string = 'No matches. Try fewer letters.'; onValueChange?: (value: string) => void; placeholder?: string = 'Search...'; value?: string />
 ```
 
 ## Пропсы
@@ -553,6 +558,7 @@
 | `options` | `JxComboboxOption[]` | да |  | список опций `{ value, label, subLabel?, icon? }` |
 | `ariaLabel` | `string` | нет |  | доступное имя поля, если нет видимой подписи |
 | `className` | `string` | нет |  | дополнительный класс корневого элемента |
+| `clearLabel` | `string` | нет | `'Clear search'` | доступное имя кнопки очистки; кнопка появляется, когда в поле есть текст, и возвращает фокус в поле |
 | `defaultValue` | `string` | нет |  | начальное значение |
 | `emptyText` | `string` | нет | `'No matches. Try fewer letters.'` | текст, когда фильтр ничего не нашёл |
 | `onValueChange` | `(value: string) => void` | нет |  | вызывается с новым значением при выборе |
@@ -561,7 +567,7 @@
 
 ## CSS-классы
 
-`jx-combobox`, `jx-combobox-empty`, `jx-combobox-input`, `jx-combobox-list`, `jx-combobox-option`, `jx-combobox-option-sub`
+`jx-combobox`, `jx-combobox-clear`, `jx-combobox-empty`, `jx-combobox-input`, `jx-combobox-list`, `jx-combobox-option`, `jx-combobox-option-sub`
 
 ## Примеры
 
@@ -580,12 +586,63 @@
 
 ---
 
+# JxDateRangePicker
+
+Выбор периода на календаре. Первый клик задаёт начало, второй — конец; если второй день раньше первого, границы меняются местами сами. Пока конец не выбран, наведение подсвечивает будущий промежуток. Значение — объект `{ from, to }`, где любая граница может быть `null`, управляемый через `value` и `onValueChange`. Над сеткой показаны обе даты и кнопка сброса, под сеткой — текстовый статус для скринридера. Клавиатура общая с `JxCalendar`: стрелки ходят по дням и неделям, `Home` и `End` — к краям недели, `PageUp` и `PageDown` — по месяцам, фокус переходит через границу месяца. Названия дней недели не локализуются — `locale` влияет на месяц и на подписи дат.
+
+Импорт: `import { JxDateRangePicker } from '@jinx-ui/react'`  
+Источник: `dist/components/Calendar.d.ts:33`
+Ключевые слова: диапазон дат, период, date range, от и до, с по, выбор периода, отпуск, бронирование, отчёт за период
+
+## Сигнатура
+
+```tsx
+<JxDateRangePicker defaultValue?: JxDateRange; fromLabel?: string = 'From'; locale?: string = 'en-US'; monthFormatter?: (date: Date) => { month: string; year: string; }; onValueChange?: (value: JxDateRange) => void; toLabel?: string = 'To'; value?: JxDateRange />
+```
+
+Наследует `Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue">`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `defaultValue` | `JxDateRange` | нет |  | начальный период |
+| `fromLabel` | `string` | нет | `'From'` | подпись поля начала, `From` по умолчанию |
+| `locale` | `string` | нет | `'en-US'` | локаль для названия месяца и подписей дат, `en-US` по умолчанию |
+| `monthFormatter` | `(date: Date) => { month: string; year: string; }` | нет |  | функция форматирования подписи месяца и года |
+| `onValueChange` | `(value: JxDateRange) => void` | нет |  | вызывается с новым `{ from, to }` после каждого клика; пока выбрано только начало, `to` равно `null` |
+| `toLabel` | `string` | нет | `'To'` | подпись поля конца, `To` по умолчанию |
+| `value` | `JxDateRange` | нет |  | выбранный период `{ from, to }` в управляемом режиме |
+
+## CSS-классы
+
+`jx-cal-day`, `jx-cal-day--in-range`, `jx-cal-day--out`, `jx-cal-day--range-end`, `jx-cal-day--range-start`, `jx-cal-day--selected`, `jx-cal-day--today`, `jx-cal-dow`, `jx-cal-grid`, `jx-cal-head`, `jx-cal-month`, `jx-cal-nav`, `jx-daterange-arrow`, `jx-daterange-clear`, `jx-daterange-field`, `jx-daterange-field-label`, `jx-daterange-field-value`, `jx-daterange-fields`, `jx-daterange-status`
+
+## Примеры
+
+### Период отчёта
+
+```tsx
+const [range, setRange] = useState<JxDateRange>({ from: null, to: null });
+
+<JxDateRangePicker locale="ru-RU" fromLabel="С" toLabel="По" value={range} onValueChange={setRange} />
+```
+
+### Кнопка активна только при выбранном периоде
+
+```tsx
+<JxDateRangePicker value={range} onValueChange={setRange} />
+<JxButton variant="primary" disabled={!range.from || !range.to}>Построить отчёт</JxButton>
+```
+
+---
+
 # JxDivider
 
 Горизонтальный разделитель между блоками. С подписью превращается в заголовок секции с линиями по бокам.
 
 Импорт: `import { JxDivider } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Divider.tsx:8`
+Источник: `dist/components/Divider.d.ts:5`
 Ключевые слова: divider, разделитель, линия, секция
 
 ## Сигнатура
@@ -621,7 +678,7 @@
 Боковая панель, выезжающая слева или справа поверх страницы, с ловушкой фокуса и закрытием по Escape. Управляется парой `open` и `onOpenChange`; содержимое передаётся как `children`.
 
 Импорт: `import { JxDrawer } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Drawer.tsx:20`
+Источник: `dist/components/Drawer.d.ts:12`
 Ключевые слова: drawer, боковая панель, шторка, sidebar, выезжающая панель, меню навигации, фильтры
 
 ## Сигнатура
@@ -640,7 +697,7 @@
 | `defaultOpen` | `boolean` | нет | `false` | начальное состояние в неуправляемом режиме |
 | `onOpenChange` | `(open: boolean) => void` | нет |  | вызывается с новым состоянием при закрытии |
 | `open` | `boolean` | нет |  | открыта ли панель в управляемом режиме |
-| `side` | `"left" \\| "right"` | нет | `'right'` | с какой стороны выезжает, `right` по умолчанию |
+| `side` | `"right" \\| "left"` | нет | `'right'` | с какой стороны выезжает, `right` по умолчанию |
 
 ## CSS-классы
 
@@ -670,7 +727,7 @@
 Пустое состояние списка или раздела: что здесь появится и что для этого сделать. Ставьте вместо пустой таблицы или нулевого счётчика.
 
 Импорт: `import { JxEmptyState } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/EmptyState.tsx:18`
+Источник: `dist/components/EmptyState.d.ts:8`
 Ключевые слова: empty state, пустой экран, нет данных, заглушка, первый запуск
 
 ## Сигнатура
@@ -713,7 +770,7 @@
 Текстовое поле с подписью, подсказкой и текстом ошибки. Само поле — обычный `<input>`, поэтому `value`, `onChange`, `placeholder`, `type`, `name` и `disabled` передаются напрямую.
 
 Импорт: `import { JxInputField } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Fields.tsx:17`
+Источник: `dist/components/Fields.d.ts:12`
 Ключевые слова: поле ввода, input, текстовое поле, форма, имя, email, телефон, ошибка валидации
 
 ## Сигнатура
@@ -767,7 +824,7 @@
 Клавиша в тексте: обозначение горячих клавиш и сочетаний. Для сочетания ставьте несколько элементов подряд.
 
 Импорт: `import { JxKbd } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Kbd.tsx:8`
+Источник: `dist/components/Kbd.d.ts:5`
 Ключевые слова: kbd, клавиша, горячие клавиши, сочетание, shortcut
 
 ## Сигнатура
@@ -805,7 +862,7 @@
 Вертикальное меню действий. Пункты описываются массивом `JxMenuItem`: обычный пункт с `label` и `onSelect`, разделитель `{ type: 'divider' }` и подпись группы `{ type: 'label', label }`. Опасные действия помечаются `danger`, недоступные — `disabled`.
 
 Импорт: `import { JxMenu } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Menu.tsx:18`
+Источник: `dist/components/Menu.d.ts:14`
 Ключевые слова: menu, меню, список действий, навигация, контекстное меню, пункты
 
 ## Сигнатура
@@ -849,7 +906,7 @@
 Модальное окно с ловушкой фокуса и закрытием по Escape. Управляется парой `open` и `onOpenChange`; кнопки действий передаются как `children`. У окна нет собственной кнопки закрытия, поэтому в `children` всегда должна быть кнопка, которая вызывает `onOpenChange(false)`.
 
 Импорт: `import { JxModal } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Modal.tsx:67`
+Источник: `dist/components/Modal.d.ts:14`
 Ключевые слова: модальное окно, модалка, диалог, dialog, подтверждение, confirm, удалить, popup
 
 ## Сигнатура
@@ -900,7 +957,7 @@
 Постраничная навигация с кнопками «назад» и «вперёд» и многоточиями для длинных списков. Страницы нумеруются с единицы; `total` — это количество страниц, а не элементов, поэтому его считают заранее: `Math.ceil(items.length / pageSize)`.
 
 Импорт: `import { JxPagination } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Pagination.tsx:41`
+Источник: `dist/components/Pagination.d.ts:9`
 Ключевые слова: pagination, пагинация, страницы, постраничная навигация, таблица, список
 
 ## Сигнатура
@@ -939,12 +996,74 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 
 ---
 
+# JxPasswordField
+
+Поле пароля с кнопкой «показать / скрыть». Кнопка переключает `type` между `password` и `text` и сообщает своё состояние через `aria-pressed`, поэтому своё переключение видимости писать не нужно. Само поле — обычный `<input>`: `value`, `onChange`, `name`, `autoComplete` и `disabled` передаются напрямую, а `type` задать нельзя — им управляет компонент. По умолчанию стоит `autoComplete="current-password"`; для регистрации передайте `new-password`.
+
+Импорт: `import { JxPasswordField } from '@jinx-ui/react'`  
+Источник: `dist/components/Fields.d.ts:17`
+Ключевые слова: пароль, password, поле пароля, показать пароль, скрыть пароль, вход, регистрация, подтверждение пароля
+
+## Сигнатура
+
+```tsx
+<JxPasswordField className?: string; errorText?: string; helperText?: string; hideLabel?: string = 'Hide password'; label?: string; required?: boolean; revealLabel?: string = 'Show password' />
+```
+
+Наследует `Omit<InputHTMLAttributes<HTMLInputElement>, "type">`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+
+## Пропсы
+
+| Проп | Тип | Обязателен | По умолчанию | Описание |
+|---|---|---|---|---|
+| `className` | `string` | нет |  | дополнительный класс корневого элемента |
+| `errorText` | `string` | нет |  | текст ошибки; при наличии поле подсвечивается как невалидное |
+| `helperText` | `string` | нет |  | подсказка под полем, например требования к длине |
+| `hideLabel` | `string` | нет | `'Hide password'` | доступное имя кнопки, пока пароль виден |
+| `label` | `string` | нет |  | подпись над полем |
+| `required` | `boolean` | нет |  | помечает поле обязательным звёздочкой и атрибутом `required` |
+| `revealLabel` | `string` | нет | `'Show password'` | доступное имя кнопки, пока пароль скрыт |
+
+## CSS-классы
+
+`jx-field`, `jx-field--error`, `jx-input`, `jx-input-action`, `jx-input-error`, `jx-input-group`, `jx-input-help`, `jx-label`, `jx-label-req`
+
+## Примеры
+
+### Вход
+
+```tsx
+<JxPasswordField
+  label="Пароль"
+  required
+  value={password}
+  onChange={(event) => setPassword(event.target.value)}
+  revealLabel="Показать пароль"
+  hideLabel="Скрыть пароль"
+/>
+```
+
+### Регистрация с подтверждением
+
+```tsx
+<JxPasswordField label="Новый пароль" autoComplete="new-password" helperText="Не короче 12 символов" value={next} onChange={(event) => setNext(event.target.value)} />
+<JxPasswordField
+  label="Повторите пароль"
+  autoComplete="new-password"
+  value={repeat}
+  onChange={(event) => setRepeat(event.target.value)}
+  errorText={repeat && repeat !== next ? 'Пароли не совпадают' : undefined}
+/>
+```
+
+---
+
 # JxProgress
 
 Горизонтальная полоса прогресса. Значение сравнивается с `max`, подпись выводится рядом с полосой.
 
 Импорт: `import { JxProgress } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Progress.tsx:11`
+Источник: `dist/components/Progress.d.ts:7`
 Ключевые слова: progress, прогресс, полоса загрузки, заполнение, процент выполнения
 
 ## Сигнатура
@@ -982,7 +1101,7 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 Круговой индикатор прогресса для компактных мест: карточек, плиток, строк таблицы. Для полосы во всю ширину есть `JxProgress`.
 
 Импорт: `import { JxProgressCircle } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Progress.tsx:40`
+Источник: `dist/components/Progress.d.ts:13`
 Ключевые слова: progress circle, круговой прогресс, индикатор, проценты, загрузка
 
 ## Сигнатура
@@ -1020,7 +1139,7 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 Радиокнопка с подписью. Внутри обычный `<input type="radio">`; варианты одной группы объединяются одинаковым `name`, выбранный задаётся через `checked` и `onChange`.
 
 Импорт: `import { JxRadio } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Radio.tsx:9`
+Источник: `dist/components/Radio.d.ts:6`
 Ключевые слова: radio, радиокнопка, один из нескольких, выбор варианта, тариф
 
 ## Сигнатура
@@ -1060,7 +1179,7 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 Выпадающий список с одним выбранным значением, клавиатурной навигацией и группами. Управляемый через `value` и `onValueChange` или неуправляемый через `defaultValue`. Опции описываются массивом `JxSelectOption`: `value`, `label`, необязательные `meta`, `group`, `disabled`.
 
 Импорт: `import { JxSelect } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Select.tsx:45`
+Источник: `dist/components/Select.d.ts:17`
 Ключевые слова: select, выпадающий список, выбор, дропдаун, dropdown, язык, статус, категория
 
 ## Сигнатура
@@ -1122,7 +1241,7 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 Заглушка на время загрузки: прямоугольник или круг с мерцанием на месте будущего содержимого. Размеры задавайте такими же, как у настоящего блока, иначе вёрстка дёрнется.
 
 Импорт: `import { JxSkeleton } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Skeleton.tsx:10`
+Источник: `dist/components/Skeleton.d.ts:7`
 Ключевые слова: skeleton, скелетон, загрузка, заглушка, плейсхолдер
 
 ## Сигнатура
@@ -1163,7 +1282,7 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 Ползунок для выбора числа в диапазоне: громкость, масштаб, бюджет. Управляемый через `value` и `onValueChange`, неуправляемый — через `defaultValue`. Границы и шаг задаются обычными атрибутами `input[type=range]`: `min`, `max`, `step`; по умолчанию это диапазон от 0 до 100 с шагом 1.
 
 Импорт: `import { JxSlider } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Slider.tsx:15`
+Источник: `dist/components/Slider.d.ts:10`
 Ключевые слова: slider, слайдер, ползунок, диапазон, громкость, значение
 
 ## Сигнатура
@@ -1172,7 +1291,7 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 <JxSlider defaultValue?: number; label?: ReactNode; onValueChange?: (value: number) => void; showOutput?: boolean = true; unit?: string = ''; value?: number />
 ```
 
-Наследует `Omit<InputHTMLAttributes<HTMLInputElement>, "defaultValue" | "value" | "onChange" | "type">`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
+Наследует `Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "value" | "onChange" | "defaultValue">`: стандартные DOM-пропсы (className, onClick, aria-*) доступны, но здесь не перечислены.
 
 ## Пропсы
 
@@ -1204,7 +1323,7 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 Инлайновый код внутри строки текста: имя пропса, путь файла, короткая команда. Для многострочного кода с копированием есть `JxSnippet`.
 
 Импорт: `import { JxSnip } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Snippet.tsx:66`
+Источник: `dist/components/Snippet.d.ts:14`
 Ключевые слова: snip, инлайновый код, моноширинный, имя пропса
 
 ## Сигнатура
@@ -1242,7 +1361,7 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 Блок кода или команды с кнопкой копирования. `prompt` рисует приглашение терминала, `block` разворачивает сниппет на всю ширину.
 
 Импорт: `import { JxSnippet } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Snippet.tsx:27`
+Источник: `dist/components/Snippet.d.ts:10`
 Ключевые слова: snippet, код, команда, копировать, терминал
 
 ## Сигнатура
@@ -1261,11 +1380,11 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 | `children` | `ReactNode` | нет |  | текст команды или кода |
 | `copyText` | `string` | нет |  | что копировать, если это отличается от видимого текста |
 | `prompt` | `ReactNode` | нет |  | приглашение перед командой, например `$` |
-| `tone` | `"alt" \\| "default" \\| "info"` | нет | `'default'` | тон блока: `default`, `accent`, `alt`, `info` |
+| `tone` | `"default" \\| "info"` | нет | `'default'` | тон знака приглашения: `default` — цвет акцента, `info` — информационный синий |
 
 ## CSS-классы
 
-`jx-snippet`, `jx-snippet--alt`, `jx-snippet--block`, `jx-snippet--info`, `jx-snippet-code`, `jx-snippet-copy`, `jx-snippet-prompt`
+`jx-snippet`, `jx-snippet--block`, `jx-snippet--info`, `jx-snippet-code`, `jx-snippet-copy`, `jx-snippet-prompt`
 
 ## Примеры
 
@@ -1284,7 +1403,7 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 Индикатор неопределённой загрузки. Если известно, сколько осталось, берите `JxProgress` или `JxProgressCircle`, а если грузится содержимое блока — `JxSkeleton`.
 
 Импорт: `import { JxSpinner } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Spinner.tsx:9`
+Источник: `dist/components/Spinner.d.ts:6`
 Ключевые слова: spinner, спиннер, загрузка, ожидание, индикатор
 
 ## Сигнатура
@@ -1321,7 +1440,7 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 Индикатор шагов для пошаговых форм. Показывает пройденные, текущий и будущие шаги; переключение шагов делает родитель. Шаги описываются массивом `JxStep` с полем `label`, `current` — индекс текущего шага с нуля.
 
 Импорт: `import { JxStepper } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Stepper.tsx:19`
+Источник: `dist/components/Stepper.d.ts:9`
 Ключевые слова: stepper, шаги, пошаговая форма, мастер, wizard, прогресс по шагам
 
 ## Сигнатура
@@ -1362,7 +1481,7 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 Переключатель «включено/выключено» с подписью. Внутри обычный `<input type="checkbox">`, поэтому состояние задаётся через `checked` и `onChange`, а имя для формы через `name`.
 
 Импорт: `import { JxSwitch } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Switch.tsx:9`
+Источник: `dist/components/Switch.d.ts:6`
 Ключевые слова: switch, переключатель, тумблер, включить, выключить, уведомления, настройка
 
 ## Сигнатура
@@ -1403,7 +1522,7 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 Стилизованная таблица. Собственных пропсов нет: это обычный `<table>` с классом библиотеки, поэтому структура `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>` пишется руками, а пагинация делается отдельно через `JxPagination`.
 
 Импорт: `import { JxTable } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Table.tsx:6`
+Источник: `dist/components/Table.d.ts:3`
 Ключевые слова: table, таблица, список пользователей, строки, колонки, данные
 
 ## Сигнатура
@@ -1454,7 +1573,7 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 Вкладки с клавиатурной навигацией стрелками. Компонент рендерит только заголовки вкладок: содержимое активной вкладки показывает родитель по текущему `value`. Элементы описываются типом `JxTabItem`: `value` и `label`.
 
 Импорт: `import { JxTabs } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Tabs.tsx:21`
+Источник: `dist/components/Tabs.d.ts:14`
 Ключевые слова: tabs, вкладки, табы, переключение разделов, сегментированный контроль
 
 ## Сигнатура
@@ -1505,7 +1624,7 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 Поле для набора тегов: пользователь вводит текст, Enter добавляет тег, Backspace удаляет последний. Значение — массив строк, управляемое через `value` и `onValueChange` или неуправляемое через `defaultValue`.
 
 Импорт: `import { JxTagInput } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/TagInput.tsx:16`
+Источник: `dist/components/TagInput.d.ts:9`
 Ключевые слова: теги, tags, метки, множественный ввод, чипы, ключевые слова
 
 ## Сигнатура
@@ -1544,7 +1663,7 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 Многострочное поле с подписью, подсказкой и текстом ошибки. Принимает все атрибуты `<textarea>`: `rows`, `value`, `onChange`, `placeholder`, `maxLength`.
 
 Импорт: `import { JxTextareaField } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Fields.tsx:65`
+Источник: `dist/components/Fields.d.ts:19`
 Ключевые слова: textarea, многострочное поле, комментарий, описание, сообщение
 
 ## Сигнатура
@@ -1591,7 +1710,7 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 Одно всплывающее уведомление с заголовком, текстом и кнопкой закрытия. В приложении обычно не рендерится напрямую: очередь ведёт хук `useJxToastQueue`, а список показывает `JxToastViewport`.
 
 Импорт: `import { JxToast } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Toast.tsx:57`
+Источник: `dist/components/Toast.d.ts:17`
 Ключевые слова: toast, уведомление, всплывающее сообщение, notification, снэкбар, успешно сохранено
 
 ## Сигнатура
@@ -1629,7 +1748,7 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 Область, в которой показывается очередь уведомлений. Работает в паре с хуком `useJxToastQueue`: хук хранит список `items` и даёт `push` и `dismiss`, компонент рендерит его в выбранном углу экрана. Элементы очереди описываются типом `JxToastItem`: `id`, `title`, необязательные `message`, `variant`, `duration`.
 
 Импорт: `import { JxToastViewport } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Toast.tsx:89`
+Источник: `dist/components/Toast.d.ts:23`
 Ключевые слова: toast, очередь уведомлений, notifications, показать уведомление после отправки, viewport
 
 ## Сигнатура
@@ -1645,6 +1764,10 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 | `items` | `JxToastItem[]` | да |  | текущая очередь уведомлений |
 | `onDismiss` | `(id: string) => void` | да |  | вызывается с `id` уведомления, которое нужно убрать |
 | `position` | `"bottom-left" \\| "bottom-right" \\| "top-right" \\| "top-left"` | нет | `'bottom-left'` | угол экрана, `bottom-left` по умолчанию |
+
+## CSS-классы
+
+`jx-toast`, `jx-toast-body`, `jx-toast-close`, `jx-toast-icon`, `jx-toast-msg`, `jx-toast-title`
 
 ## Примеры
 
@@ -1678,7 +1801,7 @@ function SubscribeForm() {
 Сегментированный переключатель на два-три коротких варианта: режим отображения, тема, период. Для большего числа вариантов берите `JxSelect`, для навигации между разделами — `JxTabs`.
 
 Импорт: `import { JxToggle } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Toggle.tsx:19`
+Источник: `dist/components/Toggle.d.ts:12`
 Ключевые слова: toggle, переключатель, сегментированный контрол, режим, выбор одного
 
 ## Сигнатура
@@ -1725,7 +1848,7 @@ function SubscribeForm() {
 Всплывающая подсказка к элементу: появляется при наведении и фокусе. Подсказка дополняет интерфейс, но не заменяет подпись — важный текст выносите на страницу.
 
 Импорт: `import { JxTooltip } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Tooltip.tsx:9`
+Источник: `dist/components/Tooltip.d.ts:6`
 Ключевые слова: tooltip, подсказка, всплывающая подсказка, пояснение, hover
 
 ## Сигнатура
@@ -1767,26 +1890,24 @@ function SubscribeForm() {
 
 | Токен | Значение | Переопределения |
 |---|---|---|
-| `--jx-accent` | `#c9a3ff` | `[data-theme="light"]`: `#6f3fcc`; `[data-style="brutal"]`: `#1a1726`; `[data-style="brutal"][data-theme="dark"]`: `#f5ff3d` |
-| `--jx-accent-2` | `#d4ff3d` | `[data-theme="light"]`: `#859e00` |
-| `--jx-accent-2-ink` | `#0c0a14` | `[data-theme="light"]`: `#14180a` |
-| `--jx-accent-ink` | `#0c0a14` | `[data-theme="light"]`: `#fff`; `[data-style="brutal"]`: `#f5ff3d`; `[data-style="brutal"][data-theme="dark"]`: `#1a1726` |
-| `--jx-accent-soft` | `rgba(201, 163, 255, 0.14)` | `[data-theme="light"]`: `rgba(111, 63, 204, 0.12)`; `[data-style="brutal"]`: `rgba(26, 23, 38, 0.08)`; `[data-style="brutal"][data-theme="dark"]`: `rgba(245, 255, 61, 0.14)` |
-| `--jx-bg` | `#0c0a14` | `[data-theme="light"]`: `#f5f2e9`; `[data-style="brutal"]`: `#f5f2e9`; `[data-style="brutal"][data-theme="dark"]`: `#1a1726` |
-| `--jx-bg-2` | `#0f0d18` | `[data-theme="light"]`: `#ece8dc`; `[data-style="brutal"]`: `#ece8dc`; `[data-style="brutal"][data-theme="dark"]`: `#0c0a14` |
-| `--jx-border` | `#221c30` | `[data-theme="light"]`: `#ddd6c4`; `[data-style="brutal"]`: `#1a1726`; `[data-style="brutal"][data-theme="dark"]`: `#f5ff3d` |
-| `--jx-border-2` | `#3a3150` | `[data-theme="light"]`: `#b8ae96`; `[data-style="brutal"]`: `#1a1726`; `[data-style="brutal"][data-theme="dark"]`: `#f5ff3d` |
+| `--jx-accent` | `#c9a3ff` | `[data-theme="light"]`: `#6f3fcc` |
+| `--jx-accent-ink` | `#0c0a14` | `[data-theme="light"]`: `#ffffff` |
+| `--jx-accent-soft` | `rgba(201, 163, 255, 0.14)` | `[data-theme="light"]`: `rgba(111, 63, 204, 0.12)` |
+| `--jx-bg` | `#0c0a14` | `[data-theme="light"]`: `#f5f2e9` |
+| `--jx-bg-2` | `#0f0d18` | `[data-theme="light"]`: `#ece8dc` |
+| `--jx-border` | `#221c30` | `[data-theme="light"]`: `#ddd6c4`; `[data-style="brutal"]`: `var(--jx-edge)` |
+| `--jx-border-2` | `#3a3150` | `[data-theme="light"]`: `#b8ae96`; `[data-style="brutal"]`: `var(--jx-edge)` |
 | `--jx-danger` | `#ff5470` | `[data-theme="light"]`: `#b01834` |
 | `--jx-info` | `#79c8ff` | `[data-theme="light"]`: `#17518f` |
-| `--jx-rule` | `#1c1828` | `[data-theme="light"]`: `#ddd6c4`; `[data-style="brutal"]`: `#1a1726`; `[data-style="brutal"][data-theme="dark"]`: `#f5ff3d` |
+| `--jx-rule` | `#1c1828` | `[data-theme="light"]`: `#ddd6c4`; `[data-style="brutal"]`: `var(--jx-edge)` |
 | `--jx-success` | `#6bd97a` | `[data-theme="light"]`: `#176034` |
-| `--jx-surface` | `#15121f` | `[data-theme="light"]`: `#ffffff`; `[data-style="brutal"]`: `#ffffff`; `[data-style="brutal"][data-theme="dark"]`: `#1a1726` |
-| `--jx-surface-2` | `#1c1828` | `[data-theme="light"]`: `#f5f1e6`; `[data-style="brutal"]`: `#f0ebdb`; `[data-style="brutal"][data-theme="dark"]`: `#0c0a14` |
-| `--jx-surface-3` | `#2a2438` | `[data-theme="light"]`: `#e6e0d0`; `[data-style="brutal"]`: `#ddd6c4` |
-| `--jx-text` | `#f0ecf5` | `[data-theme="light"]`: `#1a1726`; `[data-style="brutal"]`: `#1a1726`; `[data-style="brutal"][data-theme="dark"]`: `#f5ff3d` |
-| `--jx-text-2` | `#a59cb8` | `[data-theme="light"]`: `#4a4258`; `[data-style="brutal"]`: `#1a1726`; `[data-style="brutal"][data-theme="dark"]`: `#f5ff3d` |
-| `--jx-text-3` | `#8d84a8` | `[data-theme="light"]`: `#6b6379`; `[data-style="brutal"]`: `#6e6386`; `[data-style="brutal"][data-theme="dark"]`: `#a59cb8` |
-| `--jx-text-4` | `#463e5a` | `[data-theme="light"]`: `#b4abc0`; `[data-style="brutal"]`: `#b4abc0` |
+| `--jx-surface` | `#15121f` | `[data-theme="light"]`: `#ffffff` |
+| `--jx-surface-2` | `#1c1828` | `[data-theme="light"]`: `#f5f1e6` |
+| `--jx-surface-3` | `#2a2438` | `[data-theme="light"]`: `#e6e0d0` |
+| `--jx-text` | `#f0ecf5` | `[data-theme="light"]`: `#1a1726` |
+| `--jx-text-2` | `#a59cb8` | `[data-theme="light"]`: `#4a4258` |
+| `--jx-text-3` | `#8d84a8` | `[data-theme="light"]`: `#6b6379` |
+| `--jx-text-4` | `#463e5a` | `[data-theme="light"]`: `#b4abc0` |
 | `--jx-warning` | `#ffb547` | `[data-theme="light"]`: `#7d4f00` |
 
 ## font
@@ -1804,6 +1925,12 @@ function SubscribeForm() {
 | `--jx-ease` | `cubic-bezier(0.4, 0, 0.2, 1)` |  |
 | `--jx-ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` |  |
 
+## other
+
+| Токен | Значение | Переопределения |
+|---|---|---|
+| `--jx-edge` | `color-mix(in oklab, var(--jx-text) 82%, var(--jx-bg))` |  |
+
 ## radius
 
 | Токен | Значение | Переопределения |
@@ -1819,6 +1946,6 @@ function SubscribeForm() {
 
 | Токен | Значение | Переопределения |
 |---|---|---|
-| `--jx-shadow` | `0 8px 24px -8px rgba(0, 0, 0, 0.6)` | `[data-style="brutal"]`: `6px 6px 0 #1a1726`; `[data-style="brutal"][data-theme="dark"]`: `6px 6px 0 #f5ff3d` |
-| `--jx-shadow-lg` | `0 24px 48px -16px rgba(0, 0, 0, 0.7)` | `[data-style="brutal"]`: `10px 10px 0 #1a1726`; `[data-style="brutal"][data-theme="dark"]`: `10px 10px 0 #f5ff3d` |
-| `--jx-shadow-sm` | `0 1px 2px rgba(0, 0, 0, 0.4)` | `[data-style="brutal"]`: `4px 4px 0 #1a1726`; `[data-style="brutal"][data-theme="dark"]`: `4px 4px 0 #f5ff3d` |
+| `--jx-shadow` | `0 8px 24px -8px rgba(0, 0, 0, 0.6)` | `[data-style="brutal"]`: `6px 6px 0 var(--jx-edge)` |
+| `--jx-shadow-lg` | `0 24px 48px -16px rgba(0, 0, 0, 0.7)` | `[data-style="brutal"]`: `10px 10px 0 var(--jx-edge)` |
+| `--jx-shadow-sm` | `0 1px 2px rgba(0, 0, 0, 0.4)` | `[data-style="brutal"]`: `4px 4px 0 var(--jx-edge)` |

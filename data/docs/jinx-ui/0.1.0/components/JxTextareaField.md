@@ -3,7 +3,7 @@
 Многострочное поле с подписью, подсказкой и текстом ошибки. Принимает все атрибуты `<textarea>`: `rows`, `value`, `onChange`, `placeholder`, `maxLength`.
 
 Импорт: `import { JxTextareaField } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Fields.tsx:65`
+Источник: `dist/components/Fields.d.ts:19`
 Ключевые слова: textarea, многострочное поле, комментарий, описание, сообщение
 
 ## Сигнатура

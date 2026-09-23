@@ -3,7 +3,7 @@
 Индикатор неопределённой загрузки. Если известно, сколько осталось, берите `JxProgress` или `JxProgressCircle`, а если грузится содержимое блока — `JxSkeleton`.
 
 Импорт: `import { JxSpinner } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Spinner.tsx:9`
+Источник: `dist/components/Spinner.d.ts:6`
 Ключевые слова: spinner, спиннер, загрузка, ожидание, индикатор
 
 ## Сигнатура

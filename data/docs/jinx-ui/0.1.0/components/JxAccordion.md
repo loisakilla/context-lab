@@ -3,7 +3,7 @@
 Список раскрывающихся секций. Элементы описываются типом `JxAccordionItem`: `value`, `title`, `content`. По умолчанию открыта одна секция; `single={false}` разрешает несколько. Открытые секции задаются массивом `value`.
 
 Импорт: `import { JxAccordion } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Accordion.tsx:22`
+Источник: `dist/components/Accordion.d.ts:15`
 Ключевые слова: accordion, аккордеон, раскрывающиеся секции, faq, вопросы и ответы
 
 ## Сигнатура

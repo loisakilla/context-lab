@@ -3,7 +3,7 @@ export type { ContextSources } from './context.ts';
 export { apiDriver } from './drivers/api.ts';
 export type { ApiDriverOptions } from './drivers/api.ts';
 export { extractCode } from './extract-code.ts';
-export { buildMatrix, median } from './matrix.ts';
+export { buildMatrix, libraryKey, median } from './matrix.ts';
 export type { Matrix, MatrixCell } from './matrix.ts';
 export { canonicalModel, knownModels, priceOf, PRICES_UPDATED_AT } from './price.ts';
 export { modelSlug, runFileName, runTask, scoreOf } from './run.ts';

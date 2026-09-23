@@ -3,7 +3,7 @@
 Текстовое поле с подписью, подсказкой и текстом ошибки. Само поле — обычный `<input>`, поэтому `value`, `onChange`, `placeholder`, `type`, `name` и `disabled` передаются напрямую.
 
 Импорт: `import { JxInputField } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Fields.tsx:17`
+Источник: `dist/components/Fields.d.ts:12`
 Ключевые слова: поле ввода, input, текстовое поле, форма, имя, email, телефон, ошибка валидации
 
 ## Сигнатура

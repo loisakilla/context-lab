@@ -3,7 +3,7 @@
 Круговой индикатор прогресса для компактных мест: карточек, плиток, строк таблицы. Для полосы во всю ширину есть `JxProgress`.
 
 Импорт: `import { JxProgressCircle } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Progress.tsx:40`
+Источник: `dist/components/Progress.d.ts:13`
 Ключевые слова: progress circle, круговой прогресс, индикатор, проценты, загрузка
 
 ## Сигнатура

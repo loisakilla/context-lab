@@ -3,7 +3,7 @@
 Хлебные крошки: путь от корня раздела до текущей страницы. Элемент без `href` считается текущим и ссылкой не становится.
 
 Импорт: `import { JxBreadcrumbs } from '@jinx-ui/react'`  
-Источник: `packages/react/src/components/Breadcrumbs.tsx:15`
+Источник: `dist/components/Breadcrumbs.d.ts:10`
 Ключевые слова: breadcrumbs, хлебные крошки, навигация, путь, иерархия
 
 ## Сигнатура
