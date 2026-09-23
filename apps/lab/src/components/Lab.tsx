@@ -2,8 +2,10 @@
 
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { LibraryIndex } from '@context-lab/index-tools';
+import type { RuleSet } from '@context-lab/rules/browser';
 import { CONTEXT_MODES, estimateContext, knownModels, type ContextMode, type Matrix, type RunRecord, type Task } from '@/lib/runner-browser';
 import { describeApiError, runInBrowser, runLocally } from '@/lib/browser-run';
+import { browserToolSources } from '@/lib/tool-sources';
 import { ContextPreview } from './ContextPreview';
 import { KeyForm } from './KeyForm';
 import { MODE_LABELS } from '@/lib/labels';
@@ -18,13 +20,14 @@ export interface LabProps {
   readme: string;
   docs: string;
   rules: string | null;
+  ruleSets: RuleSet[];
   matrix: Matrix | null;
   localRunEnabled: boolean;
 }
 
 type Engine = 'local' | 'byok';
 
-export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled }: LabProps) {
+export function Lab({ index, tasks, readme, docs, rules, ruleSets, matrix, localRunEnabled }: LabProps) {
   const [taskId, setTaskId] = useState(tasks[0]?.id ?? 'custom');
   const [prompt, setPrompt] = useState(tasks[0]?.prompt ?? '');
   const [mode, setMode] = useState<ContextMode>('none');
@@ -38,7 +41,10 @@ export function Lab({ index, tasks, readme, docs, rules, matrix, localRunEnabled
   const [error, setError] = useState<string | null>(null);
   const abort = useRef<AbortController | null>(null);
 
-  const sources = useMemo(() => ({ index, readme, docs, ...(rules ? { rules } : {}) }), [index, readme, docs, rules]);
+  const sources = useMemo(
+    () => ({ index, readme, docs, ...(rules ? { rules } : {}), tools: browserToolSources(index, ruleSets) }),
+    [index, readme, docs, rules, ruleSets],
+  );
   const modeTokens = useMemo(() => estimateContext(sources), [sources]);
   const availableModes = CONTEXT_MODES.filter((candidate) => (candidate === 'docs+rules' ? rules !== null : true));
 

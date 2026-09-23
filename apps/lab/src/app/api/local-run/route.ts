@@ -1,6 +1,6 @@
-import { agentSandbox, claudeCodeDriver, CONTEXT_MODES, repoMcpServer, runTask, type ContextMode, type Task } from '@context-lab/runner';
+import { agentSandbox, claudeCodeDriver, CONTEXT_MODES, loadSources, loadTasks, repoMcpServer, runTask, type ContextMode, type Task } from '@context-lab/runner';
 import { checkCode } from '@/lib/checker';
-import { labConfig, loadLabData } from '@/lib/data';
+import { labConfig } from '@/lib/data';
 import { readJsonObject, sameOrigin, sendsJson } from '@/lib/request-guard';
 
 export const runtime = 'nodejs';
@@ -21,11 +21,10 @@ export async function POST(request: Request): Promise<Response> {
   const mode = text(body.mode) as ContextMode;
   if (!CONTEXT_MODES.includes(mode)) return Response.json({ error: `Неизвестный режим ${String(body.mode)}` }, { status: 400 });
 
-  const data = loadLabData();
-  const root = labConfig().root;
+  const config = labConfig();
   const taskId = text(body.taskId);
   const promptText = text(body.prompt);
-  const known = taskId ? data.tasks.find((task) => task.id === taskId) : undefined;
+  const known = taskId ? loadTasks(config).find((task) => task.id === taskId) : undefined;
   const prompt = (promptText ?? known?.prompt ?? '').trim();
   if (prompt.length === 0) return Response.json({ error: 'Нужна задача: taskId или prompt' }, { status: 400 });
 
@@ -33,10 +32,10 @@ export async function POST(request: Request): Promise<Response> {
   const task: Task = known ? { ...known } : { id: 'custom', title: 'Своя задача', prompt, taskType: 'ui', expects };
   if (known && promptText && promptText.trim() !== known.prompt) task.prompt = promptText.trim();
 
-  const sources = { index: data.index, readme: data.readme, docs: data.docs, ...(data.rules ? { rules: data.rules } : {}) };
+  const sources = loadSources(config);
   try {
     const record = await runTask({
-      driver: claudeCodeDriver({ cwd: agentSandbox(), ...(mode === 'mcp' ? { mcpServer: repoMcpServer(root) } : {}) }),
+      driver: claudeCodeDriver({ cwd: agentSandbox(), ...(mode === 'mcp' ? { mcpServer: repoMcpServer(config.root) } : {}) }),
       mode,
       task,
       sources,

@@ -1,9 +1,10 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { TOOL_NAMES } from '@context-lab/index-tools';
 import type { ClaudeCodeDriverOptions } from './drivers/claude-code.ts';
 
 export const MCP_SERVER_NAME = 'context-lab';
-export const MCP_TOOL_NAMES = ['search_components', 'get_component_api', 'get_component_examples', 'list_design_tokens', 'get_rules', 'get_docs'];
+export const MCP_TOOL_NAMES: string[] = [...TOOL_NAMES];
 
 export function repoMcpServer(root: string, configFile = 'context-lab.config.json'): NonNullable<ClaudeCodeDriverOptions['mcpServer']> {
   const tsx = path.join(root, 'node_modules', 'tsx', 'dist', 'cli.mjs');
@@ -12,7 +13,7 @@ export function repoMcpServer(root: string, configFile = 'context-lab.config.jso
   if (!existsSync(tsx)) throw new Error('tsx не установлен: выполните npm install');
   return {
     name: MCP_SERVER_NAME,
-    config: { command: process.execPath, args: [tsx, cli, 'serve', '--config', path.join(root, configFile)] },
+    config: { command: process.execPath, args: [tsx, cli, 'serve', '--config', path.join(root, configFile), '--no-instructions'] },
     tools: MCP_TOOL_NAMES,
   };
 }

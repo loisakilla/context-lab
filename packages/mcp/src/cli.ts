@@ -15,6 +15,7 @@ const USAGE = `context-lab mcp
   -i, --index <file>    Индекс компонентов, если конфига нет
   -d, --docs <dir>      Папка сгенерированной документации конкретной версии
   -r, --rules <dir>     Папка реестра правил
+      --no-instructions Не отдавать клиенту instructions сервера: их текст уже стоит в системном промпте
   -h, --help            Показать справку`;
 
 function fail(message: string): never {
@@ -31,6 +32,7 @@ async function main(): Promise<void> {
       index: { type: 'string', short: 'i' },
       docs: { type: 'string', short: 'd' },
       rules: { type: 'string', short: 'r' },
+      'no-instructions': { type: 'boolean' },
       help: { type: 'boolean', short: 'h' },
     },
   });
@@ -56,7 +58,12 @@ async function main(): Promise<void> {
 
   const index = loadIndex(indexFile);
   const registry = rulesDir ? loadRegistry(rulesDir) : undefined;
-  const server = createServer({ index, ...(registry ? { registry } : {}), ...(docsDir ? { docsDir } : {}) });
+  const server = createServer({
+    index,
+    ...(registry ? { registry } : {}),
+    ...(docsDir ? { docsDir } : {}),
+    ...(values['no-instructions'] ? { instructions: false } : {}),
+  });
   await server.connect(new StdioServerTransport());
   process.stderr.write(`context-lab mcp запущен: ${index.library.name}@${index.library.version}, компонентов ${index.components.length}, наборов правил ${registry?.sets.size ?? 0}.\n`);
 }

@@ -23,7 +23,7 @@ export default function HomePage() {
             <Badge>5 режимов контекста</Badge>
           </div>
         </header>
-        <Lab index={data.index} tasks={data.tasks} readme={data.readme} docs={data.docs} rules={data.rules} matrix={data.matrix} localRunEnabled={data.localRunEnabled} />
+        <Lab index={data.index} tasks={data.tasks} readme={data.readme} docs={data.docs} rules={data.rules} ruleSets={data.ruleSets} matrix={data.matrix} localRunEnabled={data.localRunEnabled} />
       </main>
     </>
   );

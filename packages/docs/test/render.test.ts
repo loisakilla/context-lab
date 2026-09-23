@@ -3,7 +3,7 @@ import type { ComponentDescription } from '@context-lab/docgen';
 import { sampleIndex } from '../../index-tools/test/helpers.ts';
 import { lintDocs } from '../src/lint.ts';
 import { renderComponentDoc, renderLlmsFull, renderLlmsTxt } from '../src/render.ts';
-import { renderDocsBundle } from '../src/write.ts';
+import { renderDocsBundle } from '../src/render.ts';
 
 const index = sampleIndex();
 

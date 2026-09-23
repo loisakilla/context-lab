@@ -138,3 +138,28 @@ export function renderLlmsFull(index: LibraryIndex): string {
   if (index.tokens.length > 0) parts.push(renderTokensDoc(index.tokens));
   return parts.join('\n---\n\n');
 }
+
+export interface DocsBundle {
+  files: Record<string, string>;
+}
+
+export function renderDocsBundle(index: LibraryIndex): DocsBundle {
+  const files: Record<string, string> = {
+    'llms.txt': renderLlmsTxt(index),
+    'llms-full.txt': renderLlmsFull(index),
+    'tokens.md': renderTokensDoc(index.tokens),
+    'index.json': `${JSON.stringify(index, null, 2)}\n`,
+  };
+  for (const component of index.components) {
+    files[`components/${component.name}.md`] = renderComponentDoc(component, index);
+  }
+  return { files };
+}
+
+export function docsReader(index: LibraryIndex): (relative: string) => string | undefined {
+  let bundle: DocsBundle | undefined;
+  return (relative) => {
+    bundle ??= renderDocsBundle(index);
+    return bundle.files[relative];
+  };
+}

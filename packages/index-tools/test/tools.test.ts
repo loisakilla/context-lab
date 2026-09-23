@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { estimateTokens, fitToBudget, renderComponent } from '../src/format.ts';
-import { createTools, runTool, toJsonSchemaTools } from '../src/tools.ts';
+import { createTools, runTool, serverInstructions, toJsonSchemaTools, TOOL_NAMES, type RulesQuery } from '../src/tools.ts';
 import { sampleIndex } from './helpers.ts';
 
 const index = sampleIndex();
@@ -47,6 +47,54 @@ describe('инструменты поверх индекса', () => {
     expect(result.text).toMatch(/--jx-accent: #7747d4/);
     expect(result.text).toMatch(/\[data-theme="dark"\]: #c9a3ff/);
     expect(result.text).not.toMatch(/--jx-r:/);
+  });
+});
+
+describe('документация и правила как инструменты', () => {
+  const docs: Record<string, string> = {
+    'llms.txt': '# sample-kit\n\nОбзор.',
+    'components/JxModal.md': '# JxModal\n\nМодальное окно.\n\n## Пропсы\n\ntitle',
+  };
+  const queries: RulesQuery[] = [];
+  const full = createTools(index, {
+    docs: (relative) => docs[relative],
+    rules: {
+      defaultSet: 'sample',
+      resolve(query) {
+        queries.push(query);
+        if (query.set === 'missing') throw new Error('Набора «missing» в реестре нет');
+        return 'Правила набора sample';
+      },
+    },
+  });
+
+  it('добавляют get_docs и get_rules, только когда им есть что отдавать', () => {
+    expect(full.map((tool) => tool.name)).toEqual([...TOOL_NAMES]);
+    expect(createTools(index, { docs: (relative) => docs[relative] }).map((tool) => tool.name)).not.toContain('get_rules');
+  });
+
+  it('get_docs находит документ по имени компонента без префикса и в любом регистре', () => {
+    expect(runTool(full, 'get_docs', { component: 'modal' }).text).toMatch(/^# JxModal/);
+    expect(runTool(full, 'get_docs', {}).text).toMatch(/^# sample-kit/);
+  });
+
+  it('get_docs отвечает ошибкой с подсказкой на выдуманное имя и не ходит по путям', () => {
+    const result = runTool(full, 'get_docs', { component: '../../README' });
+    expect(result.isError).toBe(true);
+    expect(result.text).toMatch(/нет/);
+  });
+
+  it('get_rules передаёт запрос источнику правил и превращает его ошибку в isError', () => {
+    expect(runTool(full, 'get_rules', { task: 'ui' }).text).toMatch(/^Правила набора sample/);
+    expect(queries.at(-1)).toEqual({ task: 'ui' });
+    const failed = runTool(full, 'get_rules', { set: 'missing' });
+    expect(failed.isError).toBe(true);
+    expect(failed.text).toMatch(/missing/);
+  });
+
+  it('инструкции сервера называют библиотеку и число компонентов', () => {
+    expect(serverInstructions(index)).toMatch(new RegExp(`${index.components.length} компонентов`));
+    expect(serverInstructions(index)).toMatch(/get_rules/);
   });
 });
 

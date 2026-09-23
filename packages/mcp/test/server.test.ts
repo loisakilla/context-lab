@@ -5,6 +5,8 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { createTools, runTool } from '@context-lab/index-tools';
 import { loadIndex } from '@context-lab/docgen';
+import { docsReader } from '@context-lab/docs/render';
+import { loadRegistry, rulesToolSource } from '@context-lab/rules';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '../../..');
@@ -102,5 +104,18 @@ describe('MCP-сервер по stdio', () => {
     const local = runTool(createTools(index), 'get_component_api', { name: 'JxSelect', detail: 'signature' });
     const remote = textOf(await client.callTool({ name: 'get_component_api', arguments: { name: 'JxSelect', detail: 'signature' } }));
     expect(remote).toBe(local.text);
+  });
+
+  it('get_docs и get_rules по MCP совпадают с браузерной реализацией на тех же данных', async () => {
+    const index = loadIndex(path.join(root, 'data/index/jinx-ui.json'));
+    const browser = createTools(index, { docs: docsReader(index), rules: rulesToolSource(loadRegistry(path.join(root, 'rules')), 'jinx-ui') });
+    for (const [name, args] of [
+      ['get_docs', { component: 'JxModal' }],
+      ['get_docs', {}],
+      ['get_rules', { task: 'ui' }],
+    ] as const) {
+      const remote = textOf(await client.callTool({ name, arguments: args }));
+      expect(remote).toBe(runTool(browser, name, args).text);
+    }
   });
 });

@@ -71,6 +71,14 @@ describe('buildContext', () => {
     expect(context.contextText).toBe('');
   });
 
+  it('в режиме mcp с источниками документации и правил даёт все шесть инструментов и записывает их в контекст', () => {
+    const context = buildContext('mcp', task, { ...sources, tools: { docs: () => '# doc', rules: { defaultSet: 'sample', resolve: () => 'правила' } } });
+    expect(context.tools?.map((tool) => tool.name)).toEqual(['search_components', 'get_component_api', 'get_component_examples', 'list_design_tokens', 'get_docs', 'get_rules']);
+    expect(context.sources[0]?.id).toBe('search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules');
+    expect(context.system).toMatch(/правила работы через get_rules/);
+    expect(context.runTool?.('get_rules', { task: 'ui' }).text).toMatch(/^правила/);
+  });
+
   it('падает, если для режима нет источника', () => {
     expect(() => buildContext('docs', task, { index })).toThrow(/llms-full/);
   });

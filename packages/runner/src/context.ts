@@ -1,4 +1,4 @@
-import { createTools, estimateTokens, libraryRulesPrompt, runTool, toJsonSchemaTools, type LibraryIndex } from '@context-lab/index-tools';
+import { createTools, estimateTokens, libraryRulesPrompt, runTool, serverInstructions, toJsonSchemaTools, type LibraryIndex, type ToolSources } from '@context-lab/index-tools';
 import { textHash } from './hash.ts';
 import type { BuiltContext, ContextMode, ContextSource, Task } from './types.ts';
 
@@ -7,6 +7,7 @@ export interface ContextSources {
   readme?: string;
   docs?: string;
   rules?: string;
+  tools?: ToolSources;
 }
 
 export const OUTPUT_CONTRACT = [
@@ -59,11 +60,10 @@ ${NO_TOOLS_NOTE}`;
   }
 
   if (mode === 'mcp') {
-    const specs = createTools(sources.index);
+    const specs = createTools(sources.index, sources.tools ?? {});
     tools = toJsonSchemaTools(specs);
     runner = (name, args) => runTool(specs, name, args);
-    const rules = libraryRulesPrompt(sources.index);
-    system = `${BASE_SYSTEM_PROMPT}\n\n${rules}`;
+    system = [BASE_SYSTEM_PROMPT, libraryRulesPrompt(sources.index), serverInstructions(sources.index)].join('\n\n');
     contextSources.push(source('tools', specs.map((spec) => spec.name).join(','), version, JSON.stringify(tools)));
   }
 

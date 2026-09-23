@@ -1,20 +1,13 @@
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadConfig, loadIndex, resolveFrom } from '@context-lab/docgen';
-import { buildContext, contextTokens, CONTEXT_MODES, type ContextSources, type Task } from '@context-lab/runner';
+import { loadConfig } from '@context-lab/docgen';
+import { buildContext, contextTokens, CONTEXT_MODES, loadSources, loadTasks } from '@context-lab/runner';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const config = loadConfig(path.join(root, 'context-lab.config.json'));
-const index = loadIndex(resolveFrom(config, config.index));
-const tasks = JSON.parse(readFileSync(resolveFrom(config, config.tasks), 'utf8')) as Task[];
-
-const sources: ContextSources = {
-  index,
-  readme: readFileSync(resolveFrom(config, config.library.readme ?? 'node_modules/@jinx-ui/react/README.md'), 'utf8'),
-  docs: readFileSync(path.join(resolveFrom(config, config.docs), index.library.version, 'llms-full.txt'), 'utf8'),
-  rules: readFileSync(resolveFrom(config, 'rules/compiled/jinx-ui.md'), 'utf8'),
-};
+const tasks = loadTasks(config);
+const sources = loadSources(config);
 
 const outDir = path.join(root, 'data', 'prompts');
 mkdirSync(outDir, { recursive: true });

@@ -5,10 +5,28 @@ import type { LibraryIndex } from './types.ts';
 
 export const DEFAULT_SEARCH_BUDGET = 700;
 export const DEFAULT_API_BUDGET = 1200;
+export const DEFAULT_DOCS_BUDGET = 2500;
+
+export const TOOL_NAMES = ['search_components', 'get_component_api', 'get_component_examples', 'list_design_tokens', 'get_docs', 'get_rules'] as const;
+
+export const RULE_TARGETS = ['claude', 'cursor', 'copilot', 'agents'] as const;
 
 export interface ToolResult {
   text: string;
   isError?: boolean;
+}
+
+export interface RulesQuery {
+  set?: string;
+  task?: string;
+  file?: string;
+  target?: (typeof RULE_TARGETS)[number];
+  budget?: number;
+}
+
+export interface ToolSources {
+  docs?: (relative: string) => string | undefined;
+  rules?: { defaultSet: string; resolve(query: RulesQuery): string };
 }
 
 export interface ToolSpec<Shape extends z.ZodRawShape = z.ZodRawShape> {
@@ -38,7 +56,73 @@ function notFound(index: LibraryIndex, name: string): ToolResult {
   };
 }
 
-export function createTools(index: LibraryIndex): ToolSpec[] {
+function docsTool(index: LibraryIndex, read: (relative: string) => string | undefined): ToolSpec {
+  const spec: ToolSpec<{
+    component: z.ZodOptional<z.ZodString>;
+    section: z.ZodOptional<z.ZodEnum<{ overview: 'overview'; tokens: 'tokens' }>>;
+    maxTokens: z.ZodOptional<z.ZodNumber>;
+  }> = {
+    name: 'get_docs',
+    title: 'AI-документация библиотеки',
+    description:
+      'Отдаёт сгенерированную документацию: обзор llms.txt, документ конкретного компонента или таблицу токенов. Документация собирается из исходников в CI и соответствует версии библиотеки.',
+    shape: {
+      component: z.string().optional().describe('Имя компонента, например JxModal; без него вернётся обзор llms.txt'),
+      section: z.enum(['overview', 'tokens']).optional().describe('overview — llms.txt, tokens — таблица токенов'),
+      maxTokens: z.number().int().min(200).max(20000).optional().describe('Бюджет ответа, по умолчанию 2500'),
+    },
+    run({ component, section, maxTokens }) {
+      const found = component ? findComponent(index, component) : undefined;
+      if (component && !found) return notFound(index, component);
+      const relative = found ? `components/${found.name}.md` : section === 'tokens' ? 'tokens.md' : 'llms.txt';
+      const text = read(relative);
+      if (!text) return { text: 'Документация не собрана: выполните npm run docs:build.', isError: true };
+      const budget = fitToBudget(text.split(/\n(?=#{1,3} )/), maxTokens ?? DEFAULT_DOCS_BUDGET, 'Запросите документ конкретного компонента через get_docs с параметром component.');
+      return ok(budget.text);
+    },
+  };
+  return spec as ToolSpec;
+}
+
+function rulesTool(rules: NonNullable<ToolSources['rules']>): ToolSpec {
+  const spec: ToolSpec<{
+    set: z.ZodOptional<z.ZodString>;
+    task: z.ZodOptional<z.ZodString>;
+    file: z.ZodOptional<z.ZodString>;
+    target: z.ZodOptional<z.ZodEnum<{ claude: 'claude'; cursor: 'cursor'; copilot: 'copilot'; agents: 'agents' }>>;
+    budget: z.ZodOptional<z.ZodNumber>;
+  }> = {
+    name: 'get_rules',
+    title: 'Правила для агента',
+    description:
+      'Возвращает эффективный набор правил работы с библиотекой и проектом: с наследованием от общих правил, приоритетами и провенансом. Вызывайте перед задачей на вёрстку и подставляйте правила в контекст.',
+    shape: {
+      set: z.string().optional().describe(`Набор правил, по умолчанию ${rules.defaultSet}`),
+      task: z.string().optional().describe('Тип задачи: ui, fix, refactor, docs, test'),
+      file: z.string().optional().describe('Путь файла, для которого нужны правила'),
+      target: z.enum(RULE_TARGETS).optional().describe('Агент, для которого собираются правила'),
+      budget: z.number().int().min(100).max(20000).optional().describe('Бюджет токенов на набор'),
+    },
+    run(query) {
+      try {
+        return ok(rules.resolve(query));
+      } catch (error) {
+        return { text: error instanceof Error ? error.message : String(error), isError: true };
+      }
+    },
+  };
+  return spec as ToolSpec;
+}
+
+export function serverInstructions(index: LibraryIndex): string {
+  return (
+    `MCP-сервер Context Lab по библиотеке ${index.library.name} (${index.library.package}@${index.library.version}): ${index.components.length} компонентов, ${index.tokens.length} токенов. ` +
+    'Перед тем как писать разметку с этими компонентами, возьмите их реальный API через get_component_api, а правила работы через get_rules. ' +
+    'Пропсы, которых нет в ответе сервера, в библиотеке не существуют.'
+  );
+}
+
+export function createTools(index: LibraryIndex, sources: ToolSources = {}): ToolSpec[] {
   const search: ToolSpec<{ query: z.ZodString; limit: z.ZodOptional<z.ZodNumber>; maxTokens: z.ZodOptional<z.ZodNumber> }> = {
     name: 'search_components',
     title: 'Поиск компонентов',
@@ -114,7 +198,10 @@ export function createTools(index: LibraryIndex): ToolSpec[] {
     },
   };
 
-  return [search, api, examples, tokens] as ToolSpec[];
+  const tools = [search, api, examples, tokens] as ToolSpec[];
+  if (sources.docs) tools.push(docsTool(index, sources.docs));
+  if (sources.rules) tools.push(rulesTool(sources.rules));
+  return tools;
 }
 
 export function toJsonSchemaTools(tools: ToolSpec[]): JsonSchemaTool[] {

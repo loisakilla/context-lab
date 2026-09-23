@@ -93,6 +93,4 @@ export function loadRegistry(root: string): Registry {
   return { sets, root };
 }
 
-export function registryFromSets(sets: RuleSet[], root = '/virtual'): Registry {
-  return { sets: new Map(sets.map((set) => [set.name, set])), root };
-}
+export { registryFromSets } from './registry.ts';

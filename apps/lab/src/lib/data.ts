@@ -3,7 +3,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { loadConfig, loadIndex, resolveFrom, type LabConfig } from '@context-lab/docgen';
 import type { LibraryIndex } from '@context-lab/index-tools';
-import { loadRegistry, resolveRules, type Resolution } from '@context-lab/rules';
+import { loadRegistry, resolveRules, type Resolution, type RuleSet } from '@context-lab/rules';
 import { libraryKey, type Matrix, type RunRecord, type Task } from '@context-lab/runner/browser';
 
 export interface LabData {
@@ -12,6 +12,7 @@ export interface LabData {
   readme: string;
   docs: string;
   rules: string | null;
+  ruleSets: RuleSet[];
   matrix: Matrix | null;
   localRunEnabled: boolean;
 }
@@ -45,6 +46,11 @@ export function loadLabData(): LabData {
   const docs = readText(path.join(resolveFrom(config, config.docs), index.library.version, 'llms-full.txt')) ?? '';
   const readme = (config.library.readme ? readText(resolveFrom(config, config.library.readme)) : null) ?? '';
   const rules = readText(resolveFrom(config, 'rules/compiled/jinx-ui.md'));
+  const ruleSets = [...loadRegistry(resolveFrom(config, 'rules')).sets.values()].map((set) => ({
+    ...set,
+    dir: set.name,
+    rules: set.rules.map((rule) => ({ ...rule, file: `${set.name}/${path.basename(rule.file)}` })),
+  }));
   const matrixText = readText(resolveFrom(config, config.matrix));
   return {
     index,
@@ -52,6 +58,7 @@ export function loadLabData(): LabData {
     readme,
     docs,
     rules,
+    ruleSets,
     matrix: matrixText ? (JSON.parse(matrixText) as Matrix) : null,
     localRunEnabled: process.env.CONTEXT_LAB_LOCAL === '1',
   };

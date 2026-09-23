@@ -1,5 +1,5 @@
 export { lintDocs } from './lint.ts';
 export type { DocsIssue } from './lint.ts';
-export { renderComponentDoc, renderHookDoc, renderLlmsFull, renderLlmsTxt, renderTokensDoc } from './render.ts';
-export { docsVersionDir, findDocsDrift, renderDocsBundle, writeDocs } from './write.ts';
-export type { DocsBundle } from './write.ts';
+export { docsReader, renderComponentDoc, renderDocsBundle, renderHookDoc, renderLlmsFull, renderLlmsTxt, renderTokensDoc } from './render.ts';
+export type { DocsBundle } from './render.ts';
+export { docsDirReader, docsVersionDir, findDocsDrift, writeDocs } from './write.ts';

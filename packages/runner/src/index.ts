@@ -10,6 +10,7 @@ export { buildMatrix, firstPromptTokens, libraryKey, median } from './matrix.ts'
 export { textHash } from './hash.ts';
 export { commandMcpServer, MCP_SERVER_NAME, MCP_TOOL_NAMES, repoMcpServer } from './mcp-config.ts';
 export { agentSandbox } from './sandbox.ts';
+export { COMPILED_RULES, loadSources, loadTasks } from './sources.ts';
 export { libraryFolders, readRunFolder, runsFolder } from './store.ts';
 export type { Matrix, MatrixCell, SourceRevision } from './matrix.ts';
 export { canonicalModel, knownModels, priceOf, PRICES_UPDATED_AT } from './price.ts';

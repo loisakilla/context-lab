@@ -1,9 +1,8 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { buildNodeTypeBundle, createChecker, runChecks } from '@context-lab/checks';
 import { loadConfig, loadIndex, resolveFrom, type LabConfig } from '@context-lab/docgen';
-import type { ContextSources } from './context.ts';
 import { apiDriver } from './drivers/api.ts';
 import { claudeCodeDriver, type ClaudeCodeDriverOptions } from './drivers/claude-code.ts';
 import { findClaudeBinary } from './find-claude.ts';
@@ -11,6 +10,7 @@ import { buildMatrix, libraryKey } from './matrix.ts';
 import { commandMcpServer, repoMcpServer } from './mcp-config.ts';
 import { runFileName, runTask, type CodeChecker } from './run.ts';
 import { agentSandbox } from './sandbox.ts';
+import { loadSources, loadTasks } from './sources.ts';
 import { libraryFolders, readRunFolder, runsFolder } from './store.ts';
 import { CONTEXT_MODES, DRIVER_NAMES, type ContextMode, type Driver, type DriverName, type RunRecord, type Task } from './types.ts';
 
@@ -41,24 +41,6 @@ const USAGE = `context-lab runner
 function fail(message: string): never {
   process.stderr.write(`${message}\n`);
   process.exit(1);
-}
-
-function loadTasks(config: LabConfig): Task[] {
-  return JSON.parse(readFileSync(resolveFrom(config, config.tasks), 'utf8')) as Task[];
-}
-
-function readOptional(file: string | undefined): string | undefined {
-  if (!file || !existsSync(file)) return undefined;
-  return readFileSync(file, 'utf8');
-}
-
-function loadSources(config: LabConfig, rulesFile?: string): ContextSources {
-  const index = loadIndex(resolveFrom(config, config.index));
-  const docsFile = path.join(resolveFrom(config, config.docs), index.library.version, 'llms-full.txt');
-  const readme = readOptional(config.library.readme ? resolveFrom(config, config.library.readme) : undefined);
-  const docs = readOptional(docsFile);
-  const rules = readOptional(rulesFile ?? resolveFrom(config, 'rules/compiled/jinx-ui.md'));
-  return { index, ...(readme ? { readme } : {}), ...(docs ? { docs } : {}), ...(rules ? { rules } : {}) };
 }
 
 function buildChecker(config: LabConfig): CodeChecker {

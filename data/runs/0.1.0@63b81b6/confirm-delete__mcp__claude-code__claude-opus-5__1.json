@@ -23,13 +23,14 @@
     ]
   },
   "context": {
-    "tokens": 1000,
+    "tokens": 1510,
     "sources": [
       {
         "kind": "tools",
-        "id": "search_components,get_component_api,get_component_examples,list_design_tokens",
+        "id": "search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules",
         "version": "0.1.0",
-        "tokens": 688
+        "tokens": 1114,
+        "hash": "4b2f91608f9602b8"
       }
     ]
   },

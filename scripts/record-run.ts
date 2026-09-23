@@ -2,20 +2,14 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildNodeTypeBundle, createChecker, runChecks } from '@context-lab/checks';
-import { loadConfig, loadIndex, resolveFrom } from '@context-lab/docgen';
-import { buildContext, contextTokens, CONTEXT_MODES, extractCode, runFileName, runsFolder, scoreOf, type ContextMode, type ContextSources, type RunRecord, type Task } from '@context-lab/runner';
+import { loadConfig, resolveFrom } from '@context-lab/docgen';
+import { buildContext, contextTokens, CONTEXT_MODES, extractCode, loadSources, loadTasks, runFileName, runsFolder, scoreOf, type ContextMode, type RunRecord } from '@context-lab/runner';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const config = loadConfig(path.join(root, 'context-lab.config.json'));
-const index = loadIndex(resolveFrom(config, config.index));
-const tasks = JSON.parse(readFileSync(resolveFrom(config, config.tasks), 'utf8')) as Task[];
-
-const sources: ContextSources = {
-  index,
-  readme: readFileSync(resolveFrom(config, config.library.readme ?? 'node_modules/@jinx-ui/react/README.md'), 'utf8'),
-  docs: readFileSync(path.join(resolveFrom(config, config.docs), index.library.version, 'llms-full.txt'), 'utf8'),
-  rules: readFileSync(resolveFrom(config, 'rules/compiled/jinx-ui.md'), 'utf8'),
-};
+const tasks = loadTasks(config);
+const sources = loadSources(config);
+const index = sources.index;
 
 const outputsDir = path.join(root, 'data', 'outputs');
 const runsDir = runsFolder(resolveFrom(config, config.runs), index.library);

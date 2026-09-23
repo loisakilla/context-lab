@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@context-lab/docgen": "0.1.0",
+    "@context-lab/docs": "0.1.0",
     "@context-lab/index-tools": "0.1.0",
     "@context-lab/rules": "0.1.0",
     "@modelcontextprotocol/sdk": "^1.30.0",
