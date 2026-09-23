@@ -1,13 +1,9 @@
 import picomatch from 'picomatch';
 import { estimateTokens } from '@context-lab/index-tools';
-import type { Provenance, Registry, ResolveOptions, ResolvedRule, Resolution, RuleDefinition, RuleSet } from './types.ts';
+import type { Provenance, Registry, ResolveOptions, ResolvedRule, Resolution, RuleDefinition } from './types.ts';
 
 export function qualify(set: string, id: string): string {
   return `${set}/${id}`;
-}
-
-function stamp(set: RuleSet, rule: RuleDefinition): string {
-  return `${set.name}/${rule.id}@${rule.version}`;
 }
 
 export function inheritanceChain(registry: Registry, setName: string): string[] {
@@ -122,8 +118,4 @@ export function describeProvenance(resolution: Resolution): string[] {
     parts.push(`приоритет ${rule.priority}`, `~${rule.tokens} токенов`);
     return parts.join(' · ');
   });
-}
-
-export function stampOf(set: RuleSet, rule: RuleDefinition): string {
-  return stamp(set, rule);
 }

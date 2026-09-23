@@ -7,7 +7,6 @@ export {
   renderComponentSections,
   renderExampleSections,
   renderExamples,
-  renderHook,
   renderSearchHit,
   renderSignature,
   renderTokens,

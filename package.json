@@ -5,14 +5,14 @@
   "description": "AI-инфраструктура для библиотеки React-компонентов и лаборатория, где видно, как контекст меняет код агента",
   "type": "module",
   "engines": {
-    "node": ">=20.11"
+    "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
   },
   "workspaces": [
     "packages/*",
     "apps/*"
   ],
   "scripts": {
-    "typecheck": "npm run typecheck --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present && tsc -p scripts/tsconfig.json",
     "test": "vitest run",
     "verify": "npm run typecheck && npm run test && npm run index:check && npm run docs:check && npm run docs:lint && npm run rules:lint && npm run rules:check",
     "index": "tsx packages/docgen/src/cli.ts build",
@@ -44,9 +44,7 @@
     "@jinx-ui/react": "0.1.0",
     "@jinx-ui/tokens": "0.1.0",
     "@types/node": "^22.10.0",
-    "cross-env": "^7.0.3",
     "esbuild": "^0.28.2",
-    "jsdom": "^26.1.0",
     "tsx": "^4.23.0",
     "typescript": "~5.9.3",
     "vitest": "^5.0.1"

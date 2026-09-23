@@ -1,4 +1,4 @@
-import type { ComponentDoc, HookDoc, PropDoc, SearchHit, TokenDoc } from './types.ts';
+import type { ComponentDoc, PropDoc, SearchHit, TokenDoc } from './types.ts';
 
 const CHARS_PER_TOKEN = 3.6;
 
@@ -114,12 +114,6 @@ export function renderComponentSections(component: ComponentDoc): string[] {
 export function renderComponent(component: ComponentDoc, detail: 'signature' | 'full'): string {
   if (detail === 'signature') return renderSignature(component);
   return renderComponentSections(component).join('\n\n');
-}
-
-export function renderHook(hook: HookDoc): string {
-  const lines = [`${hook.name}${hook.signature}`, `  src: ${hook.file}:${hook.line}`];
-  if (hook.description) lines.push(indent(collapse(hook.description), '  '));
-  return lines.join('\n');
 }
 
 export function renderTokens(tokens: TokenDoc[]): string {

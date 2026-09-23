@@ -7,8 +7,6 @@ export interface ModelPrice {
   cacheWrite: number;
 }
 
-export const PRICES_UPDATED_AT = '2026-06-24';
-
 const PER_MILLION: Record<string, ModelPrice> = {
   'claude-opus-5': { input: 5, output: 25, cacheRead: 0.5, cacheWrite: 6.25 },
   'claude-opus-4-8': { input: 5, output: 25, cacheRead: 0.5, cacheWrite: 6.25 },

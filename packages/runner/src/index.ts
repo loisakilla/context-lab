@@ -13,7 +13,7 @@ export { agentSandbox } from './sandbox.ts';
 export { COMPILED_RULES, loadSources, loadTasks } from './sources.ts';
 export { libraryFolders, readRunFolder, runsFolder } from './store.ts';
 export type { Matrix, MatrixCell, SourceRevision } from './matrix.ts';
-export { canonicalModel, knownModels, priceOf, PRICES_UPDATED_AT } from './price.ts';
+export { canonicalModel, knownModels, priceOf } from './price.ts';
 export type { ModelPrice } from './price.ts';
 export { modelSlug, runFileName, runTask, scoreOf } from './run.ts';
 export type { RunOptions } from './run.ts';
