@@ -31,6 +31,8 @@
 ### Статусы в таблице
 
 ```tsx
-<JxBadge tone="success" dot>Активен</JxBadge>
-<JxBadge tone="warning">Ожидает</JxBadge>
+<>
+  <JxBadge tone="success" dot>Активен</JxBadge>
+  <JxBadge tone="warning">Ожидает</JxBadge>
+</>
 ```

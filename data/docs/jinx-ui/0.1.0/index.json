@@ -303,7 +303,7 @@
       "examples": [
         {
           "title": "Статусы в таблице",
-          "code": "<JxBadge tone=\"success\" dot>Активен</JxBadge>\n<JxBadge tone=\"warning\">Ожидает</JxBadge>"
+          "code": "<>\n  <JxBadge tone=\"success\" dot>Активен</JxBadge>\n  <JxBadge tone=\"warning\">Ожидает</JxBadge>\n</>"
         }
       ],
       "description": "Небольшая метка статуса или счётчика. Тон задаёт цвет из токенов, `dot` добавляет точку-индикатор перед текстом."
@@ -423,7 +423,7 @@
           "code": "<JxButton variant=\"danger\" size=\"sm\" disabled={isDeleting} onClick={remove}>\n  Удалить\n</JxButton>"
         }
       ],
-      "description": "Кнопка действия. Шесть визуальных вариантов и три размера, всё остальное берётся из атрибутов `<button>`: `type`, `disabled`, `onClick`, `aria-label`. По умолчанию `type=\"button\"`, поэтому для отправки формы задавайте `type=\"submit\"` явно."
+      "description": "Кнопка действия. Пять визуальных вариантов и три размера, всё остальное берётся из атрибутов `<button>`: `type`, `disabled`, `onClick`, `aria-label`. По умолчанию `type=\"button\"`, поэтому для отправки формы задавайте `type=\"submit\"` явно."
     },
     {
       "name": "JxCalendar",
@@ -782,11 +782,11 @@
       "examples": [
         {
           "title": "Период отчёта",
-          "code": "const [range, setRange] = useState<JxDateRange>({ from: null, to: null });\n\n<JxDateRangePicker locale=\"ru-RU\" fromLabel=\"С\" toLabel=\"По\" value={range} onValueChange={setRange} />"
+          "code": "function ReportPeriod() {\n  const [range, setRange] = useState<JxDateRange>({ from: null, to: null });\n  return <JxDateRangePicker locale=\"ru-RU\" fromLabel=\"С\" toLabel=\"По\" value={range} onValueChange={setRange} />;\n}"
         },
         {
           "title": "Кнопка активна только при выбранном периоде",
-          "code": "<JxDateRangePicker value={range} onValueChange={setRange} />\n<JxButton variant=\"primary\" disabled={!range.from || !range.to}>Построить отчёт</JxButton>"
+          "code": "function ReportRequest() {\n  const [range, setRange] = useState<JxDateRange>({ from: null, to: null });\n  return (\n    <>\n      <JxDateRangePicker value={range} onValueChange={setRange} />\n      <JxButton variant=\"primary\" disabled={!range.from || !range.to}>\n        Построить отчёт\n      </JxButton>\n    </>\n  );\n}"
         }
       ],
       "description": "Выбор периода на календаре. Первый клик задаёт начало, второй — конец; если второй день раньше первого, границы меняются местами сами. Пока конец не выбран, наведение подсвечивает будущий промежуток. Значение — объект `{ from, to }`, где любая граница может быть `null`, управляемый через `value` и `onValueChange`. Над сеткой показаны обе даты и кнопка сброса, под сеткой — текстовый статус для скринридера.\n\nКлавиатура общая с `JxCalendar`: стрелки ходят по дням и неделям, `Home` и `End` — к краям недели, `PageUp` и `PageDown` — по месяцам, фокус переходит через границу месяца. Названия дней недели не локализуются — `locale` влияет на месяц и на подписи дат."
@@ -1350,11 +1350,11 @@
       "examples": [
         {
           "title": "Вход",
-          "code": "<JxPasswordField\n  label=\"Пароль\"\n  required\n  value={password}\n  onChange={(event) => setPassword(event.target.value)}\n  revealLabel=\"Показать пароль\"\n  hideLabel=\"Скрыть пароль\"\n/>"
+          "code": "function SignInPassword() {\n  const [password, setPassword] = useState('');\n  return (\n    <JxPasswordField\n      label=\"Пароль\"\n      required\n      value={password}\n      onChange={(event) => setPassword(event.target.value)}\n      revealLabel=\"Показать пароль\"\n      hideLabel=\"Скрыть пароль\"\n    />\n  );\n}"
         },
         {
           "title": "Регистрация с подтверждением",
-          "code": "<JxPasswordField label=\"Новый пароль\" autoComplete=\"new-password\" helperText=\"Не короче 12 символов\" value={next} onChange={(event) => setNext(event.target.value)} />\n<JxPasswordField\n  label=\"Повторите пароль\"\n  autoComplete=\"new-password\"\n  value={repeat}\n  onChange={(event) => setRepeat(event.target.value)}\n  errorText={repeat && repeat !== next ? 'Пароли не совпадают' : undefined}\n/>"
+          "code": "function NewPassword() {\n  const [next, setNext] = useState('');\n  const [repeat, setRepeat] = useState('');\n  return (\n    <>\n      <JxPasswordField\n        label=\"Новый пароль\"\n        autoComplete=\"new-password\"\n        helperText=\"Не короче 12 символов\"\n        value={next}\n        onChange={(event) => setNext(event.target.value)}\n      />\n      <JxPasswordField\n        label=\"Повторите пароль\"\n        autoComplete=\"new-password\"\n        value={repeat}\n        onChange={(event) => setRepeat(event.target.value)}\n        errorText={repeat && repeat !== next ? 'Пароли не совпадают' : undefined}\n      />\n    </>\n  );\n}"
         }
       ],
       "description": "Поле пароля с кнопкой «показать / скрыть». Кнопка переключает `type` между `password` и `text` и сообщает своё состояние через `aria-pressed`, поэтому своё переключение видимости писать не нужно. Само поле — обычный `<input>`: `value`, `onChange`, `name`, `autoComplete` и `disabled` передаются напрямую, а `type` задать нельзя — им управляет компонент. По умолчанию стоит `autoComplete=\"current-password\"`; для регистрации передайте `new-password`."

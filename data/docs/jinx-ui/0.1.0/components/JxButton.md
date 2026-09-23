@@ -1,6 +1,6 @@
 # JxButton
 
-Кнопка действия. Шесть визуальных вариантов и три размера, всё остальное берётся из атрибутов `<button>`: `type`, `disabled`, `onClick`, `aria-label`. По умолчанию `type="button"`, поэтому для отправки формы задавайте `type="submit"` явно.
+Кнопка действия. Пять визуальных вариантов и три размера, всё остальное берётся из атрибутов `<button>`: `type`, `disabled`, `onClick`, `aria-label`. По умолчанию `type="button"`, поэтому для отправки формы задавайте `type="submit"` явно.
 
 Импорт: `import { JxButton } from '@jinx-ui/react'`  
 Источник: `dist/components/Button.d.ts:9`

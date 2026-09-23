@@ -35,25 +35,44 @@
 ### Вход
 
 ```tsx
-<JxPasswordField
-  label="Пароль"
-  required
-  value={password}
-  onChange={(event) => setPassword(event.target.value)}
-  revealLabel="Показать пароль"
-  hideLabel="Скрыть пароль"
-/>
+function SignInPassword() {
+  const [password, setPassword] = useState('');
+  return (
+    <JxPasswordField
+      label="Пароль"
+      required
+      value={password}
+      onChange={(event) => setPassword(event.target.value)}
+      revealLabel="Показать пароль"
+      hideLabel="Скрыть пароль"
+    />
+  );
+}
 ```
 
 ### Регистрация с подтверждением
 
 ```tsx
-<JxPasswordField label="Новый пароль" autoComplete="new-password" helperText="Не короче 12 символов" value={next} onChange={(event) => setNext(event.target.value)} />
-<JxPasswordField
-  label="Повторите пароль"
-  autoComplete="new-password"
-  value={repeat}
-  onChange={(event) => setRepeat(event.target.value)}
-  errorText={repeat && repeat !== next ? 'Пароли не совпадают' : undefined}
-/>
+function NewPassword() {
+  const [next, setNext] = useState('');
+  const [repeat, setRepeat] = useState('');
+  return (
+    <>
+      <JxPasswordField
+        label="Новый пароль"
+        autoComplete="new-password"
+        helperText="Не короче 12 символов"
+        value={next}
+        onChange={(event) => setNext(event.target.value)}
+      />
+      <JxPasswordField
+        label="Повторите пароль"
+        autoComplete="new-password"
+        value={repeat}
+        onChange={(event) => setRepeat(event.target.value)}
+        errorText={repeat && repeat !== next ? 'Пароли не совпадают' : undefined}
+      />
+    </>
+  );
+}
 ```

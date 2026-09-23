@@ -35,14 +35,24 @@
 ### Период отчёта
 
 ```tsx
-const [range, setRange] = useState<JxDateRange>({ from: null, to: null });
-
-<JxDateRangePicker locale="ru-RU" fromLabel="С" toLabel="По" value={range} onValueChange={setRange} />
+function ReportPeriod() {
+  const [range, setRange] = useState<JxDateRange>({ from: null, to: null });
+  return <JxDateRangePicker locale="ru-RU" fromLabel="С" toLabel="По" value={range} onValueChange={setRange} />;
+}
 ```
 
 ### Кнопка активна только при выбранном периоде
 
 ```tsx
-<JxDateRangePicker value={range} onValueChange={setRange} />
-<JxButton variant="primary" disabled={!range.from || !range.to}>Построить отчёт</JxButton>
+function ReportRequest() {
+  const [range, setRange] = useState<JxDateRange>({ from: null, to: null });
+  return (
+    <>
+      <JxDateRangePicker value={range} onValueChange={setRange} />
+      <JxButton variant="primary" disabled={!range.from || !range.to}>
+        Построить отчёт
+      </JxButton>
+    </>
+  );
+}
 ```

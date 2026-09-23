@@ -312,8 +312,10 @@
 ### Статусы в таблице
 
 ```tsx
-<JxBadge tone="success" dot>Активен</JxBadge>
-<JxBadge tone="warning">Ожидает</JxBadge>
+<>
+  <JxBadge tone="success" dot>Активен</JxBadge>
+  <JxBadge tone="warning">Ожидает</JxBadge>
+</>
 ```
 
 ---
@@ -363,7 +365,7 @@
 
 # JxButton
 
-Кнопка действия. Шесть визуальных вариантов и три размера, всё остальное берётся из атрибутов `<button>`: `type`, `disabled`, `onClick`, `aria-label`. По умолчанию `type="button"`, поэтому для отправки формы задавайте `type="submit"` явно.
+Кнопка действия. Пять визуальных вариантов и три размера, всё остальное берётся из атрибутов `<button>`: `type`, `disabled`, `onClick`, `aria-label`. По умолчанию `type="button"`, поэтому для отправки формы задавайте `type="submit"` явно.
 
 Импорт: `import { JxButton } from '@jinx-ui/react'`  
 Источник: `dist/components/Button.d.ts:9`
@@ -623,16 +625,26 @@
 ### Период отчёта
 
 ```tsx
-const [range, setRange] = useState<JxDateRange>({ from: null, to: null });
-
-<JxDateRangePicker locale="ru-RU" fromLabel="С" toLabel="По" value={range} onValueChange={setRange} />
+function ReportPeriod() {
+  const [range, setRange] = useState<JxDateRange>({ from: null, to: null });
+  return <JxDateRangePicker locale="ru-RU" fromLabel="С" toLabel="По" value={range} onValueChange={setRange} />;
+}
 ```
 
 ### Кнопка активна только при выбранном периоде
 
 ```tsx
-<JxDateRangePicker value={range} onValueChange={setRange} />
-<JxButton variant="primary" disabled={!range.from || !range.to}>Построить отчёт</JxButton>
+function ReportRequest() {
+  const [range, setRange] = useState<JxDateRange>({ from: null, to: null });
+  return (
+    <>
+      <JxDateRangePicker value={range} onValueChange={setRange} />
+      <JxButton variant="primary" disabled={!range.from || !range.to}>
+        Построить отчёт
+      </JxButton>
+    </>
+  );
+}
 ```
 
 ---
@@ -1033,27 +1045,46 @@ const visible = users.slice((page - 1) * pageSize, page * pageSize);
 ### Вход
 
 ```tsx
-<JxPasswordField
-  label="Пароль"
-  required
-  value={password}
-  onChange={(event) => setPassword(event.target.value)}
-  revealLabel="Показать пароль"
-  hideLabel="Скрыть пароль"
-/>
+function SignInPassword() {
+  const [password, setPassword] = useState('');
+  return (
+    <JxPasswordField
+      label="Пароль"
+      required
+      value={password}
+      onChange={(event) => setPassword(event.target.value)}
+      revealLabel="Показать пароль"
+      hideLabel="Скрыть пароль"
+    />
+  );
+}
 ```
 
 ### Регистрация с подтверждением
 
 ```tsx
-<JxPasswordField label="Новый пароль" autoComplete="new-password" helperText="Не короче 12 символов" value={next} onChange={(event) => setNext(event.target.value)} />
-<JxPasswordField
-  label="Повторите пароль"
-  autoComplete="new-password"
-  value={repeat}
-  onChange={(event) => setRepeat(event.target.value)}
-  errorText={repeat && repeat !== next ? 'Пароли не совпадают' : undefined}
-/>
+function NewPassword() {
+  const [next, setNext] = useState('');
+  const [repeat, setRepeat] = useState('');
+  return (
+    <>
+      <JxPasswordField
+        label="Новый пароль"
+        autoComplete="new-password"
+        helperText="Не короче 12 символов"
+        value={next}
+        onChange={(event) => setNext(event.target.value)}
+      />
+      <JxPasswordField
+        label="Повторите пароль"
+        autoComplete="new-password"
+        value={repeat}
+        onChange={(event) => setRepeat(event.target.value)}
+        errorText={repeat && repeat !== next ? 'Пароли не совпадают' : undefined}
+      />
+    </>
+  );
+}
 ```
 
 ---
