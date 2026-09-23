@@ -1,9 +1,9 @@
 'use client';
 
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { LibraryIndex } from '@context-lab/index-tools';
 import type { RuleSet } from '@context-lab/rules/browser';
-import { CONTEXT_MODES, estimateContext, knownModels, type ContextMode, type Matrix, type RunRecord, type Task } from '@/lib/runner-browser';
+import { CONTEXT_MODES, estimateContext, knownModels, libraryKey, type ContextMode, type Matrix, type RunRecord, type Task } from '@/lib/runner-browser';
 import { describeApiError, runInBrowser, runLocally } from '@/lib/browser-run';
 import { browserToolSources } from '@/lib/tool-sources';
 import { ContextPreview } from './ContextPreview';
@@ -47,6 +47,8 @@ export function Lab({ index, tasks, readme, docs, rules, ruleSets, matrix, local
   );
   const modeTokens = useMemo(() => estimateContext(sources), [sources]);
   const availableModes = CONTEXT_MODES.filter((candidate) => (candidate === 'docs+rules' ? rules !== null : true));
+  const currentLibrary = libraryKey(index.library);
+  const matrixLibrary = matrix?.library ? libraryKey(matrix.library) : currentLibrary;
 
   const task: Task = useMemo(() => {
     const known = tasks.find((candidate) => candidate.id === taskId);
@@ -61,6 +63,8 @@ export function Lab({ index, tasks, readme, docs, rules, ruleSets, matrix, local
   };
 
   const onRendered = useCallback((status: RenderStatus) => setRender(status), []);
+
+  useEffect(() => () => abort.current?.abort(), []);
 
   const start = async () => {
     setError(null);
@@ -85,7 +89,7 @@ export function Lab({ index, tasks, readme, docs, rules, ruleSets, matrix, local
             });
       setRecord(result);
     } catch (caught) {
-      setError(describeApiError(caught));
+      setError(controller.signal.aborted ? 'Прогон отменён.' : describeApiError(caught));
     } finally {
       setRunning(false);
       abort.current = null;
@@ -208,11 +212,14 @@ export function Lab({ index, tasks, readme, docs, rules, ruleSets, matrix, local
           <h2>Записанные прогоны</h2>
           {matrix ? (
             <p className="muted max-w-[72ch] text-sm">
-              {matrix.generatedFrom} прогонов · модель {matrix.model} · библиотека {matrix.library?.name}@{matrix.library?.version}. В ячейке: доля прогонов
-              без ошибок, медиана токенов и цены, ходы и время.
+              {matrix.generatedFrom} прогонов · модель {matrix.model} · библиотека {matrix.library?.name} {matrixLibrary}
+              {matrixLibrary !== currentLibrary ? ` (контекст выше собирается из ${currentLibrary})` : ''}. В ячейке: доля засчитанных прогонов, медиана
+              токенов и цены, вызовы модели и время.
             </p>
           ) : (
-            <p className="muted text-sm">Матрица ещё не записана.</p>
+            <p className="muted text-sm">
+              Матрица ещё не записана: запишите прогоны командой <code>npm run run</code> и соберите таблицу через <code>npm run matrix</code>.
+            </p>
           )}
         </div>
         {matrix && <MatrixTable matrix={matrix} />}

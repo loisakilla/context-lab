@@ -15,11 +15,11 @@ interface PreviewProps {
 }
 
 interface PreviewMessage {
-  type?: string;
-  ok?: boolean;
-  error?: string;
-  height?: number;
-  filledProps?: string[];
+  type?: unknown;
+  ok?: unknown;
+  error?: unknown;
+  height?: unknown;
+  filledProps?: unknown;
 }
 
 const MIN_HEIGHT = 200;
@@ -28,15 +28,33 @@ const MAX_HEIGHT = 1200;
 let shellPromise: Promise<string> | undefined;
 
 function loadShell(): Promise<string> {
-  shellPromise ??= fetch('/preview/index.html').then((response) => {
-    if (!response.ok) throw new Error(`Страница превью не загрузилась: ${response.status}`);
-    return response.text();
-  });
+  shellPromise ??= fetch('/preview/index.html')
+    .then((response) => {
+      if (!response.ok) throw new Error(`Страница превью не загрузилась: ${response.status}`);
+      return response.text();
+    })
+    .catch((error: unknown) => {
+      shellPromise = undefined;
+      throw error;
+    });
   return shellPromise;
 }
 
 function clamp(height: number): number {
   return Math.min(MAX_HEIGHT, Math.max(MIN_HEIGHT, height + 8));
+}
+
+function heightOf(value: unknown): number | undefined {
+  return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
+}
+
+function statusOf(message: PreviewMessage): RenderStatus {
+  const filled = Array.isArray(message.filledProps) ? message.filledProps.filter((name): name is string => typeof name === 'string') : [];
+  return {
+    ok: message.ok === true,
+    ...(typeof message.error === 'string' && message.error.length > 0 ? { error: message.error.slice(0, 2000) } : {}),
+    ...(filled.length > 0 ? { filledProps: filled } : {}),
+  };
 }
 
 export function Preview({ code, onRendered }: PreviewProps) {
@@ -64,16 +82,15 @@ export function Preview({ code, onRendered }: PreviewProps) {
   useEffect(() => {
     const onMessage = (event: MessageEvent<PreviewMessage>) => {
       if (event.source !== frame.current?.contentWindow) return;
-      if (event.data?.type === 'preview-ready') setReadyCount((count) => count + 1);
-      if (event.data?.type === 'height' && typeof event.data.height === 'number') setHeight(clamp(event.data.height));
-      if (event.data?.type === 'rendered') {
-        const next: RenderStatus = {
-          ok: event.data.ok === true,
-          ...(event.data.error ? { error: event.data.error } : {}),
-          ...(event.data.filledProps ? { filledProps: event.data.filledProps } : {}),
-        };
+      const message = event.data;
+      if (!message || typeof message !== 'object') return;
+      if (message.type === 'preview-ready') setReadyCount((count) => count + 1);
+      const height = heightOf(message.height);
+      if (message.type === 'height' && height !== undefined) setHeight(clamp(height));
+      if (message.type === 'rendered') {
+        const next = statusOf(message);
         setStatus(next);
-        if (typeof event.data.height === 'number') setHeight(clamp(event.data.height));
+        if (height !== undefined) setHeight(clamp(height));
         onRendered?.(next);
       }
     };

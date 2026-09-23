@@ -57,7 +57,7 @@ export function Report({ record, render }: ReportProps) {
   const checks = record.checks;
   const lintErrors = checks?.lint.filter((finding) => finding.severity === 'error') ?? [];
   const lintWarnings = checks?.lint.filter((finding) => finding.severity === 'warning') ?? [];
-  const passed = record.verdict.passed && render?.ok !== false;
+  const passed = record.verdict.passed;
   const tokens = tokensOf(record);
   const promptTokens = firstPromptTokens(record);
   const toolCalls = record.turns.flatMap((turn) => turn.toolCalls);
@@ -66,9 +66,12 @@ export function Report({ record, render }: ReportProps) {
     <div className="flex flex-col gap-6">
       <div className="jx-card flex flex-col gap-6">
         <div className="card-head">
-          <Badge tone={passed ? 'ok' : 'bad'} dot>
-            {passed ? 'Проверки пройдены' : 'Есть проблемы'}
-          </Badge>
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge tone={passed ? 'ok' : 'bad'} dot>
+              {passed ? 'Проверки пройдены' : 'Есть проблемы'}
+            </Badge>
+            {render && <Badge tone={render.ok ? 'ok' : 'bad'}>{render.ok ? 'Превью построено' : 'Превью не построено'}</Badge>}
+          </div>
           <span className="dim">
             {MODE_LABELS[record.mode] ?? record.mode} · {record.model} · {DRIVER_LABELS[record.driver] ?? record.driver}
           </span>
@@ -171,7 +174,7 @@ export function Report({ record, render }: ReportProps) {
           <span className="jx-label">Вызовы инструментов · {toolCalls.length}</span>
           <ol className="flex flex-col gap-1">
             {toolCalls.map((call, position) => (
-              <li key={position} className="codebox code--row text-[12.5px]">
+              <li key={position} className="codebox codebox--row">
                 <span style={{ color: 'var(--jx-accent)' }}>{call.name.replace('mcp__context-lab__', '')}</span>
                 <span className="dim">({JSON.stringify(call.input)})</span>
                 <span className="muted">

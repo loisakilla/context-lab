@@ -8,6 +8,18 @@ import { libraryKey } from '@context-lab/runner/browser';
 
 export const dynamic = 'force-dynamic';
 
+function MissingRun({ task, mode }: { task: string; mode: string }) {
+  return (
+    <Note title="Прогона нет">
+      Для этой задачи в режиме «{MODE_LABELS[mode] ?? mode}» записи нет. Выберите другой режим выше или запишите прогон:{' '}
+      <code>
+        npm run run -- --task {task} --mode {mode}
+      </code>
+      .
+    </Note>
+  );
+}
+
 function first(value: string | string[] | undefined, fallback: string): string {
   return (Array.isArray(value) ? value[0] : value) ?? fallback;
 }
@@ -76,12 +88,12 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
           {leftRun ? (
             <RunPane record={leftRun} title={MODE_LABELS[left] ?? left} />
           ) : (
-            <Note title="Прогона нет">Для этой задачи в режиме «{MODE_LABELS[left] ?? left}» записи нет.</Note>
+            <MissingRun task={task} mode={left} />
           )}
           {rightRun ? (
             <RunPane record={rightRun} title={MODE_LABELS[right] ?? right} />
           ) : (
-            <Note title="Прогона нет">Для этой задачи в режиме «{MODE_LABELS[right] ?? right}» записи нет.</Note>
+            <MissingRun task={task} mode={right} />
           )}
         </section>
       </main>

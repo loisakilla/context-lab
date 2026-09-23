@@ -16,7 +16,7 @@ export function RunView({ record }: { record: RunRecord }) {
         <h1>{record.task.title}</h1>
         <p className="lede">{record.task.prompt}</p>
         <p className="dim mono text-[13px]">
-          {record.id} · {new Date(record.createdAt).toLocaleString('ru-RU')}
+          {record.id} · {new Date(record.createdAt).toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })} мск
         </p>
       </header>
 

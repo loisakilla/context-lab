@@ -90,7 +90,8 @@ export function Note({ tone = 'warn', title, children }: { tone?: 'warn' | 'bad'
   );
 }
 
-function plural(count: number, one: string, few: string, many: string): string {
+export function plural(count: number, one: string, few: string, many: string): string {
+  if (!Number.isInteger(count)) return few;
   const mod10 = count % 10;
   const mod100 = count % 100;
   if (mod10 === 1 && mod100 !== 11) return one;

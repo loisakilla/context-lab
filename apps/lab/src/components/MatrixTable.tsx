@@ -3,6 +3,11 @@ import { JxBadge, JxTable } from '@jinx-ui/react';
 import { libraryKey, type Matrix } from '@context-lab/runner/browser';
 import { MODE_LABELS } from '@/lib/labels';
 import { formatCost } from './Report';
+import { plural } from './ui';
+
+function decimal(value: number): string {
+  return value.toLocaleString('ru-RU', { maximumFractionDigits: 1 });
+}
 
 function tone(passRate: number): 'success' | 'danger' | 'warning' {
   if (passRate === 1) return 'success';
@@ -52,7 +57,7 @@ export function MatrixTable({ matrix }: { matrix: Matrix }) {
                       {cell.medianTurns > 0 && (
                         <>
                           <br />
-                          {cell.medianTurns} ход · {cell.medianSeconds} с
+                          {decimal(cell.medianTurns)} {plural(cell.medianTurns, 'вызов', 'вызова', 'вызовов')} модели · {decimal(cell.medianSeconds)} с
                         </>
                       )}
                     </span>

@@ -228,6 +228,10 @@ a.cell:hover {
   background: var(--jx-accent-soft);
 }
 
+a.cell:hover .muted {
+  color: var(--jx-text-2);
+}
+
 details > summary {
   display: inline-flex;
   align-items: center;
