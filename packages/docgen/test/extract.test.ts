@@ -1,6 +1,9 @@
+import { cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describe, expect, it } from 'vitest';
+import { afterAll, describe, expect, it } from 'vitest';
+import { buildIndex } from '../src/build.ts';
 import { extract } from '../src/extract.ts';
 import { createLibraryProgram } from '../src/program.ts';
 
@@ -97,5 +100,31 @@ describe('экстрактор на опубликованном пакете Ji
     expect(calendar?.cssClasses).toEqual(expect.arrayContaining(['jx-calendar', 'jx-cal-grid', 'jx-cal-day--selected']));
     const range = byName.get('JxDateRangePicker');
     expect(range?.cssClasses).toEqual(expect.arrayContaining(['jx-daterange-field', 'jx-cal-day--range-start', 'jx-cal-day--in-range']));
+  });
+
+  it('падает с понятной ошибкой, когда точки входа в пакете нет', () => {
+    expect(() => extract(lib, { entry: 'dist/runtme.d.ts' })).toThrow(/Точки входа dist\/runtme\.d\.ts нет/);
+  });
+});
+
+describe('выбор способа разбора и пустой индекс', () => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'docgen-'));
+  afterAll(() => rmSync(dir, { recursive: true, force: true }));
+
+  it('разбирает опубликованные типы по entry .d.ts, даже если в пакете лежит tsconfig.json', () => {
+    const copy = path.join(dir, 'with-tsconfig');
+    cpSync(jinx, copy, { recursive: true });
+    writeFileSync(path.join(copy, 'tsconfig.json'), JSON.stringify({ include: ['src/**/*'] }), 'utf8');
+    const lib = createLibraryProgram({ packageRoot: copy, entry: 'dist/runtime.d.ts' });
+    expect(lib.mode).toBe('package');
+    expect(extract(lib, { entry: 'dist/runtime.d.ts' }).components.length).toBeGreaterThanOrEqual(40);
+  });
+
+  it('не записывает индекс без единого компонента', () => {
+    const empty = path.join(dir, 'empty');
+    mkdirSync(empty, { recursive: true });
+    writeFileSync(path.join(empty, 'package.json'), JSON.stringify({ name: 'empty-kit', version: '1.0.0' }), 'utf8');
+    writeFileSync(path.join(empty, 'index.d.ts'), 'export declare const version: string;\n', 'utf8');
+    expect(() => buildIndex({ packageRoot: empty, entry: 'index.d.ts', library: { name: 'empty-kit' } })).toThrow(/ни одного компонента/);
   });
 });

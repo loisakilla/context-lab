@@ -25,9 +25,16 @@ function readPackageMeta(packageRoot: string): { name: string; version: string }
 }
 
 export function buildIndex(options: BuildOptions): LibraryIndex {
-  const lib = createLibraryProgram({ packageRoot: options.packageRoot, ...(options.libraryRoot ? { libraryRoot: options.libraryRoot } : {}) });
+  const lib = createLibraryProgram({
+    packageRoot: options.packageRoot,
+    ...(options.libraryRoot ? { libraryRoot: options.libraryRoot } : {}),
+    ...(options.entry ? { entry: options.entry } : {}),
+  });
   const descriptions = options.docsDir ? loadDescriptions(options.docsDir) : undefined;
   const extracted = extract(lib, { ...(options.entry ? { entry: options.entry } : {}), ...(descriptions ? { descriptions } : {}) });
+  if (extracted.components.length === 0) {
+    throw new Error(`В ${options.packageRoot} не нашлось ни одного компонента: проверьте library.packageRoot и library.entry в конфиге`);
+  }
   const tokens = (options.tokensCss ?? []).flatMap((file) => parseTokensCss(readFileSync(file, 'utf8')));
   const meta = readPackageMeta(options.packageRoot);
 

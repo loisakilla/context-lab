@@ -265,10 +265,14 @@ function location(node: ts.Node, lib: LibraryProgram): { file: string; line: num
   return { file: relative, line: source.getLineAndCharacterOfPosition(node.getStart()).line + 1 };
 }
 
+function entrySource(lib: LibraryProgram, entry: string): ts.SourceFile {
+  const source = lib.program.getSourceFile(toPosix(path.resolve(lib.packageRoot, entry)));
+  if (!source) throw new Error(`Точки входа ${entry} нет в ${lib.packageRoot}: проверьте library.entry в конфиге`);
+  return source;
+}
+
 function candidateSymbols(lib: LibraryProgram, entry?: string): Array<{ exported: ts.Symbol; resolved: ts.Symbol }> {
-  const sources = entry
-    ? [lib.program.getSourceFile(toPosix(path.resolve(lib.packageRoot, entry)))].filter((source): source is ts.SourceFile => source !== undefined)
-    : lib.program.getSourceFiles().filter((source) => lib.files.includes(toPosix(source.fileName)));
+  const sources = entry ? [entrySource(lib, entry)] : lib.program.getSourceFiles().filter((source) => lib.files.includes(toPosix(source.fileName)));
 
   const seen = new Set<ts.Symbol>();
   const result: Array<{ exported: ts.Symbol; resolved: ts.Symbol }> = [];

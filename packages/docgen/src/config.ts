@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import type { BuildOptions } from './build.ts';
 
@@ -43,13 +43,21 @@ function manifestGitHead(libraryRoot: string): string {
   }
 }
 
+function realPath(file: string): string {
+  try {
+    return realpathSync(file);
+  } catch {
+    return path.resolve(file);
+  }
+}
+
 export function libraryCommit(libraryRoot: string): string {
   const fromManifest = manifestGitHead(libraryRoot);
   if (fromManifest) return fromManifest;
+  const checkout = realPath(libraryRoot);
+  if (checkout.split(/[\\/]/).includes('node_modules')) return '';
   try {
-    const topLevel = execFileSync('git', ['-C', libraryRoot, 'rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim();
-    if (path.resolve(topLevel) !== path.resolve(libraryRoot)) return '';
-    return execFileSync('git', ['-C', libraryRoot, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+    return execFileSync('git', ['-C', checkout, 'rev-parse', 'HEAD'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
   } catch {
     return '';
   }

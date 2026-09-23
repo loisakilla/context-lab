@@ -15,6 +15,7 @@ export interface ProgramOptions {
   packageRoot: string;
   libraryRoot?: string;
   tsconfig?: string;
+  entry?: string;
 }
 
 const IGNORED = /(\.(test|spec|stories)\.tsx?|\.d\.ts)$/;
@@ -43,7 +44,11 @@ function readConfig(configPath: string): ts.ParsedCommandLine {
   if (raw.error) {
     throw new Error(ts.flattenDiagnosticMessageText(raw.error.messageText, '\n'));
   }
-  return ts.parseJsonConfigFileContent(raw.config, ts.sys, path.dirname(configPath));
+  const parsed = ts.parseJsonConfigFileContent(raw.config, ts.sys, path.dirname(configPath));
+  if (parsed.errors.length > 0) {
+    throw new Error(`${configPath}: ${parsed.errors.map((error) => ts.flattenDiagnosticMessageText(error.messageText, '\n')).join('; ')}`);
+  }
+  return parsed;
 }
 
 function shippedFiles(dir: string, into: string[]): string[] {
@@ -88,6 +93,7 @@ function packageProgram(packageRoot: string, libraryRoot: string): LibraryProgra
 export function createLibraryProgram(options: ProgramOptions): LibraryProgram {
   const packageRoot = toPosix(path.resolve(options.packageRoot));
   const libraryRoot = toPosix(path.resolve(options.libraryRoot ?? options.packageRoot));
+  if (options.entry && SHIPPED_TYPES.test(options.entry)) return packageProgram(packageRoot, libraryRoot);
   const ownConfig = path.join(packageRoot, 'tsconfig.json');
   const configPath = options.tsconfig ?? (existsSync(ownConfig) ? ownConfig : undefined);
   return configPath ? sourceProgram(configPath, packageRoot, libraryRoot) : packageProgram(packageRoot, libraryRoot);
