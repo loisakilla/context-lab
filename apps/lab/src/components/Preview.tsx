@@ -42,7 +42,7 @@ function clamp(height: number): number {
 export function Preview({ code, onRendered }: PreviewProps) {
   const frame = useRef<HTMLIFrameElement>(null);
   const [shell, setShell] = useState<string | null>(null);
-  const [ready, setReady] = useState(false);
+  const [readyCount, setReadyCount] = useState(0);
   const [height, setHeight] = useState(MIN_HEIGHT);
   const [status, setStatus] = useState<RenderStatus | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -64,7 +64,7 @@ export function Preview({ code, onRendered }: PreviewProps) {
   useEffect(() => {
     const onMessage = (event: MessageEvent<PreviewMessage>) => {
       if (event.source !== frame.current?.contentWindow) return;
-      if (event.data?.type === 'preview-ready') setReady(true);
+      if (event.data?.type === 'preview-ready') setReadyCount((count) => count + 1);
       if (event.data?.type === 'height' && typeof event.data.height === 'number') setHeight(clamp(event.data.height));
       if (event.data?.type === 'rendered') {
         const next: RenderStatus = {
@@ -82,10 +82,10 @@ export function Preview({ code, onRendered }: PreviewProps) {
   }, [onRendered]);
 
   useEffect(() => {
-    if (!ready || !code) return;
+    if (readyCount === 0 || !code) return;
     setStatus(null);
     frame.current?.contentWindow?.postMessage({ type: 'render', code, theme: 'light', style: 'brutal' }, '*');
-  }, [ready, code]);
+  }, [readyCount, code]);
 
   if (loadError) return <pre className="codebox" style={{ color: 'var(--jx-danger)' }}>{loadError}</pre>;
 
@@ -97,7 +97,6 @@ export function Preview({ code, onRendered }: PreviewProps) {
         ref={frame}
         title="Превью сгенерированного компонента"
         sandbox="allow-scripts"
-        onLoad={() => setReady(true)}
         {...(shell ? { srcDoc: shell } : {})}
         style={{
           height: broken ? 0 : height,
