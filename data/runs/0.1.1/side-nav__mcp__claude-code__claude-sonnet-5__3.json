@@ -1,8 +1,8 @@
 {
   "id": "side-nav__mcp__claude-code__claude-sonnet-5__3",
-  "createdAt": "2026-09-23T17:20:41.412Z",
+  "createdAt": "2026-09-24T10:40:31.422Z",
   "repeat": 3,
-  "durationMs": 11731,
+  "durationMs": 10123,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -24,14 +24,14 @@
     ]
   },
   "context": {
-    "tokens": 1587,
+    "tokens": 2405,
     "sources": [
       {
         "kind": "tools",
         "id": "search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules",
         "version": "0.1.1",
-        "tokens": 1191,
-        "hash": "7b624df52b71eb9c"
+        "tokens": 1213,
+        "hash": "491261188ee9c372"
       }
     ]
   },
@@ -40,41 +40,18 @@
       "usage": {
         "input": 2,
         "output": 2,
-        "cacheRead": 11207,
+        "cacheRead": 12562,
         "cacheCreation": 0
       },
       "toolCalls": [
         {
-          "name": "mcp__context-lab__search_components",
+          "name": "mcp__context-lab__get_component_api",
           "input": {
-            "query": "выезжающая панель drawer слева"
+            "name": "JxButton",
+            "detail": "signature"
           },
-          "resultTokens": 131
+          "resultTokens": 45
         },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "кнопка button"
-          },
-          "resultTokens": 455
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "список меню навигация пункты разделитель"
-          },
-          "resultTokens": 440
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 11207,
-        "cacheCreation": 2030
-      },
-      "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -94,34 +71,34 @@
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
-            "name": "JxButton",
+            "name": "JxDivider",
             "detail": "signature"
           },
-          "resultTokens": 45
+          "resultTokens": 23
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 1,
-        "cacheRead": 13237,
-        "cacheCreation": 1886
+        "output": 2,
+        "cacheRead": 12562,
+        "cacheCreation": 2022
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 6,
-    "output": 973,
-    "cacheRead": 35651,
-    "cacheCreation": 3916
+    "input": 4,
+    "output": 860,
+    "cacheRead": 25124,
+    "cacheCreation": 2022
   },
-  "costUsd": 0.06665549999999999,
+  "costUsd": 0.018688,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState } from 'react';\nimport { JxButton, JxDrawer, JxMenu } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface AppNavProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function AppNav({ onNavigate }: AppNavProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = (key: NavKey) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <JxButton variant=\"ghost\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n      <JxDrawer open={open} onOpenChange={setOpen} title=\"Меню\" side=\"left\">\n        <JxMenu\n          items={[\n            { label: 'Проекты', onSelect: () => select('projects') },\n            { label: 'Команда', onSelect: () => select('team') },\n            { label: 'Настройки', onSelect: () => select('settings') },\n            { type: 'divider' },\n            { label: 'Выйти', danger: true, onSelect: () => select('logout') },\n          ]}\n        />\n      </JxDrawer>\n    </>\n  );\n}",
-    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxDrawer, JxMenu } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface AppNavProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function AppNav({ onNavigate }: AppNavProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = (key: NavKey) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <JxButton variant=\"ghost\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n      <JxDrawer open={open} onOpenChange={setOpen} title=\"Меню\" side=\"left\">\n        <JxMenu\n          items={[\n            { label: 'Проекты', onSelect: () => select('projects') },\n            { label: 'Команда', onSelect: () => select('team') },\n            { label: 'Настройки', onSelect: () => select('settings') },\n            { type: 'divider' },\n            { label: 'Выйти', danger: true, onSelect: () => select('logout') },\n          ]}\n        />\n      </JxDrawer>\n    </>\n  );\n}\n```"
+    "code": "import { useState } from 'react';\nimport { JxButton, JxDrawer, JxMenu } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface NavigationMenuProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function NavigationMenu({ onNavigate }: NavigationMenuProps) {\n  const [open, setOpen] = useState(false);\n\n  const handleSelect = (key: NavKey) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <JxButton variant=\"ghost\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n      <JxDrawer open={open} onOpenChange={setOpen} title=\"Меню\" side=\"left\">\n        <JxMenu\n          items={[\n            { label: 'Проекты', onSelect: () => handleSelect('projects') },\n            { label: 'Команда', onSelect: () => handleSelect('team') },\n            { label: 'Настройки', onSelect: () => handleSelect('settings') },\n            { type: 'divider' },\n            { label: 'Выйти', danger: true, onSelect: () => handleSelect('logout') },\n          ]}\n        />\n      </JxDrawer>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxDrawer, JxMenu } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface NavigationMenuProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function NavigationMenu({ onNavigate }: NavigationMenuProps) {\n  const [open, setOpen] = useState(false);\n\n  const handleSelect = (key: NavKey) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <JxButton variant=\"ghost\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n      <JxDrawer open={open} onOpenChange={setOpen} title=\"Меню\" side=\"left\">\n        <JxMenu\n          items={[\n            { label: 'Проекты', onSelect: () => handleSelect('projects') },\n            { label: 'Команда', onSelect: () => handleSelect('team') },\n            { label: 'Настройки', onSelect: () => handleSelect('settings') },\n            { type: 'divider' },\n            { label: 'Выйти', danger: true, onSelect: () => handleSelect('logout') },\n          ]}\n        />\n      </JxDrawer>\n    </>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {

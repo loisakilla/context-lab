@@ -1,8 +1,8 @@
 {
   "id": "side-nav__mcp__claude-code__claude-opus-5__3",
-  "createdAt": "2026-09-23T19:08:19.223Z",
+  "createdAt": "2026-09-24T10:30:03.951Z",
   "repeat": 3,
-  "durationMs": 12396,
+  "durationMs": 11192,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -24,14 +24,14 @@
     ]
   },
   "context": {
-    "tokens": 1587,
+    "tokens": 2405,
     "sources": [
       {
         "kind": "tools",
         "id": "search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules",
         "version": "0.1.1",
-        "tokens": 1191,
-        "hash": "7b624df52b71eb9c"
+        "tokens": 1213,
+        "hash": "491261188ee9c372"
       }
     ]
   },
@@ -39,8 +39,8 @@
     {
       "usage": {
         "input": 2,
-        "output": 1,
-        "cacheRead": 11137,
+        "output": 2,
+        "cacheRead": 12492,
         "cacheCreation": 0
       },
       "toolCalls": [
@@ -52,76 +52,58 @@
           "resultTokens": 1247
         },
         {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "выезжающая панель сбоку drawer"
-          },
-          "resultTokens": 131
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "меню навигации пункты разделитель"
-          },
-          "resultTokens": 399
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11137,
-        "cacheCreation": 3319
-      },
-      "toolCalls": [
-        {
           "name": "mcp__context-lab__get_component_api",
           "input": {
-            "name": "JxMenu",
-            "detail": "full"
-          },
-          "resultTokens": 365
-        },
-        {
-          "name": "mcp__context-lab__get_component_api",
-          "input": {
-            "name": "JxDrawer",
-            "detail": "full"
+            "name": "JxDrawer"
           },
           "resultTokens": 522
         },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
-            "name": "JxButton",
-            "detail": "full"
+            "name": "JxMenu"
           },
-          "resultTokens": 539
+          "resultTokens": 365
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxButton",
+            "detail": "signature"
+          },
+          "resultTokens": 45
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxDivider",
+            "detail": "signature"
+          },
+          "resultTokens": 23
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 2,
-        "cacheRead": 14456,
-        "cacheCreation": 2654
+        "output": 5,
+        "cacheRead": 16643,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 6,
-    "output": 961,
-    "cacheRead": 36730,
-    "cacheCreation": 5973
+    "input": 4,
+    "output": 898,
+    "cacheRead": 29135,
+    "cacheCreation": 0
   },
-  "costUsd": 0.07975125,
+  "costUsd": 0.037038,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState } from 'react';\nimport { JxButton, JxDrawer, JxMenu } from '@jinx-ui/react';\n\nexport type NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface AppNavDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function AppNavDrawer({ onNavigate }: AppNavDrawerProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = (key: NavKey) => () => {\n    setOpen(false);\n    onNavigate(key);\n  };\n\n  return (\n    <>\n      <JxButton variant=\"ghost\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n      <JxDrawer open={open} onOpenChange={setOpen} title=\"Меню\" side=\"left\">\n        <JxMenu\n          items={[\n            { label: 'Проекты', onSelect: select('projects') },\n            { label: 'Команда', onSelect: select('team') },\n            { label: 'Настройки', onSelect: select('settings') },\n            { type: 'divider' },\n            { label: 'Выйти', danger: true, onSelect: select('logout') },\n          ]}\n        />\n      </JxDrawer>\n    </>\n  );\n}",
-    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxDrawer, JxMenu } from '@jinx-ui/react';\n\nexport type NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface AppNavDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function AppNavDrawer({ onNavigate }: AppNavDrawerProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = (key: NavKey) => () => {\n    setOpen(false);\n    onNavigate(key);\n  };\n\n  return (\n    <>\n      <JxButton variant=\"ghost\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n      <JxDrawer open={open} onOpenChange={setOpen} title=\"Меню\" side=\"left\">\n        <JxMenu\n          items={[\n            { label: 'Проекты', onSelect: select('projects') },\n            { label: 'Команда', onSelect: select('team') },\n            { label: 'Настройки', onSelect: select('settings') },\n            { type: 'divider' },\n            { label: 'Выйти', danger: true, onSelect: select('logout') },\n          ]}\n        />\n      </JxDrawer>\n    </>\n  );\n}\n```"
+    "code": "import { useState } from 'react';\nimport { JxButton, JxDrawer, JxMenu } from '@jinx-ui/react';\n\nexport type NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\nexport interface AppNavDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function AppNavDrawer({ onNavigate }: AppNavDrawerProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = (key: NavKey) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <JxButton variant=\"ghost\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n      <JxDrawer open={open} onOpenChange={setOpen} title=\"Меню\" side=\"left\">\n        <JxMenu\n          items={[\n            { label: 'Проекты', onSelect: () => select('projects') },\n            { label: 'Команда', onSelect: () => select('team') },\n            { label: 'Настройки', onSelect: () => select('settings') },\n            { type: 'divider' },\n            { label: 'Выйти', danger: true, onSelect: () => select('logout') },\n          ]}\n        />\n      </JxDrawer>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxDrawer, JxMenu } from '@jinx-ui/react';\n\nexport type NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\nexport interface AppNavDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function AppNavDrawer({ onNavigate }: AppNavDrawerProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = (key: NavKey) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <JxButton variant=\"ghost\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n      <JxDrawer open={open} onOpenChange={setOpen} title=\"Меню\" side=\"left\">\n        <JxMenu\n          items={[\n            { label: 'Проекты', onSelect: () => select('projects') },\n            { label: 'Команда', onSelect: () => select('team') },\n            { label: 'Настройки', onSelect: () => select('settings') },\n            { type: 'divider' },\n            { label: 'Выйти', danger: true, onSelect: () => select('logout') },\n          ]}\n        />\n      </JxDrawer>\n    </>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {

@@ -1,8 +1,8 @@
 {
   "id": "users-table__mcp__claude-code__claude-opus-5__1",
-  "createdAt": "2026-09-23T19:02:05.549Z",
+  "createdAt": "2026-09-24T10:25:29.361Z",
   "repeat": 1,
-  "durationMs": 24639,
+  "durationMs": 14321,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -24,14 +24,14 @@
     ]
   },
   "context": {
-    "tokens": 1587,
+    "tokens": 2405,
     "sources": [
       {
         "kind": "tools",
         "id": "search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules",
         "version": "0.1.1",
-        "tokens": 1191,
-        "hash": "7b624df52b71eb9c"
+        "tokens": 1213,
+        "hash": "491261188ee9c372"
       }
     ]
   },
@@ -39,47 +39,9 @@
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 10654,
-        "cacheCreation": 463
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "таблица"
-          },
-          "resultTokens": 325
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "пагинация постраничная навигация"
-          },
-          "resultTokens": 449
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "цветная метка статуса badge"
-          },
-          "resultTokens": 475
-        },
-        {
-          "name": "mcp__context-lab__get_rules",
-          "input": {
-            "task": "ui"
-          },
-          "resultTokens": 1247
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
         "output": 2,
-        "cacheRead": 11117,
-        "cacheCreation": 4592
+        "cacheRead": 12015,
+        "cacheCreation": 457
       },
       "toolCalls": [
         {
@@ -89,13 +51,6 @@
             "detail": "full"
           },
           "resultTokens": 361
-        },
-        {
-          "name": "mcp__context-lab__get_component_examples",
-          "input": {
-            "name": "JxTable"
-          },
-          "resultTokens": 219
         },
         {
           "name": "mcp__context-lab__get_component_api",
@@ -112,47 +67,55 @@
             "detail": "full"
           },
           "resultTokens": 274
+        },
+        {
+          "name": "mcp__context-lab__get_rules",
+          "input": {
+            "task": "ui"
+          },
+          "resultTokens": 1247
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 15709,
-        "cacheCreation": 2585
+        "output": 7,
+        "cacheRead": 12472,
+        "cacheCreation": 4269
       },
       "toolCalls": [
         {
-          "name": "mcp__context-lab__list_design_tokens",
+          "name": "mcp__context-lab__get_component_api",
           "input": {
-            "maxTokens": 900
+            "name": "JxEmptyState",
+            "detail": "full"
           },
-          "resultTokens": 625
+          "resultTokens": 274
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 18294,
-        "cacheCreation": 1574
+        "output": 8,
+        "cacheRead": 16741,
+        "cacheCreation": 575
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 8,
-    "output": 1841,
-    "cacheRead": 55774,
-    "cacheCreation": 9214
+    "input": 6,
+    "output": 1254,
+    "cacheRead": 41228,
+    "cacheCreation": 5301
   },
-  "costUsd": 0.1315395,
+  "costUsd": 0.085125,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState } from 'react';\nimport { JxBadge, JxEmptyState, JxPagination, JxTable } from '@jinx-ui/react';\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: { users: User[] }) {\n  const [page, setPage] = useState(1);\n\n  if (users.length === 0) {\n    return (\n      <JxEmptyState\n        title=\"Пользователей пока нет\"\n        message=\"Как только вы пригласите первого участника, он появится в этом списке.\"\n      />\n    );\n  }\n\n  const pageCount = Math.ceil(users.length / PAGE_SIZE);\n  const safePage = Math.min(page, pageCount);\n  const visible = users.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, fontFamily: 'var(--jx-font-sans)' }}>\n      <JxTable>\n        <thead>\n          <tr>\n            <th scope=\"col\">Имя</th>\n            <th scope=\"col\">Роль</th>\n            <th scope=\"col\">Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'default'} dot>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n\n      {pageCount > 1 && (\n        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>\n          <JxPagination total={pageCount} page={safePage} onPageChange={setPage} />\n        </div>\n      )}\n    </div>\n  );\n}",
-    "text": "```tsx\nimport { useState } from 'react';\nimport { JxBadge, JxEmptyState, JxPagination, JxTable } from '@jinx-ui/react';\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: { users: User[] }) {\n  const [page, setPage] = useState(1);\n\n  if (users.length === 0) {\n    return (\n      <JxEmptyState\n        title=\"Пользователей пока нет\"\n        message=\"Как только вы пригласите первого участника, он появится в этом списке.\"\n      />\n    );\n  }\n\n  const pageCount = Math.ceil(users.length / PAGE_SIZE);\n  const safePage = Math.min(page, pageCount);\n  const visible = users.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, fontFamily: 'var(--jx-font-sans)' }}>\n      <JxTable>\n        <thead>\n          <tr>\n            <th scope=\"col\">Имя</th>\n            <th scope=\"col\">Роль</th>\n            <th scope=\"col\">Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'default'} dot>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n\n      {pageCount > 1 && (\n        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>\n          <JxPagination total={pageCount} page={safePage} onPageChange={setPage} />\n        </div>\n      )}\n    </div>\n  );\n}\n```"
+    "code": "import { useEffect, useMemo, useState } from 'react';\nimport { JxBadge, JxEmptyState, JxPagination, JxTable } from '@jinx-ui/react';\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\nexport interface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n\n  useEffect(() => {\n    if (page > pageCount) setPage(pageCount);\n  }, [page, pageCount]);\n\n  const visible = useMemo(() => {\n    const start = (page - 1) * PAGE_SIZE;\n    return users.slice(start, start + PAGE_SIZE);\n  }, [users, page]);\n\n  if (users.length === 0) {\n    return (\n      <JxEmptyState\n        title=\"Пользователей пока нет\"\n        message=\"Как только кого-нибудь пригласят в рабочее пространство, он появится в этом списке.\"\n      />\n    );\n  }\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>\n      <JxTable>\n        <thead>\n          <tr>\n            <th scope=\"col\">Имя</th>\n            <th scope=\"col\">Роль</th>\n            <th scope=\"col\">Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td style={{ color: 'var(--jx-text-2)' }}>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'danger'} dot>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n\n      {pageCount > 1 && (\n        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>\n          <JxPagination total={pageCount} page={page} onPageChange={setPage} />\n        </div>\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useEffect, useMemo, useState } from 'react';\nimport { JxBadge, JxEmptyState, JxPagination, JxTable } from '@jinx-ui/react';\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\nexport interface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n\n  useEffect(() => {\n    if (page > pageCount) setPage(pageCount);\n  }, [page, pageCount]);\n\n  const visible = useMemo(() => {\n    const start = (page - 1) * PAGE_SIZE;\n    return users.slice(start, start + PAGE_SIZE);\n  }, [users, page]);\n\n  if (users.length === 0) {\n    return (\n      <JxEmptyState\n        title=\"Пользователей пока нет\"\n        message=\"Как только кого-нибудь пригласят в рабочее пространство, он появится в этом списке.\"\n      />\n    );\n  }\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>\n      <JxTable>\n        <thead>\n          <tr>\n            <th scope=\"col\">Имя</th>\n            <th scope=\"col\">Роль</th>\n            <th scope=\"col\">Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td style={{ color: 'var(--jx-text-2)' }}>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'danger'} dot>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n\n      {pageCount > 1 && (\n        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>\n          <JxPagination total={pageCount} page={page} onPageChange={setPage} />\n        </div>\n      )}\n    </div>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
@@ -164,13 +127,19 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 30,
+        "line": 41,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 55,
+        "line": 54,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 66,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       }
     ],

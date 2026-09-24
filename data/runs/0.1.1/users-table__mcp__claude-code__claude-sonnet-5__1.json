@@ -1,8 +1,8 @@
 {
   "id": "users-table__mcp__claude-code__claude-sonnet-5__1",
-  "createdAt": "2026-09-23T17:16:14.269Z",
+  "createdAt": "2026-09-24T10:37:26.284Z",
   "repeat": 1,
-  "durationMs": 10918,
+  "durationMs": 8603,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -24,14 +24,14 @@
     ]
   },
   "context": {
-    "tokens": 1587,
+    "tokens": 2405,
     "sources": [
       {
         "kind": "tools",
         "id": "search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules",
         "version": "0.1.1",
-        "tokens": 1191,
-        "hash": "7b624df52b71eb9c"
+        "tokens": 1213,
+        "hash": "491261188ee9c372"
       }
     ]
   },
@@ -40,39 +40,8 @@
       "usage": {
         "input": 2,
         "output": 2,
-        "cacheRead": 10724,
-        "cacheCreation": 463
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "таблица"
-          },
-          "resultTokens": 325
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "пагинация"
-          },
-          "resultTokens": 155
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "метка статус бейдж"
-          },
-          "resultTokens": 470
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11187,
-        "cacheCreation": 1880
+        "cacheRead": 12085,
+        "cacheCreation": 457
       },
       "toolCalls": [
         {
@@ -98,30 +67,37 @@
             "detail": "full"
           },
           "resultTokens": 274
+        },
+        {
+          "name": "mcp__context-lab__get_rules",
+          "input": {
+            "task": "ui"
+          },
+          "resultTokens": 1247
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 2,
-        "cacheRead": 13067,
-        "cacheCreation": 2089
+        "output": 6,
+        "cacheRead": 12542,
+        "cacheCreation": 4277
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 6,
-    "output": 1047,
-    "cacheRead": 34978,
-    "cacheCreation": 4432
+    "input": 4,
+    "output": 873,
+    "cacheRead": 24627,
+    "cacheCreation": 4734
   },
-  "costUsd": 0.071394,
+  "costUsd": 0.025498,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState } from 'react';\nimport { JxTable, JxPagination, JxBadge } from '@jinx-ui/react';\n\ninterface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\ninterface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n  const pageCount = Math.ceil(users.length / PAGE_SIZE);\n  const visible = users.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);\n\n  return (\n    <div>\n      <JxTable>\n        <thead>\n          <tr>\n            <th>Имя</th>\n            <th>Роль</th>\n            <th>Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'default'} dot>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n      {pageCount > 1 && (\n        <JxPagination total={pageCount} page={page} onPageChange={setPage} />\n      )}\n    </div>\n  );\n}",
-    "text": "Есть всё необходимое: `JxTable`, `JxPagination`, `JxBadge`. Пишу компонент.\n\n```tsx\nimport { useState } from 'react';\nimport { JxTable, JxPagination, JxBadge } from '@jinx-ui/react';\n\ninterface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\ninterface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n  const pageCount = Math.ceil(users.length / PAGE_SIZE);\n  const visible = users.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);\n\n  return (\n    <div>\n      <JxTable>\n        <thead>\n          <tr>\n            <th>Имя</th>\n            <th>Роль</th>\n            <th>Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'default'} dot>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n      {pageCount > 1 && (\n        <JxPagination total={pageCount} page={page} onPageChange={setPage} />\n      )}\n    </div>\n  );\n}\n```"
+    "code": "import { useState } from 'react';\nimport { JxTable, JxPagination, JxBadge } from '@jinx-ui/react';\n\ninterface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\ninterface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const visible = users.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-r)' }}>\n      <JxTable>\n        <thead>\n          <tr>\n            <th>Имя</th>\n            <th>Роль</th>\n            <th>Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'default'} dot={user.active}>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n      <JxPagination total={pageCount} page={page} onPageChange={setPage} />\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxTable, JxPagination, JxBadge } from '@jinx-ui/react';\n\ninterface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\ninterface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const visible = users.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-r)' }}>\n      <JxTable>\n        <thead>\n          <tr>\n            <th>Имя</th>\n            <th>Роль</th>\n            <th>Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visible.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'default'} dot={user.active}>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n      <JxPagination total={pageCount} page={page} onPageChange={setPage} />\n    </div>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
@@ -129,7 +105,14 @@
       "unknownComponents": [],
       "unknownProps": []
     },
-    "lint": [],
+    "lint": [
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 23,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      }
+    ],
     "usedComponents": [
       "JxBadge",
       "JxPagination",

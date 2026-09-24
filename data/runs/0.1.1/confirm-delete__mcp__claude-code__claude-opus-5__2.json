@@ -1,8 +1,8 @@
 {
   "id": "confirm-delete__mcp__claude-code__claude-opus-5__2",
-  "createdAt": "2026-09-23T18:59:13.409Z",
+  "createdAt": "2026-09-24T10:26:36.472Z",
   "repeat": 2,
-  "durationMs": 11005,
+  "durationMs": 9659,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -23,14 +23,14 @@
     ]
   },
   "context": {
-    "tokens": 1587,
+    "tokens": 2405,
     "sources": [
       {
         "kind": "tools",
         "id": "search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules",
         "version": "0.1.1",
-        "tokens": 1191,
-        "hash": "7b624df52b71eb9c"
+        "tokens": 1213,
+        "hash": "491261188ee9c372"
       }
     ]
   },
@@ -38,86 +38,57 @@
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 11133,
+        "output": 6,
+        "cacheRead": 12488,
         "cacheCreation": 0
       },
       "toolCalls": [
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "модальное окно подтверждения"
-          },
-          "resultTokens": 283
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "кнопка"
-          },
-          "resultTokens": 445
-        },
         {
           "name": "mcp__context-lab__get_rules",
           "input": {
             "task": "ui"
           },
           "resultTokens": 1247
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 29,
-        "cacheRead": 11133,
-        "cacheCreation": 3631
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
-            "name": "JxModal"
+            "name": "JxModal",
+            "detail": "full"
           },
           "resultTokens": 630
         },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
-            "name": "JxButton"
+            "name": "JxButton",
+            "detail": "full"
           },
           "resultTokens": 539
-        },
-        {
-          "name": "mcp__context-lab__get_component_examples",
-          "input": {
-            "name": "JxModal"
-          },
-          "resultTokens": 234
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 1,
-        "cacheRead": 14764,
-        "cacheCreation": 2419
+        "output": 8,
+        "cacheRead": 16742,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 6,
-    "output": 793,
-    "cacheRead": 37030,
-    "cacheCreation": 6050
+    "input": 4,
+    "output": 702,
+    "cacheRead": 29230,
+    "cacheCreation": 0
   },
-  "costUsd": 0.07618250000000001,
+  "costUsd": 0.032185,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState } from 'react';\nimport { JxButton, JxModal } from '@jinx-ui/react';\n\ntype DeleteProjectButtonProps = {\n  onConfirm: () => void;\n};\n\nexport default function DeleteProjectButton({ onConfirm }: DeleteProjectButtonProps) {\n  const [confirmOpen, setConfirmOpen] = useState(false);\n\n  const confirm = () => {\n    setConfirmOpen(false);\n    onConfirm();\n  };\n\n  return (\n    <>\n      <JxButton variant=\"danger\" onClick={() => setConfirmOpen(true)}>\n        Удалить проект\n      </JxButton>\n      <JxModal\n        open={confirmOpen}\n        onOpenChange={setConfirmOpen}\n        intent=\"danger\"\n        title=\"Удалить проект?\"\n        message=\"Действие необратимо: проект и все его задачи будут удалены навсегда.\"\n      >\n        <JxButton variant=\"ghost\" onClick={() => setConfirmOpen(false)}>\n          Отмена\n        </JxButton>\n        <JxButton variant=\"danger\" onClick={confirm}>\n          Удалить проект\n        </JxButton>\n      </JxModal>\n    </>\n  );\n}",
-    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxModal } from '@jinx-ui/react';\n\ntype DeleteProjectButtonProps = {\n  onConfirm: () => void;\n};\n\nexport default function DeleteProjectButton({ onConfirm }: DeleteProjectButtonProps) {\n  const [confirmOpen, setConfirmOpen] = useState(false);\n\n  const confirm = () => {\n    setConfirmOpen(false);\n    onConfirm();\n  };\n\n  return (\n    <>\n      <JxButton variant=\"danger\" onClick={() => setConfirmOpen(true)}>\n        Удалить проект\n      </JxButton>\n      <JxModal\n        open={confirmOpen}\n        onOpenChange={setConfirmOpen}\n        intent=\"danger\"\n        title=\"Удалить проект?\"\n        message=\"Действие необратимо: проект и все его задачи будут удалены навсегда.\"\n      >\n        <JxButton variant=\"ghost\" onClick={() => setConfirmOpen(false)}>\n          Отмена\n        </JxButton>\n        <JxButton variant=\"danger\" onClick={confirm}>\n          Удалить проект\n        </JxButton>\n      </JxModal>\n    </>\n  );\n}\n```"
+    "code": "import { useState } from 'react';\nimport { JxButton, JxModal } from '@jinx-ui/react';\n\nexport interface DeleteProjectButtonProps {\n  projectName?: string;\n  onConfirm: () => void;\n}\n\nexport default function DeleteProjectButton({ projectName, onConfirm }: DeleteProjectButtonProps) {\n  const [open, setOpen] = useState(false);\n\n  const confirm = () => {\n    setOpen(false);\n    onConfirm();\n  };\n\n  return (\n    <>\n      <JxButton variant=\"danger\" onClick={() => setOpen(true)}>\n        Удалить проект\n      </JxButton>\n      <JxModal\n        open={open}\n        onOpenChange={setOpen}\n        intent=\"danger\"\n        title=\"Удалить проект?\"\n        message={\n          projectName\n            ? `Проект «${projectName}» и все его задачи будут удалены безвозвратно. Отменить действие нельзя.`\n            : 'Проект и все его задачи будут удалены безвозвратно. Отменить действие нельзя.'\n        }\n      >\n        <JxButton variant=\"ghost\" onClick={() => setOpen(false)}>\n          Отмена\n        </JxButton>\n        <JxButton variant=\"danger\" onClick={confirm}>\n          Удалить проект\n        </JxButton>\n      </JxModal>\n    </>\n  );\n}",
+    "text": "```tsx\nimport { useState } from 'react';\nimport { JxButton, JxModal } from '@jinx-ui/react';\n\nexport interface DeleteProjectButtonProps {\n  projectName?: string;\n  onConfirm: () => void;\n}\n\nexport default function DeleteProjectButton({ projectName, onConfirm }: DeleteProjectButtonProps) {\n  const [open, setOpen] = useState(false);\n\n  const confirm = () => {\n    setOpen(false);\n    onConfirm();\n  };\n\n  return (\n    <>\n      <JxButton variant=\"danger\" onClick={() => setOpen(true)}>\n        Удалить проект\n      </JxButton>\n      <JxModal\n        open={open}\n        onOpenChange={setOpen}\n        intent=\"danger\"\n        title=\"Удалить проект?\"\n        message={\n          projectName\n            ? `Проект «${projectName}» и все его задачи будут удалены безвозвратно. Отменить действие нельзя.`\n            : 'Проект и все его задачи будут удалены безвозвратно. Отменить действие нельзя.'\n        }\n      >\n        <JxButton variant=\"ghost\" onClick={() => setOpen(false)}>\n          Отмена\n        </JxButton>\n        <JxButton variant=\"danger\" onClick={confirm}>\n          Удалить проект\n        </JxButton>\n      </JxModal>\n    </>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {

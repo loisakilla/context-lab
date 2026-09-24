@@ -1,8 +1,8 @@
 {
   "id": "tag-picker__mcp__claude-code__claude-sonnet-5__1",
-  "createdAt": "2026-09-23T17:18:51.026Z",
+  "createdAt": "2026-09-24T10:39:25.277Z",
   "repeat": 1,
-  "durationMs": 51592,
+  "durationMs": 28115,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -22,14 +22,14 @@
     ]
   },
   "context": {
-    "tokens": 1587,
+    "tokens": 2405,
     "sources": [
       {
         "kind": "tools",
         "id": "search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules",
         "version": "0.1.1",
-        "tokens": 1191,
-        "hash": "7b624df52b71eb9c"
+        "tokens": 1213,
+        "hash": "491261188ee9c372"
       }
     ]
   },
@@ -38,39 +38,8 @@
       "usage": {
         "input": 2,
         "output": 2,
-        "cacheRead": 10724,
-        "cacheCreation": 455
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "tag input chips"
-          },
-          "resultTokens": 506
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "удаляемая метка chip badge"
-          },
-          "resultTokens": 433
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "текстовое поле ввода input"
-          },
-          "resultTokens": 564
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 11179,
-        "cacheCreation": 2735
+        "cacheRead": 12085,
+        "cacheCreation": 449
       },
       "toolCalls": [
         {
@@ -81,48 +50,6 @@
           },
           "resultTokens": 323
         },
-        {
-          "name": "mcp__context-lab__get_component_examples",
-          "input": {
-            "name": "JxTagInput"
-          },
-          "resultTokens": 85
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 13914,
-        "cacheCreation": 920
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__get_docs",
-          "input": {
-            "component": "JxInputField"
-          },
-          "resultTokens": 610
-        },
-        {
-          "name": "mcp__context-lab__get_component_api",
-          "input": {
-            "name": "JxChip",
-            "detail": "full"
-          },
-          "resultTokens": 360
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 8,
-        "cacheRead": 14834,
-        "cacheCreation": 2562
-      },
-      "toolCalls": [
         {
           "name": "mcp__context-lab__get_rules",
           "input": {
@@ -135,57 +62,97 @@
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 17396,
-        "cacheCreation": 2300
+        "output": 2,
+        "cacheRead": 12534,
+        "cacheCreation": 2846
       },
       "toolCalls": [
         {
-          "name": "mcp__context-lab__list_design_tokens",
-          "input": {},
-          "resultTokens": 625
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxChip",
+            "detail": "full"
+          },
+          "resultTokens": 360
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxInputField",
+            "detail": "full"
+          },
+          "resultTokens": 484
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 19696,
-        "cacheCreation": 3020
+        "output": 7,
+        "cacheRead": 15380,
+        "cacheCreation": 1901
+      },
+      "toolCalls": [
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxAvatar",
+            "detail": "signature"
+          },
+          "resultTokens": 49
+        }
+      ]
+    },
+    {
+      "usage": {
+        "input": 2,
+        "output": 2,
+        "cacheRead": 17281,
+        "cacheCreation": 707
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 12,
-    "output": 4562,
-    "cacheRead": 87743,
-    "cacheCreation": 11992
+    "input": 8,
+    "output": 2230,
+    "cacheRead": 57280,
+    "cacheCreation": 5903
   },
-  "costUsd": 0.2329315,
+  "costUsd": 0.04853,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState, type ChangeEvent, type KeyboardEvent } from 'react';\nimport { JxInputField, JxChip } from '@jinx-ui/react';\n\ninterface ArticleTagsFieldProps {\n  value?: string[];\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n  label?: string;\n  placeholder?: string;\n}\n\nexport default function ArticleTagsField({\n  value,\n  defaultValue = [],\n  onChange,\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n}: ArticleTagsFieldProps) {\n  const isControlled = value !== undefined;\n  const [internalTags, setInternalTags] = useState<string[]>(defaultValue);\n  const tags = isControlled ? (value as string[]) : internalTags;\n  const [draft, setDraft] = useState('');\n\n  const commitTags = (next: string[]) => {\n    if (!isControlled) setInternalTags(next);\n    onChange?.(next);\n  };\n\n  const addTag = () => {\n    const trimmed = draft.trim();\n    if (trimmed.length === 0) return;\n    setDraft('');\n    if (tags.includes(trimmed)) return;\n    commitTags([...tags, trimmed]);\n  };\n\n  const removeTag = (tag: string) => {\n    commitTags(tags.filter((item) => item !== tag));\n  };\n\n  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {\n    setDraft(event.target.value);\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag();\n    } else if (event.key === 'Backspace' && draft.length === 0 && tags.length > 0) {\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  return (\n    <div>\n      <JxInputField\n        label={label}\n        placeholder={placeholder}\n        value={draft}\n        onChange={handleInputChange}\n        onKeyDown={handleKeyDown}\n        aria-label={label}\n        helperText={\n          tags.length === 0\n            ? 'Введите тег и нажмите Enter, чтобы добавить'\n            : `Добавлено тегов: ${tags.length}`\n        }\n      />\n      <div\n        role=\"list\"\n        aria-label=\"Выбранные теги\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8, minHeight: 32 }}\n      >\n        {tags.length === 0 ? (\n          <span style={{ color: 'var(--jx-text-3)', fontFamily: 'var(--jx-font-sans)' }}>\n            Теги ещё не добавлены\n          </span>\n        ) : (\n          tags.map((tag) => (\n            <span role=\"listitem\" key={tag}>\n              <JxChip removable onRemove={() => removeTag(tag)}>\n                {tag}\n              </JxChip>\n            </span>\n          ))\n        )}\n      </div>\n    </div>\n  );\n}",
-    "text": "```tsx\nimport { useState, type ChangeEvent, type KeyboardEvent } from 'react';\nimport { JxInputField, JxChip } from '@jinx-ui/react';\n\ninterface ArticleTagsFieldProps {\n  value?: string[];\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n  label?: string;\n  placeholder?: string;\n}\n\nexport default function ArticleTagsField({\n  value,\n  defaultValue = [],\n  onChange,\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n}: ArticleTagsFieldProps) {\n  const isControlled = value !== undefined;\n  const [internalTags, setInternalTags] = useState<string[]>(defaultValue);\n  const tags = isControlled ? (value as string[]) : internalTags;\n  const [draft, setDraft] = useState('');\n\n  const commitTags = (next: string[]) => {\n    if (!isControlled) setInternalTags(next);\n    onChange?.(next);\n  };\n\n  const addTag = () => {\n    const trimmed = draft.trim();\n    if (trimmed.length === 0) return;\n    setDraft('');\n    if (tags.includes(trimmed)) return;\n    commitTags([...tags, trimmed]);\n  };\n\n  const removeTag = (tag: string) => {\n    commitTags(tags.filter((item) => item !== tag));\n  };\n\n  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {\n    setDraft(event.target.value);\n  };\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag();\n    } else if (event.key === 'Backspace' && draft.length === 0 && tags.length > 0) {\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  return (\n    <div>\n      <JxInputField\n        label={label}\n        placeholder={placeholder}\n        value={draft}\n        onChange={handleInputChange}\n        onKeyDown={handleKeyDown}\n        aria-label={label}\n        helperText={\n          tags.length === 0\n            ? 'Введите тег и нажмите Enter, чтобы добавить'\n            : `Добавлено тегов: ${tags.length}`\n        }\n      />\n      <div\n        role=\"list\"\n        aria-label=\"Выбранные теги\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8, minHeight: 32 }}\n      >\n        {tags.length === 0 ? (\n          <span style={{ color: 'var(--jx-text-3)', fontFamily: 'var(--jx-font-sans)' }}>\n            Теги ещё не добавлены\n          </span>\n        ) : (\n          tags.map((tag) => (\n            <span role=\"listitem\" key={tag}>\n              <JxChip removable onRemove={() => removeTag(tag)}>\n                {tag}\n              </JxChip>\n            </span>\n          ))\n        )}\n      </div>\n    </div>\n  );\n}\n```"
+    "code": "import { useState, useCallback, KeyboardEvent } from 'react';\nimport { JxInputField, JxChip } from '@jinx-ui/react';\n\ninterface ArticleTagInputProps {\n  defaultTags?: string[];\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagInput({ defaultTags = [], onChange }: ArticleTagInputProps) {\n  const [tags, setTags] = useState<string[]>(defaultTags);\n  const [draft, setDraft] = useState('');\n\n  const commit = useCallback(\n    (next: string[]) => {\n      setTags(next);\n      onChange?.(next);\n    },\n    [onChange],\n  );\n\n  const addTag = useCallback(() => {\n    const value = draft.trim();\n    if (!value || tags.includes(value)) {\n      setDraft('');\n      return;\n    }\n    commit([...tags, value]);\n    setDraft('');\n  }, [draft, tags, commit]);\n\n  const removeTag = useCallback(\n    (index: number) => {\n      commit(tags.filter((_, i) => i !== index));\n    },\n    [tags, commit],\n  );\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter') {\n      event.preventDefault();\n      addTag();\n    } else if (event.key === 'Backspace' && draft.length === 0 && tags.length > 0) {\n      event.preventDefault();\n      removeTag(tags.length - 1);\n    }\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-r-sm)' }}>\n      <JxInputField\n        label=\"Теги статьи\"\n        placeholder=\"Введите тег и нажмите Enter\"\n        value={draft}\n        onChange={(event) => setDraft(event.target.value)}\n        onKeyDown={handleKeyDown}\n        onBlur={addTag}\n        helperText=\"Enter добавляет тег, Backspace удаляет последний\"\n        ariaLabel=\"Ввод тега\"\n      />\n      {tags.length > 0 && (\n        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--jx-r-sm)' }}>\n          {tags.map((tag, index) => (\n            <JxChip key={tag} removable onRemove={() => removeTag(index)}>\n              {tag}\n            </JxChip>\n          ))}\n        </div>\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useState, useCallback, KeyboardEvent } from 'react';\nimport { JxInputField, JxChip } from '@jinx-ui/react';\n\ninterface ArticleTagInputProps {\n  defaultTags?: string[];\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagInput({ defaultTags = [], onChange }: ArticleTagInputProps) {\n  const [tags, setTags] = useState<string[]>(defaultTags);\n  const [draft, setDraft] = useState('');\n\n  const commit = useCallback(\n    (next: string[]) => {\n      setTags(next);\n      onChange?.(next);\n    },\n    [onChange],\n  );\n\n  const addTag = useCallback(() => {\n    const value = draft.trim();\n    if (!value || tags.includes(value)) {\n      setDraft('');\n      return;\n    }\n    commit([...tags, value]);\n    setDraft('');\n  }, [draft, tags, commit]);\n\n  const removeTag = useCallback(\n    (index: number) => {\n      commit(tags.filter((_, i) => i !== index));\n    },\n    [tags, commit],\n  );\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter') {\n      event.preventDefault();\n      addTag();\n    } else if (event.key === 'Backspace' && draft.length === 0 && tags.length > 0) {\n      event.preventDefault();\n      removeTag(tags.length - 1);\n    }\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-r-sm)' }}>\n      <JxInputField\n        label=\"Теги статьи\"\n        placeholder=\"Введите тег и нажмите Enter\"\n        value={draft}\n        onChange={(event) => setDraft(event.target.value)}\n        onKeyDown={handleKeyDown}\n        onBlur={addTag}\n        helperText=\"Enter добавляет тег, Backspace удаляет последний\"\n        ariaLabel=\"Ввод тега\"\n      />\n      {tags.length > 0 && (\n        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--jx-r-sm)' }}>\n          {tags.map((tag, index) => (\n            <JxChip key={tag} removable onRemove={() => removeTag(index)}>\n              {tag}\n            </JxChip>\n          ))}\n        </div>\n      )}\n    </div>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
-      "errors": [],
+      "errors": [
+        {
+          "code": 2322,
+          "line": 58,
+          "message": "Type '{ label: string; placeholder: string; value: string; onChange: (event: ChangeEvent<HTMLInputElement, HTMLInputElement>) => void; onKeyDown: (event: KeyboardEvent<...>) => void; onBlur: () => void; helperText: string; ariaLabel: string; }' is not assignable to type 'IntrinsicAttributes & FieldBaseProps & InputHTMLAttributes<HTMLInputElement> & { ref?: Ref<HTMLInputElement> | undefined; prefix?: string | undefined; }'.\n  Property 'ariaLabel' does not exist on type 'IntrinsicAttributes & FieldBaseProps & InputHTMLAttributes<HTMLInputElement> & { ref?: Ref<HTMLInputElement> | undefined; prefix?: string | undefined; }'. Did you mean '\"aria-label\"'?"
+        }
+      ],
       "unknownComponents": [],
-      "unknownProps": []
+      "unknownProps": [
+        {
+          "component": "JxInputField",
+          "prop": "ariaLabel"
+        }
+      ]
     },
     "lint": [
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 72,
+        "line": 49,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 75,
+        "line": 61,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       }
     ],
@@ -194,10 +161,10 @@
       "JxInputField"
     ],
     "expectedCoverage": 0,
-    "passed": true
+    "passed": false
   },
   "verdict": {
-    "passed": true,
-    "score": 0.7
+    "passed": false,
+    "score": 0.56
   }
 }

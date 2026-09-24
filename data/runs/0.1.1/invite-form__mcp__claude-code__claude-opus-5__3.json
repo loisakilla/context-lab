@@ -1,8 +1,8 @@
 {
   "id": "invite-form__mcp__claude-code__claude-opus-5__3",
-  "createdAt": "2026-09-23T19:13:45.841Z",
+  "createdAt": "2026-09-24T10:34:32.150Z",
   "repeat": 3,
-  "durationMs": 31258,
+  "durationMs": 23579,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -26,14 +26,14 @@
     ]
   },
   "context": {
-    "tokens": 1587,
+    "tokens": 2405,
     "sources": [
       {
         "kind": "tools",
         "id": "search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules",
         "version": "0.1.1",
-        "tokens": 1191,
-        "hash": "7b624df52b71eb9c"
+        "tokens": 1213,
+        "hash": "491261188ee9c372"
       }
     ]
   },
@@ -41,8 +41,8 @@
     {
       "usage": {
         "input": 2,
-        "output": 1,
-        "cacheRead": 11147,
+        "output": 6,
+        "cacheRead": 12502,
         "cacheCreation": 0
       },
       "toolCalls": [
@@ -53,51 +53,6 @@
           },
           "resultTokens": 1247
         },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "поле ввода почты с подсказкой и ошибкой"
-          },
-          "resultTokens": 526
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "выбор роли из списка select"
-          },
-          "resultTokens": 599
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "переключатель switch toggle"
-          },
-          "resultTokens": 240
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "кнопка отправки формы"
-          },
-          "resultTokens": 375
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "сообщение об успехе которое можно закрыть alert"
-          },
-          "resultTokens": 483
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11147,
-        "cacheCreation": 6316
-      },
-      "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -138,41 +93,24 @@
     {
       "usage": {
         "input": 2,
-        "output": 2,
-        "cacheRead": 17463,
-        "cacheCreation": 3935
-      },
-      "toolCalls": [
-        {
-          "name": "mcp__context-lab__list_design_tokens",
-          "input": {
-            "maxTokens": 1200
-          },
-          "resultTokens": 625
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 21398,
-        "cacheCreation": 1687
+        "output": 8,
+        "cacheRead": 18520,
+        "cacheCreation": 0
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 8,
-    "output": 2712,
-    "cacheRead": 61155,
-    "cacheCreation": 11938
+    "input": 4,
+    "output": 2315,
+    "cacheRead": 31022,
+    "cacheCreation": 0
   },
-  "costUsd": 0.17303000000000002,
+  "costUsd": 0.073406,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useId, useRef, useState } from 'react';\nimport { JxAlert, JxButton, JxInputField, JxSelect, JxSwitch } from '@jinx-ui/react';\n\ntype Role = 'viewer' | 'editor' | 'admin';\n\nconst ROLE_OPTIONS = [\n  { value: 'viewer', label: 'Наблюдатель', meta: 'Только чтение' },\n  { value: 'editor', label: 'Редактор', meta: 'Правит содержимое' },\n  { value: 'admin', label: 'Администратор', meta: 'Полный доступ' },\n];\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nexport default function TeamInviteForm() {\n  const [email, setEmail] = useState('');\n  const [touched, setTouched] = useState(false);\n  const [role, setRole] = useState<Role>('editor');\n  const [notify, setNotify] = useState(true);\n  const [invited, setInvited] = useState<string | null>(null);\n\n  const formId = useId();\n  const submitRef = useRef<HTMLButtonElement>(null);\n\n  const isValid = EMAIL_PATTERN.test(email.trim());\n  const errorText = touched && !isValid ? 'Нужен адрес вида name@company.com' : undefined;\n\n  const submit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!isValid) {\n      setTouched(true);\n      return;\n    }\n    setInvited(email.trim());\n    setEmail('');\n    setTouched(false);\n  };\n\n  const dismiss = () => {\n    setInvited(null);\n    submitRef.current?.focus();\n  };\n\n  return (\n    <div style={{ display: 'grid', gap: 16, maxWidth: 420 }}>\n      {invited ? (\n        <JxAlert intent=\"success\" title=\"Приглашение отправлено\" role=\"status\">\n          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>\n            <span style={{ flex: 1, minWidth: 0, overflowWrap: 'anywhere' }}>\n              {invited} получит доступ, как только примет приглашение.\n              {notify ? ' Уведомление на почту отправлено.' : ' Уведомление на почту не отправлялось.'}\n            </span>\n            <JxButton variant=\"ghost\" size=\"sm\" iconOnly aria-label=\"Закрыть сообщение\" onClick={dismiss}>\n              ✕\n            </JxButton>\n          </div>\n        </JxAlert>\n      ) : null}\n\n      <form id={formId} onSubmit={submit} noValidate style={{ display: 'grid', gap: 16 }}>\n        <JxInputField\n          label=\"Электронная почта\"\n          type=\"email\"\n          name=\"email\"\n          required\n          autoComplete=\"email\"\n          placeholder=\"name@company.com\"\n          value={email}\n          onChange={(event) => setEmail(event.target.value)}\n          onBlur={() => setTouched(true)}\n          helperText=\"Приглашение придёт на этот адрес и будет действовать 7 дней\"\n          errorText={errorText}\n        />\n\n        <JxSelect\n          label=\"Роль в команде\"\n          options={ROLE_OPTIONS}\n          value={role}\n          onValueChange={(value) => setRole(value as Role)}\n          placeholder=\"Выберите роль\"\n        />\n\n        <JxSwitch\n          label=\"Отправить уведомление на почту\"\n          name=\"notify\"\n          checked={notify}\n          onChange={(event) => setNotify(event.target.checked)}\n        />\n\n        <div style={{ display: 'flex', gap: 8 }}>\n          <JxButton ref={submitRef} type=\"submit\" variant=\"primary\" disabled={!isValid}>\n            Отправить приглашение\n          </JxButton>\n        </div>\n      </form>\n    </div>\n  );\n}",
-    "text": "```tsx\nimport { useId, useRef, useState } from 'react';\nimport { JxAlert, JxButton, JxInputField, JxSelect, JxSwitch } from '@jinx-ui/react';\n\ntype Role = 'viewer' | 'editor' | 'admin';\n\nconst ROLE_OPTIONS = [\n  { value: 'viewer', label: 'Наблюдатель', meta: 'Только чтение' },\n  { value: 'editor', label: 'Редактор', meta: 'Правит содержимое' },\n  { value: 'admin', label: 'Администратор', meta: 'Полный доступ' },\n];\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nexport default function TeamInviteForm() {\n  const [email, setEmail] = useState('');\n  const [touched, setTouched] = useState(false);\n  const [role, setRole] = useState<Role>('editor');\n  const [notify, setNotify] = useState(true);\n  const [invited, setInvited] = useState<string | null>(null);\n\n  const formId = useId();\n  const submitRef = useRef<HTMLButtonElement>(null);\n\n  const isValid = EMAIL_PATTERN.test(email.trim());\n  const errorText = touched && !isValid ? 'Нужен адрес вида name@company.com' : undefined;\n\n  const submit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!isValid) {\n      setTouched(true);\n      return;\n    }\n    setInvited(email.trim());\n    setEmail('');\n    setTouched(false);\n  };\n\n  const dismiss = () => {\n    setInvited(null);\n    submitRef.current?.focus();\n  };\n\n  return (\n    <div style={{ display: 'grid', gap: 16, maxWidth: 420 }}>\n      {invited ? (\n        <JxAlert intent=\"success\" title=\"Приглашение отправлено\" role=\"status\">\n          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>\n            <span style={{ flex: 1, minWidth: 0, overflowWrap: 'anywhere' }}>\n              {invited} получит доступ, как только примет приглашение.\n              {notify ? ' Уведомление на почту отправлено.' : ' Уведомление на почту не отправлялось.'}\n            </span>\n            <JxButton variant=\"ghost\" size=\"sm\" iconOnly aria-label=\"Закрыть сообщение\" onClick={dismiss}>\n              ✕\n            </JxButton>\n          </div>\n        </JxAlert>\n      ) : null}\n\n      <form id={formId} onSubmit={submit} noValidate style={{ display: 'grid', gap: 16 }}>\n        <JxInputField\n          label=\"Электронная почта\"\n          type=\"email\"\n          name=\"email\"\n          required\n          autoComplete=\"email\"\n          placeholder=\"name@company.com\"\n          value={email}\n          onChange={(event) => setEmail(event.target.value)}\n          onBlur={() => setTouched(true)}\n          helperText=\"Приглашение придёт на этот адрес и будет действовать 7 дней\"\n          errorText={errorText}\n        />\n\n        <JxSelect\n          label=\"Роль в команде\"\n          options={ROLE_OPTIONS}\n          value={role}\n          onValueChange={(value) => setRole(value as Role)}\n          placeholder=\"Выберите роль\"\n        />\n\n        <JxSwitch\n          label=\"Отправить уведомление на почту\"\n          name=\"notify\"\n          checked={notify}\n          onChange={(event) => setNotify(event.target.checked)}\n        />\n\n        <div style={{ display: 'flex', gap: 8 }}>\n          <JxButton ref={submitRef} type=\"submit\" variant=\"primary\" disabled={!isValid}>\n            Отправить приглашение\n          </JxButton>\n        </div>\n      </form>\n    </div>\n  );\n}\n```"
+    "code": "import { useId, useRef, useState } from 'react';\nimport {\n  JxAlert,\n  JxButton,\n  JxInputField,\n  JxSelect,\n  JxSwitch,\n} from '@jinx-ui/react';\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nconst ROLE_OPTIONS = [\n  { value: 'viewer', label: 'Наблюдатель', meta: 'только чтение' },\n  { value: 'editor', label: 'Редактор', meta: 'правит материалы' },\n  { value: 'admin', label: 'Администратор', meta: 'управляет командой' },\n];\n\nexport default function TeamInviteForm() {\n  const [email, setEmail] = useState('');\n  const [touched, setTouched] = useState(false);\n  const [role, setRole] = useState('editor');\n  const [notify, setNotify] = useState(true);\n  const [sending, setSending] = useState(false);\n  const [invitedEmail, setInvitedEmail] = useState<string | null>(null);\n\n  const emailRef = useRef<HTMLInputElement>(null);\n  const formTitleId = useId();\n\n  const isValid = EMAIL_PATTERN.test(email.trim());\n  const errorText =\n    touched && !isValid\n      ? email.trim().length === 0\n        ? 'Укажите почту приглашаемого'\n        : 'Похоже, это не адрес почты: нужен вид name@example.com'\n      : undefined;\n\n  const submit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    setTouched(true);\n    if (!isValid || sending) {\n      emailRef.current?.focus();\n      return;\n    }\n    setSending(true);\n    setInvitedEmail(email.trim());\n    setEmail('');\n    setTouched(false);\n    setSending(false);\n  };\n\n  const dismiss = () => {\n    setInvitedEmail(null);\n    emailRef.current?.focus();\n  };\n\n  return (\n    <form\n      onSubmit={submit}\n      aria-labelledby={formTitleId}\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 16,\n        maxWidth: 440,\n        padding: 20,\n        background: 'var(--jx-surface)',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n        boxShadow: 'var(--jx-shadow-sm)',\n        color: 'var(--jx-text)',\n        fontFamily: 'var(--jx-font-sans)',\n      }}\n    >\n      <h2\n        id={formTitleId}\n        style={{\n          margin: 0,\n          fontFamily: 'var(--jx-font-display)',\n          fontSize: 18,\n          color: 'var(--jx-text)',\n        }}\n      >\n        Приглашение в команду\n      </h2>\n\n      {invitedEmail !== null && (\n        <div\n          role=\"status\"\n          style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}\n        >\n          <div style={{ flex: 1, minWidth: 0 }}>\n            <JxAlert intent=\"success\" title=\"Приглашение отправлено\">\n              <span style={{ wordBreak: 'break-word' }}>\n                {invitedEmail} получит доступ как «\n                {ROLE_OPTIONS.find((option) => option.value === role)?.label}».\n                {notify\n                  ? ' Уведомление на почту отправлено.'\n                  : ' Уведомление на почту не отправлялось.'}\n              </span>\n            </JxAlert>\n          </div>\n          <JxButton\n            variant=\"ghost\"\n            size=\"sm\"\n            iconOnly\n            aria-label=\"Закрыть сообщение об отправке\"\n            onClick={dismiss}\n          >\n            ✕\n          </JxButton>\n        </div>\n      )}\n\n      <JxInputField\n        ref={emailRef}\n        label=\"Электронная почта\"\n        type=\"email\"\n        name=\"email\"\n        required\n        placeholder=\"name@example.com\"\n        value={email}\n        onChange={(event) => setEmail(event.target.value)}\n        onBlur={() => setTouched(true)}\n        helperText=\"Приглашение придёт на этот адрес и будет действовать 7 дней\"\n        errorText={errorText}\n      />\n\n      <JxSelect\n        label=\"Роль в команде\"\n        placeholder=\"Выберите роль\"\n        options={ROLE_OPTIONS}\n        value={role}\n        onValueChange={setRole}\n      />\n\n      <JxSwitch\n        name=\"notify\"\n        label=\"Отправить уведомление на почту\"\n        checked={notify}\n        onChange={(event) => setNotify(event.target.checked)}\n      />\n\n      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>\n        <JxButton type=\"submit\" variant=\"primary\" disabled={!isValid || sending}>\n          Отправить приглашение\n        </JxButton>\n      </div>\n    </form>\n  );\n}",
+    "text": "```tsx\nimport { useId, useRef, useState } from 'react';\nimport {\n  JxAlert,\n  JxButton,\n  JxInputField,\n  JxSelect,\n  JxSwitch,\n} from '@jinx-ui/react';\n\nconst EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n\nconst ROLE_OPTIONS = [\n  { value: 'viewer', label: 'Наблюдатель', meta: 'только чтение' },\n  { value: 'editor', label: 'Редактор', meta: 'правит материалы' },\n  { value: 'admin', label: 'Администратор', meta: 'управляет командой' },\n];\n\nexport default function TeamInviteForm() {\n  const [email, setEmail] = useState('');\n  const [touched, setTouched] = useState(false);\n  const [role, setRole] = useState('editor');\n  const [notify, setNotify] = useState(true);\n  const [sending, setSending] = useState(false);\n  const [invitedEmail, setInvitedEmail] = useState<string | null>(null);\n\n  const emailRef = useRef<HTMLInputElement>(null);\n  const formTitleId = useId();\n\n  const isValid = EMAIL_PATTERN.test(email.trim());\n  const errorText =\n    touched && !isValid\n      ? email.trim().length === 0\n        ? 'Укажите почту приглашаемого'\n        : 'Похоже, это не адрес почты: нужен вид name@example.com'\n      : undefined;\n\n  const submit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    setTouched(true);\n    if (!isValid || sending) {\n      emailRef.current?.focus();\n      return;\n    }\n    setSending(true);\n    setInvitedEmail(email.trim());\n    setEmail('');\n    setTouched(false);\n    setSending(false);\n  };\n\n  const dismiss = () => {\n    setInvitedEmail(null);\n    emailRef.current?.focus();\n  };\n\n  return (\n    <form\n      onSubmit={submit}\n      aria-labelledby={formTitleId}\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 16,\n        maxWidth: 440,\n        padding: 20,\n        background: 'var(--jx-surface)',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n        boxShadow: 'var(--jx-shadow-sm)',\n        color: 'var(--jx-text)',\n        fontFamily: 'var(--jx-font-sans)',\n      }}\n    >\n      <h2\n        id={formTitleId}\n        style={{\n          margin: 0,\n          fontFamily: 'var(--jx-font-display)',\n          fontSize: 18,\n          color: 'var(--jx-text)',\n        }}\n      >\n        Приглашение в команду\n      </h2>\n\n      {invitedEmail !== null && (\n        <div\n          role=\"status\"\n          style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}\n        >\n          <div style={{ flex: 1, minWidth: 0 }}>\n            <JxAlert intent=\"success\" title=\"Приглашение отправлено\">\n              <span style={{ wordBreak: 'break-word' }}>\n                {invitedEmail} получит доступ как «\n                {ROLE_OPTIONS.find((option) => option.value === role)?.label}».\n                {notify\n                  ? ' Уведомление на почту отправлено.'\n                  : ' Уведомление на почту не отправлялось.'}\n              </span>\n            </JxAlert>\n          </div>\n          <JxButton\n            variant=\"ghost\"\n            size=\"sm\"\n            iconOnly\n            aria-label=\"Закрыть сообщение об отправке\"\n            onClick={dismiss}\n          >\n            ✕\n          </JxButton>\n        </div>\n      )}\n\n      <JxInputField\n        ref={emailRef}\n        label=\"Электронная почта\"\n        type=\"email\"\n        name=\"email\"\n        required\n        placeholder=\"name@example.com\"\n        value={email}\n        onChange={(event) => setEmail(event.target.value)}\n        onBlur={() => setTouched(true)}\n        helperText=\"Приглашение придёт на этот адрес и будет действовать 7 дней\"\n        errorText={errorText}\n      />\n\n      <JxSelect\n        label=\"Роль в команде\"\n        placeholder=\"Выберите роль\"\n        options={ROLE_OPTIONS}\n        value={role}\n        onValueChange={setRole}\n      />\n\n      <JxSwitch\n        name=\"notify\"\n        label=\"Отправить уведомление на почту\"\n        checked={notify}\n        onChange={(event) => setNotify(event.target.checked)}\n      />\n\n      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>\n        <JxButton type=\"submit\" variant=\"primary\" disabled={!isValid || sending}>\n          Отправить приглашение\n        </JxButton>\n      </div>\n    </form>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
@@ -184,31 +122,37 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 44,
+        "line": 60,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 47,
-        "message": "Инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 48,
-        "message": "Инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 59,
+        "line": 76,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
         "line": 89,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 91,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 93,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 143,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       }
     ],

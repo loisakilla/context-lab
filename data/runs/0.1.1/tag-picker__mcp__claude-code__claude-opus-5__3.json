@@ -1,8 +1,8 @@
 {
   "id": "tag-picker__mcp__claude-code__claude-opus-5__3",
-  "createdAt": "2026-09-23T19:07:41.495Z",
+  "createdAt": "2026-09-24T10:29:30.025Z",
   "repeat": 3,
-  "durationMs": 43210,
+  "durationMs": 32744,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -22,14 +22,14 @@
     ]
   },
   "context": {
-    "tokens": 1587,
+    "tokens": 2405,
     "sources": [
       {
         "kind": "tools",
         "id": "search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules",
         "version": "0.1.1",
-        "tokens": 1191,
-        "hash": "7b624df52b71eb9c"
+        "tokens": 1213,
+        "hash": "491261188ee9c372"
       }
     ]
   },
@@ -37,44 +37,18 @@
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 11109,
+        "output": 2,
+        "cacheRead": 12464,
         "cacheCreation": 0
       },
       "toolCalls": [
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "теги, метка, chip, удаляемая метка",
-            "limit": 8
-          },
-          "resultTokens": 429
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "поле ввода текста input",
-            "limit": 8
-          },
-          "resultTokens": 744
-        },
         {
           "name": "mcp__context-lab__get_rules",
           "input": {
             "task": "ui"
           },
           "resultTokens": 1247
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 2,
-        "cacheRead": 11109,
-        "cacheCreation": 4377
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -82,13 +56,6 @@
             "detail": "full"
           },
           "resultTokens": 323
-        },
-        {
-          "name": "mcp__context-lab__get_component_examples",
-          "input": {
-            "name": "JxTagInput"
-          },
-          "resultTokens": 85
         },
         {
           "name": "mcp__context-lab__get_component_api",
@@ -103,25 +70,18 @@
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 15486,
-        "cacheCreation": 1594
+        "output": 2,
+        "cacheRead": 12464,
+        "cacheCreation": 3505
       },
       "toolCalls": [
         {
-          "name": "mcp__context-lab__list_design_tokens",
+          "name": "mcp__context-lab__get_component_api",
           "input": {
-            "group": "color"
+            "name": "JxInputField",
+            "detail": "full"
           },
-          "resultTokens": 377
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "текст, подпись, заголовок поля, вспомогательный текст",
-            "limit": 6
-          },
-          "resultTokens": 457
+          "resultTokens": 484
         }
       ]
     },
@@ -129,23 +89,23 @@
       "usage": {
         "input": 2,
         "output": 3,
-        "cacheRead": 17080,
-        "cacheCreation": 2092
+        "cacheRead": 15969,
+        "cacheCreation": 1246
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 8,
-    "output": 3056,
-    "cacheRead": 54784,
-    "cacheCreation": 8063
+    "input": 6,
+    "output": 2698,
+    "cacheRead": 40897,
+    "cacheCreation": 4751
   },
-  "costUsd": 0.15422575,
+  "costUsd": 0.117622,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useState } from 'react';\nimport { JxChip, JxTagInput } from '@jinx-ui/react';\n\ntype ArticleTagPickerProps = {\n  label?: string;\n  placeholder?: string;\n  value?: string[];\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n};\n\nexport default function ArticleTagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  value,\n  defaultValue = [],\n  onChange,\n}: ArticleTagPickerProps) {\n  const [uncontrolled, setUncontrolled] = useState<string[]>(defaultValue);\n  const tags = value ?? uncontrolled;\n\n  const commit = (next: string[]) => {\n    if (value === undefined) setUncontrolled(next);\n    onChange?.(next);\n  };\n\n  const handleValueChange = (next: string[]) => {\n    const cleaned: string[] = [];\n    for (const raw of next) {\n      const tag = raw.trim();\n      if (tag && !cleaned.some((item) => item.toLowerCase() === tag.toLowerCase())) {\n        cleaned.push(tag);\n      }\n    }\n    commit(cleaned);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>\n      <span\n        style={{\n          color: 'var(--jx-text)',\n          font: 'var(--jx-font-ui)',\n          fontWeight: 600,\n        }}\n      >\n        {label}\n      </span>\n\n      <JxTagInput\n        ariaLabel={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={handleValueChange}\n      />\n\n      <div\n        aria-live=\"polite\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', minHeight: '28px' }}\n      >\n        {tags.length === 0 ? (\n          <span style={{ color: 'var(--jx-text-2)', font: 'var(--jx-font-ui)' }}>\n            Пока ни одного тега. Наберите слово и нажмите Enter, чтобы добавить.\n          </span>\n        ) : (\n          tags.map((tag) => (\n            <JxChip\n              key={tag}\n              removable\n              onRemove={() => commit(tags.filter((item) => item !== tag))}\n            >\n              {tag}\n            </JxChip>\n          ))\n        )}\n      </div>\n    </div>\n  );\n}",
-    "text": "```tsx\nimport { useState } from 'react';\nimport { JxChip, JxTagInput } from '@jinx-ui/react';\n\ntype ArticleTagPickerProps = {\n  label?: string;\n  placeholder?: string;\n  value?: string[];\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n};\n\nexport default function ArticleTagPicker({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  value,\n  defaultValue = [],\n  onChange,\n}: ArticleTagPickerProps) {\n  const [uncontrolled, setUncontrolled] = useState<string[]>(defaultValue);\n  const tags = value ?? uncontrolled;\n\n  const commit = (next: string[]) => {\n    if (value === undefined) setUncontrolled(next);\n    onChange?.(next);\n  };\n\n  const handleValueChange = (next: string[]) => {\n    const cleaned: string[] = [];\n    for (const raw of next) {\n      const tag = raw.trim();\n      if (tag && !cleaned.some((item) => item.toLowerCase() === tag.toLowerCase())) {\n        cleaned.push(tag);\n      }\n    }\n    commit(cleaned);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>\n      <span\n        style={{\n          color: 'var(--jx-text)',\n          font: 'var(--jx-font-ui)',\n          fontWeight: 600,\n        }}\n      >\n        {label}\n      </span>\n\n      <JxTagInput\n        ariaLabel={label}\n        placeholder={placeholder}\n        value={tags}\n        onValueChange={handleValueChange}\n      />\n\n      <div\n        aria-live=\"polite\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', minHeight: '28px' }}\n      >\n        {tags.length === 0 ? (\n          <span style={{ color: 'var(--jx-text-2)', font: 'var(--jx-font-ui)' }}>\n            Пока ни одного тега. Наберите слово и нажмите Enter, чтобы добавить.\n          </span>\n        ) : (\n          tags.map((tag) => (\n            <JxChip\n              key={tag}\n              removable\n              onRemove={() => commit(tags.filter((item) => item !== tag))}\n            >\n              {tag}\n            </JxChip>\n          ))\n        )}\n      </div>\n    </div>\n  );\n}\n```"
+    "code": "import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'react';\nimport { JxChip, JxInputField } from '@jinx-ui/react';\n\nexport interface ArticleTagsFieldProps {\n  label?: string;\n  placeholder?: string;\n  defaultValue?: string[];\n  value?: string[];\n  maxTags?: number;\n  disabled?: boolean;\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagsField({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  defaultValue = [],\n  value,\n  maxTags = 10,\n  disabled = false,\n  onChange,\n}: ArticleTagsFieldProps) {\n  const [innerTags, setInnerTags] = useState<string[]>(defaultValue);\n  const [draft, setDraft] = useState('');\n  const [error, setError] = useState<string | undefined>(undefined);\n  const inputRef = useRef<HTMLInputElement>(null);\n\n  const tags = value ?? innerTags;\n  const isFull = tags.length >= maxTags;\n\n  const commit = useCallback(\n    (next: string[]) => {\n      if (value === undefined) setInnerTags(next);\n      onChange?.(next);\n    },\n    [onChange, value],\n  );\n\n  const addTag = useCallback(() => {\n    const tag = draft.trim().replace(/\\s+/g, ' ');\n    if (tag.length === 0) return;\n    if (tags.some((existing) => existing.toLowerCase() === tag.toLowerCase())) {\n      setError(`Тег «${tag}» уже добавлен`);\n      return;\n    }\n    if (isFull) {\n      setError(`Можно добавить не больше ${maxTags} тегов`);\n      return;\n    }\n    setError(undefined);\n    setDraft('');\n    commit([...tags, tag]);\n  }, [commit, draft, isFull, maxTags, tags]);\n\n  const removeTag = useCallback(\n    (tag: string) => {\n      setError(undefined);\n      commit(tags.filter((existing) => existing !== tag));\n      inputRef.current?.focus();\n    },\n    [commit, tags],\n  );\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag();\n      return;\n    }\n    if (event.key === 'Backspace' && draft.length === 0 && tags.length > 0) {\n      event.preventDefault();\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const counter = useMemo(() => `${tags.length} из ${maxTags}`, [maxTags, tags.length]);\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '520px' }}>\n      <JxInputField\n        ref={inputRef}\n        label={label}\n        placeholder={isFull ? 'Достигнут предел тегов' : placeholder}\n        helperText={`Enter добавляет тег, Backspace удаляет последний. Добавлено ${counter}.`}\n        errorText={error}\n        value={draft}\n        disabled={disabled || isFull}\n        onChange={(event) => {\n          setDraft(event.target.value);\n          if (error) setError(undefined);\n        }}\n        onKeyDown={handleKeyDown}\n        onBlur={addTag}\n      />\n\n      {tags.length > 0 ? (\n        <ul\n          aria-label=\"Выбранные теги\"\n          style={{\n            display: 'flex',\n            flexWrap: 'wrap',\n            gap: '8px',\n            margin: 0,\n            padding: 0,\n            listStyle: 'none',\n          }}\n        >\n          {tags.map((tag) => (\n            <li key={tag} style={{ display: 'flex', minWidth: 0 }}>\n              <JxChip\n                active\n                removable={!disabled}\n                onRemove={disabled ? undefined : () => removeTag(tag)}\n                title={tag}\n              >\n                <span\n                  style={{\n                    display: 'block',\n                    maxWidth: '18ch',\n                    overflow: 'hidden',\n                    textOverflow: 'ellipsis',\n                    whiteSpace: 'nowrap',\n                  }}\n                >\n                  {tag}\n                </span>\n              </JxChip>\n            </li>\n          ))}\n        </ul>\n      ) : (\n        <p\n          style={{\n            margin: 0,\n            color: 'var(--jx-text-2)',\n            fontFamily: 'var(--jx-font-sans)',\n            fontSize: '13px',\n          }}\n        >\n          Тегов пока нет — введите первое ключевое слово, чтобы читатели нашли статью.\n        </p>\n      )}\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'react';\nimport { JxChip, JxInputField } from '@jinx-ui/react';\n\nexport interface ArticleTagsFieldProps {\n  label?: string;\n  placeholder?: string;\n  defaultValue?: string[];\n  value?: string[];\n  maxTags?: number;\n  disabled?: boolean;\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagsField({\n  label = 'Теги статьи',\n  placeholder = 'Введите тег и нажмите Enter',\n  defaultValue = [],\n  value,\n  maxTags = 10,\n  disabled = false,\n  onChange,\n}: ArticleTagsFieldProps) {\n  const [innerTags, setInnerTags] = useState<string[]>(defaultValue);\n  const [draft, setDraft] = useState('');\n  const [error, setError] = useState<string | undefined>(undefined);\n  const inputRef = useRef<HTMLInputElement>(null);\n\n  const tags = value ?? innerTags;\n  const isFull = tags.length >= maxTags;\n\n  const commit = useCallback(\n    (next: string[]) => {\n      if (value === undefined) setInnerTags(next);\n      onChange?.(next);\n    },\n    [onChange, value],\n  );\n\n  const addTag = useCallback(() => {\n    const tag = draft.trim().replace(/\\s+/g, ' ');\n    if (tag.length === 0) return;\n    if (tags.some((existing) => existing.toLowerCase() === tag.toLowerCase())) {\n      setError(`Тег «${tag}» уже добавлен`);\n      return;\n    }\n    if (isFull) {\n      setError(`Можно добавить не больше ${maxTags} тегов`);\n      return;\n    }\n    setError(undefined);\n    setDraft('');\n    commit([...tags, tag]);\n  }, [commit, draft, isFull, maxTags, tags]);\n\n  const removeTag = useCallback(\n    (tag: string) => {\n      setError(undefined);\n      commit(tags.filter((existing) => existing !== tag));\n      inputRef.current?.focus();\n    },\n    [commit, tags],\n  );\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault();\n      addTag();\n      return;\n    }\n    if (event.key === 'Backspace' && draft.length === 0 && tags.length > 0) {\n      event.preventDefault();\n      removeTag(tags[tags.length - 1]);\n    }\n  };\n\n  const counter = useMemo(() => `${tags.length} из ${maxTags}`, [maxTags, tags.length]);\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '520px' }}>\n      <JxInputField\n        ref={inputRef}\n        label={label}\n        placeholder={isFull ? 'Достигнут предел тегов' : placeholder}\n        helperText={`Enter добавляет тег, Backspace удаляет последний. Добавлено ${counter}.`}\n        errorText={error}\n        value={draft}\n        disabled={disabled || isFull}\n        onChange={(event) => {\n          setDraft(event.target.value);\n          if (error) setError(undefined);\n        }}\n        onKeyDown={handleKeyDown}\n        onBlur={addTag}\n      />\n\n      {tags.length > 0 ? (\n        <ul\n          aria-label=\"Выбранные теги\"\n          style={{\n            display: 'flex',\n            flexWrap: 'wrap',\n            gap: '8px',\n            margin: 0,\n            padding: 0,\n            listStyle: 'none',\n          }}\n        >\n          {tags.map((tag) => (\n            <li key={tag} style={{ display: 'flex', minWidth: 0 }}>\n              <JxChip\n                active\n                removable={!disabled}\n                onRemove={disabled ? undefined : () => removeTag(tag)}\n                title={tag}\n              >\n                <span\n                  style={{\n                    display: 'block',\n                    maxWidth: '18ch',\n                    overflow: 'hidden',\n                    textOverflow: 'ellipsis',\n                    whiteSpace: 'nowrap',\n                  }}\n                >\n                  {tag}\n                </span>\n              </JxChip>\n            </li>\n          ))}\n        </ul>\n      ) : (\n        <p\n          style={{\n            margin: 0,\n            color: 'var(--jx-text-2)',\n            fontFamily: 'var(--jx-font-sans)',\n            fontSize: '13px',\n          }}\n        >\n          Тегов пока нет — введите первое ключевое слово, чтобы читатели нашли статью.\n        </p>\n      )}\n    </div>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
@@ -157,37 +117,43 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 39,
+        "line": 79,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 41,
+        "line": 99,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 59,
+        "line": 109,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 62,
+        "line": 117,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 133,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       }
     ],
     "usedComponents": [
       "JxChip",
-      "JxTagInput"
+      "JxInputField"
     ],
-    "expectedCoverage": 1,
+    "expectedCoverage": 0,
     "passed": true
   },
   "verdict": {
     "passed": true,
-    "score": 1
+    "score": 0.7
   }
 }

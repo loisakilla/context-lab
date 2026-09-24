@@ -1,8 +1,8 @@
 {
   "id": "wizard__mcp__claude-code__claude-opus-5__2",
-  "createdAt": "2026-09-23T19:04:39.591Z",
+  "createdAt": "2026-09-24T10:27:23.581Z",
   "repeat": 2,
-  "durationMs": 43949,
+  "durationMs": 32056,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -24,14 +24,14 @@
     ]
   },
   "context": {
-    "tokens": 1587,
+    "tokens": 2405,
     "sources": [
       {
         "kind": "tools",
         "id": "search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules",
         "version": "0.1.1",
-        "tokens": 1191,
-        "hash": "7b624df52b71eb9c"
+        "tokens": 1213,
+        "hash": "491261188ee9c372"
       }
     ]
   },
@@ -39,8 +39,8 @@
     {
       "usage": {
         "input": 2,
-        "output": 6,
-        "cacheRead": 11135,
+        "output": 2,
+        "cacheRead": 12490,
         "cacheCreation": 0
       },
       "toolCalls": [
@@ -51,40 +51,6 @@
           },
           "resultTokens": 1247
         },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "индикатор шагов степпер wizard",
-            "limit": 6
-          },
-          "resultTokens": 391
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "поле ввода текста форма",
-            "limit": 6
-          },
-          "resultTokens": 518
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "кнопка",
-            "limit": 4
-          },
-          "resultTokens": 340
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 4,
-        "cacheRead": 11135,
-        "cacheCreation": 4659
-      },
-      "toolCalls": [
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -108,70 +74,60 @@
             "detail": "full"
           },
           "resultTokens": 539
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "список пар ключ-значение описание итог",
-            "limit": 5
-          },
-          "resultTokens": 512
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 15794,
-        "cacheCreation": 3488
+        "output": 8,
+        "cacheRead": 12490,
+        "cacheCreation": 4696
       },
       "toolCalls": [
         {
-          "name": "mcp__context-lab__list_design_tokens",
+          "name": "mcp__context-lab__get_component_api",
           "input": {
-            "maxTokens": 1500
+            "name": "JxDivider",
+            "detail": "signature"
           },
-          "resultTokens": 625
+          "resultTokens": 23
+        },
+        {
+          "name": "mcp__context-lab__get_component_api",
+          "input": {
+            "name": "JxAlert",
+            "detail": "full"
+          },
+          "resultTokens": 303
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 19282,
-        "cacheCreation": 1547
+        "output": 8,
+        "cacheRead": 17186,
+        "cacheCreation": 903
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 8,
-    "output": 3936,
-    "cacheRead": 57346,
-    "cacheCreation": 9694
+    "input": 6,
+    "output": 3387,
+    "cacheRead": 42166,
+    "cacheCreation": 5599
   },
-  "costUsd": 0.1877005,
+  "costUsd": 0.140782,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useMemo, useState } from 'react';\nimport { JxButton, JxInputField, JxStepper } from '@jinx-ui/react';\n\nexport interface RegistrationValues {\n  name: string;\n  email: string;\n  phone: string;\n  city: string;\n  street: string;\n  zip: string;\n}\n\ninterface FieldConfig {\n  name: keyof RegistrationValues;\n  label: string;\n  type?: string;\n  prefix?: string;\n  helperText?: string;\n  validate: (value: string) => string | undefined;\n}\n\nconst required = (value: string) => (value.trim() ? undefined : 'Заполните поле');\n\nconst STEP_FIELDS: FieldConfig[][] = [\n  [\n    { name: 'name', label: 'Имя и фамилия', validate: required },\n    {\n      name: 'email',\n      label: 'Электронная почта',\n      type: 'email',\n      validate: (value) =>\n        !value.trim() ? 'Заполните поле' : value.includes('@') ? undefined : 'Укажите адрес с символом @',\n    },\n    {\n      name: 'phone',\n      label: 'Телефон',\n      type: 'tel',\n      prefix: '+7',\n      helperText: '10 цифр без пробелов',\n      validate: (value) =>\n        !value.trim() ? 'Заполните поле' : /^\\d{10}$/.test(value.trim()) ? undefined : 'Нужно ровно 10 цифр',\n    },\n  ],\n  [\n    { name: 'city', label: 'Город', validate: required },\n    { name: 'street', label: 'Улица, дом, квартира', validate: required },\n    {\n      name: 'zip',\n      label: 'Почтовый индекс',\n      validate: (value) =>\n        !value.trim() ? 'Заполните поле' : /^\\d{6}$/.test(value.trim()) ? undefined : 'Индекс из 6 цифр',\n    },\n  ],\n];\n\nconst EMPTY: RegistrationValues = { name: '', email: '', phone: '', city: '', street: '', zip: '' };\n\nexport default function RegistrationWizard({\n  onSubmit,\n}: {\n  onSubmit: (values: RegistrationValues) => void | Promise<void>;\n}) {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<RegistrationValues>(EMPTY);\n  const [showErrors, setShowErrors] = useState(false);\n  const [submitting, setSubmitting] = useState(false);\n  const [submitError, setSubmitError] = useState<string | undefined>(undefined);\n\n  const isLast = step === 2;\n\n  const stepErrors = useMemo(() => {\n    const fields = STEP_FIELDS[step] ?? [];\n    return fields.reduce<Partial<Record<keyof RegistrationValues, string>>>((acc, field) => {\n      const message = field.validate(values[field.name]);\n      if (message) acc[field.name] = message;\n      return acc;\n    }, {});\n  }, [step, values]);\n\n  const change = (name: keyof RegistrationValues) => (event: React.ChangeEvent<HTMLInputElement>) => {\n    const next = event.target.value;\n    setValues((prev) => ({ ...prev, [name]: next }));\n  };\n\n  const goBack = () => {\n    setSubmitError(undefined);\n    setShowErrors(false);\n    setStep((prev) => Math.max(prev - 1, 0));\n  };\n\n  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (submitting) return;\n\n    if (!isLast) {\n      if (Object.keys(stepErrors).length > 0) {\n        setShowErrors(true);\n        return;\n      }\n      setShowErrors(false);\n      setStep((prev) => prev + 1);\n      return;\n    }\n\n    setSubmitError(undefined);\n    setSubmitting(true);\n    try {\n      await onSubmit(values);\n    } catch {\n      setSubmitError('Не удалось отправить анкету. Проверьте соединение и попробуйте ещё раз.');\n    } finally {\n      setSubmitting(false);\n    }\n  };\n\n  const reviewRows = STEP_FIELDS.flat().map((field) => ({\n    label: field.label,\n    value: values[field.name].trim() ? `${field.prefix ?? ''}${values[field.name].trim()}` : '—',\n  }));\n\n  return (\n    <form\n      onSubmit={handleSubmit}\n      noValidate\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: '24px',\n        maxWidth: '520px',\n        fontFamily: 'var(--jx-font-sans)',\n        color: 'var(--jx-text)',\n      }}\n    >\n      <JxStepper steps={[{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }]} current={step} />\n\n      {isLast ? (\n        <dl\n          style={{\n            display: 'grid',\n            gridTemplateColumns: 'minmax(120px, auto) 1fr',\n            gap: '12px 16px',\n            margin: 0,\n            padding: '16px',\n            background: 'var(--jx-surface-2)',\n            border: '1px solid var(--jx-border)',\n            borderRadius: 'var(--jx-r)',\n          }}\n        >\n          {reviewRows.map((row) => (\n            <React.Fragment key={row.label}>\n              <dt style={{ color: 'var(--jx-text-2)' }}>{row.label}</dt>\n              <dd style={{ margin: 0, overflowWrap: 'anywhere' }}>{row.value}</dd>\n            </React.Fragment>\n          ))}\n        </dl>\n      ) : (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>\n          {STEP_FIELDS[step].map((field) => (\n            <JxInputField\n              key={field.name}\n              label={field.label}\n              type={field.type}\n              prefix={field.prefix}\n              helperText={field.helperText}\n              required\n              value={values[field.name]}\n              onChange={change(field.name)}\n              errorText={showErrors ? stepErrors[field.name] : undefined}\n              disabled={submitting}\n            />\n          ))}\n        </div>\n      )}\n\n      {submitError ? (\n        <p role=\"alert\" style={{ margin: 0, color: 'var(--jx-danger)' }}>\n          {submitError}\n        </p>\n      ) : null}\n\n      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>\n        <JxButton variant=\"ghost\" type=\"button\" onClick={goBack} disabled={step === 0 || submitting}>\n          Назад\n        </JxButton>\n        <JxButton variant=\"primary\" type=\"submit\" disabled={submitting}>\n          {isLast ? (submitting ? 'Отправляем…' : 'Отправить') : 'Дальше'}\n        </JxButton>\n      </div>\n    </form>\n  );\n}",
-    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport { JxButton, JxInputField, JxStepper } from '@jinx-ui/react';\n\nexport interface RegistrationValues {\n  name: string;\n  email: string;\n  phone: string;\n  city: string;\n  street: string;\n  zip: string;\n}\n\ninterface FieldConfig {\n  name: keyof RegistrationValues;\n  label: string;\n  type?: string;\n  prefix?: string;\n  helperText?: string;\n  validate: (value: string) => string | undefined;\n}\n\nconst required = (value: string) => (value.trim() ? undefined : 'Заполните поле');\n\nconst STEP_FIELDS: FieldConfig[][] = [\n  [\n    { name: 'name', label: 'Имя и фамилия', validate: required },\n    {\n      name: 'email',\n      label: 'Электронная почта',\n      type: 'email',\n      validate: (value) =>\n        !value.trim() ? 'Заполните поле' : value.includes('@') ? undefined : 'Укажите адрес с символом @',\n    },\n    {\n      name: 'phone',\n      label: 'Телефон',\n      type: 'tel',\n      prefix: '+7',\n      helperText: '10 цифр без пробелов',\n      validate: (value) =>\n        !value.trim() ? 'Заполните поле' : /^\\d{10}$/.test(value.trim()) ? undefined : 'Нужно ровно 10 цифр',\n    },\n  ],\n  [\n    { name: 'city', label: 'Город', validate: required },\n    { name: 'street', label: 'Улица, дом, квартира', validate: required },\n    {\n      name: 'zip',\n      label: 'Почтовый индекс',\n      validate: (value) =>\n        !value.trim() ? 'Заполните поле' : /^\\d{6}$/.test(value.trim()) ? undefined : 'Индекс из 6 цифр',\n    },\n  ],\n];\n\nconst EMPTY: RegistrationValues = { name: '', email: '', phone: '', city: '', street: '', zip: '' };\n\nexport default function RegistrationWizard({\n  onSubmit,\n}: {\n  onSubmit: (values: RegistrationValues) => void | Promise<void>;\n}) {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<RegistrationValues>(EMPTY);\n  const [showErrors, setShowErrors] = useState(false);\n  const [submitting, setSubmitting] = useState(false);\n  const [submitError, setSubmitError] = useState<string | undefined>(undefined);\n\n  const isLast = step === 2;\n\n  const stepErrors = useMemo(() => {\n    const fields = STEP_FIELDS[step] ?? [];\n    return fields.reduce<Partial<Record<keyof RegistrationValues, string>>>((acc, field) => {\n      const message = field.validate(values[field.name]);\n      if (message) acc[field.name] = message;\n      return acc;\n    }, {});\n  }, [step, values]);\n\n  const change = (name: keyof RegistrationValues) => (event: React.ChangeEvent<HTMLInputElement>) => {\n    const next = event.target.value;\n    setValues((prev) => ({ ...prev, [name]: next }));\n  };\n\n  const goBack = () => {\n    setSubmitError(undefined);\n    setShowErrors(false);\n    setStep((prev) => Math.max(prev - 1, 0));\n  };\n\n  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (submitting) return;\n\n    if (!isLast) {\n      if (Object.keys(stepErrors).length > 0) {\n        setShowErrors(true);\n        return;\n      }\n      setShowErrors(false);\n      setStep((prev) => prev + 1);\n      return;\n    }\n\n    setSubmitError(undefined);\n    setSubmitting(true);\n    try {\n      await onSubmit(values);\n    } catch {\n      setSubmitError('Не удалось отправить анкету. Проверьте соединение и попробуйте ещё раз.');\n    } finally {\n      setSubmitting(false);\n    }\n  };\n\n  const reviewRows = STEP_FIELDS.flat().map((field) => ({\n    label: field.label,\n    value: values[field.name].trim() ? `${field.prefix ?? ''}${values[field.name].trim()}` : '—',\n  }));\n\n  return (\n    <form\n      onSubmit={handleSubmit}\n      noValidate\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: '24px',\n        maxWidth: '520px',\n        fontFamily: 'var(--jx-font-sans)',\n        color: 'var(--jx-text)',\n      }}\n    >\n      <JxStepper steps={[{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }]} current={step} />\n\n      {isLast ? (\n        <dl\n          style={{\n            display: 'grid',\n            gridTemplateColumns: 'minmax(120px, auto) 1fr',\n            gap: '12px 16px',\n            margin: 0,\n            padding: '16px',\n            background: 'var(--jx-surface-2)',\n            border: '1px solid var(--jx-border)',\n            borderRadius: 'var(--jx-r)',\n          }}\n        >\n          {reviewRows.map((row) => (\n            <React.Fragment key={row.label}>\n              <dt style={{ color: 'var(--jx-text-2)' }}>{row.label}</dt>\n              <dd style={{ margin: 0, overflowWrap: 'anywhere' }}>{row.value}</dd>\n            </React.Fragment>\n          ))}\n        </dl>\n      ) : (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>\n          {STEP_FIELDS[step].map((field) => (\n            <JxInputField\n              key={field.name}\n              label={field.label}\n              type={field.type}\n              prefix={field.prefix}\n              helperText={field.helperText}\n              required\n              value={values[field.name]}\n              onChange={change(field.name)}\n              errorText={showErrors ? stepErrors[field.name] : undefined}\n              disabled={submitting}\n            />\n          ))}\n        </div>\n      )}\n\n      {submitError ? (\n        <p role=\"alert\" style={{ margin: 0, color: 'var(--jx-danger)' }}>\n          {submitError}\n        </p>\n      ) : null}\n\n      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>\n        <JxButton variant=\"ghost\" type=\"button\" onClick={goBack} disabled={step === 0 || submitting}>\n          Назад\n        </JxButton>\n        <JxButton variant=\"primary\" type=\"submit\" disabled={submitting}>\n          {isLast ? (submitting ? 'Отправляем…' : 'Отправить') : 'Дальше'}\n        </JxButton>\n      </div>\n    </form>\n  );\n}\n```"
+    "code": "import { useState, type FormEvent } from 'react';\nimport { JxAlert, JxButton, JxDivider, JxInputField, JxStepper } from '@jinx-ui/react';\n\ntype SignupValues = {\n  name: string;\n  email: string;\n  phone: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype SignupWizardProps = {\n  onSubmit: (values: SignupValues) => void;\n};\n\nconst STEPS = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nconst EMPTY_VALUES: SignupValues = {\n  name: '',\n  email: '',\n  phone: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nfunction validate(step: number, values: SignupValues): Partial<Record<keyof SignupValues, string>> {\n  if (step === 0) {\n    return {\n      name: values.name.trim().length === 0 ? 'Укажите имя' : undefined,\n      email: !values.email.includes('@') ? 'Укажите адрес с символом @' : undefined,\n      phone: values.phone.replace(/\\D/g, '').length < 10 ? 'Укажите номер из 10 цифр' : undefined,\n    };\n  }\n  if (step === 1) {\n    return {\n      city: values.city.trim().length === 0 ? 'Укажите город' : undefined,\n      street: values.street.trim().length === 0 ? 'Укажите улицу и дом' : undefined,\n      zip: /^\\d{6}$/.test(values.zip) ? undefined : 'Индекс из 6 цифр',\n    };\n  }\n  return {};\n}\n\nexport default function SignupWizard({ onSubmit }: SignupWizardProps) {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<SignupValues>(EMPTY_VALUES);\n  const [showErrors, setShowErrors] = useState(false);\n\n  const errors = validate(step, values);\n  const hasErrors = Object.values(errors).some(Boolean);\n  const isLast = step === STEPS.length - 1;\n\n  const set = (key: keyof SignupValues) => (event: { target: { value: string } }) => {\n    setValues((current) => ({ ...current, [key]: event.target.value }));\n  };\n\n  const errorOf = (key: keyof SignupValues) => (showErrors ? errors[key] : undefined);\n\n  const goBack = () => {\n    setShowErrors(false);\n    setStep((current) => Math.max(current - 1, 0));\n  };\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (hasErrors) {\n      setShowErrors(true);\n      return;\n    }\n    if (isLast) {\n      onSubmit(values);\n      return;\n    }\n    setShowErrors(false);\n    setStep((current) => current + 1);\n  };\n\n  return (\n    <form\n      onSubmit={handleSubmit}\n      noValidate\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 20,\n        padding: 24,\n        maxWidth: 520,\n        background: 'var(--jx-surface)',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n        boxShadow: 'var(--jx-shadow-sm)',\n        fontFamily: 'var(--jx-font-sans)',\n        color: 'var(--jx-text)',\n      }}\n    >\n      <JxStepper steps={STEPS} current={step} />\n\n      {showErrors && hasErrors ? (\n        <JxAlert intent=\"danger\" title=\"Проверьте поля\">\n          Чтобы перейти дальше, исправьте отмеченные поля на этом шаге.\n        </JxAlert>\n      ) : null}\n\n      {step === 0 ? (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>\n          <JxInputField\n            label=\"Имя и фамилия\"\n            required\n            autoComplete=\"name\"\n            value={values.name}\n            onChange={set('name')}\n            errorText={errorOf('name')}\n          />\n          <JxInputField\n            label=\"Электронная почта\"\n            type=\"email\"\n            required\n            autoComplete=\"email\"\n            value={values.email}\n            onChange={set('email')}\n            errorText={errorOf('email')}\n            helperText=\"На неё придёт письмо с подтверждением\"\n          />\n          <JxInputField\n            label=\"Телефон\"\n            type=\"tel\"\n            required\n            prefix=\"+7\"\n            autoComplete=\"tel\"\n            value={values.phone}\n            onChange={set('phone')}\n            errorText={errorOf('phone')}\n          />\n        </div>\n      ) : null}\n\n      {step === 1 ? (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>\n          <JxInputField\n            label=\"Город\"\n            required\n            autoComplete=\"address-level2\"\n            value={values.city}\n            onChange={set('city')}\n            errorText={errorOf('city')}\n          />\n          <JxInputField\n            label=\"Улица, дом, квартира\"\n            required\n            autoComplete=\"street-address\"\n            value={values.street}\n            onChange={set('street')}\n            errorText={errorOf('street')}\n          />\n          <JxInputField\n            label=\"Почтовый индекс\"\n            required\n            inputMode=\"numeric\"\n            autoComplete=\"postal-code\"\n            value={values.zip}\n            onChange={set('zip')}\n            errorText={errorOf('zip')}\n            helperText=\"Шесть цифр без пробелов\"\n          />\n        </div>\n      ) : null}\n\n      {step === 2 ? (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>\n          <JxDivider label=\"Контакты\" />\n          <dl\n            style={{\n              display: 'grid',\n              gridTemplateColumns: 'minmax(120px, auto) 1fr',\n              gap: '8px 16px',\n              margin: 0,\n            }}\n          >\n            <dt style={{ color: 'var(--jx-text-2)' }}>Имя</dt>\n            <dd style={{ margin: 0, overflowWrap: 'anywhere' }}>{values.name}</dd>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Почта</dt>\n            <dd style={{ margin: 0, overflowWrap: 'anywhere' }}>{values.email}</dd>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Телефон</dt>\n            <dd style={{ margin: 0, overflowWrap: 'anywhere' }}>+7 {values.phone}</dd>\n          </dl>\n          <JxDivider label=\"Адрес\" />\n          <dl\n            style={{\n              display: 'grid',\n              gridTemplateColumns: 'minmax(120px, auto) 1fr',\n              gap: '8px 16px',\n              margin: 0,\n            }}\n          >\n            <dt style={{ color: 'var(--jx-text-2)' }}>Город</dt>\n            <dd style={{ margin: 0, overflowWrap: 'anywhere' }}>{values.city}</dd>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Адрес</dt>\n            <dd style={{ margin: 0, overflowWrap: 'anywhere' }}>{values.street}</dd>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Индекс</dt>\n            <dd style={{ margin: 0, overflowWrap: 'anywhere' }}>{values.zip}</dd>\n          </dl>\n        </div>\n      ) : null}\n\n      <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>\n        <JxButton variant=\"ghost\" type=\"button\" disabled={step === 0} onClick={goBack}>\n          Назад\n        </JxButton>\n        <JxButton variant=\"primary\" type=\"submit\">\n          {isLast ? 'Отправить' : 'Дальше'}\n        </JxButton>\n      </div>\n    </form>\n  );\n}",
+    "text": "```tsx\nimport { useState, type FormEvent } from 'react';\nimport { JxAlert, JxButton, JxDivider, JxInputField, JxStepper } from '@jinx-ui/react';\n\ntype SignupValues = {\n  name: string;\n  email: string;\n  phone: string;\n  city: string;\n  street: string;\n  zip: string;\n};\n\ntype SignupWizardProps = {\n  onSubmit: (values: SignupValues) => void;\n};\n\nconst STEPS = [{ label: 'Контакты' }, { label: 'Адрес' }, { label: 'Проверка' }];\n\nconst EMPTY_VALUES: SignupValues = {\n  name: '',\n  email: '',\n  phone: '',\n  city: '',\n  street: '',\n  zip: '',\n};\n\nfunction validate(step: number, values: SignupValues): Partial<Record<keyof SignupValues, string>> {\n  if (step === 0) {\n    return {\n      name: values.name.trim().length === 0 ? 'Укажите имя' : undefined,\n      email: !values.email.includes('@') ? 'Укажите адрес с символом @' : undefined,\n      phone: values.phone.replace(/\\D/g, '').length < 10 ? 'Укажите номер из 10 цифр' : undefined,\n    };\n  }\n  if (step === 1) {\n    return {\n      city: values.city.trim().length === 0 ? 'Укажите город' : undefined,\n      street: values.street.trim().length === 0 ? 'Укажите улицу и дом' : undefined,\n      zip: /^\\d{6}$/.test(values.zip) ? undefined : 'Индекс из 6 цифр',\n    };\n  }\n  return {};\n}\n\nexport default function SignupWizard({ onSubmit }: SignupWizardProps) {\n  const [step, setStep] = useState(0);\n  const [values, setValues] = useState<SignupValues>(EMPTY_VALUES);\n  const [showErrors, setShowErrors] = useState(false);\n\n  const errors = validate(step, values);\n  const hasErrors = Object.values(errors).some(Boolean);\n  const isLast = step === STEPS.length - 1;\n\n  const set = (key: keyof SignupValues) => (event: { target: { value: string } }) => {\n    setValues((current) => ({ ...current, [key]: event.target.value }));\n  };\n\n  const errorOf = (key: keyof SignupValues) => (showErrors ? errors[key] : undefined);\n\n  const goBack = () => {\n    setShowErrors(false);\n    setStep((current) => Math.max(current - 1, 0));\n  };\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (hasErrors) {\n      setShowErrors(true);\n      return;\n    }\n    if (isLast) {\n      onSubmit(values);\n      return;\n    }\n    setShowErrors(false);\n    setStep((current) => current + 1);\n  };\n\n  return (\n    <form\n      onSubmit={handleSubmit}\n      noValidate\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 20,\n        padding: 24,\n        maxWidth: 520,\n        background: 'var(--jx-surface)',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n        boxShadow: 'var(--jx-shadow-sm)',\n        fontFamily: 'var(--jx-font-sans)',\n        color: 'var(--jx-text)',\n      }}\n    >\n      <JxStepper steps={STEPS} current={step} />\n\n      {showErrors && hasErrors ? (\n        <JxAlert intent=\"danger\" title=\"Проверьте поля\">\n          Чтобы перейти дальше, исправьте отмеченные поля на этом шаге.\n        </JxAlert>\n      ) : null}\n\n      {step === 0 ? (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>\n          <JxInputField\n            label=\"Имя и фамилия\"\n            required\n            autoComplete=\"name\"\n            value={values.name}\n            onChange={set('name')}\n            errorText={errorOf('name')}\n          />\n          <JxInputField\n            label=\"Электронная почта\"\n            type=\"email\"\n            required\n            autoComplete=\"email\"\n            value={values.email}\n            onChange={set('email')}\n            errorText={errorOf('email')}\n            helperText=\"На неё придёт письмо с подтверждением\"\n          />\n          <JxInputField\n            label=\"Телефон\"\n            type=\"tel\"\n            required\n            prefix=\"+7\"\n            autoComplete=\"tel\"\n            value={values.phone}\n            onChange={set('phone')}\n            errorText={errorOf('phone')}\n          />\n        </div>\n      ) : null}\n\n      {step === 1 ? (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>\n          <JxInputField\n            label=\"Город\"\n            required\n            autoComplete=\"address-level2\"\n            value={values.city}\n            onChange={set('city')}\n            errorText={errorOf('city')}\n          />\n          <JxInputField\n            label=\"Улица, дом, квартира\"\n            required\n            autoComplete=\"street-address\"\n            value={values.street}\n            onChange={set('street')}\n            errorText={errorOf('street')}\n          />\n          <JxInputField\n            label=\"Почтовый индекс\"\n            required\n            inputMode=\"numeric\"\n            autoComplete=\"postal-code\"\n            value={values.zip}\n            onChange={set('zip')}\n            errorText={errorOf('zip')}\n            helperText=\"Шесть цифр без пробелов\"\n          />\n        </div>\n      ) : null}\n\n      {step === 2 ? (\n        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>\n          <JxDivider label=\"Контакты\" />\n          <dl\n            style={{\n              display: 'grid',\n              gridTemplateColumns: 'minmax(120px, auto) 1fr',\n              gap: '8px 16px',\n              margin: 0,\n            }}\n          >\n            <dt style={{ color: 'var(--jx-text-2)' }}>Имя</dt>\n            <dd style={{ margin: 0, overflowWrap: 'anywhere' }}>{values.name}</dd>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Почта</dt>\n            <dd style={{ margin: 0, overflowWrap: 'anywhere' }}>{values.email}</dd>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Телефон</dt>\n            <dd style={{ margin: 0, overflowWrap: 'anywhere' }}>+7 {values.phone}</dd>\n          </dl>\n          <JxDivider label=\"Адрес\" />\n          <dl\n            style={{\n              display: 'grid',\n              gridTemplateColumns: 'minmax(120px, auto) 1fr',\n              gap: '8px 16px',\n              margin: 0,\n            }}\n          >\n            <dt style={{ color: 'var(--jx-text-2)' }}>Город</dt>\n            <dd style={{ margin: 0, overflowWrap: 'anywhere' }}>{values.city}</dd>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Адрес</dt>\n            <dd style={{ margin: 0, overflowWrap: 'anywhere' }}>{values.street}</dd>\n            <dt style={{ color: 'var(--jx-text-2)' }}>Индекс</dt>\n            <dd style={{ margin: 0, overflowWrap: 'anywhere' }}>{values.zip}</dd>\n          </dl>\n        </div>\n      ) : null}\n\n      <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>\n        <JxButton variant=\"ghost\" type=\"button\" disabled={step === 0} onClick={goBack}>\n          Назад\n        </JxButton>\n        <JxButton variant=\"primary\" type=\"submit\">\n          {isLast ? 'Отправить' : 'Дальше'}\n        </JxButton>\n      </div>\n    </form>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
-      "errors": [
-        {
-          "code": 2686,
-          "line": 150,
-          "message": "'React' refers to a UMD global, but the current file is a module. Consider adding an import instead."
-        },
-        {
-          "code": 2686,
-          "line": 153,
-          "message": "'React' refers to a UMD global, but the current file is a module. Consider adding an import instead."
-        }
-      ],
+      "errors": [],
       "unknownComponents": [],
       "unknownProps": []
     },
@@ -179,37 +135,31 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 125,
+        "line": 84,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 138,
+        "line": 107,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 151,
+        "line": 140,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 152,
+        "line": 171,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 157,
-        "message": "Инлайновые стили вместо классов и токенов библиотеки"
-      },
-      {
-        "rule": "inline-style",
-        "severity": "warning",
-        "line": 176,
+        "line": 174,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       },
       {
@@ -217,18 +167,98 @@
         "severity": "warning",
         "line": 181,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 182,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 183,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 184,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 185,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 186,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 190,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 197,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 198,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 199,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 200,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 201,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 202,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
+      },
+      {
+        "rule": "inline-style",
+        "severity": "warning",
+        "line": 207,
+        "message": "Инлайновые стили вместо классов и токенов библиотеки"
       }
     ],
     "usedComponents": [
+      "JxAlert",
       "JxButton",
+      "JxDivider",
       "JxInputField",
       "JxStepper"
     ],
     "expectedCoverage": 1,
-    "passed": false
+    "passed": true
   },
   "verdict": {
-    "passed": false,
-    "score": 0.72
+    "passed": true,
+    "score": 1
   }
 }

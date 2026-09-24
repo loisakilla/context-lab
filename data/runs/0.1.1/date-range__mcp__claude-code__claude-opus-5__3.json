@@ -1,8 +1,8 @@
 {
   "id": "date-range__mcp__claude-code__claude-opus-5__3",
-  "createdAt": "2026-09-23T19:09:42.963Z",
+  "createdAt": "2026-09-24T10:31:20.195Z",
   "repeat": 3,
-  "durationMs": 36801,
+  "durationMs": 24028,
   "driver": "claude-code",
   "library": {
     "name": "jinx-ui",
@@ -23,14 +23,14 @@
     ]
   },
   "context": {
-    "tokens": 1587,
+    "tokens": 2405,
     "sources": [
       {
         "kind": "tools",
         "id": "search_components,get_component_api,get_component_examples,list_design_tokens,get_docs,get_rules",
         "version": "0.1.1",
-        "tokens": 1191,
-        "hash": "7b624df52b71eb9c"
+        "tokens": 1213,
+        "hash": "491261188ee9c372"
       }
     ]
   },
@@ -38,42 +38,18 @@
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 11126,
+        "output": 2,
+        "cacheRead": 12481,
         "cacheCreation": 0
       },
       "toolCalls": [
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "календарь выбор даты"
-          },
-          "resultTokens": 498
-        },
-        {
-          "name": "mcp__context-lab__search_components",
-          "input": {
-            "query": "быстрые варианты чипы переключатель"
-          },
-          "resultTokens": 423
-        },
         {
           "name": "mcp__context-lab__get_rules",
           "input": {
             "task": "ui"
           },
           "resultTokens": 1247
-        }
-      ]
-    },
-    {
-      "usage": {
-        "input": 2,
-        "output": 3,
-        "cacheRead": 11126,
-        "cacheCreation": 3943
-      },
-      "toolCalls": [
+        },
         {
           "name": "mcp__context-lab__get_component_api",
           "input": {
@@ -89,55 +65,48 @@
             "detail": "full"
           },
           "resultTokens": 360
-        },
-        {
-          "name": "mcp__context-lab__get_component_api",
-          "input": {
-            "name": "JxToggle",
-            "detail": "full"
-          },
-          "resultTokens": 368
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 2,
-        "cacheRead": 15069,
-        "cacheCreation": 2393
+        "output": 8,
+        "cacheRead": 12481,
+        "cacheCreation": 3832
       },
       "toolCalls": [
         {
-          "name": "mcp__context-lab__list_design_tokens",
+          "name": "mcp__context-lab__get_component_api",
           "input": {
-            "maxTokens": 900
+            "name": "JxButton",
+            "detail": "full"
           },
-          "resultTokens": 625
+          "resultTokens": 539
         }
       ]
     },
     {
       "usage": {
         "input": 2,
-        "output": 3,
-        "cacheRead": 17462,
-        "cacheCreation": 1839
+        "output": 8,
+        "cacheRead": 16313,
+        "cacheCreation": 1230
       },
       "toolCalls": []
     }
   ],
   "usage": {
-    "input": 8,
-    "output": 2811,
-    "cacheRead": 54783,
-    "cacheCreation": 8175
+    "input": 6,
+    "output": 2176,
+    "cacheRead": 41275,
+    "cacheCreation": 5062
   },
-  "costUsd": 0.14880025000000002,
+  "costUsd": 0.106705,
   "stopReason": "end_turn",
   "output": {
-    "code": "import { useMemo, useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date | null;\n  defaultValue?: Date | null;\n  onChange?: (value: Date | null) => void;\n};\n\nconst startOfDay = (date: Date) =>\n  new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst shiftDays = (date: Date, days: number) =>\n  new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);\n\nconst isSameDay = (a: Date | null, b: Date | null) =>\n  !!a && !!b && a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();\n\nexport default function ReportDatePicker({ value, defaultValue = null, onChange }: ReportDatePickerProps) {\n  const [innerValue, setInnerValue] = useState<Date | null>(defaultValue);\n  const selected = value !== undefined ? value : innerValue;\n\n  const presets = useMemo(() => {\n    const today = startOfDay(new Date());\n    return [\n      { id: 'today', label: 'Сегодня', date: today },\n      { id: 'yesterday', label: 'Вчера', date: shiftDays(today, -1) },\n      { id: 'week-ago', label: 'Неделя назад', date: shiftDays(today, -7) },\n    ];\n  }, []);\n\n  const commit = (next: Date | null) => {\n    if (value === undefined) setInnerValue(next);\n    onChange?.(next);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '320px' }}>\n      <div\n        role=\"group\"\n        aria-label=\"Быстрый выбор даты отчёта\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}\n      >\n        {presets.map((preset) => {\n          const active = isSameDay(selected, preset.date);\n          return (\n            <JxChip\n              key={preset.id}\n              active={active}\n              role=\"button\"\n              tabIndex={0}\n              aria-pressed={active}\n              onClick={() => commit(preset.date)}\n              onKeyDown={(event) => {\n                if (event.key === 'Enter' || event.key === ' ') {\n                  event.preventDefault();\n                  commit(preset.date);\n                }\n              }}\n            >\n              {preset.label}\n            </JxChip>\n          );\n        })}\n      </div>\n\n      <JxCalendar locale=\"ru-RU\" value={selected} onValueChange={commit} />\n\n      <p\n        aria-live=\"polite\"\n        style={{\n          margin: 0,\n          fontFamily: 'var(--jx-font-sans)',\n          fontSize: '13px',\n          lineHeight: 1.4,\n          color: selected ? 'var(--jx-text)' : 'var(--jx-text-2)',\n        }}\n      >\n        {selected\n          ? `Дата отчёта: ${selected.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}`\n          : 'Дата не выбрана — нажмите быстрый вариант или день в календаре.'}\n      </p>\n    </div>\n  );\n}",
-    "text": "```tsx\nimport { useMemo, useState } from 'react';\nimport { JxCalendar, JxChip } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date | null;\n  defaultValue?: Date | null;\n  onChange?: (value: Date | null) => void;\n};\n\nconst startOfDay = (date: Date) =>\n  new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst shiftDays = (date: Date, days: number) =>\n  new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);\n\nconst isSameDay = (a: Date | null, b: Date | null) =>\n  !!a && !!b && a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();\n\nexport default function ReportDatePicker({ value, defaultValue = null, onChange }: ReportDatePickerProps) {\n  const [innerValue, setInnerValue] = useState<Date | null>(defaultValue);\n  const selected = value !== undefined ? value : innerValue;\n\n  const presets = useMemo(() => {\n    const today = startOfDay(new Date());\n    return [\n      { id: 'today', label: 'Сегодня', date: today },\n      { id: 'yesterday', label: 'Вчера', date: shiftDays(today, -1) },\n      { id: 'week-ago', label: 'Неделя назад', date: shiftDays(today, -7) },\n    ];\n  }, []);\n\n  const commit = (next: Date | null) => {\n    if (value === undefined) setInnerValue(next);\n    onChange?.(next);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '320px' }}>\n      <div\n        role=\"group\"\n        aria-label=\"Быстрый выбор даты отчёта\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}\n      >\n        {presets.map((preset) => {\n          const active = isSameDay(selected, preset.date);\n          return (\n            <JxChip\n              key={preset.id}\n              active={active}\n              role=\"button\"\n              tabIndex={0}\n              aria-pressed={active}\n              onClick={() => commit(preset.date)}\n              onKeyDown={(event) => {\n                if (event.key === 'Enter' || event.key === ' ') {\n                  event.preventDefault();\n                  commit(preset.date);\n                }\n              }}\n            >\n              {preset.label}\n            </JxChip>\n          );\n        })}\n      </div>\n\n      <JxCalendar locale=\"ru-RU\" value={selected} onValueChange={commit} />\n\n      <p\n        aria-live=\"polite\"\n        style={{\n          margin: 0,\n          fontFamily: 'var(--jx-font-sans)',\n          fontSize: '13px',\n          lineHeight: 1.4,\n          color: selected ? 'var(--jx-text)' : 'var(--jx-text-2)',\n        }}\n      >\n        {selected\n          ? `Дата отчёта: ${selected.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}`\n          : 'Дата не выбрана — нажмите быстрый вариант или день в календаре.'}\n      </p>\n    </div>\n  );\n}\n```"
+    "code": "import { useCallback, useMemo, useState } from 'react';\nimport { JxButton, JxCalendar } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date | null;\n  defaultValue?: Date | null;\n  onChange?: (value: Date | null) => void;\n  locale?: string;\n};\n\nconst DAY_MS = 24 * 60 * 60 * 1000;\n\nconst startOfDay = (date: Date) =>\n  new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst isSameDay = (a: Date | null, b: Date | null) =>\n  a != null && b != null && startOfDay(a).getTime() === startOfDay(b).getTime();\n\nexport default function ReportDatePicker({\n  value,\n  defaultValue = null,\n  onChange,\n  locale = 'ru-RU',\n}: ReportDatePickerProps) {\n  const [internalDate, setInternalDate] = useState<Date | null>(defaultValue);\n  const isControlled = value !== undefined;\n  const date = isControlled ? value : internalDate;\n\n  const commit = useCallback(\n    (next: Date | null) => {\n      if (!isControlled) setInternalDate(next);\n      onChange?.(next);\n    },\n    [isControlled, onChange],\n  );\n\n  const presets = useMemo(() => {\n    const today = startOfDay(new Date());\n    return [\n      { id: 'today', label: 'Сегодня', date: today },\n      { id: 'yesterday', label: 'Вчера', date: new Date(today.getTime() - DAY_MS) },\n      { id: 'week', label: 'Неделя назад', date: new Date(today.getTime() - 7 * DAY_MS) },\n    ];\n  }, []);\n\n  const formatted = useMemo(\n    () =>\n      date\n        ? new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(date)\n        : null,\n    [date, locale],\n  );\n\n  return (\n    <div\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: '12px',\n        padding: '16px',\n        maxWidth: '340px',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n        background: 'var(--jx-surface)',\n        color: 'var(--jx-text)',\n        fontFamily: 'var(--jx-font-sans)',\n        boxShadow: 'var(--jx-shadow-sm)',\n      }}\n    >\n      <div\n        role=\"group\"\n        aria-label=\"Быстрый выбор даты отчёта\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}\n      >\n        {presets.map((preset) => {\n          const active = isSameDay(date, preset.date);\n          return (\n            <JxButton\n              key={preset.id}\n              size=\"sm\"\n              variant={active ? 'secondary' : 'outline'}\n              aria-pressed={active}\n              onClick={() => commit(preset.date)}\n            >\n              {preset.label}\n            </JxButton>\n          );\n        })}\n      </div>\n\n      <JxCalendar locale={locale} value={date} onValueChange={commit} />\n\n      <p\n        aria-live=\"polite\"\n        style={{\n          margin: 0,\n          fontSize: '0.875rem',\n          color: 'var(--jx-text-2)',\n        }}\n      >\n        {formatted\n          ? `Дата отчёта: ${formatted}`\n          : 'Дата не выбрана — выберите день в календаре или быстрый вариант выше.'}\n      </p>\n    </div>\n  );\n}",
+    "text": "```tsx\nimport { useCallback, useMemo, useState } from 'react';\nimport { JxButton, JxCalendar } from '@jinx-ui/react';\n\ntype ReportDatePickerProps = {\n  value?: Date | null;\n  defaultValue?: Date | null;\n  onChange?: (value: Date | null) => void;\n  locale?: string;\n};\n\nconst DAY_MS = 24 * 60 * 60 * 1000;\n\nconst startOfDay = (date: Date) =>\n  new Date(date.getFullYear(), date.getMonth(), date.getDate());\n\nconst isSameDay = (a: Date | null, b: Date | null) =>\n  a != null && b != null && startOfDay(a).getTime() === startOfDay(b).getTime();\n\nexport default function ReportDatePicker({\n  value,\n  defaultValue = null,\n  onChange,\n  locale = 'ru-RU',\n}: ReportDatePickerProps) {\n  const [internalDate, setInternalDate] = useState<Date | null>(defaultValue);\n  const isControlled = value !== undefined;\n  const date = isControlled ? value : internalDate;\n\n  const commit = useCallback(\n    (next: Date | null) => {\n      if (!isControlled) setInternalDate(next);\n      onChange?.(next);\n    },\n    [isControlled, onChange],\n  );\n\n  const presets = useMemo(() => {\n    const today = startOfDay(new Date());\n    return [\n      { id: 'today', label: 'Сегодня', date: today },\n      { id: 'yesterday', label: 'Вчера', date: new Date(today.getTime() - DAY_MS) },\n      { id: 'week', label: 'Неделя назад', date: new Date(today.getTime() - 7 * DAY_MS) },\n    ];\n  }, []);\n\n  const formatted = useMemo(\n    () =>\n      date\n        ? new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(date)\n        : null,\n    [date, locale],\n  );\n\n  return (\n    <div\n      style={{\n        display: 'flex',\n        flexDirection: 'column',\n        gap: '12px',\n        padding: '16px',\n        maxWidth: '340px',\n        border: '1px solid var(--jx-border)',\n        borderRadius: 'var(--jx-r-lg)',\n        background: 'var(--jx-surface)',\n        color: 'var(--jx-text)',\n        fontFamily: 'var(--jx-font-sans)',\n        boxShadow: 'var(--jx-shadow-sm)',\n      }}\n    >\n      <div\n        role=\"group\"\n        aria-label=\"Быстрый выбор даты отчёта\"\n        style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}\n      >\n        {presets.map((preset) => {\n          const active = isSameDay(date, preset.date);\n          return (\n            <JxButton\n              key={preset.id}\n              size=\"sm\"\n              variant={active ? 'secondary' : 'outline'}\n              aria-pressed={active}\n              onClick={() => commit(preset.date)}\n            >\n              {preset.label}\n            </JxButton>\n          );\n        })}\n      </div>\n\n      <JxCalendar locale={locale} value={date} onValueChange={commit} />\n\n      <p\n        aria-live=\"polite\"\n        style={{\n          margin: 0,\n          fontSize: '0.875rem',\n          color: 'var(--jx-text-2)',\n        }}\n      >\n        {formatted\n          ? `Дата отчёта: ${formatted}`\n          : 'Дата не выбрана — выберите день в календаре или быстрый вариант выше.'}\n      </p>\n    </div>\n  );\n}\n```"
   },
   "checks": {
     "tsc": {
@@ -149,31 +118,31 @@
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 38,
+        "line": 56,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 42,
+        "line": 73,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       },
       {
         "rule": "inline-style",
         "severity": "warning",
-        "line": 71,
+        "line": 95,
         "message": "Инлайновые стили вместо классов и токенов библиотеки"
       }
     ],
     "usedComponents": [
-      "JxCalendar",
-      "JxChip"
+      "JxButton",
+      "JxCalendar"
     ],
-    "expectedCoverage": 1,
+    "expectedCoverage": 0.5,
     "passed": true
   },
   "verdict": {
     "passed": true,
-    "score": 1
+    "score": 0.85
   }
 }
