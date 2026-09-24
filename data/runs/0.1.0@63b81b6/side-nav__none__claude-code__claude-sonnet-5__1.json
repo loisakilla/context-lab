@@ -44,7 +44,7 @@
     "cacheRead": 8235,
     "cacheCreation": 372
   },
-  "costUsd": 0.022777500000000003,
+  "costUsd": 0.009111,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState } from 'react';\nimport {\n  Button,\n  Drawer,\n  DrawerHeader,\n  DrawerTitle,\n  DrawerBody,\n  Nav,\n  NavItem,\n  NavDivider,\n  Icon,\n} from '@jinx-ui/react';\n\nexport type NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface SideNavMenuProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function SideNavMenu({ onNavigate }: SideNavMenuProps) {\n  const [isOpen, setIsOpen] = useState(false);\n\n  const handleSelect = (key: NavKey) => {\n    onNavigate(key);\n    setIsOpen(false);\n  };\n\n  return (\n    <>\n      <Button\n        variant=\"secondary\"\n        leadingIcon={<Icon name=\"menu\" />}\n        onClick={() => setIsOpen(true)}\n      >\n        Меню\n      </Button>\n\n      <Drawer\n        placement=\"left\"\n        isOpen={isOpen}\n        onClose={() => setIsOpen(false)}\n      >\n        <DrawerHeader>\n          <DrawerTitle>Навигация</DrawerTitle>\n        </DrawerHeader>\n        <DrawerBody>\n          <Nav>\n            <NavItem onClick={() => handleSelect('projects')}>\n              Проекты\n            </NavItem>\n            <NavItem onClick={() => handleSelect('team')}>\n              Команда\n            </NavItem>\n            <NavItem onClick={() => handleSelect('settings')}>\n              Настройки\n            </NavItem>\n            <NavDivider />\n            <NavItem\n              tone=\"danger\"\n              onClick={() => handleSelect('logout')}\n            >\n              Выйти\n            </NavItem>\n          </Nav>\n        </DrawerBody>\n      </Drawer>\n    </>\n  );\n}",

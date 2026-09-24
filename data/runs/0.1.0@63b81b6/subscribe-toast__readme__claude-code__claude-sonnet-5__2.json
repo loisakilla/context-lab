@@ -51,7 +51,7 @@
     "cacheRead": 9547,
     "cacheCreation": 0
   },
-  "costUsd": 0.0302335,
+  "costUsd": 0.012093,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState, FormEvent } from 'react';\nimport { Button, Input, Toast } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [showToast, setShowToast] = useState(false);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    setEmail('');\n    setShowToast(true);\n  };\n\n  return (\n    <div className=\"jx-stack\" style={{ position: 'relative' }}>\n      <form className=\"jx-stack\" onSubmit={handleSubmit}>\n        <label className=\"jx-label\" htmlFor=\"newsletter-email\">\n          Email для рассылки\n        </label>\n        <Input\n          id=\"newsletter-email\"\n          type=\"email\"\n          name=\"email\"\n          placeholder=\"you@example.com\"\n          required\n          value={email}\n          onChange={(event) => setEmail(event.target.value)}\n        />\n        <Button type=\"submit\">Подписаться</Button>\n      </form>\n\n      {showToast && (\n        <div\n          className=\"jx-toast-region\"\n          style={{\n            position: 'fixed',\n            top: 'var(--jx-space-4)',\n            right: 'var(--jx-space-4)',\n            zIndex: 'var(--jx-z-toast)',\n          }}\n        >\n          <Toast\n            variant=\"success\"\n            title=\"Готово\"\n            description=\"Письмо с подтверждением подписки отправлено на вашу почту.\"\n            onClose={() => setShowToast(false)}\n          />\n        </div>\n      )}\n    </div>\n  );\n}",

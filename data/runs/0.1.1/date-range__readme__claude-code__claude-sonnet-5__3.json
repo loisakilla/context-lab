@@ -51,7 +51,7 @@
     "cacheRead": 9532,
     "cacheCreation": 0
   },
-  "costUsd": 0.021201,
+  "costUsd": 0.00848,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState } from 'react';\nimport { JxButton, JxCalendar } from '@jinx-ui/react';\n\nfunction startOfDay(date: Date): Date {\n  const d = new Date(date);\n  d.setHours(0, 0, 0, 0);\n  return d;\n}\n\nfunction addDays(date: Date, days: number): Date {\n  const d = new Date(date);\n  d.setDate(d.getDate() + days);\n  return d;\n}\n\ninterface ReportDatePickerProps {\n  onChange?: (date: Date) => void;\n}\n\nexport default function ReportDatePicker({ onChange }: ReportDatePickerProps) {\n  const [selected, setSelected] = useState<Date>(() => startOfDay(new Date()));\n\n  const handleChange = (date: Date) => {\n    const normalized = startOfDay(date);\n    setSelected(normalized);\n    onChange?.(normalized);\n  };\n\n  const quickOptions: { label: string; getDate: () => Date }[] = [\n    { label: 'Сегодня', getDate: () => startOfDay(new Date()) },\n    { label: 'Вчера', getDate: () => addDays(startOfDay(new Date()), -1) },\n    { label: 'Неделя назад', getDate: () => addDays(startOfDay(new Date()), -7) },\n  ];\n\n  return (\n    <div className=\"jx-stack\" style={{ gap: 'var(--jx-space-3)' }}>\n      <div className=\"jx-stack\" style={{ flexDirection: 'row', gap: 'var(--jx-space-2)' }}>\n        {quickOptions.map((option) => (\n          <JxButton\n            key={option.label}\n            variant=\"secondary\"\n            size=\"sm\"\n            onClick={() => handleChange(option.getDate())}\n          >\n            {option.label}\n          </JxButton>\n        ))}\n      </div>\n      <JxCalendar value={selected} onValueChange={handleChange} />\n    </div>\n  );\n}",

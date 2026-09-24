@@ -108,6 +108,19 @@ describe('runTask', () => {
     expect(record.library.name).toBe('sample-kit');
   });
 
+  it('считает цену по тарифу из расхода, а цену драйвера берёт только для модели без тарифа', async () => {
+    const reporting: Driver = {
+      name: 'claude-code',
+      async generate(request) {
+        return { ...(await fakeDriver('```tsx\nexport default () => null;\n```').generate(request)), costUsd: 9 };
+      },
+    };
+    const known = await runTask({ driver: reporting, mode: 'none', task, sources: { index }, model: 'claude-sonnet-5' });
+    expect(known.costUsd).toBe(priceOf('claude-sonnet-5', known.usage));
+    const unknown = await runTask({ driver: reporting, mode: 'none', task, sources: { index }, model: 'model-without-price' });
+    expect(unknown.costUsd).toBe(9);
+  });
+
   it('сохраняет ответ модели, даже если проверка кода упала', async () => {
     const good = '```tsx\nimport { JxButton } from \'@jinx-ui/react\';\nexport default () => <JxButton>ok</JxButton>;\n```';
     const broken = { check: async () => Promise.reject(new Error('Проверка не уложилась в 5 с')) };

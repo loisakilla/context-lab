@@ -60,7 +60,7 @@
     "cacheRead": 49060,
     "cacheCreation": 0
   },
-  "costUsd": 0.04009,
+  "costUsd": 0.016036,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState, FormEvent } from 'react';\nimport { JxInputField, JxSelect, JxSwitch, JxButton } from '@jinx-ui/react';\n\ninterface ProfileSettings {\n  name: string;\n  language: string;\n  emailNotifications: boolean;\n}\n\ninterface ProfileSettingsFormProps {\n  onSave: (settings: ProfileSettings) => void;\n}\n\nexport default function ProfileSettingsForm({ onSave }: ProfileSettingsFormProps) {\n  const [name, setName] = useState('');\n  const [language, setLanguage] = useState('ru');\n  const [emailNotifications, setEmailNotifications] = useState(true);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    onSave({ name, language, emailNotifications });\n  };\n\n  return (\n    <form\n      onSubmit={handleSubmit}\n      style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '360px' }}\n    >\n      <JxInputField\n        label=\"Имя\"\n        required\n        value={name}\n        onChange={(event) => setName(event.target.value)}\n        placeholder=\"Введите имя\"\n      />\n\n      <JxSelect\n        label=\"Язык интерфейса\"\n        options={[\n          { value: 'ru', label: 'Русский' },\n          { value: 'en', label: 'English' },\n        ]}\n        value={language}\n        onValueChange={setLanguage}\n      />\n\n      <JxSwitch\n        label=\"Уведомления на почту\"\n        checked={emailNotifications}\n        onChange={(event) => setEmailNotifications(event.target.checked)}\n      />\n\n      <JxButton type=\"submit\" variant=\"primary\">\n        Сохранить\n      </JxButton>\n    </form>\n  );\n}",

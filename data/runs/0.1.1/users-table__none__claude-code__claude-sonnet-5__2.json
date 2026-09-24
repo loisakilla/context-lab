@@ -44,7 +44,7 @@
     "cacheRead": 8587,
     "cacheCreation": 0
   },
-  "costUsd": 0.0208035,
+  "costUsd": 0.008321,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState } from 'react';\nimport {\n  Table,\n  TableHead,\n  TableBody,\n  TableRow,\n  TableHeaderCell,\n  TableCell,\n  Badge,\n  Pagination,\n} from '@jinx-ui/react';\n\ninterface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\ninterface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const totalPages = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const startIndex = (page - 1) * PAGE_SIZE;\n  const pageUsers = users.slice(startIndex, startIndex + PAGE_SIZE);\n\n  return (\n    <div className=\"jx-stack jx-stack-gap-md\">\n      <Table>\n        <TableHead>\n          <TableRow>\n            <TableHeaderCell>Имя</TableHeaderCell>\n            <TableHeaderCell>Роль</TableHeaderCell>\n            <TableHeaderCell>Статус</TableHeaderCell>\n          </TableRow>\n        </TableHead>\n        <TableBody>\n          {pageUsers.map((user) => (\n            <TableRow key={user.id}>\n              <TableCell>{user.name}</TableCell>\n              <TableCell>{user.role}</TableCell>\n              <TableCell>\n                <Badge tone={user.active ? 'success' : 'neutral'}>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </Badge>\n              </TableCell>\n            </TableRow>\n          ))}\n        </TableBody>\n      </Table>\n      <Pagination\n        page={page}\n        totalPages={totalPages}\n        onPageChange={setPage}\n      />\n    </div>\n  );\n}",

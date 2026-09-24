@@ -44,7 +44,7 @@
     "cacheRead": 8572,
     "cacheCreation": 0
   },
-  "costUsd": 0.017821,
+  "costUsd": 0.007128,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState } from 'react';\nimport { JxInput, JxButton, JxToast, JxCard, JxText } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [showToast, setShowToast] = useState(false);\n\n  const handleSubmit = (e: React.FormEvent) => {\n    e.preventDefault();\n    if (!email) return;\n\n    setEmail('');\n    setShowToast(true);\n  };\n\n  return (\n    <>\n      <JxCard className=\"jx-p-lg jx-max-w-md\">\n        <JxText as=\"h2\" className=\"jx-text-lg jx-font-semibold jx-mb-md\">\n          Подписка на рассылку\n        </JxText>\n        <form onSubmit={handleSubmit} className=\"jx-flex jx-flex-col jx-gap-md\">\n          <JxInput\n            type=\"email\"\n            name=\"email\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={(e) => setEmail(e.target.value)}\n            required\n            aria-label=\"Электронная почта\"\n          />\n          <JxButton type=\"submit\" variant=\"primary\">\n            Подписаться\n          </JxButton>\n        </form>\n      </JxCard>\n\n      {showToast && (\n        <JxToast\n          variant=\"success\"\n          title=\"Готово\"\n          description=\"Письмо с подтверждением подписки отправлено на вашу почту.\"\n          className=\"jx-fixed jx-top-md jx-right-md\"\n          onClose={() => setShowToast(false)}\n        />\n      )}\n    </>\n  );\n}",

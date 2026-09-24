@@ -106,7 +106,7 @@
     "cacheRead": 36038,
     "cacheCreation": 3424
   },
-  "costUsd": 0.093349,
+  "costUsd": 0.03734,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState } from 'react';\nimport { JxTagInput, JxChip } from '@jinx-ui/react';\n\ninterface ArticleTagPickerProps {\n  defaultTags?: string[];\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagPicker({ defaultTags = [], onChange }: ArticleTagPickerProps) {\n  const [tags, setTags] = useState<string[]>(defaultTags);\n\n  const handleValueChange = (nextTags: string[]) => {\n    setTags(nextTags);\n    onChange?.(nextTags);\n  };\n\n  const handleRemove = (tagToRemove: string) => {\n    const nextTags = tags.filter((tag) => tag !== tagToRemove);\n    setTags(nextTags);\n    onChange?.(nextTags);\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-space-sm)' }}>\n      <JxTagInput\n        ariaLabel=\"Теги статьи\"\n        placeholder=\"Введите тег и нажмите Enter\"\n        value={tags}\n        onValueChange={handleValueChange}\n      />\n      {tags.length > 0 && (\n        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--jx-space-xs)' }}>\n          {tags.map((tag) => (\n            <JxChip key={tag} removable onRemove={() => handleRemove(tag)}>\n              {tag}\n            </JxChip>\n          ))}\n        </div>\n      )}\n    </div>\n  );\n}",

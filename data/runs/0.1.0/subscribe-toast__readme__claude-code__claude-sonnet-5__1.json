@@ -52,7 +52,7 @@
     "cacheRead": 8235,
     "cacheCreation": 1059
   },
-  "costUsd": 0.02202125,
+  "costUsd": 0.008809,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState, FormEvent } from 'react';\nimport { JxInput, JxButton, JxToast } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [showToast, setShowToast] = useState(false);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    setEmail('');\n    setShowToast(true);\n  };\n\n  return (\n    <>\n      <form\n        onSubmit={handleSubmit}\n        className=\"jx-stack jx-gap-md\"\n        style={{ maxWidth: 360 }}\n      >\n        <label htmlFor=\"newsletter-email\" className=\"jx-label\">\n          Email для рассылки\n        </label>\n        <JxInput\n          id=\"newsletter-email\"\n          type=\"email\"\n          required\n          placeholder=\"you@example.com\"\n          value={email}\n          onValueChange={setEmail}\n        />\n        <JxButton type=\"submit\" variant=\"primary\">\n          Подписаться\n        </JxButton>\n      </form>\n\n      <JxToast\n        open={showToast}\n        onOpenChange={setShowToast}\n        placement=\"top-right\"\n        title=\"Готово\"\n        description=\"Письмо отправлено на вашу почту.\"\n      />\n    </>\n  );\n}",

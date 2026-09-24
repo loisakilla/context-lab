@@ -57,7 +57,7 @@
     "cacheRead": 49037,
     "cacheCreation": 0
   },
-  "costUsd": 0.0587785,
+  "costUsd": 0.023511,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState } from 'react';\nimport { JxTagInput, JxChip, JxEmptyState } from '@jinx-ui/react';\n\ninterface ArticleTagPickerProps {\n  label?: string;\n  defaultValue?: string[];\n  onChange?: (tags: string[]) => void;\n}\n\nexport default function ArticleTagPicker({\n  label = 'Теги статьи',\n  defaultValue = [],\n  onChange,\n}: ArticleTagPickerProps) {\n  const [tags, setTags] = useState<string[]>(defaultValue);\n\n  const updateTags = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  const removeTag = (tag: string) => {\n    updateTags(tags.filter((existing) => existing !== tag));\n  };\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>\n      <span style={{ color: 'var(--jx-text-2)', fontSize: '13px' }}>{label}</span>\n\n      <JxTagInput\n        ariaLabel={label}\n        placeholder=\"Введите тег и нажмите Enter\"\n        value={tags}\n        onValueChange={updateTags}\n      />\n\n      <div\n        style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', minHeight: '32px' }}\n        role=\"list\"\n        aria-label=\"Выбранные теги\"\n      >\n        {tags.length === 0 ? (\n          <JxEmptyState\n            title=\"Тегов пока нет\"\n            message=\"Добавьте тег в поле выше — он появится здесь.\"\n          />\n        ) : (\n          tags.map((tag) => (\n            <div key={tag} role=\"listitem\">\n              <JxChip removable onRemove={() => removeTag(tag)}>\n                {tag}\n              </JxChip>\n            </div>\n          ))\n        )}\n      </div>\n    </div>\n  );\n}",

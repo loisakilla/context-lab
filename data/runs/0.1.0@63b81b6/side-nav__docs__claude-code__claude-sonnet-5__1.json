@@ -51,7 +51,7 @@
     "cacheRead": 8235,
     "cacheCreation": 32411
   },
-  "costUsd": 0.21687125000000002,
+  "costUsd": 0.086749,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState } from 'react';\nimport { JxButton, JxDrawer, JxMenu } from '@jinx-ui/react';\n\ninterface NavMenuButtonProps {\n  onNavigate: (key: string) => void;\n}\n\nexport default function NavMenuButton({ onNavigate }: NavMenuButtonProps) {\n  const [open, setOpen] = useState(false);\n\n  const select = (key: string) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <JxButton variant=\"secondary\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n      <JxDrawer open={open} onOpenChange={setOpen} title=\"Разделы\" side=\"left\">\n        <JxMenu\n          items={[\n            { label: 'Проекты', onSelect: () => select('projects') },\n            { label: 'Команда', onSelect: () => select('team') },\n            { label: 'Настройки', onSelect: () => select('settings') },\n            { type: 'divider' },\n            { label: 'Выйти', danger: true, onSelect: () => select('logout') },\n          ]}\n        />\n      </JxDrawer>\n    </>\n  );\n}",

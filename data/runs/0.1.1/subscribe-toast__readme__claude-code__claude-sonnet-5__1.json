@@ -52,7 +52,7 @@
     "cacheRead": 8235,
     "cacheCreation": 1273
   },
-  "costUsd": 0.05623375,
+  "costUsd": 0.022493,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState, type FormEvent } from 'react';\nimport { JxButton, JxField, JxInput, JxToast } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [toastOpen, setToastOpen] = useState(false);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!email) return;\n\n    setEmail('');\n    setToastOpen(true);\n  };\n\n  return (\n    <>\n      <form\n        className=\"jx-stack\"\n        style={{ gap: 'var(--jx-space-3)', maxWidth: 360 }}\n        onSubmit={handleSubmit}\n      >\n        <JxField label=\"Email\">\n          <JxInput\n            type=\"email\"\n            name=\"email\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onValueChange={setEmail}\n            required\n          />\n        </JxField>\n\n        <JxButton type=\"submit\" variant=\"primary\">\n          Подписаться\n        </JxButton>\n      </form>\n\n      <JxToast\n        open={toastOpen}\n        onOpenChange={setToastOpen}\n        position=\"top-right\"\n        variant=\"success\"\n        title=\"Готово\"\n        description=\"Письмо с подтверждением подписки отправлено на вашу почту.\"\n      />\n    </>\n  );\n}",

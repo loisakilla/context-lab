@@ -52,7 +52,7 @@
     "cacheRead": 8235,
     "cacheCreation": 1308
   },
-  "costUsd": 0.0257275,
+  "costUsd": 0.010291,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState } from 'react';\nimport { JxButton, JxDrawer, JxMenu, JxMenuItem, JxMenuSeparator } from '@jinx-ui/react';\n\ntype NavKey = 'projects' | 'team' | 'settings' | 'logout';\n\ninterface NavDrawerProps {\n  onNavigate: (key: NavKey) => void;\n}\n\nexport default function NavDrawer({ onNavigate }: NavDrawerProps) {\n  const [open, setOpen] = useState(false);\n\n  const handleSelect = (key: NavKey) => {\n    onNavigate(key);\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <JxButton variant=\"secondary\" onClick={() => setOpen(true)}>\n        Меню\n      </JxButton>\n      <JxDrawer open={open} onOpenChange={setOpen} side=\"left\" aria-label=\"Навигация\">\n        <JxMenu aria-label=\"Основная навигация\">\n          <JxMenuItem onSelect={() => handleSelect('projects')}>Проекты</JxMenuItem>\n          <JxMenuItem onSelect={() => handleSelect('team')}>Команда</JxMenuItem>\n          <JxMenuItem onSelect={() => handleSelect('settings')}>Настройки</JxMenuItem>\n          <JxMenuSeparator />\n          <JxMenuItem danger onSelect={() => handleSelect('logout')}>\n            Выйти\n          </JxMenuItem>\n        </JxMenu>\n      </JxDrawer>\n    </>\n  );\n}",

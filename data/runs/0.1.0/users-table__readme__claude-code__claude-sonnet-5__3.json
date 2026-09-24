@@ -52,7 +52,7 @@
     "cacheRead": 9309,
     "cacheCreation": 0
   },
-  "costUsd": 0.0200895,
+  "costUsd": 0.008036,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useMemo, useState } from 'react';\nimport { JxTable, JxBadge, JxPagination } from '@jinx-ui/react';\n\nexport interface User {\n  id: string;\n  name: string;\n  role: string;\n  status: 'active' | 'disabled';\n}\n\ninterface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  const pageCount = Math.max(1, Math.ceil(users.length / PAGE_SIZE));\n  const currentPage = Math.min(page, pageCount);\n\n  const pageUsers = useMemo(() => {\n    const start = (currentPage - 1) * PAGE_SIZE;\n    return users.slice(start, start + PAGE_SIZE);\n  }, [users, currentPage]);\n\n  return (\n    <div className=\"jx-stack\">\n      <JxTable>\n        <thead>\n          <tr>\n            <th>Имя</th>\n            <th>Роль</th>\n            <th>Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {pageUsers.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                {user.status === 'active' ? (\n                  <JxBadge variant=\"success\">Активен</JxBadge>\n                ) : (\n                  <JxBadge variant=\"neutral\">Отключён</JxBadge>\n                )}\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n\n      <JxPagination\n        page={currentPage}\n        pageCount={pageCount}\n        onPageChange={(next) => setPage(next)}\n      />\n    </div>\n  );\n}",

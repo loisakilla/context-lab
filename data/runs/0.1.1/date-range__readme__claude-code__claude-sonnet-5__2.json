@@ -51,7 +51,7 @@
     "cacheRead": 9532,
     "cacheCreation": 0
   },
-  "costUsd": 0.019251,
+  "costUsd": 0.0077,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState } from 'react';\nimport { JxButton, JxCalendar } from '@jinx-ui/react';\n\ninterface ReportDatePickerProps {\n  onChange?: (date: Date) => void;\n}\n\nfunction startOfDay(date: Date): Date {\n  const result = new Date(date);\n  result.setHours(0, 0, 0, 0);\n  return result;\n}\n\nfunction daysAgo(days: number): Date {\n  const result = startOfDay(new Date());\n  result.setDate(result.getDate() - days);\n  return result;\n}\n\nexport default function ReportDatePicker({ onChange }: ReportDatePickerProps) {\n  const [value, setValue] = useState<Date>(() => startOfDay(new Date()));\n\n  const handleChange = (date: Date) => {\n    const normalized = startOfDay(date);\n    setValue(normalized);\n    onChange?.(normalized);\n  };\n\n  const quickOptions = [\n    { label: 'Сегодня', getDate: () => daysAgo(0) },\n    { label: 'Вчера', getDate: () => daysAgo(1) },\n    { label: 'Неделя назад', getDate: () => daysAgo(7) },\n  ];\n\n  return (\n    <div className=\"jx-stack jx-stack-gap-md\">\n      <div className=\"jx-inline jx-inline-gap-sm\">\n        {quickOptions.map((option) => (\n          <JxButton\n            key={option.label}\n            variant=\"secondary\"\n            size=\"sm\"\n            onClick={() => handleChange(option.getDate())}\n          >\n            {option.label}\n          </JxButton>\n        ))}\n      </div>\n      <JxCalendar value={value} onValueChange={handleChange} />\n    </div>\n  );\n}",

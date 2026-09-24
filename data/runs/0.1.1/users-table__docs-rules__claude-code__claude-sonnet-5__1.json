@@ -59,7 +59,7 @@
     "cacheRead": 8235,
     "cacheCreation": 40810
   },
-  "costUsd": 0.27524,
+  "costUsd": 0.110096,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState } from 'react';\nimport { JxTable, JxBadge, JxPagination, JxEmptyState } from '@jinx-ui/react';\n\ninterface User {\n  id: string;\n  name: string;\n  role: string;\n  active: boolean;\n}\n\ninterface UsersTableProps {\n  users: User[];\n}\n\nconst PAGE_SIZE = 10;\n\nexport default function UsersTable({ users }: UsersTableProps) {\n  const [page, setPage] = useState(1);\n\n  if (users.length === 0) {\n    return (\n      <JxEmptyState\n        title=\"Пользователей пока нет\"\n        message=\"Как только появятся пользователи, они будут показаны здесь.\"\n      />\n    );\n  }\n\n  const pageCount = Math.ceil(users.length / PAGE_SIZE);\n  const visibleUsers = users.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--jx-r-sm)' }}>\n      <JxTable>\n        <thead>\n          <tr>\n            <th>Имя</th>\n            <th>Роль</th>\n            <th>Статус</th>\n          </tr>\n        </thead>\n        <tbody>\n          {visibleUsers.map((user) => (\n            <tr key={user.id}>\n              <td>{user.name}</td>\n              <td>{user.role}</td>\n              <td>\n                <JxBadge tone={user.active ? 'success' : 'default'} dot>\n                  {user.active ? 'Активен' : 'Отключён'}\n                </JxBadge>\n              </td>\n            </tr>\n          ))}\n        </tbody>\n      </JxTable>\n      {pageCount > 1 && (\n        <JxPagination total={pageCount} page={page} onPageChange={setPage} />\n      )}\n    </div>\n  );\n}",

@@ -44,7 +44,7 @@
     "cacheRead": 8235,
     "cacheCreation": 337
   },
-  "costUsd": 0.01795875,
+  "costUsd": 0.007183,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState } from 'react';\nimport { JxInput, JxButton, JxToast, JxField } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const [showToast, setShowToast] = useState(false);\n\n  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {\n    e.preventDefault();\n    if (!email) return;\n\n    setEmail('');\n    setShowToast(true);\n  };\n\n  return (\n    <div className=\"jx-stack\" style={{ position: 'relative' }}>\n      <form onSubmit={handleSubmit} className=\"jx-stack jx-gap-md\">\n        <JxField label=\"Email\">\n          <JxInput\n            type=\"email\"\n            name=\"email\"\n            placeholder=\"you@example.com\"\n            value={email}\n            onChange={(e) => setEmail(e.target.value)}\n            required\n          />\n        </JxField>\n        <JxButton type=\"submit\" variant=\"primary\">\n          Подписаться\n        </JxButton>\n      </form>\n\n      {showToast && (\n        <JxToast\n          variant=\"success\"\n          title=\"Готово\"\n          description=\"Письмо с подтверждением подписки отправлено на вашу почту.\"\n          onClose={() => setShowToast(false)}\n          className=\"jx-toast-corner\"\n        />\n      )}\n    </div>\n  );\n}",

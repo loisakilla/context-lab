@@ -50,7 +50,7 @@
     "cacheRead": 8235,
     "cacheCreation": 1343
   },
-  "costUsd": 0.05579625,
+  "costUsd": 0.022319,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState } from 'react';\nimport { Button, Dialog } from '@jinx-ui/react';\n\ninterface DeleteProjectButtonProps {\n  onConfirm: () => void;\n}\n\nexport default function DeleteProjectButton({ onConfirm }: DeleteProjectButtonProps) {\n  const [open, setOpen] = useState(false);\n\n  const handleConfirm = () => {\n    onConfirm();\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <Button\n        variant=\"danger\"\n        className=\"jx-btn jx-btn-danger\"\n        onClick={() => setOpen(true)}\n      >\n        Удалить проект\n      </Button>\n\n      <Dialog open={open} onOpenChange={setOpen}>\n        <Dialog.Content className=\"jx-dialog jx-dialog-danger\">\n          <Dialog.Title className=\"jx-dialog-title\">\n            Удалить проект?\n          </Dialog.Title>\n          <Dialog.Description className=\"jx-dialog-description\">\n            Это действие необратимо. Все данные проекта, включая файлы и историю, будут удалены без возможности восстановления.\n          </Dialog.Description>\n\n          <div className=\"jx-dialog-footer\">\n            <Button\n              variant=\"secondary\"\n              className=\"jx-btn jx-btn-secondary\"\n              onClick={() => setOpen(false)}\n            >\n              Отмена\n            </Button>\n            <Button\n              variant=\"danger\"\n              className=\"jx-btn jx-btn-danger\"\n              onClick={handleConfirm}\n            >\n              Удалить\n            </Button>\n          </div>\n        </Dialog.Content>\n      </Dialog>\n    </>\n  );\n}",

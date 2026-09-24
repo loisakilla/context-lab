@@ -70,7 +70,7 @@ export async function runTask(options: RunOptions): Promise<RunRecord> {
       checkError = error instanceof Error ? error.message : String(error);
     }
   }
-  const priced = generation.costUsd ?? priceOf(options.model, generation.usage);
+  const priced = priceOf(options.model, generation.usage) ?? generation.costUsd;
 
   const record: RunRecord = {
     id: runFileName(options.task, options.mode, options.driver.name, options.model, repeat, options.effort).replace(/\.json$/, ''),

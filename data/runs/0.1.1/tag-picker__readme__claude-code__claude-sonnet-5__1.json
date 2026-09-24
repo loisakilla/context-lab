@@ -50,7 +50,7 @@
     "cacheRead": 8235,
     "cacheCreation": 1280
   },
-  "costUsd": 0.0207275,
+  "costUsd": 0.008291,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState } from 'react';\nimport { JxTagInput } from '@jinx-ui/react';\n\ninterface ArticleTagPickerProps {\n  onChange?: (tags: string[]) => void;\n  defaultTags?: string[];\n  placeholder?: string;\n}\n\nexport default function ArticleTagPicker({\n  onChange,\n  defaultTags = [],\n  placeholder = 'Добавьте тег и нажмите Enter',\n}: ArticleTagPickerProps) {\n  const [tags, setTags] = useState<string[]>(defaultTags);\n\n  const handleValueChange = (next: string[]) => {\n    setTags(next);\n    onChange?.(next);\n  };\n\n  return (\n    <div className=\"jx-stack\" style={{ gap: 'var(--jx-space-2)' }}>\n      <JxTagInput\n        value={tags}\n        onValueChange={handleValueChange}\n        placeholder={placeholder}\n        aria-label=\"Теги статьи\"\n      />\n    </div>\n  );\n}",

@@ -51,7 +51,7 @@
     "cacheRead": 8235,
     "cacheCreation": 39121
   },
-  "costUsd": 0.25770875,
+  "costUsd": 0.103083,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState } from 'react';\nimport { JxButton, JxModal } from '@jinx-ui/react';\n\nexport default function DeleteProjectButton({ onConfirm }: { onConfirm: () => void }) {\n  const [open, setOpen] = useState(false);\n\n  const confirmDelete = () => {\n    onConfirm();\n    setOpen(false);\n  };\n\n  return (\n    <>\n      <JxButton variant=\"danger\" onClick={() => setOpen(true)}>\n        Удалить проект\n      </JxButton>\n      <JxModal\n        open={open}\n        onOpenChange={setOpen}\n        intent=\"danger\"\n        title=\"Удалить проект?\"\n        message=\"Это действие необратимо. Проект и все его данные будут удалены безвозвратно.\"\n      >\n        <JxButton variant=\"ghost\" onClick={() => setOpen(false)}>\n          Отмена\n        </JxButton>\n        <JxButton variant=\"danger\" onClick={confirmDelete}>\n          Удалить\n        </JxButton>\n      </JxModal>\n    </>\n  );\n}",

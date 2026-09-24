@@ -52,7 +52,7 @@
     "cacheRead": 44822,
     "cacheCreation": 0
   },
-  "costUsd": 0.033346,
+  "costUsd": 0.013338,
   "stopReason": "end_turn",
   "output": {
     "code": "import { FormEvent, useState } from 'react';\nimport { JxInputField, JxButton, JxToastViewport, useJxToastQueue } from '@jinx-ui/react';\n\nexport default function NewsletterSubscribeForm() {\n  const [email, setEmail] = useState('');\n  const toasts = useJxToastQueue();\n\n  const submit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    toasts.push({\n      title: 'Готово',\n      message: `Письмо отправлено на ${email}`,\n      variant: 'success',\n    });\n    setEmail('');\n  };\n\n  return (\n    <form\n      onSubmit={submit}\n      style={{ display: 'flex', gap: 'var(--jx-r-sm)', alignItems: 'flex-end' }}\n    >\n      <JxInputField\n        label=\"Электронная почта\"\n        type=\"email\"\n        required\n        placeholder=\"you@example.com\"\n        value={email}\n        onChange={(event) => setEmail(event.target.value)}\n      />\n      <JxButton variant=\"primary\" type=\"submit\">\n        Подписаться\n      </JxButton>\n      <JxToastViewport items={toasts.items} onDismiss={toasts.dismiss} position=\"top-right\" />\n    </form>\n  );\n}",

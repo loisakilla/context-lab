@@ -43,7 +43,7 @@
     "cacheRead": 8235,
     "cacheCreation": 361
   },
-  "costUsd": 0.02258375,
+  "costUsd": 0.009033,
   "stopReason": "end_turn",
   "output": {
     "code": "import { useState } from 'react';\nimport { Calendar, ButtonGroup, Button, Stack } from '@jinx-ui/react';\n\ninterface ReportDatePickerProps {\n  onChange?: (date: Date) => void;\n}\n\nfunction startOfDay(date: Date): Date {\n  const d = new Date(date);\n  d.setHours(0, 0, 0, 0);\n  return d;\n}\n\nfunction addDays(date: Date, days: number): Date {\n  const d = new Date(date);\n  d.setDate(d.getDate() + days);\n  return d;\n}\n\nexport default function ReportDatePicker({ onChange }: ReportDatePickerProps) {\n  const [selectedDate, setSelectedDate] = useState<Date>(() => startOfDay(new Date()));\n\n  const handleSelect = (date: Date) => {\n    const normalized = startOfDay(date);\n    setSelectedDate(normalized);\n    onChange?.(normalized);\n  };\n\n  const quickOptions = [\n    { label: 'Сегодня', getValue: () => startOfDay(new Date()) },\n    { label: 'Вчера', getValue: () => addDays(startOfDay(new Date()), -1) },\n    { label: 'Неделя назад', getValue: () => addDays(startOfDay(new Date()), -7) },\n  ];\n\n  return (\n    <Stack direction=\"column\" gap=\"var(--jx-space-md)\" className=\"jx-report-date-picker\">\n      <ButtonGroup>\n        {quickOptions.map((option) => (\n          <Button\n            key={option.label}\n            variant=\"secondary\"\n            onClick={() => handleSelect(option.getValue())}\n          >\n            {option.label}\n          </Button>\n        ))}\n      </ButtonGroup>\n      <Calendar\n        mode=\"single\"\n        selected={selectedDate}\n        onSelect={(date) => date && handleSelect(date)}\n      />\n    </Stack>\n  );\n}",
