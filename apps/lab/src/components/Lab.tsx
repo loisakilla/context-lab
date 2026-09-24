@@ -203,8 +203,8 @@ export function Lab({ library, tasks, modes, previews, matrix, localRunEnabled }
           {matrix ? (
             <p className="muted max-w-[72ch] text-sm">
               {matrix.generatedFrom} прогонов · модель {matrix.model} · библиотека {matrix.library?.name} {matrixLibrary}
-              {matrixLibrary !== currentLibrary ? ` (контекст выше собирается из ${currentLibrary})` : ''}. В ячейке: доля засчитанных прогонов, медиана
-              токенов и цены, вызовы модели и время.
+              {matrixLibrary !== currentLibrary ? ` (контекст выше собирается из ${currentLibrary})` : ''}. В ячейке: доля засчитанных прогонов, медианы
+              новых токенов и прочитанных из кэша, цены, вызовов модели и времени.
             </p>
           ) : (
             <p className="muted text-sm">

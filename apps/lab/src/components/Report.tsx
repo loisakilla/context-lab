@@ -1,8 +1,8 @@
 'use client';
 
-import { firstPromptTokens, type RunRecord } from '@context-lab/runner/browser';
+import { firstPromptTokens, peakPromptTokens, type RunRecord } from '@context-lab/runner/browser';
 import type { RenderStatus } from './Preview';
-import { DRIVER_LABELS, MODE_LABELS, SOURCE_LABELS, sentence } from '@/lib/labels';
+import { DRIVER_LABELS, MODE_LABELS, plural, SOURCE_LABELS, sentence } from '@/lib/labels';
 import { Badge, Stat } from './ui';
 
 interface ReportProps {
@@ -60,6 +60,7 @@ export function Report({ record, render }: ReportProps) {
   const passed = record.verdict.passed;
   const tokens = tokensOf(record);
   const promptTokens = firstPromptTokens(record);
+  const peakTokens = peakPromptTokens(record);
   const toolCalls = record.turns.flatMap((turn) => turn.toolCalls);
 
   return (
@@ -88,8 +89,12 @@ export function Report({ record, render }: ReportProps) {
         </div>
         {promptTokens > 0 && (
           <p className="dim">
-            Первый вызов модели получил {promptTokens.toLocaleString('ru-RU')} токенов входа
-            {record.driver === 'claude-code' ? ', включая системный промпт Claude Code' : ''}. Контекст до задачи — оценка по длине текста, для
+            Первый вызов модели получил {promptTokens.toLocaleString('ru-RU')} {plural(promptTokens, 'токен', 'токена', 'токенов')} входа
+            {record.driver === 'claude-code' ? ', включая системный промпт Claude Code' : ''}
+            {record.turns.length > 1
+              ? `; вызовов модели ${record.turns.length}, каждый отправлял разговор заново, и самый большой получил ${peakTokens.toLocaleString('ru-RU')} ${plural(peakTokens, 'токен', 'токена', 'токенов')}`
+              : ''}
+            . Контекст до задачи — оценка по длине текста, для
             русского текста она занижает число токенов в полтора-два раза.
           </p>
         )}

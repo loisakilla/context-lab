@@ -4,7 +4,7 @@ export { apiDriver } from './drivers/api.ts';
 export type { ApiDriverOptions } from './drivers/api.ts';
 export { extractCode } from './extract-code.ts';
 export { DRIVER_LABELS, MODE_LABELS, SOURCE_LABELS } from './labels.ts';
-export { buildMatrix, firstPromptTokens, libraryKey, median } from './matrix.ts';
+export { buildMatrix, firstPromptTokens, freshTokens, libraryKey, median, peakPromptTokens } from './matrix.ts';
 export type { Matrix, MatrixCell, SourceRevision } from './matrix.ts';
 export { textHash } from './hash.ts';
 export { canonicalModel, knownModels, priceOf } from './price.ts';

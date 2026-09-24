@@ -42,6 +42,7 @@ const others = readdirSync(matrixDir)
 const modes = matrix.modes;
 const withUsage = matrix.cells.some((cell) => cell.medianTokens > 0);
 const withPrompt = matrix.cells.some((cell) => (cell.medianPromptTokens ?? 0) > 0);
+const withPeak = matrix.cells.some((cell) => (cell.medianPeakPromptTokens ?? 0) > 0);
 const withCost = matrix.cells.some((cell) => cell.medianCostUsd !== null);
 const withTurns = matrix.cells.some((cell) => cell.medianTurns > 0);
 
@@ -79,39 +80,58 @@ const prompt = (mode: string) => mean(matrix, mode, (cell) => cell.medianPromptT
 const baseline = prompt('none');
 const added = (mode: string) => prompt(mode) - baseline;
 
-const headers = [
-  'Режим',
-  ...(withPrompt ? ['Вход первого вызова', 'Из них контекст режима'] : ['Контекст до задачи']),
-  ...(withUsage ? ['Токенов на задачу'] : []),
-  ...(withCost ? ['Цена задачи'] : []),
-  ...(withTurns ? ['Вызовов модели', 'Секунд'] : []),
-  'Задач, где прошли все прогоны',
-  'Ошибок компилятора на задачу',
-  'Нарушений правил',
-  'Покрытие нужных компонентов',
-];
+function table(headers: string[], rows: string[][]): string[] {
+  return [`| ${headers.join(' | ')} |`, `|${headers.map(() => '---').join('|')}|`, ...rows.map((row) => `| ${row.join(' | ')} |`)];
+}
 
-const summary: string[] = [`| ${headers.join(' | ')} |`, `|${headers.map(() => '---').join('|')}|`];
-for (const mode of modes) {
-  const columns = [
+const quality = table(
+  ['Режим', 'Задач, где прошли все прогоны', 'Ошибок компилятора на задачу', 'Нарушений правил', 'Покрытие нужных компонентов'],
+  modes.map((mode) => [
     MODE_LABELS[mode] ?? mode,
-    ...(withPrompt ? [tokens(prompt(mode)), mode === 'none' ? '—' : `+${tokens(added(mode))}`] : [`~${tokens(mean(matrix, mode, (cell) => cell.medianContextTokens))}`]),
-    ...(withUsage ? [tokens(mean(matrix, mode, (cell) => cell.medianTokens))] : []),
-    ...(withCost ? [meanCost(matrix, mode)] : []),
-    ...(withTurns ? [mean(matrix, mode, (cell) => cell.medianTurns).toFixed(1), mean(matrix, mode, (cell) => cell.medianSeconds).toFixed(0)] : []),
     share(matrix, mode),
     mean(matrix, mode, (cell) => cell.medianTscErrors).toFixed(1),
     mean(matrix, mode, (cell) => cell.medianLintErrors).toFixed(1),
     `${Math.round(mean(matrix, mode, (cell) => cell.meanCoverage) * 100)}%`,
-  ];
-  summary.push(`| ${columns.join(' | ')} |`);
-}
+  ]),
+);
+
+const consumption = table(
+  [
+    'Режим',
+    ...(withPrompt ? ['Вход первого вызова', 'Из них контекст режима'] : ['Контекст до задачи']),
+    ...(withPeak ? ['Самый большой запрос'] : []),
+    ...(withUsage ? ['Новых токенов на задачу', 'Из кэша'] : []),
+    ...(withCost ? ['Цена задачи'] : []),
+    ...(withTurns ? ['Вызовов модели', 'Секунд'] : []),
+  ],
+  modes.map((mode) => [
+    MODE_LABELS[mode] ?? mode,
+    ...(withPrompt ? [tokens(prompt(mode)), mode === 'none' ? '—' : `+${tokens(added(mode))}`] : [`~${tokens(mean(matrix, mode, (cell) => cell.medianContextTokens))}`]),
+    ...(withPeak ? [tokens(mean(matrix, mode, (cell) => cell.medianPeakPromptTokens ?? 0))] : []),
+    ...(withUsage ? [tokens(mean(matrix, mode, (cell) => cell.medianFreshTokens ?? 0)), tokens(mean(matrix, mode, (cell) => cell.medianCacheReadTokens ?? 0))] : []),
+    ...(withCost ? [meanCost(matrix, mode)] : []),
+    ...(withTurns ? [mean(matrix, mode, (cell) => cell.medianTurns).toFixed(1), mean(matrix, mode, (cell) => cell.medianSeconds).toFixed(0)] : []),
+  ]),
+);
+
+const summary = [...quality, '', ...consumption];
 
 const notes: string[] = [];
 if (withPrompt) {
   notes.push(
     `Вход первого вызова — сколько токенов получил первый запрос к модели, по записанному расходу. У Claude Code в него входит собственный системный промпт, поэтому даже без контекста это ${thousands(baseline)}; контекст режима — разница с режимом без контекста.`,
   );
+}
+if (withPeak) {
+  notes.push('Самый большой запрос — наибольший вход одного вызова модели за задачу: столько места режим занимает в окне контекста.');
+}
+if (withUsage) {
+  notes.push(
+    'Новых токенов — то, что модель за задачу получила впервые или написала сама: вход мимо кэша, запись в кэш и вывод. Из кэша — то, что каждый следующий вызов отправляет заново и модель перечитывает за десятую часть цены входа: системный промпт, описания инструментов и прошлые ответы инструментов.',
+  );
+}
+if (withCost) {
+  notes.push('Цена посчитана из записанного расхода токенов по тарифу Anthropic для модели прогона.');
 }
 for (const [kind, revisions] of Object.entries(matrix.sourceRevisions ?? {})) {
   if (revisions.length < 2) continue;
@@ -145,13 +165,13 @@ if (others.length > 0) {
     '',
     '<details><summary>Те же задачи на другой модели</summary>',
     '',
-    '| Модель | Режим | Задач, где прошли все прогоны | Ошибок компилятора на задачу | Цена задачи |',
-    '|---|---|---|---|---|',
+    '| Модель | Режим | Задач, где прошли все прогоны | Ошибок компилятора на задачу | Вызовов модели | Цена задачи |',
+    '|---|---|---|---|---|---|',
   );
   for (const source of [matrix, ...others]) {
     for (const mode of source.modes) {
       byModel.push(
-        `| ${source.model} | ${MODE_LABELS[mode] ?? mode} | ${share(source, mode)} | ${mean(source, mode, (cell) => cell.medianTscErrors).toFixed(1)} | ${meanCost(source, mode)} |`,
+        `| ${source.model} | ${MODE_LABELS[mode] ?? mode} | ${share(source, mode)} | ${mean(source, mode, (cell) => cell.medianTscErrors).toFixed(1)} | ${mean(source, mode, (cell) => cell.medianTurns).toFixed(1)} | ${meanCost(source, mode)} |`,
       );
     }
   }

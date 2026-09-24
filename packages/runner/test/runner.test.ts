@@ -9,7 +9,7 @@ import { buildContext, contextTokens } from '../src/context.ts';
 import { buildClaudeArgs, claudeCodeDriver, composePrompt, parseStreamJson } from '../src/drivers/claude-code.ts';
 import { extractCode } from '../src/extract-code.ts';
 import { textHash } from '../src/hash.ts';
-import { buildMatrix, firstPromptTokens, libraryKey, median } from '../src/matrix.ts';
+import { buildMatrix, firstPromptTokens, freshTokens, libraryKey, median, peakPromptTokens } from '../src/matrix.ts';
 import { priceOf } from '../src/price.ts';
 import { runFileName, runTask } from '../src/run.ts';
 import { libraryFolders, readRunFolder, runsFolder } from '../src/store.ts';
@@ -272,6 +272,38 @@ describe('матрица', () => {
     const matrix = buildMatrix([run('a', first(1000)), run('b', first(3000)), run('c', [])]);
     expect(firstPromptTokens(run('a', first(1000)))).toBe(1010);
     expect(matrix.cells[0]?.medianPromptTokens).toBe(2010);
+  });
+
+  it('делит токены на новые и прочитанные из кэша и находит самый большой запрос', () => {
+    const turn = (cacheRead: number, cacheCreation: number): RunRecord['turns'][number] => ({ usage: { input: 2, output: 5, cacheRead, cacheCreation }, toolCalls: [] });
+    const record: RunRecord = {
+      id: 'mcp-run',
+      createdAt: '',
+      repeat: 1,
+      durationMs: 1,
+      driver: 'claude-code',
+      library: { name: 'k', version: '1', commit: '' },
+      model: 'claude-opus-5',
+      mode: 'mcp',
+      task,
+      context: { tokens: 100, sources: [] },
+      turns: [turn(8000, 0), turn(8000, 1500), turn(9500, 700)],
+      usage: { input: 6, output: 900, cacheRead: 25500, cacheCreation: 2200 },
+      costUsd: null,
+      stopReason: 'end_turn',
+      output: { code: '', text: '' },
+      checks: null,
+      verdict: { passed: false, score: 0 },
+    };
+    expect(peakPromptTokens(record)).toBe(10202);
+    expect(freshTokens(record.usage)).toBe(3106);
+    expect(buildMatrix([record]).cells[0]).toMatchObject({
+      medianTokens: 28606,
+      medianFreshTokens: 3106,
+      medianCacheReadTokens: 25500,
+      medianPromptTokens: 8002,
+      medianPeakPromptTokens: 10202,
+    });
   });
 
   it('отличает редакции одного источника по отпечатку текста, а в старых записях по числу токенов', () => {

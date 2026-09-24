@@ -6,7 +6,7 @@ export { buildClaudeArgs, claudeCodeDriver, composePrompt, NOT_LOGGED_IN_HINT, p
 export type { ClaudeCodeDriverOptions, McpServerConfig, ParsedStream } from './drivers/claude-code.ts';
 export { extractCode } from './extract-code.ts';
 export { DRIVER_LABELS, MODE_LABELS, SOURCE_LABELS } from './labels.ts';
-export { buildMatrix, firstPromptTokens, libraryKey, median } from './matrix.ts';
+export { buildMatrix, firstPromptTokens, freshTokens, libraryKey, median, peakPromptTokens } from './matrix.ts';
 export { textHash } from './hash.ts';
 export { commandMcpServer, MCP_SERVER_NAME, MCP_TOOL_NAMES, repoMcpServer } from './mcp-config.ts';
 export { agentSandbox } from './sandbox.ts';

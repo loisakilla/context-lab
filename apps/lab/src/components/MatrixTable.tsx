@@ -8,6 +8,10 @@ function decimal(value: number): string {
   return value.toLocaleString('ru-RU', { maximumFractionDigits: 1 });
 }
 
+function kilo(value: number): string {
+  return value < 1000 ? String(Math.round(value)) : `${decimal(value / 1000)}k`;
+}
+
 function tone(passRate: number): 'success' | 'danger' | 'warning' {
   if (passRate === 1) return 'success';
   if (passRate === 0) return 'danger';
@@ -44,19 +48,22 @@ export function MatrixTable({ matrix }: { matrix: Matrix }) {
                 }
                 const first = cell.runs[0];
                 const passed = Math.round(cell.passRate * cell.runs.length);
+                const withUsage = cell.medianTokens > 0;
                 const body = (
                   <>
                     <JxBadge tone={tone(cell.passRate)}>
                       {passed}/{cell.runs.length}
                     </JxBadge>
                     <span className="muted mono text-[12px] leading-snug">
-                      {cell.medianTokens > 0
-                        ? `${Math.round(cell.medianTokens).toLocaleString('ru-RU')} ток · ${formatCost(cell.medianCostUsd)}`
+                      {withUsage
+                        ? `${kilo(cell.medianFreshTokens ?? 0)} новых · ${kilo(cell.medianCacheReadTokens ?? 0)} из кэша`
                         : `контекст ~${Math.round(cell.medianContextTokens).toLocaleString('ru-RU')}`}
-                      {cell.medianTurns > 0 && (
+                      {withUsage && (
                         <>
                           <br />
-                          {decimal(cell.medianTurns)} {plural(cell.medianTurns, 'вызов', 'вызова', 'вызовов')} модели · {decimal(cell.medianSeconds)} с
+                          {formatCost(cell.medianCostUsd)}
+                          {cell.medianTurns > 0 &&
+                            ` · ${decimal(cell.medianTurns)} ${plural(cell.medianTurns, 'вызов', 'вызова', 'вызовов')} · ${decimal(cell.medianSeconds)} с`}
                         </>
                       )}
                     </span>

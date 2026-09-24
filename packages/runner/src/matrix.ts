@@ -1,4 +1,4 @@
-import { CONTEXT_MODES, type ContextMode, type RunRecord } from './types.ts';
+import { CONTEXT_MODES, type ContextMode, type RunRecord, type Turn, type Usage } from './types.ts';
 
 export interface MatrixCell {
   taskId: string;
@@ -6,8 +6,11 @@ export interface MatrixCell {
   runs: string[];
   passRate: number;
   medianTokens: number;
+  medianFreshTokens: number;
+  medianCacheReadTokens: number;
   medianContextTokens: number;
   medianPromptTokens: number;
+  medianPeakPromptTokens: number;
   medianCostUsd: number | null;
   medianTscErrors: number;
   medianLintErrors: number;
@@ -45,9 +48,21 @@ export function libraryKey(library: { version: string; commit: string }): string
   return library.commit ? `${library.version}@${library.commit.slice(0, 7)}` : library.version;
 }
 
+function promptTokensOf(turn: Turn): number {
+  return turn.usage.input + turn.usage.cacheRead + turn.usage.cacheCreation;
+}
+
 export function firstPromptTokens(run: Pick<RunRecord, 'turns'>): number {
-  const usage = run.turns[0]?.usage;
-  return usage ? usage.input + usage.cacheRead + usage.cacheCreation : 0;
+  const turn = run.turns[0];
+  return turn ? promptTokensOf(turn) : 0;
+}
+
+export function peakPromptTokens(run: Pick<RunRecord, 'turns'>): number {
+  return run.turns.reduce((peak, turn) => Math.max(peak, promptTokensOf(turn)), 0);
+}
+
+export function freshTokens(usage: Usage): number {
+  return usage.input + usage.cacheCreation + usage.output;
 }
 
 function sourceRevisions(runs: RunRecord[]): Record<string, SourceRevision[]> {
@@ -102,8 +117,11 @@ export function buildMatrix(runs: RunRecord[]): Matrix {
       runs: bucket.map((run) => run.id),
       passRate: Number((bucket.filter((run) => run.verdict.passed).length / bucket.length).toFixed(2)),
       medianTokens: median(bucket.map((run) => run.usage.input + run.usage.output + run.usage.cacheRead + run.usage.cacheCreation)),
+      medianFreshTokens: median(bucket.map((run) => freshTokens(run.usage))),
+      medianCacheReadTokens: median(bucket.map((run) => run.usage.cacheRead)),
       medianContextTokens: median(bucket.map((run) => run.context.tokens)),
       medianPromptTokens: median(bucket.map(firstPromptTokens).filter((tokens) => tokens > 0)),
+      medianPeakPromptTokens: median(bucket.map(peakPromptTokens).filter((tokens) => tokens > 0)),
       medianCostUsd: costs.length > 0 ? median(costs) : null,
       medianTscErrors: median(bucket.map((run) => run.checks?.tsc.errors.length ?? 0)),
       medianLintErrors: median(bucket.map((run) => run.checks?.lint.filter((finding) => finding.severity === 'error').length ?? 0)),
