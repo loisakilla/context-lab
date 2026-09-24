@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { estimateTokens, fitToBudget, renderComponent } from '../src/format.ts';
+import { estimateTokens, fitToBudget, renderCatalog, renderComponent } from '../src/format.ts';
 import { createTools, runTool, serverInstructions, toJsonSchemaTools, TOOL_NAMES, type RulesQuery } from '../src/tools.ts';
-import { sampleIndex } from './helpers.ts';
+import { component, sampleIndex } from './helpers.ts';
 
 const index = sampleIndex();
 const tools = createTools(index);
@@ -93,8 +93,39 @@ describe('документация и правила как инструмент
   });
 
   it('инструкции сервера называют библиотеку и число компонентов', () => {
-    expect(serverInstructions(index)).toMatch(new RegExp(`${index.components.length} компонентов`));
+    expect(serverInstructions(index)).toMatch(new RegExp(`компонентов: ${index.components.length}`));
     expect(serverInstructions(index)).toMatch(/get_rules/);
+  });
+
+  it('инструкции сервера несут каталог компонентов и токенов, чтобы агент шёл сразу за API', () => {
+    const instructions = serverInstructions(index);
+    expect(instructions).toMatch(/через get_component_api/);
+    expect(instructions).toMatch(/search_components нужен, только если/);
+    expect(instructions).toMatch(/^JxButton — кнопка действия с вариантами оформления$/m);
+    expect(instructions).toMatch(/^JxDropdown — старое выпадающее меню \(DEPRECATED\)$/m);
+    expect(instructions).toMatch(/^color: --jx-accent$/m);
+    expect(instructions).toMatch(/^radius: --jx-r$/m);
+  });
+});
+
+describe('каталог библиотеки', () => {
+  it('сводит описание к первой фразе до двоеточия и режет длинную по запятой', () => {
+    const catalog = renderCatalog(
+      [
+        component({ name: 'JxAvatar', description: 'Аватар пользователя: инициалы или изображение внутри круга. Тон задаёт цвет.' }),
+        component({ name: 'JxDrawer', description: 'Боковая панель, выезжающая слева или справа поверх страницы, с ловушкой фокуса и закрытием по Escape.' }),
+        component({ name: 'JxIcon', description: 'SVG-иконка из набора.' }),
+        component({ name: 'JxBare' }),
+      ],
+      [],
+    );
+    expect(catalog.split('\n')).toEqual([
+      'Компоненты:',
+      'JxAvatar — аватар пользователя',
+      'JxDrawer — боковая панель, выезжающая слева или справа поверх страницы',
+      'JxIcon — SVG-иконка из набора',
+      'JxBare — без описания',
+    ]);
   });
 });
 

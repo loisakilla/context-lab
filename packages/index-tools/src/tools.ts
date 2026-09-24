@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { fitToBudget, renderComponent, renderComponentSections, renderExampleSections, renderSearchHit, renderTokens, withFooter } from './format.ts';
+import { fitToBudget, renderCatalog, renderComponent, renderComponentSections, renderExampleSections, renderSearchHit, renderTokens, withFooter } from './format.ts';
 import { findComponent, searchComponents, suggestNames } from './search.ts';
 import type { LibraryIndex } from './types.ts';
 
@@ -117,11 +117,12 @@ function rulesTool(rules: NonNullable<ToolSources['rules']>): ToolSpec {
 }
 
 export function serverInstructions(index: LibraryIndex): string {
-  return (
-    `MCP-сервер Context Lab по библиотеке ${index.library.name} (${index.library.package}@${index.library.version}): ${index.components.length} компонентов, ${index.tokens.length} токенов. ` +
-    'Перед тем как писать разметку с этими компонентами, возьмите их реальный API через get_component_api, а правила работы через get_rules. ' +
-    'Пропсы, которых нет в ответе сервера, в библиотеке не существуют.'
-  );
+  return [
+    `MCP-сервер Context Lab по библиотеке ${index.library.name} (${index.library.package}@${index.library.version}), компонентов: ${index.components.length}, токенов: ${index.tokens.length}.`,
+    'Выберите компоненты по каталогу ниже и возьмите их реальный API через get_component_api, а правила работы через get_rules. Независимые вызовы делайте одним ходом. ' +
+      'search_components нужен, только если подходящего компонента в каталоге нет. Пропсы, которых нет в ответе сервера, в библиотеке не существуют.',
+    renderCatalog(index.components, index.tokens),
+  ].join('\n\n');
 }
 
 export function createTools(index: LibraryIndex, sources: ToolSources = {}): ToolSpec[] {
@@ -130,7 +131,7 @@ export function createTools(index: LibraryIndex, sources: ToolSources = {}): Too
     title: 'Поиск компонентов',
     description:
       'Находит компоненты библиотеки по задаче или названию: понимает русские и английские запросы, ищет по имени, ключевым словам, описанию и пропсам. ' +
-      'Возвращает компактные карточки с сигнатурой, чтобы выбрать компонент, не загружая всю библиотеку в контекст.',
+      'Возвращает компактные карточки с сигнатурой, чтобы выбрать компонент, не загружая всю библиотеку в контекст. Нужен, когда подходящего компонента не видно в каталоге из инструкций сервера.',
     shape: {
       query: z.string().min(1).describe("Что нужно сделать или как называется компонент: 'модальное окно', 'таблица с сортировкой', 'Button'"),
       limit: z.number().int().min(1).max(20).optional().describe('Сколько компонентов вернуть, по умолчанию 5'),
@@ -231,9 +232,9 @@ export function libraryRulesPrompt(index: LibraryIndex, task?: string): string {
     `Библиотека: ${index.library.name} (${index.library.package}@${index.library.version}). Компонентов: ${index.components.length}, токенов: ${index.tokens.length}.`,
     '',
     'Правила:',
-    '1. Прежде чем писать разметку, найдите компонент через search_components и возьмите его API через get_component_api. Не полагайтесь на память.',
+    '1. Прежде чем писать разметку, возьмите API нужных компонентов через get_component_api. Имена есть в каталоге из инструкций сервера; search_components нужен, только если подходящего компонента там нет. Не полагайтесь на память.',
     '2. Используйте только те пропсы, которые вернул сервер. Если нужного пропса нет — не выдумывайте его, а соберите решение из существующего API или скажите, что компонент нужно расширить.',
-    '3. Цвета, радиусы и шрифты берите из list_design_tokens через var(--токен), а не хардкодом.',
+    '3. Цвета, радиусы, шрифты и тени задавайте через var(--токен) из каталога токенов, а не хардкодом. Для этого хватает имени токена; значения по темам отдаёт list_design_tokens.',
     '4. Компоненты с пометкой DEPRECATED в новом коде не используйте.',
     '5. Запрашивайте detail=signature, когда нужен только список пропсов, и detail=full, когда нужны описания и примеры. Не тяните всю библиотеку в контекст.',
     ...(task ? ['', `Задача: ${task}`] : []),

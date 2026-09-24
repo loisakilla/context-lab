@@ -27,8 +27,8 @@ function wrap(tag: string, body: string): string {
   return `<${tag}>\n${body.trim()}\n</${tag}>`;
 }
 
-function source(kind: ContextSource['kind'], id: string, version: string, text: string): ContextSource {
-  return { kind, id, version, tokens: estimateTokens(text), hash: textHash(text) };
+function source(kind: ContextSource['kind'], id: string, version: string, text: string, fingerprint = text): ContextSource {
+  return { kind, id, version, tokens: estimateTokens(text), hash: textHash(fingerprint) };
 }
 
 export function buildContext(mode: ContextMode, task: Task, sources: ContextSources): BuiltContext {
@@ -63,12 +63,14 @@ ${NO_TOOLS_NOTE}`;
     const specs = createTools(sources.index, sources.tools ?? {});
     tools = toJsonSchemaTools(specs);
     runner = (name, args) => runTool(specs, name, args);
-    system = [BASE_SYSTEM_PROMPT, libraryRulesPrompt(sources.index), serverInstructions(sources.index)].join('\n\n');
-    contextSources.push(source('tools', specs.map((spec) => spec.name).join(','), version, JSON.stringify(tools)));
+    const instructions = serverInstructions(sources.index);
+    system = [BASE_SYSTEM_PROMPT, libraryRulesPrompt(sources.index), instructions].join('\n\n');
+    const definitions = JSON.stringify(tools);
+    contextSources.push(source('tools', specs.map((spec) => spec.name).join(','), version, definitions, `${definitions}\n${instructions}`));
   }
 
   const taskLines = [`Задача: ${task.prompt}`];
-  if (mode === 'mcp') taskLines.push('Сначала найди подходящие компоненты через search_components и запроси их API через get_component_api, и только потом пиши код.');
+  if (mode === 'mcp') taskLines.push('Выбери компоненты по каталогу, запроси их API через get_component_api и только потом пиши код.');
   taskLines.push('', OUTPUT_CONTRACT);
 
   const result: BuiltContext = {

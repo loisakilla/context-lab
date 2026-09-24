@@ -86,6 +86,14 @@ describe('MCP-сервер по stdio', () => {
     expect(textOf(result)).not.toMatch(/Context Lab/);
   });
 
+  it('отдаёт в instructions каталог компонентов и токенов', () => {
+    const instructions = client.getInstructions() ?? '';
+    expect(instructions).toMatch(/через get_component_api/);
+    expect(instructions).toMatch(/^JxButton — кнопка действия$/m);
+    expect(instructions).toMatch(/^JxToastViewport — область, в которой показывается очередь уведомлений$/m);
+    expect(instructions).toMatch(/^color: --jx-accent, /m);
+  });
+
   it('промпт и ресурсы доступны', async () => {
     const prompt = await client.getPrompt({ name: 'jinx_rules', arguments: { task: 'сверстать форму настроек' } });
     const text = prompt.messages.map((message) => (message.content as { text?: string }).text ?? '').join('\n');

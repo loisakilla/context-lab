@@ -15,7 +15,7 @@ const MODE_CONTENTS: Record<string, string> = {
   readme: 'README npm-пакета `@jinx-ui/react`: установка, модель состояния, `ref`, клавиатура; компоненты названы мимоходом, пропсов нет',
   docs: 'сгенерированный `llms-full.txt`',
   'docs+rules': 'то же плюс правила из реестра',
-  mcp: 'описания шести инструментов сервера; API и правила агент берёт сам через `search_components`, `get_component_api` и `get_rules`',
+  mcp: 'каталог компонентов и токенов в инструкциях сервера и описания шести инструментов; API и правила агент берёт сам через `get_component_api` и `get_rules`',
 };
 
 const MATRIX_START = '<!-- matrix:start -->';

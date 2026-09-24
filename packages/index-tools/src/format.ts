@@ -1,6 +1,7 @@
 import type { ComponentDoc, PropDoc, SearchHit, TokenDoc } from './types.ts';
 
 const CHARS_PER_TOKEN = 3.6;
+const CATALOG_SUMMARY_LIMIT = 70;
 
 export function estimateTokens(text: string): number {
   return Math.ceil(text.length / CHARS_PER_TOKEN);
@@ -114,6 +115,29 @@ export function renderComponentSections(component: ComponentDoc): string[] {
 export function renderComponent(component: ComponentDoc, detail: 'signature' | 'full'): string {
   if (detail === 'signature') return renderSignature(component);
   return renderComponentSections(component).join('\n\n');
+}
+
+function catalogSummary(component: ComponentDoc): string {
+  if (!component.description) return 'без описания';
+  let text = firstSentence(component.description).replace(/[.!?…]+$/, '');
+  const colon = text.indexOf(':');
+  if (colon > 0) text = text.slice(0, colon);
+  if (text.length > CATALOG_SUMMARY_LIMIT) {
+    const comma = text.lastIndexOf(',', CATALOG_SUMMARY_LIMIT);
+    if (comma > 0) text = text.slice(0, comma);
+  }
+  return /^\p{Lu}\p{Ll}/u.test(text) ? `${text.charAt(0).toLowerCase()}${text.slice(1)}` : text;
+}
+
+export function renderCatalog(components: ComponentDoc[], tokens: TokenDoc[]): string {
+  const lines = components.map((component) => `${component.name} — ${catalogSummary(component)}${component.status === 'deprecated' ? ' (DEPRECATED)' : ''}`);
+  const sections = [['Компоненты:', ...lines].join('\n')];
+  const groups = new Map<string, string[]>();
+  for (const token of tokens) groups.set(token.group, [...(groups.get(token.group) ?? []), token.name]);
+  if (groups.size > 0) {
+    sections.push(['Токены для var(--…):', ...[...groups].map(([group, names]) => `${group}: ${names.join(', ')}`)].join('\n'));
+  }
+  return sections.join('\n\n');
 }
 
 export function renderTokens(tokens: TokenDoc[]): string {

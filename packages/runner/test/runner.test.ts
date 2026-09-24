@@ -72,6 +72,22 @@ describe('buildContext', () => {
     expect(context.contextText).toBe('');
   });
 
+  it('в режиме mcp каталог компонентов стоит в системном промпте, и задача сразу ведёт к API', () => {
+    const context = buildContext('mcp', task, sources);
+    expect(context.system).toMatch(/^JxModal — модальное окно с ловушкой фокуса$/m);
+    expect(context.system).toMatch(/^color: --jx-accent$/m);
+    expect(context.taskText).toMatch(/запроси их API через get_component_api/);
+    expect(context.taskText).not.toMatch(/search_components/);
+  });
+
+  it('отпечаток контекста mcp меняется вместе с каталогом, даже если описания инструментов те же', () => {
+    const before = buildContext('mcp', task, sources).sources[0];
+    const renamed = { ...index, components: index.components.map((item) => (item.name === 'JxMenu' ? { ...item, name: 'JxActionMenu' } : item)) };
+    const after = buildContext('mcp', task, { ...sources, index: renamed }).sources[0];
+    expect(after?.tokens).toBe(before?.tokens);
+    expect(after?.hash).not.toBe(before?.hash);
+  });
+
   it('в режиме mcp с источниками документации и правил даёт все шесть инструментов и записывает их в контекст', () => {
     const context = buildContext('mcp', task, { ...sources, tools: { docs: () => '# doc', rules: { defaultSet: 'sample', resolve: () => 'правила' } } });
     expect(context.tools?.map((tool) => tool.name)).toEqual(['search_components', 'get_component_api', 'get_component_examples', 'list_design_tokens', 'get_docs', 'get_rules']);

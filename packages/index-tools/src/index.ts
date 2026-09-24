@@ -3,6 +3,7 @@ export { editDistance, findComponent, searchComponents, suggestNames, tokenize }
 export {
   estimateTokens,
   fitToBudget,
+  renderCatalog,
   renderComponent,
   renderComponentSections,
   renderExampleSections,
